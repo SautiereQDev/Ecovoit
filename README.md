@@ -8,7 +8,7 @@ Application web de covoiturage dédiée aux habitants de La Rochelle. L'applicat
 
 Assurez-vous d'avoir installé les outils suivants sur votre machine :
 
-[Node.js](https://nodejs.org/fr) (version 20 ou supérieure)
+- [Node.js](https://nodejs.org/fr) (version 20 ou supérieure)
 
 TODO: à compléter
 
@@ -41,8 +41,6 @@ expo start
 ```
 
 ## Fabriqué avec
-
-Entrez les programmes/logiciels/ressources que vous avez utilisé pour développer votre projet
 
 - [React Native](https://reactnative.dev/) - Framework d'applications mobiles (front-end)
 - [Expo](https://expo.dev/) - Outil permettant de développer des applications mobiles natives universelles
