@@ -11,7 +11,7 @@ export default function Index() {
       }}
     >
       <Text>Ecovoit</Text>
-      <Link href="/login">Connexion</Link>
+      <Link href="/login">Connexion/Inscription</Link>
       
     </View>
   );
