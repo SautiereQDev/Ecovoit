@@ -1,7 +1,7 @@
 import React from 'react';
-import {  Text, View, TextInput, Button, StyleSheet } from "react-native";
+import {  Text, View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Link } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import LoginForm from '@/components/LoginForm';
 
 /**
  * Identifiants de connexion d'un utilisateur
@@ -28,47 +28,21 @@ export default function Login() {
 
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-    
-    <View style={styles.header}>
-      <Text style={styles.h1}>Ecovoit</Text>
-      <Text style={styles.h2}>Connectez-vous</Text>
-    </View>
-      
-
-      <View>
-        <TextInput
-          style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder='Email'
-          inputMode='email'
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder='Mot de passe'
-          secureTextEntry
-          inputMode='text'
-        />
+    <ScrollView >
+        <View style={{flex: 1}}>
+          <View style={styles.header}>
+            <Text style={styles.h1}>Ecovoit</Text>
+            <Text style={styles.h2}>Connectez-vous</Text>
+          </View>
+          
+          <LoginForm></LoginForm>
         
-      </View>
-      
-
-
-      <View style={styles.footer}>
-        <Text style={styles.h3}>Pas encore membre ?</Text>
-        <Link href='/login'>Inscription</Link>
-      </View>
-
-    </View>
+          <View style={styles.footer}>
+            <Text style={styles.h3}>Pas encore membre ?</Text>
+            <Link href='/login'>Inscription</Link>
+          </View>
+        </View>
+    </ScrollView>
   );
 }
 
@@ -77,7 +51,7 @@ const styles = StyleSheet.create(
     header: {
       justifyContent: "center",
       alignItems: "center",
-      marginBottom: 40
+      marginVertical: 50
     },
     h1: {
       fontSize: 40,
@@ -88,26 +62,8 @@ const styles = StyleSheet.create(
     h3: {
       fontSize: 20
     },
-    input: {
-      backgroundColor: '#aaa',
-      height: 40,
-      width: 300,
-      marginBottom: 20,
-      borderRadius: 8,
-      padding: 7.5,
-    },
-    button: {
-      backgroundColor: "#2196F3",
-      padding: 10,
-      borderRadius: 7.5,
-      marginBottom: 30
-    },
-    buttonText: {
-      fontSize: 20,
-      color: "#fff",
-    },
     footer: {
-      width: 300
+      alignItems: "center",
     }
   }
 )

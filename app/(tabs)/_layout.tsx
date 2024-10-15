@@ -12,10 +12,18 @@ export default function TabLayout() {
         tabBarIcon: ({color, focused}) => (
           <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
         ) } } />
+
       <Tabs.Screen name="profil" options={{ 
         title: 'Profil',
         tabBarIcon: ({color, focused}) => (
           <Ionicons name={focused ? 'person-sharp' : 'person-outline'} color={color} size={24} />
+        )
+        } } />
+
+      <Tabs.Screen name="tests" options={{ 
+        title: 'Tests',
+        tabBarIcon: ({color, focused}) => (
+          <Ionicons name={focused ? 'cube-sharp' : 'cube-outline'} color={color} size={24} />
         )
         } } />
     </Tabs>
