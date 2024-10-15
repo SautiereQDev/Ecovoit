@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 type Credentials = {
   username: string,
   password: string
-}
+};
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -24,7 +24,6 @@ export default function Login() {
       password
     }
     console.log(JSON.stringify(credentials));
-
   }
 
 
@@ -59,24 +58,15 @@ export default function Login() {
           secureTextEntry
           inputMode='text'
         />
+        
       </View>
       
 
-      <TouchableOpacity
-
-        style={styles.button}
-        onPress={handleSubmit}
-        
-      >
-        <Text style={styles.buttonText}>Se connecter</Text>
-
-      </TouchableOpacity>
 
       <View style={styles.footer}>
         <Text style={styles.h3}>Pas encore membre ?</Text>
         <Link href='/login'>Inscription</Link>
       </View>
-      
 
     </View>
   );

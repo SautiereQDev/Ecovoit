@@ -9,7 +9,7 @@ type User = {
 	email: string;
 	password: string;
 	bio: string; // Nullable
-	rank: string;
+	rank: string; // TODO: Je n'ai pas compris ce champ (voir avec Axel et Cody)
 	verified: boolean;
 };
 
