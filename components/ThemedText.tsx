@@ -1,31 +1,45 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
-
-import { useThemeColor } from '@/hooks/useThemeColor';
+import {StyleSheet, Text, type TextProps} from 'react-native';
+import {useThemeColor} from '@/hooks/useThemeColor';
+import {useFonts} from 'expo-font';
+import {Colors} from '@/constants/Colors';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'defaultBody' | 'italic' | 'acccent' | 'small' | 'header1' | 'header2' | 'header3' | 'header4' | 'header5';
+  type?: 'defaultBody' | 'italic' | 'accent' | 'small' | 'header1' | 'header2' | 'header3' | 'header4' | 'header5';
+  color?: keyof typeof Colors.light;
 };
 
 export function ThemedText({
-  style,
-  lightColor,
-  darkColor,
-  type = 'defaultBody',
-  ...rest
+ style,
+ lightColor,
+ darkColor,
+ type = 'defaultBody',
+ color = 'text',
+ ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const textColor = useThemeColor({light: lightColor, dark: darkColor}, color);
+
+  // fonts import
+  const [fontsLoaded] = useFonts({
+    'Gabarito': require('@/assets/fonts/Gabarito.ttf'),
+    'Inter': require('@/assets/fonts/Inter.ttf'),
+    'Inter-italic': require('@/assets/fonts/Inter-italic.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return <Text>Chargement...</Text>
+  }
 
   return (
-    <Text
-      style={[
-        { color },
-        type === 'defaultBody' ? styles.defaultBody : undefined,
-        style,
-      ]}
-      {...rest}
-    />
+      <Text
+          style={[
+            {color : textColor},
+            styles[type],
+            style
+          ]}
+          {...rest}
+      />
   );
 }
 

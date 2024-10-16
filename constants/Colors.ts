@@ -15,6 +15,12 @@ export const Colors = {
 
   },
   dark: {
-    text: '#ECEDEE',
+    text: '#FFF',
+    primary: '#2980b9',
+    secondary: '#27ae60',
+    background: '#000',
+    inputText: '#ccc',
+    inputBackground: '#333',
+    accent: '#c0392b',
   },
 };

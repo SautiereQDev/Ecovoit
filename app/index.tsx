@@ -1,18 +1,20 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import {StyleSheet, View} from "react-native";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function Index() {
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Ecovoit</Text>
-      <Link href="/login">Connexion/Inscription</Link>
-      
-    </View>
+      <View style={styles.container}>
+        <ThemedText type="header1" color="primary">Ecovoit</ThemedText>
+      </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
