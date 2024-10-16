@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-native",
     "strict": true,
     "paths": {
       "@/*": [
         "./*"
-      ],
+      ]
+
     },
     "allowImportingTsExtensions": true
   },
