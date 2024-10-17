@@ -4,7 +4,6 @@
  */
 
 export const Colors = {
-<<<<<<< HEAD
   light: {
     text: '#11181C',
     primary: '#00570D',
@@ -24,25 +23,4 @@ export const Colors = {
     inputBackground: '#333',
     accent: '#c0392b',
   },
-=======
-	light: {
-		text: "#11181C",
-		primary: "#00570D",
-		secondary: "#106EB2",
-		accent: "#6CC5D5",
-		background: "#FDFFFD",
-		inputText: "#616161",
-		inputBackground: "#E6E6E6",
-	},
-	dark: {
-		// TODO: définir la palette de couleur du darkmode
-		text: "#11181C",
-		primary: "#00570D",
-		secondary: "#106EB2",
-		accent: "#6CC5D5",
-		background: "#FDFFFD",
-		inputText: "#616161",
-		inputBackground: "#E6E6E6",
-	},
->>>>>>> 8813d1f730969f41f12aaffae9e1d6101eaeb7f4
 };

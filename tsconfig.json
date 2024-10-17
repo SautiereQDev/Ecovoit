@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react-native",
@@ -10,7 +9,8 @@
       ]
 
     },
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": [
     "**/*.ts",
@@ -18,20 +18,6 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
   ]
-=======
-	"extends": "expo/tsconfig.base",
-	"compilerOptions": {
-		"strict": true,
-		"paths": {
-			"@/*": ["./*"]
-		}
-	},
-	"include": [
-		"**/*.ts",
-		"**/*.tsx",
-		".expo/types/**/*.ts",
-		"expo-env.d.ts",
-		"constants/Colors.ts"
-	]
->>>>>>> 8813d1f730969f41f12aaffae9e1d6101eaeb7f4
 }
+
+
