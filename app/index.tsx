@@ -1,24 +1,37 @@
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import DestinationForm from "@/components/DestinationForm";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 export default function Index() {
 	const [data, setData] = useState({ position: "", destination: "" });
 
 	return (
-		<View style={styles.container}>
-			<ThemedText
-				type='header1'
-				color='primary'
+		<>
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
 			>
-				Ecovoit
-			</ThemedText>
-			<DestinationForm
-				formData={data}
-				submitForm={setData}
-			/>
-		</View>
+				<Text>Ecovoit</Text>
+				<Link href='/login'>Connexion/Inscription</Link>
+			</View>
+			<View style={styles.container}>
+				<ThemedText
+					type='header1'
+					color='primary'
+				>
+					Ecovoit
+				</ThemedText>
+				<DestinationForm
+					formData={data}
+					submitForm={setData}
+				/>
+			</View>
+		</>
 	);
 }
 
