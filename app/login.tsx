@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import LoginForm from "@/components/LoginForm";
 

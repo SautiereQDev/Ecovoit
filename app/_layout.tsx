@@ -1,6 +1,4 @@
 import { Stack } from "expo-router";
-import Login from "./login.js";
-import { users } from "@/tests/User.js";
 
 export default function RootLayout() {
 	// const [authenticated, setAuthenticated] = useState(false);
