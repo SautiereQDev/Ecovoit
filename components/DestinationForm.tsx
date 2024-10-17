@@ -33,10 +33,11 @@ export default function DestinationForm({
 			/>
 			<View style={styles.submitButtonContainer}>
 				<CustomButton
-					text='Rechercher'
-					buttonStyle={styles.submitButton}
-					textProps={{ color: "background" }}
-				/>
+						title='Rechercher'
+						buttonStyle={styles.submitButton}
+						textProps={{color: "background"}}
+						onPress={() => alert('salut')}
+						/>
 			</View>
 		</View>
 	);
