@@ -1,7 +1,6 @@
 import {
 	ButtonProps,
 	StyleProp,
-	StyleSheet,
 	TouchableOpacity,
 	ViewStyle,
 } from "react-native";
@@ -67,9 +66,3 @@ export default function IconButton({
 		</TouchableOpacity>
 	);
 }
-
-const styles = StyleSheet.create({
-	text: {
-		textAlign: "center",
-	},
-});
