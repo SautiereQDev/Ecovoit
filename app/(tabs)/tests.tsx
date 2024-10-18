@@ -3,9 +3,10 @@
  */
 
 import { View } from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function Tests() {
 	// Insérer les composants à tester
 
-	return <View></View>;
+	return <SafeAreaView></SafeAreaView>;
 }
