@@ -8,8 +8,8 @@ import {
 import React, { SetStateAction } from "react";
 import CustomButton from "./CustomButton";
 import { destinationSearch } from "../types.ts";
-import Octicons from "@expo/vector-icons/Octicons";
 import { Colors } from "@/constants/Colors.ts";
+import IconButton from "@/components/IconButton.tsx";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -41,11 +41,12 @@ export default function DestinationForm({
 						onPress={() => alert("salut")}
 					/>
 				</View>
-				<Octicons
+				<IconButton
 					name='arrow-switch'
 					size={24}
 					color='black'
 					style={styles.switchButton}
+					title={""}
 				/>
 			</View>
 		</View>
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		height: 40,
 		width: 40,
-		paddingVertical: 8,
-		paddingHorizontal: 10,
+		paddingVertical: 5,
+		paddingHorizontal: 8,
 		margin: "auto",
 		borderRadius: 5,
 		transform: [{ rotate: "90deg" }],
