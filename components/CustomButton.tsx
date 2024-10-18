@@ -10,7 +10,7 @@ import { ThemedText } from "@/components/ThemedText.tsx";
 import { Colors } from "@/constants/Colors";
 
 type Props = ButtonProps & {
-	buttonStyle: StyleProp<ViewStyle>;
+	buttonStyle?: StyleProp<ViewStyle>;
 	textProps?: {
 		type?:
 			| "header1"
@@ -30,15 +30,15 @@ export default function CustomButton({
 	buttonStyle,
 	title,
 	textProps,
-	...buttonProps
+	...restProps
 }: Props) {
 	return (
 		<TouchableOpacity
 			style={buttonStyle}
-			{...buttonProps}
+			{...restProps}
 		>
 			<ThemedText
-				type={textProps?.type ?? "defaultBody"}
+				type={textProps?.type ?? "accent"}
 				color={textProps?.color}
 				style={styles.text} // Separate style for the text
 			>
