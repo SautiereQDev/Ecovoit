@@ -9,6 +9,7 @@ import React, { SetStateAction } from "react";
 import CustomButton from "./CustomButton";
 import { destinationSearch } from "../types.ts";
 import Octicons from "@expo/vector-icons/Octicons";
+import { Colors } from "@/constants/Colors.ts";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -24,7 +25,7 @@ export default function DestinationForm({
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.inputsContainer}>
-				<View style={styles.searchInputOnly}>
+				<View style={styles.searchForm}>
 					<TextInput
 						placeholder='Entrez votre position'
 						style={styles.searchInput}
@@ -33,16 +34,19 @@ export default function DestinationForm({
 						placeholder='Entrez votre destination'
 						style={styles.searchInput}
 					/>
-				</View>
-				<Octicons name="arrow-switch" size={24} color="black" style={styles.switchButton}/>
-			</View>
-			<View style={styles.submitButtonContainer}>
-				<CustomButton
+					<CustomButton
 						title='Rechercher'
 						buttonStyle={styles.submitButton}
-						textProps={{color: "background"}}
-						onPress={() => alert('salut')}
-						/>
+						textProps={{ color: "background" }}
+						onPress={() => alert("salut")}
+					/>
+				</View>
+				<Octicons
+					name='arrow-switch'
+					size={24}
+					color='black'
+					style={styles.switchButton}
+				/>
 			</View>
 		</View>
 	);
@@ -64,15 +68,13 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		margin: "auto",
 		borderRadius: 5,
-		transform: [{ rotate: '90deg' }],
+		transform: [{ rotate: "90deg" }],
 	},
 	inputsContainer: {
 		display: "flex",
 		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
 		width: "100%",
-		gap: 30
+		gap: 30,
 	},
 	searchInput: {
 		borderWidth: 1,
@@ -83,20 +85,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	// style du conteneur du parent pour son integration dans la page
-	submitButtonContainer: {
-		marginTop: 5,
-	},
-	searchInputOnly: {
+	searchForm: {
 		display: "flex",
-		height: 93,
+		height: 140,
 		width: "85%",
 		gap: 10,
 	},
 	// style pour personaliser le boutton
 	submitButton: {
-		backgroundColor: "green",
+		backgroundColor: Colors.light.accent,
 		borderRadius: 20,
-		paddingVertical: 8,
-		paddingHorizontal: 25,
+		paddingVertical: 6,
+		paddingHorizontal: 20,
+		width: 145,
+		marginTop: 5, // Ajoutez cette ligne pour augmenter le margin
 	},
 });

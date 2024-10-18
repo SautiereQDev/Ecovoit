@@ -1,38 +1,38 @@
-import {StyleSheet} from "react-native";
-import {ThemedText} from "@/components/ThemedText";
+import { StyleSheet } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
 import DestinationForm from "@/components/DestinationForm";
-import {useState} from "react";
-import {Colors} from "@/constants/Colors.ts";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { useState } from "react";
+import { Colors } from "@/constants/Colors.ts";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-    const [data, setData] = useState({position: "", destination: ""});
+	const [data, setData] = useState({ position: "", destination: "" });
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ThemedText
-                type='header1'
-                color='primary'
-            >
-                Ecovoit
-            </ThemedText>
-            <DestinationForm
-                formData={data}
-                submitForm={setData}
+	return (
+		<SafeAreaView style={styles.container}>
+			<ThemedText
+				type='header1'
+				color='primary'
+			>
+				Ecovoit
+			</ThemedText>
+			<DestinationForm
+				formData={data}
+				submitForm={setData}
 				style={styles.searchInput}
-            />
-        </SafeAreaView>
-    );
+			/>
+		</SafeAreaView>
+	);
 }
 
 const styles = StyleSheet.create({
-    container: {
+	container: {
 		paddingTop: 40,
-        flex: 1,
-        backgroundColor: Colors.light.background,
-        alignItems: "center",
-    },
+		flex: 1,
+		backgroundColor: Colors.light.background,
+		alignItems: "center",
+	},
 	searchInput: {
-		marginTop : 20
-	}
+		marginTop: 20,
+	},
 });

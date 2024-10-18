@@ -1,7 +1,13 @@
-import {ButtonProps, StyleProp, StyleSheet, TouchableOpacity, ViewStyle,} from "react-native";
+import {
+	ButtonProps,
+	StyleProp,
+	StyleSheet,
+	TouchableOpacity,
+	ViewStyle,
+} from "react-native";
 import React from "react";
-import {ThemedText} from "@/components/ThemedText.tsx";
-import {Colors} from "@/constants/Colors";
+import { ThemedText } from "@/components/ThemedText.tsx";
+import { Colors } from "@/constants/Colors";
 
 type Props = ButtonProps & {
 	buttonStyle: StyleProp<ViewStyle>;
@@ -15,15 +21,22 @@ type Props = ButtonProps & {
 			| "small"
 			| "italic"
 			| "accent"
-			| "defaultBody"
-			| undefined;
+			| "defaultBody";
 		color: keyof typeof Colors.light;
 	};
 };
 
-export default function CustomButton({buttonStyle, title, textProps, ...buttonProps}: Props) {
+export default function CustomButton({
+	buttonStyle,
+	title,
+	textProps,
+	...buttonProps
+}: Props) {
 	return (
-		<TouchableOpacity style={buttonStyle} {...buttonProps}>
+		<TouchableOpacity
+			style={buttonStyle}
+			{...buttonProps}
+		>
 			<ThemedText
 				type={textProps?.type ?? "defaultBody"}
 				color={textProps?.color}
