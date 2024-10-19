@@ -35,7 +35,7 @@ export default function DestinationForm({
 						style={styles.searchInput}
 					/>
 					<CustomButton
-						title='Rechercher'
+						text='Rechercher'
 						buttonStyle={styles.submitButton}
 						textProps={{ color: "background" }}
 						onPress={() => alert("salut")}
