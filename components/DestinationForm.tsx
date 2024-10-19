@@ -6,10 +6,10 @@ import {
 	ViewStyle,
 } from "react-native";
 import React, { SetStateAction } from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "./UI/CustomButton";
 import { destinationSearch } from "../types.ts";
 import { Colors } from "@/constants/Colors.ts";
-import IconButton from "@/components/IconButton.tsx";
+import IconButton from "@/components/UI/IconButton.tsx";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -99,6 +99,5 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		paddingHorizontal: 20,
 		width: 145,
-		marginTop: 5, // Ajoutez cette ligne pour augmenter le margin
 	},
 });
