@@ -8,7 +8,7 @@ export const Colors = {
     text: '#11181C',
     primary: '#00570D',
     secondary: '#106EB2',
-    accent: '#6CC5D5',
+    accent: '#5bb6c6',
     background: '#FDFFFD',
     inputText : '#616161',
     inputBackground : '#E6E6E6',
