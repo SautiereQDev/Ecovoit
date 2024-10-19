@@ -1,14 +1,8 @@
-import {
-	StyleProp,
-	StyleSheet,
-	TextInput,
-	View,
-	ViewStyle,
-} from "react-native";
-import React, { SetStateAction } from "react";
+import {StyleProp, StyleSheet, TextInput, View, ViewStyle,} from "react-native";
+import React, {SetStateAction} from "react";
 import CustomButton from "./UI/CustomButton";
-import { destinationSearch } from "../types.ts";
-import { Colors } from "@/constants/Colors.ts";
+import {destinationSearch} from "../types.ts";
+import {Colors} from "@/constants/Colors.ts";
 import IconButton from "@/components/UI/IconButton.tsx";
 
 type props = {
@@ -58,8 +52,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		backgroundColor: "#fff",
 		alignItems: "center",
-		gap: 10,
-		width: "75%",
 	},
 	switchButton: {
 		borderWidth: 2,
@@ -88,16 +80,14 @@ const styles = StyleSheet.create({
 	// style du conteneur du parent pour son integration dans la page
 	searchForm: {
 		display: "flex",
-		height: 140,
+		height: 160,
 		width: "85%",
-		gap: 10,
+		gap: 16,
 	},
 	// style pour personaliser le boutton
 	submitButton: {
 		backgroundColor: Colors.light.accent,
-		borderRadius: 20,
-		paddingVertical: 6,
-		paddingHorizontal: 20,
+		borderRadius: 10,
 		width: 145,
 	},
 });
