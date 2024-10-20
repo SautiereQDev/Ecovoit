@@ -2,6 +2,8 @@ import { StyleSheet, Text, type TextProps } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useFonts } from "expo-font";
 import { Colors } from "@/constants/Colors";
+import { useEffect } from "react";
+import * as SplashScreen from 'expo-splash-screen';
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
@@ -20,28 +22,37 @@ export type ThemedTextProps = TextProps & {
 };
 
 export function ThemedText({
-	style,
-	lightColor,
-	darkColor,
-	type = "defaultBody",
-	color = "text",
-	...rest
-}: ThemedTextProps) {
+	                           style,
+	                           lightColor,
+	                           darkColor,
+	                           type = "defaultBody",
+	                           color = "text",
+	                           ...rest
+                           }: ThemedTextProps) {
+
 	const textColor = useThemeColor(
 		{ light: lightColor, dark: darkColor },
-		color,
+		color
 	);
 
-	// fonts import
-	const [fontsLoaded] = useFonts({
-		Gabarito: require("@/assets/fonts/Gabarito.ttf"),
-		Inter: require("@/assets/fonts/Inter.ttf"),
-		"Inter-italic": require("@/assets/fonts/Inter-italic.ttf"),
+	const [loaded, error] = useFonts({
+		"Inter": require("../assets/fonts/Inter.ttf"),
+		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
+		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
+		"Gabarito-Medium": require("../assets/fonts/Gabarito-Medium.ttf"),
 	});
 
-	if (!fontsLoaded) {
-		return <Text>Chargement...</Text>;
+	// fonts import
+	useEffect(() => {
+		if (loaded || error) {
+			SplashScreen.hideAsync();
+		}
+	}, [loaded, error]);
+
+	if (!loaded && !error) {
+		return null;
 	}
+
 
 	return (
 		<Text
@@ -71,28 +82,23 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 	},
 	header1: {
-		fontFamily: "Gabarito",
+		fontFamily: "Gabarito-bold",
 		fontSize: 60.5,
-		fontWeight: "bold",
 	},
 	header2: {
-		fontFamily: "Gabarito",
+		fontFamily: "Gabarito-bold",
 		fontSize: 42,
-		fontWeight: "bold",
 	},
 	header3: {
-		fontFamily: "Gabarito",
+		fontFamily: "Gabarito-bold",
 		fontSize: 38,
-		fontWeight: "bold",
 	},
 	header4: {
-		fontFamily: "Gabarito",
+		fontFamily: "Gabarito-bold",
 		fontSize: 28.5,
-		fontWeight: "bold",
 	},
 	header5: {
-		fontFamily: "Gabarito",
+		fontFamily: "Gabarito-medium",
 		fontSize: 21,
-		fontWeight: "bold",
 	},
 });
