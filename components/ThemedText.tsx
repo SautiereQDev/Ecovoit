@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
 	accent: {
 		fontFamily: "Inter",
 		fontWeight: "bold",
-		fontSize: 18,
+		fontSize: 19,
+		letterSpacing: 0.25,
 	},
 	small: {
 		fontFamily: "Inter",
@@ -87,11 +88,12 @@ const styles = StyleSheet.create({
 	},
 	header2: {
 		fontFamily: "Gabarito-bold",
-		fontSize: 42,
+		fontSize: 46,
 	},
 	header3: {
 		fontFamily: "Gabarito-bold",
-		fontSize: 38,
+		fontSize: 35.5,
+		lineHeight: 45,
 	},
 	header4: {
 		fontFamily: "Gabarito-bold",

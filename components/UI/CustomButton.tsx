@@ -37,11 +37,11 @@ buttonStyle,
 text,
 textProps,
 ...restProps
-}: Props) {
+}: Props): JSX.Element {
 	return (
 			<Pressable style={[styles.button, buttonStyle]} {...restProps}>
 				<ThemedText
-						type={textProps?.type ?? "defaultBody"}
+						type={textProps?.type ?? "accent"}
 						color={textProps?.color}
 						style={styles.text}
 				>
