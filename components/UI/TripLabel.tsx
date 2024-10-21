@@ -8,64 +8,34 @@ type Props = {
 	style?: ViewStyle;
 };
 
+const labelColors = {
+	"en cours": Colors.light.hidden,
+	effectué: "#00B309",
+	annulé: "#C00600",
+};
+
 export default function TripLabel({ status, style }: Readonly<Props>) {
-	switch (status) {
-		case "en cours":
-			return (
-				<View style={[styles.enCour, style]}>
-					<ThemedText
-						type={"small"}
-						color='background'
-						style={styles.text}
-					>
-						En cours
-					</ThemedText>
-				</View>
-			);
-		case "effectué":
-			return (
-				<View style={[styles.effectue, style]}>
-					<ThemedText
-						type={"small"}
-						color='background'
-						style={styles.text}
-					>
-						Effectué
-					</ThemedText>
-				</View>
-			);
-		case "annulé":
-			return (
-				<View style={[styles.annule, style]}>
-					<ThemedText
-						type={"small"}
-						color='background'
-						style={styles.text}
-					>
-						Annulé
-					</ThemedText>
-				</View>
-			);
-	}
+	return (
+		<View
+			style={[
+				styles.container,
+				style,
+				{ backgroundColor: labelColors[status] },
+			]}
+		>
+			<ThemedText
+				type={"small"}
+				color='background'
+				style={styles.text}
+			>
+				{status.charAt(0).toUpperCase() + status.slice(1)}
+			</ThemedText>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-	enCour: {
-		backgroundColor: Colors.light.hidden,
-		margin: "auto",
-		width: "40%",
-		paddingVertical: 3,
-		borderRadius: 10,
-	},
-	effectue: {
-		backgroundColor: "#00B309",
-		margin: "auto",
-		width: "40%",
-		paddingVertical: 3,
-		borderRadius: 10,
-	},
-	annule: {
-		backgroundColor: "#C00600",
+	container: {
 		margin: "auto",
 		width: "40%",
 		paddingVertical: 3,
