@@ -14,6 +14,9 @@ const labelColors = {
 	annulé: "#C00600",
 };
 
+const textColor = (status: "effectué" | "en cours" | "annulé") =>
+	status === "en cours" ? Colors.light.text : "#fff";
+
 export default function TripLabel({ status, style }: Readonly<Props>) {
 	return (
 		<View
@@ -25,8 +28,10 @@ export default function TripLabel({ status, style }: Readonly<Props>) {
 		>
 			<ThemedText
 				type={"small"}
-				color='background'
-				style={styles.text}
+				style={[
+					{ color: status === "en cours" ? Colors.light.text : "#fff" },
+					styles.text,
+				]}
 			>
 				{status.charAt(0).toUpperCase() + status.slice(1)}
 			</ThemedText>
