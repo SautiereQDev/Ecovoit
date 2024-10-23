@@ -22,6 +22,6 @@ export default function ListHistoricTrip({ data }: Readonly<Props>) {
 const styles = StyleSheet.create({
 	container: {
 		display: "flex",
-		gap: 15,
+		gap: 20,
 	},
 });
