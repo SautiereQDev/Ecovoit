@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
 		borderRadius: 9999,
 		borderWidth: 1,
 		borderColor: Colors.light.background,
+		marginLeft: 5,
 	},
 	textContainer: {
 		display: "flex",
@@ -80,12 +81,12 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "space-between",
 		marginLeft: "auto",
-		maxWidth: "75%",
+		maxWidth: "72%",
 	},
 	header: {
 		display: "flex",
 		flexDirection: "row",
-		gap: 55,
+		gap: 50,
 	},
 	date: {
 		alignSelf: "flex-end",
