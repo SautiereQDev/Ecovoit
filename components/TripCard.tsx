@@ -34,25 +34,66 @@ export default function TripCard({ style, data }: Readonly<Props>) {
 				source={require("@/assets/images/user-picture.jpg")}
 				style={styles.userImage}
 			/>
-			<ThemedText color={"background"}>{data.nom}</ThemedText>
-			<TripLabel status={data.status} />
-			<ThemedText color='background'>
-				{data.depart}
-				{"->"}
-				{data.destination}
-			</ThemedText>
-			<ThemedText color='background'>{data.date}</ThemedText>
+			<View style={styles.textContainer}>
+				<View style={styles.header}>
+					<ThemedText
+						type='header4'
+						color={"background"}
+						style={{ marginLeft: 20 }}
+					>
+						{data.nom}
+					</ThemedText>
+					<TripLabel
+						status={data.status}
+						style={{ alignSelf: "baseline" }}
+					/>
+				</View>
+				<ThemedText
+					color='background'
+					style={styles.destination}
+				>
+					{data.depart} {"->"} {data.destination}
+				</ThemedText>
+				<ThemedText
+					color='background'
+					style={styles.date}
+				>
+					{data.date}
+				</ThemedText>
+			</View>
 		</View>
 	);
 }
+
 const styles = StyleSheet.create({
 	container: {
-		// width: "100%",
+		display: "flex",
+		flexDirection: "row",
+		width: "100%",
+		padding: 10,
 		overflow: "hidden",
 	},
 	userImage: {
-		width: 50,
-		height: 50,
+		width: "20%",
+		marginVertical: "auto",
+		aspectRatio: 1,
 		borderRadius: 9999,
+	},
+	textContainer: {
+		display: "flex",
+		flex: 1,
+		flexDirection: "column",
+		justifyContent: "space-between",
+		marginLeft: "auto",
+		maxWidth: "75%",
+	},
+	header: {
+		display: "flex",
+		flexDirection: "row",
+		gap: 55,
+	},
+	date: {
+		alignSelf: "flex-end",
+		marginTop: 5,
 	},
 });
