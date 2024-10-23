@@ -8,7 +8,7 @@ type Props = {
 	style?: ViewStyle;
 };
 
-const labelColors = {
+const backgroundColor = {
 	"en cours": Colors.light.hidden,
 	effectué: "#00B309",
 	annulé: "#C00600",
@@ -20,7 +20,7 @@ export default function TripLabel({ status, style }: Readonly<Props>) {
 			style={[
 				styles.container,
 				style,
-				{ backgroundColor: labelColors[status] },
+				{ backgroundColor: backgroundColor[status] },
 			]}
 		>
 			<ThemedText
