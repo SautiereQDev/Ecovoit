@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
 	italic: fonts.italic,
 	accent: fonts.accent,
 	small: fonts.small,
+	smaller: fonts.smaller,
 	header1: fonts.header1,
 	header2: fonts.header2,
 	header3: fonts.header3,

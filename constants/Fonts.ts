@@ -16,6 +16,10 @@ export const fonts = {
 	},
 	small: {
 		fontFamily: "Inter",
+		fontSize: 14,
+	},
+	smaller: {
+		fontFamily: "Inter",
 		fontSize: 12,
 	},
 	header1: {
