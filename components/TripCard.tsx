@@ -8,7 +8,7 @@ import { TripCardType } from "@/types";
 const backgroundColor = {
 	"en cours": Colors.light.accent,
 	effectue: Colors.light.secondary,
-	annule: Colors.light.secondary,
+	annule: Colors.light.inputText,
 };
 
 type Props = {
@@ -23,6 +23,7 @@ export default function TripCard({ style, data }: Readonly<Props>) {
 				styles.container,
 				style,
 				{ backgroundColor: backgroundColor[data.status] },
+				data.status === "annule" && styles.cancelledCard,
 			]}
 		>
 			<Image
@@ -44,11 +45,14 @@ export default function TripCard({ style, data }: Readonly<Props>) {
 					/>
 				</View>
 				<ThemedText color='background'>
-					{data.depart} {"->"} {data.destination}
+					{data.depart}
+					{" -> "}
+					{data.destination}
 				</ThemedText>
 				<ThemedText
 					color='background'
 					style={styles.date}
+					type={"smaller"}
 				>
 					{data.date}
 				</ThemedText>
@@ -75,18 +79,17 @@ const styles = StyleSheet.create({
 		borderColor: Colors.light.background,
 		marginLeft: 5,
 	},
+	cancelledCard: {
+		opacity: 0.75, // Apply grayscale effect using opacity
+	},
 	textContainer: {
-		display: "flex",
-		flex: 1,
-		flexDirection: "column",
-		justifyContent: "space-between",
 		marginLeft: "auto",
 		maxWidth: "72%",
 	},
 	header: {
 		display: "flex",
 		flexDirection: "row",
-		gap: 50,
+		gap: 45,
 	},
 	date: {
 		alignSelf: "flex-end",

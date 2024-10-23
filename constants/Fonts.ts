@@ -5,12 +5,12 @@ export const fonts = {
 	},
 	italic: {
 		fontFamily: "Inter-italic",
-		fontStyle: "italic" as "italic",
+		fontStyle: "italic" as const,
 		fontSize: 16,
 	},
 	accent: {
 		fontFamily: "Inter",
-		fontWeight: "bold" as "bold",
+		fontWeight: "bold" as const,
 		fontSize: 19,
 		letterSpacing: 0.25,
 	},
@@ -20,7 +20,7 @@ export const fonts = {
 	},
 	smaller: {
 		fontFamily: "Inter",
-		fontSize: 12,
+		fontSize: 13,
 	},
 	header1: {
 		fontFamily: "Gabarito-bold",
