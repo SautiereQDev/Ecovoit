@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
 		marginVertical: "auto",
 		aspectRatio: 1,
 		borderRadius: 9999,
+		borderWidth: 1,
+		borderColor: Colors.light.background,
 	},
 	textContainer: {
 		display: "flex",
