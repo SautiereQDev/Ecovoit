@@ -41,6 +41,7 @@ export default function DestinationForm({
 						onPress={() => alert("salut")}
 					/>
 				</View>
+
 				<IconButton
 					name='arrow-switch'
 					size={24}
