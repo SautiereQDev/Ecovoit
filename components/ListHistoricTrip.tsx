@@ -9,7 +9,7 @@ type Props = {
 
 export default function ListHistoricTrip({ data }: Readonly<Props>) {
 	return (
-		<View>
+		<View style={styles.container}>
 			{data.map((el, index) => (
 				<TripCard
 					data={el}
@@ -19,4 +19,9 @@ export default function ListHistoricTrip({ data }: Readonly<Props>) {
 		</View>
 	);
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	container: {
+		display: "flex",
+		gap: 15,
+	},
+});
