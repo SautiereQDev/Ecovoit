@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		padding: 10,
 		overflow: "hidden",
+		borderRadius: 5,
 	},
 	userImage: {
 		width: "20%",
