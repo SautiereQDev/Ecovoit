@@ -3,22 +3,17 @@ import React from "react";
 import TripLabel from "@/components/UI/TripLabel.tsx";
 import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText.tsx";
+import { TripCardType } from "@/types";
 
 const backgroundColor = {
 	"en cours": Colors.light.accent,
-	effectue: Colors.light.primary,
-	annule: Colors.light.primary,
+	effectue: Colors.light.secondary,
+	annule: Colors.light.secondary,
 };
 
 type Props = {
 	style?: ViewStyle;
-	data: {
-		depart: string;
-		destination: string;
-		status: "en cours" | "effectue" | "annule";
-		nom: string;
-		date: string;
-	};
+	data: TripCardType;
 };
 
 export default function TripCard({ style, data }: Readonly<Props>) {
