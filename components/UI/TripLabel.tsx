@@ -4,14 +4,14 @@ import { ThemedText } from "@/components/ThemedText.tsx";
 import { Colors } from "@/constants/Colors.ts";
 
 type Props = {
-	status: "effectué" | "en cours" | "annulé";
+	status: "effectue" | "en cours" | "annule";
 	style?: ViewStyle;
 };
 
 const backgroundColor = {
 	"en cours": Colors.light.hidden,
-	effectué: "#00B309",
-	annulé: "#C00600",
+	effectue: "#00B309",
+	annule: "#C00600",
 };
 
 export default function TripLabel({ status, style }: Readonly<Props>) {

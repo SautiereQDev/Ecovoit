@@ -6,8 +6,8 @@ import { ThemedText } from "@/components/ThemedText.tsx";
 
 const backgroundColor = {
 	"en cours": Colors.light.accent,
-	effectué: Colors.light.primary,
-	annulé: Colors.light.primary,
+	effectue: Colors.light.primary,
+	annule: Colors.light.primary,
 };
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 	data: {
 		depart: string;
 		destination: string;
-		status: "en cours" | "effectué" | "annulé";
+		status: "en cours" | "effectue" | "annule";
 		nom: string;
 		date: string;
 	};
@@ -48,10 +48,7 @@ export default function TripCard({ style, data }: Readonly<Props>) {
 						style={{ alignSelf: "baseline" }}
 					/>
 				</View>
-				<ThemedText
-					color='background'
-					style={styles.destination}
-				>
+				<ThemedText color='background'>
 					{data.depart} {"->"} {data.destination}
 				</ThemedText>
 				<ThemedText
