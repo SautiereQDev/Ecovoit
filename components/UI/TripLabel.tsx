@@ -39,7 +39,7 @@ export default function TripLabel({ status, style }: Readonly<Props>) {
 const styles = StyleSheet.create({
 	container: {
 		margin: "auto",
-		width: "40%",
+		width: "30%",
 		paddingVertical: 3,
 		borderRadius: 10,
 	},
