@@ -1,8 +1,14 @@
-import {StyleProp, StyleSheet, TextInput, View, ViewStyle,} from "react-native";
-import React, {SetStateAction} from "react";
+import {
+	StyleProp,
+	StyleSheet,
+	TextInput,
+	View,
+	ViewStyle,
+} from "react-native";
+import React, { SetStateAction } from "react";
 import CustomButton from "./UI/CustomButton";
-import {destinationSearch} from "../types.ts";
-import {Colors} from "@/constants/Colors.ts";
+import { destinationSearch } from "../types.ts";
+import { Colors } from "@/constants/Colors.ts";
 import IconButton from "@/components/UI/IconButton.tsx";
 
 type props = {
@@ -15,7 +21,7 @@ export default function DestinationForm({
 	style,
 	formData,
 	submitForm,
-}: props) {
+}: Readonly<props>) {
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.inputsContainer}>

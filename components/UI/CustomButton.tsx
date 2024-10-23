@@ -1,22 +1,28 @@
-import {Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle,} from "react-native";
+import {
+	Pressable,
+	PressableProps,
+	StyleProp,
+	StyleSheet,
+	ViewStyle,
+} from "react-native";
 import React from "react";
-import {ThemedText} from "../ThemedText.tsx";
-import {Colors} from "../../constants/Colors";
+import { ThemedText } from "../ThemedText.tsx";
+import { Colors } from "@/constants/Colors.ts";
 
 type Props = PressableProps & {
 	buttonStyle?: StyleProp<ViewStyle>;
 	text: string;
 	textProps?: {
 		type?:
-				| "header1"
-				| "header2"
-				| "header3"
-				| "header4"
-				| "header5"
-				| "small"
-				| "italic"
-				| "accent"
-				| "defaultBody";
+			| "header1"
+			| "header2"
+			| "header3"
+			| "header4"
+			| "header5"
+			| "small"
+			| "italic"
+			| "accent"
+			| "defaultBody";
 		color: keyof typeof Colors.light;
 	};
 };
@@ -33,21 +39,24 @@ type Props = PressableProps & {
  * @returns {JSX.Element} The rendered button component.
  */
 export default function CustomButton({
-buttonStyle,
-text,
-textProps,
-...restProps
+	buttonStyle,
+	text,
+	textProps,
+	...restProps
 }: Props): JSX.Element {
 	return (
-			<Pressable style={[styles.button, buttonStyle]} {...restProps}>
-				<ThemedText
-						type={textProps?.type ?? "accent"}
-						color={textProps?.color}
-						style={styles.text}
-				>
-					{text}
-				</ThemedText>
-			</Pressable>
+		<Pressable
+			style={[styles.button, buttonStyle]}
+			{...restProps}
+		>
+			<ThemedText
+				type={textProps?.type ?? "accent"}
+				color={textProps?.color}
+				style={styles.text}
+			>
+				{text}
+			</ThemedText>
+		</Pressable>
 	);
 }
 
