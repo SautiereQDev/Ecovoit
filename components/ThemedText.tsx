@@ -1,5 +1,56 @@
-import { StyleSheet, Text, View } from "react-native";
-import fonts from "@/constants/Fonts";
+import { StyleSheet, Text, type TextProps, View } from "react-native";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { useFonts } from "expo-font";
+import { Colors } from "@/constants/Colors";
+import { useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import fonts from "@/constants/Fonts.ts";
+
+export type ThemedTextProps = TextProps & {
+	lightColor?: string;
+	darkColor?: string;
+	type?: keyof typeof styles;
+	color?: keyof typeof Colors.light;
+};
+
+export function ThemedText({
+	style,
+	lightColor,
+	darkColor,
+	type = "defaultBody",
+	color = "text",
+	...rest
+}: ThemedTextProps) {
+	const textColor = useThemeColor(
+		{ light: lightColor, dark: darkColor },
+		color,
+	);
+
+	const [loaded, error] = useFonts({
+		Inter: require("../assets/fonts/Inter.ttf"),
+		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
+		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
+		"Gabarito-Medium": require("../assets/fonts/Gabarito-Medium.ttf"),
+	});
+
+	// fonts import
+	useEffect(() => {
+		if (loaded || error) {
+			SplashScreen.hideAsync();
+		}
+	}, [loaded, error]);
+
+	if (!loaded && !error) {
+		return null;
+	}
+
+	return (
+		<Text
+			style={[{ color: textColor }, styles[type], style]}
+			{...rest}
+		/>
+	);
+}
 
 const styles = StyleSheet.create({
 	defaultBody: fonts.defaultBody,
@@ -13,6 +64,10 @@ const styles = StyleSheet.create({
 	header5: fonts.header5,
 });
 
+/**
+ * Composants d'example pour démontrer différents styles de police.
+ * Ce composant rend un ensemble d'éléments Text avec divers styles.
+ */
 export default function FontStylesExample() {
 	return (
 		<View>
