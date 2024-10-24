@@ -40,8 +40,9 @@ export const fonts = {
 		fontSize: 28.5,
 	},
 	header5: {
-		fontFamily: "Gabarito-medium",
+		fontFamily: "Inter",
 		fontSize: 21,
+		fontWeight: "bold",
 	},
 };
 
