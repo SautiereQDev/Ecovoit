@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		width: "100%",
+		justifyContent: "space-between",
 		padding: 10,
 		overflow: "hidden",
 		borderRadius: 5,
@@ -66,11 +67,7 @@ const styles = StyleSheet.create({
 		borderRadius: 9999,
 		borderWidth: 1,
 		borderColor: Colors.light.background,
-		marginLeft: 5,
-	},
-	textContainer: {
-		marginLeft: "auto",
-		maxWidth: "72%",
+		marginLeft: 10,
 	},
 	header: {
 		display: "flex",
@@ -81,5 +78,8 @@ const styles = StyleSheet.create({
 	date: {
 		alignSelf: "flex-end",
 		marginTop: 5,
+	},
+	textContainer: {
+		marginRight: 3,
 	},
 });
