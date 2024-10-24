@@ -4,12 +4,6 @@ import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText.tsx";
 import { SearchTripCardType } from "@/types.ts";
 
-const backgroundColor = {
-	"en cours": Colors.light.accent,
-	effectue: Colors.light.secondary,
-	annule: Colors.light.inputText,
-};
-
 type Props = {
 	style?: ViewStyle;
 	data: SearchTripCardType;
