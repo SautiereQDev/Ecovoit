@@ -10,3 +10,11 @@ export type TripCardType = {
 	nom: string;
 	date: string;
 };
+
+export type SearchTripCardType = {
+	depart: string;
+	destination: string;
+	nom: string;
+	date: string;
+	distance: number | string;
+};
