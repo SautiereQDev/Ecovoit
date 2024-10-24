@@ -6,10 +6,10 @@ import {
 	ViewStyle,
 } from "react-native";
 import React, { SetStateAction } from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "./UI/CustomButton";
 import { destinationSearch } from "../types.ts";
 import { Colors } from "@/constants/Colors.ts";
-import IconButton from "@/components/IconButton.tsx";
+import IconButton from "@/components/UI/IconButton.tsx";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -21,7 +21,7 @@ export default function DestinationForm({
 	style,
 	formData,
 	submitForm,
-}: props) {
+}: Readonly<props>) {
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.inputsContainer}>
@@ -35,12 +35,13 @@ export default function DestinationForm({
 						style={styles.searchInput}
 					/>
 					<CustomButton
-						title='Rechercher'
+						text='Rechercher'
 						buttonStyle={styles.submitButton}
 						textProps={{ color: "background" }}
 						onPress={() => alert("salut")}
 					/>
 				</View>
+
 				<IconButton
 					name='arrow-switch'
 					size={24}
@@ -58,8 +59,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		backgroundColor: "#fff",
 		alignItems: "center",
-		gap: 10,
-		width: "75%",
 	},
 	switchButton: {
 		borderWidth: 2,
@@ -88,17 +87,14 @@ const styles = StyleSheet.create({
 	// style du conteneur du parent pour son integration dans la page
 	searchForm: {
 		display: "flex",
-		height: 140,
+		height: 160,
 		width: "85%",
-		gap: 10,
+		gap: 16,
 	},
 	// style pour personaliser le boutton
 	submitButton: {
 		backgroundColor: Colors.light.accent,
-		borderRadius: 20,
-		paddingVertical: 6,
-		paddingHorizontal: 20,
+		borderRadius: 10,
 		width: 145,
-		marginTop: 5, // Ajoutez cette ligne pour augmenter le margin
 	},
 });

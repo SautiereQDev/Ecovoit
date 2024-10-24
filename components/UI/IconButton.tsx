@@ -5,7 +5,7 @@ import {
 	ViewStyle,
 } from "react-native";
 import React, { ComponentProps } from "react";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "../../constants/Colors";
 import Octicons from "@expo/vector-icons/Octicons";
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
@@ -30,22 +30,15 @@ type Props = ButtonProps &
 	};
 
 /**
- * Ce fichier définit le composant `IconButton`, qui est un bouton personnalisable
- * utilisant l'ensemble d'icônes Octicons de la bibliothèque `@expo/vector-icons`.
+ * IconButton component that renders a button with an icon.
  *
- * Props :
- * - `buttonStyle` (optionnel) : Styles personnalisés pour le conteneur du bouton.
- * - `textProps` (optionnel) : Propriétés supplémentaires pour le texte, y compris :
- *   - `type` : Le type de texte (par exemple, header1, header2, etc.).
- *   - `color` : La couleur du texte, qui doit être une clé de `Colors.light`.
- * - `iconStyle` : Styles personnalisés pour l'icône.
+ * @param {StyleProp<ViewStyle>} buttonStyle - Custom style for the button.
+ * @param {string} title - Title of the button.
+ * @param {object} textProps - Properties for the text inside the button.
+ * @param {StyleProp<ViewStyle>} iconStyle - Custom style for the icon.
+ * @param {Props} restProps - Other properties passed to the button.
  *
- * Attention:
- * Les props `name`, `size` et `color` sont obligatoires.
- * Title est obligatoire mais sa valeure est sans conséquence.
- *
- * Le composant combine les styles et les props pour rendre un `TouchableOpacity`
- * contenant une icône `Octicons`.
+ * @returns {JSX.Element} A TouchableOpacity component with an icon.
  */
 export default function IconButton({
 	buttonStyle,

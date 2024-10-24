@@ -4,23 +4,24 @@
  */
 
 export const Colors = {
-  light: {
-    text: '#11181C',
-    primary: '#00570D',
-    secondary: '#106EB2',
-    accent: '#6CC5D5',
-    background: '#FDFFFD',
-    inputText : '#616161',
-    inputBackground : '#E6E6E6',
-
-  },
-  dark: {
-    text: '#FFF',
-    primary: '#2980b9',
-    secondary: '#27ae60',
-    background: '#000',
-    inputText: '#ccc',
-    inputBackground: '#333',
-    accent: '#c0392b',
-  },
+	light: {
+		hidden: "#DCDCDC",
+		text: "#11181C",
+		primary: "#00570D",
+		secondary: "#106EB2",
+		accent: "#5bb6c6",
+		background: "#FDFFFD",
+		inputText: "#616161",
+		inputBackground: "#E6E6E6",
+	},
+	dark: {
+		hidden: "#DCDCDC",
+		text: "#FFF",
+		primary: "#2980b9",
+		secondary: "#27ae60",
+		background: "#000",
+		inputText: "#ccc",
+		inputBackground: "#333",
+		accent: "#c0392b",
+	},
 };

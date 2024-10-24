@@ -1,21 +1,15 @@
-import { StyleSheet, Text, type TextProps } from "react-native";
+import { StyleSheet, Text, type TextProps, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useFonts } from "expo-font";
 import { Colors } from "@/constants/Colors";
+import { useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import fonts from "@/constants/Fonts.ts";
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
 	darkColor?: string;
-	type?:
-		| "defaultBody"
-		| "italic"
-		| "accent"
-		| "small"
-		| "header1"
-		| "header2"
-		| "header3"
-		| "header4"
-		| "header5";
+	type?: keyof typeof styles;
 	color?: keyof typeof Colors.light;
 };
 
@@ -32,15 +26,22 @@ export function ThemedText({
 		color,
 	);
 
-	// fonts import
-	const [fontsLoaded] = useFonts({
-		Gabarito: require("@/assets/fonts/Gabarito.ttf"),
-		Inter: require("@/assets/fonts/Inter.ttf"),
-		"Inter-italic": require("@/assets/fonts/Inter-italic.ttf"),
+	const [loaded, error] = useFonts({
+		Inter: require("../assets/fonts/Inter.ttf"),
+		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
+		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
+		"Gabarito-medium": require("../assets/fonts/Gabarito-Medium.ttf"),
 	});
 
-	if (!fontsLoaded) {
-		return <Text>Chargement...</Text>;
+	// fonts import
+	useEffect(() => {
+		if (loaded || error) {
+			SplashScreen.hideAsync();
+		}
+	}, [loaded, error]);
+
+	if (!loaded && !error) {
+		return null;
 	}
 
 	return (
@@ -52,47 +53,34 @@ export function ThemedText({
 }
 
 const styles = StyleSheet.create({
-	defaultBody: {
-		fontFamily: "Inter",
-		fontSize: 16,
-	},
-	italic: {
-		fontFamily: "Inter-italic",
-		fontStyle: "italic",
-		fontSize: 16,
-	},
-	accent: {
-		fontFamily: "Inter",
-		fontWeight: "bold",
-		fontSize: 18,
-	},
-	small: {
-		fontFamily: "Inter",
-		fontSize: 12,
-	},
-	header1: {
-		fontFamily: "Gabarito",
-		fontSize: 60.5,
-		fontWeight: "bold",
-	},
-	header2: {
-		fontFamily: "Gabarito",
-		fontSize: 42,
-		fontWeight: "bold",
-	},
-	header3: {
-		fontFamily: "Gabarito",
-		fontSize: 38,
-		fontWeight: "bold",
-	},
-	header4: {
-		fontFamily: "Gabarito",
-		fontSize: 28.5,
-		fontWeight: "bold",
-	},
-	header5: {
-		fontFamily: "Gabarito",
-		fontSize: 21,
-		fontWeight: "bold",
-	},
+	defaultBody: fonts.defaultBody,
+	italic: fonts.italic,
+	accent: fonts.accent,
+	small: fonts.small,
+	smaller: fonts.smaller,
+	header1: fonts.header1,
+	header2: fonts.header2,
+	header3: fonts.header3,
+	header4: fonts.header4,
+	header5: fonts.header5,
 });
+
+/**
+ * Composants d'example pour démontrer différents styles de police.
+ * Ce composant rend un ensemble d'éléments Text avec divers styles.
+ */
+export default function FontStylesExample() {
+	return (
+		<View>
+			<Text style={styles.defaultBody}>Default Body Text</Text>
+			<Text style={styles.italic}>Italic Text</Text>
+			<Text style={styles.accent}>Accent Text</Text>
+			<Text style={styles.small}>Small Text</Text>
+			<Text style={styles.header1}>Header 1 Text</Text>
+			<Text style={styles.header2}>Header 2 Text</Text>
+			<Text style={styles.header3}>Header 3 Text</Text>
+			<Text style={styles.header4}>Header 4 Text</Text>
+			<Text style={styles.header5}>Header 5 Text</Text>
+		</View>
+	);
+}
