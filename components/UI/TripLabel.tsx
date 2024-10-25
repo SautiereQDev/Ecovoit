@@ -14,6 +14,12 @@ const backgroundColor = {
 	annule: "#C00600",
 };
 
+const statusText = {
+	"en cours": "En cours",
+	effectue: "Effectué",
+	annule: "Annulé",
+};
+
 export default function TripLabel({ status, style }: Readonly<Props>) {
 	return (
 		<View
@@ -30,7 +36,7 @@ export default function TripLabel({ status, style }: Readonly<Props>) {
 					styles.text,
 				]}
 			>
-				{status.charAt(0).toUpperCase() + status.slice(1)}
+				{statusText[status]}
 			</ThemedText>
 		</View>
 	);
