@@ -7,13 +7,18 @@ type Props = TextInputProps & {
 	style?: ViewStyle;
 };
 
-export default function TextInput({ placeholder, style }: Readonly<Props>) {
+export default function TextInput({
+	placeholder,
+	style,
+	...rest
+}: Readonly<Props>) {
 	return (
 		<View style={style}>
 			<TextInput
 				placeholder={placeholder}
 				style={styles.inputStyle}
 				cursorColor={Colors.light.inputText}
+				{...rest}
 			/>
 		</View>
 	);
