@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors.ts";
-import { ThemedText } from "@/components/ThemedText.tsx";
+import { ThemedText } from "@/components/ThemedText";
 import { SearchTripCardType } from "@/types.ts";
 
 type Props = {
