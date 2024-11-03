@@ -2,9 +2,10 @@
  * Cette page va nous servir en phase de développement pour tester des composants
  */
 
-import SearchPage from "../SearchPage";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Tests() {
 	// Insérer les composants à tester
-	return <SearchPage />;
+
+	return <SafeAreaView></SafeAreaView>;
 }
