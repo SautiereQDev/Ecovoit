@@ -3,7 +3,7 @@ import React from "react";
 import TripLabel from "@/components/UI/TripLabel.tsx";
 import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText.tsx";
-import { TripCardType } from "@/types";
+import { TripCardType } from "@/types/types";
 
 const backgroundColor = {
 	"en cours": Colors.light.accent,
@@ -16,7 +16,7 @@ type Props = {
 	data: TripCardType;
 };
 
-export default function TripCard({ style, data }: Readonly<Props>) {
+export function TripCard({ style, data }: Readonly<Props>) {
 	return (
 		<View
 			style={[
@@ -96,3 +96,5 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 	},
 });
+
+export default TripCard;

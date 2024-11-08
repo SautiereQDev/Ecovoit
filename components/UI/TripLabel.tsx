@@ -20,7 +20,7 @@ const statusText = {
 	annule: "Annulé",
 };
 
-export default function TripLabel({ status, style }: Readonly<Props>) {
+export function TripLabel({ status, style }: Readonly<Props>) {
 	return (
 		<View
 			style={[
@@ -53,3 +53,5 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export default TripLabel;

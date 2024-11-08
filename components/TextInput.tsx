@@ -7,7 +7,7 @@ type Props = TextInputProps & {
 	style?: ViewStyle;
 };
 
-export default function TextInput({
+export function TextInput({
 	placeholder,
 	style,
 	...rest
@@ -33,3 +33,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 });
+
+export default TextInput;
+

@@ -1,10 +1,15 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import {
+	StyleProp,
+	StyleSheet,
+	TextInput,
+	View,
+	ViewStyle,
+} from "react-native";
 import React, { SetStateAction } from "react";
 import CustomButton from "./UI/CustomButton";
-import { destinationSearch } from "../types.ts";
+import { destinationSearch } from "../types/types.ts";
 import { Colors } from "@/constants/Colors.ts";
 import IconButton from "@/components/UI/IconButton.tsx";
-import TextInput from "@/components/TextInput.tsx";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -12,7 +17,7 @@ type props = {
 	submitForm: React.Dispatch<SetStateAction<destinationSearch>>;
 };
 
-export default function DestinationForm({
+export function DestinationForm({
 	style,
 	formData,
 	submitForm,
@@ -23,9 +28,12 @@ export default function DestinationForm({
 				<View style={styles.searchForm}>
 					<TextInput
 						placeholder='Entrez votre position'
-						cursorColor={Colors.light.inputText}
+						style={styles.searchInput}
 					/>
-					<TextInput placeholder='Entrez votre destination' />
+					<TextInput
+						placeholder='Entrez votre destination'
+						style={styles.searchInput}
+					/>
 					<CustomButton
 						text='Rechercher'
 						buttonStyle={styles.submitButton}
@@ -68,6 +76,14 @@ const styles = StyleSheet.create({
 		width: "100%",
 		gap: 30,
 	},
+	searchInput: {
+		borderWidth: 1,
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		width: "100%",
+		borderRadius: 10,
+		flex: 1,
+	},
 	// style du conteneur du parent pour son integration dans la page
 	searchForm: {
 		display: "flex",
@@ -82,3 +98,5 @@ const styles = StyleSheet.create({
 		width: 145,
 	},
 });
+
+export default DestinationForm;

@@ -1,13 +1,13 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { TripCardType } from "@/types.ts";
+import { TripCardType } from "@/types/types";
 import TripCard from "./TripCard";
 
 type Props = {
 	data: TripCardType[];
 };
 
-export default function ListHistoricTrip({ data }: Readonly<Props>) {
+export function ListHistoricTrip({ data }: Readonly<Props>) {
 	return (
 		<View style={styles.container}>
 			{data.map((el, index) => (
@@ -25,3 +25,5 @@ const styles = StyleSheet.create({
 		gap: 20,
 	},
 });
+
+export default ListHistoricTrip;

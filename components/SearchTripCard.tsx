@@ -2,14 +2,14 @@ import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText";
-import { SearchTripCardType } from "@/types.ts";
+import { SearchTripCardType } from "@/types/types";
 
 type Props = {
 	style?: ViewStyle;
 	data: SearchTripCardType;
 };
 
-export default function SearchTripCard({ style, data }: Readonly<Props>) {
+export function SearchTripCard({ style, data }: Readonly<Props>) {
 	return (
 		<View style={[styles.container, style]}>
 			<Image
@@ -83,3 +83,5 @@ const styles = StyleSheet.create({
 		marginRight: 3,
 	},
 });
+
+export default SearchTripCard;

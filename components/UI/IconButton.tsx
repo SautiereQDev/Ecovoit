@@ -40,7 +40,7 @@ type Props = ButtonProps &
  *
  * @returns {JSX.Element} A TouchableOpacity component with an icon.
  */
-export default function IconButton({
+export function IconButton({
 	buttonStyle,
 	title,
 	textProps,
@@ -59,3 +59,5 @@ export default function IconButton({
 		</TouchableOpacity>
 	);
 }
+
+export default IconButton;
