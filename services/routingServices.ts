@@ -1,13 +1,12 @@
-// services/osrmService.ts
-import { Coordinates, Route } from "@/types/map";
+import { Point, Route } from "@/types/map";
 
 export class OSRMService {
 	private static readonly BASE_URL = "https://router.project-osrm.org/route/v1";
 
 	static async getRoute(
-		start: Coordinates,
-		end: Coordinates,
-		waypoints: Coordinates[] = [],
+		start: Point,
+		end: Point,
+		waypoints: Point[] = [],
 	): Promise<Route> {
 		const coordinates = [start, ...waypoints, end]
 			.map((point) => `${point.longitude},${point.latitude}`)
@@ -25,9 +24,9 @@ export class OSRMService {
 
 			return {
 				points: data.routes[0].geometry.coordinates.map(
-					([lng, lat]: number[]) => ({
+					([long, lat]: number[]) => ({
 						latitude: lat,
-						longitude: lng,
+						longitude: long,
 					}),
 				),
 				distance: data.routes[0].distance,

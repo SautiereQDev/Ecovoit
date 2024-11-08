@@ -1,12 +1,13 @@
 // types/map.ts
-export interface Coordinates {
+export interface Point {
 	latitude: number;
 	longitude: number;
 	title?: string;
 }
 
 export interface Route {
-	points: Coordinates[];
+	points: Point[];
 	distance: number;
 	duration: number;
+	name?: string;
 }
