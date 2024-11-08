@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { SetStateAction } from "react";
 import CustomButton from "./UI/CustomButton";
-import { destinationSearch } from "../types.ts";
+import { destinationSearch } from "../types/types.ts";
 import { Colors } from "@/constants/Colors.ts";
 import IconButton from "@/components/UI/IconButton.tsx";
 

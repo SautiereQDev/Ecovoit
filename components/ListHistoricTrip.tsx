@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { TripCardType } from "@/types.ts";
+import { TripCardType } from "@/types/types";
 import TripCard from "./TripCard";
 
 type Props = {

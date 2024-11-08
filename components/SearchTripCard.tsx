@@ -2,7 +2,7 @@ import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText";
-import { SearchTripCardType } from "@/types.ts";
+import { SearchTripCardType } from "@/types/types";
 
 type Props = {
 	style?: ViewStyle;

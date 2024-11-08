@@ -3,7 +3,7 @@ import React from "react";
 import TripLabel from "@/components/UI/TripLabel.tsx";
 import { Colors } from "@/constants/Colors.ts";
 import { ThemedText } from "@/components/ThemedText.tsx";
-import { TripCardType } from "@/types";
+import { TripCardType } from "@/types/types";
 
 const backgroundColor = {
 	"en cours": Colors.light.accent,
