@@ -4,11 +4,11 @@
 		"slug": "ecovoit",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/images/Ecovoit_logo.webp",
+		"icon": "./assets/images/Ecovoit_logo.png",
 		"scheme": "myapp",
 		"userInterfaceStyle": "automatic",
 		"splash": {
-			"image": "./assets/images/Ecovoit_logo.webp",
+			"image": "./assets/images/Ecovoit_logo.png",
 			"resizeMode": "contain",
 			"backgroundColor": "#ffffff"
 		},
@@ -17,14 +17,14 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/Ecovoit_logo.webp",
+				"foregroundImage": "./assets/images/Ecovoit_logo.png",
 				"backgroundColor": "#ffffff"
 			}
 		},
 		"web": {
 			"bundler": "metro",
 			"output": "static",
-			"favicon": "./assets/images/Ecovoit_logo.webp"
+			"favicon": "./assets/images/Ecovoit_logo.png"
 		},
 		"plugins": ["expo-router", "expo-font"],
 		"experiments": {
