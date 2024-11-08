@@ -9,7 +9,7 @@ type Props = {
 	data: SearchTripCardType;
 };
 
-export default function SearchTripCard({ style, data }: Readonly<Props>) {
+export function SearchTripCard({ style, data }: Readonly<Props>) {
 	return (
 		<View style={[styles.container, style]}>
 			<Image
@@ -83,3 +83,5 @@ const styles = StyleSheet.create({
 		marginRight: 3,
 	},
 });
+
+export default SearchTripCard;

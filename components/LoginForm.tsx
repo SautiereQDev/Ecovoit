@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function LoginForm() {
+export function LoginForm() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
@@ -107,3 +107,5 @@ const styles = StyleSheet.create({
 		borderRadius: 7.5,
 	},
 });
+
+export default LoginForm;

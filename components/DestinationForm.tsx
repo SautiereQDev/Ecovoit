@@ -17,7 +17,7 @@ type props = {
 	submitForm: React.Dispatch<SetStateAction<destinationSearch>>;
 };
 
-export default function DestinationForm({
+export function DestinationForm({
 	style,
 	formData,
 	submitForm,
@@ -98,3 +98,5 @@ const styles = StyleSheet.create({
 		width: 145,
 	},
 });
+
+export default DestinationForm;

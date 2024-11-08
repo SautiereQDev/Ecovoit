@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
  * Composants d'example pour démontrer différents styles de police.
  * Ce composant rend un ensemble d'éléments Text avec divers styles.
  */
-export default function FontStylesExample() {
+export function FontStylesExample() {
 	return (
 		<View>
 			<Text style={styles.defaultBody}>Default Body Text</Text>
@@ -84,3 +84,5 @@ export default function FontStylesExample() {
 		</View>
 	);
 }
+
+export default ThemedText;

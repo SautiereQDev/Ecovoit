@@ -38,7 +38,7 @@ type Props = PressableProps & {
  *
  * @returns {JSX.Element} The rendered button component.
  */
-export default function CustomButton({
+export function CustomButton({
 	buttonStyle,
 	text,
 	textProps,
@@ -71,3 +71,5 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
+
+export default CustomButton;

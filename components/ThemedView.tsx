@@ -25,3 +25,5 @@ export function ThemedView({
 		/>
 	);
 }
+
+export default ThemedView;

@@ -16,7 +16,7 @@ type Props = {
 	data: TripCardType;
 };
 
-export default function TripCard({ style, data }: Readonly<Props>) {
+export function TripCard({ style, data }: Readonly<Props>) {
 	return (
 		<View
 			style={[
@@ -96,3 +96,5 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 	},
 });
+
+export default TripCard;
