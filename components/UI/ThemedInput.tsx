@@ -11,17 +11,19 @@ import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 
 interface ThemedInputProps extends Omit<TextInputProps, "style"> {
+	theme: "Primary" | "Secondary";
 	style?: StyleProp<ViewStyle>;
 	textStyle?: StyleProp<TextStyle>;
 }
 
-// TODO:Mettre en place un système de thème avec un theme par default et des themes customs
 export const ThemedInput = ({
 	style,
 	textStyle,
+	theme = "Primary", // Default theme
 	...inputProps
 }: ThemedInputProps) => {
 	const [isFocused, setIsFocused] = useState(false);
+	const styles = theme === "Primary" ? primary : secondary;
 
 	return (
 		<View style={[styles.container, style]}>
@@ -36,7 +38,7 @@ export const ThemedInput = ({
 	);
 };
 
-const styles = StyleSheet.create({
+const primary = StyleSheet.create({
 	container: {
 		width: "100%",
 	},
@@ -54,5 +56,24 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 	},
 });
+
+const secondary = StyleSheet.create({
+	container: {
+		width: "100%",
+	},
+	input: {
+		borderWidth: 1,
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		width: "100%",
+		borderRadius: 10,
+		backgroundColor: Colors.light.background,
+		borderColor: Colors.light.inputText,
+	},
+	focusedInput: {
+		borderColor: Colors.light.secondary,
+		borderWidth: 2,
+	},
+})
 
 export default ThemedInput;
