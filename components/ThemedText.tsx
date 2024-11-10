@@ -30,7 +30,7 @@ export function ThemedText({
 		Inter: require("../assets/fonts/Inter.ttf"),
 		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
 		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
-		"Gabarito-Medium": require("../assets/fonts/Gabarito-Medium.ttf"),
+		"Gabarito-medium": require("../assets/fonts/Gabarito-Medium.ttf"),
 	});
 
 	// fonts import

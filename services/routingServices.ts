@@ -1,62 +1,67 @@
-import { Point, Route } from "@/types/map";
+// services/OSRMService.ts
 
-/*
- * Open Source Routing Machine (OSRM) service
- * This service is used to get the route between two points
- * using the OSRM API
- */
+interface RoutePoint {
+	location: [number, number];
+	name?: string;
+}
 
-type OSRMparams = {
-	service? : 'route' | 'table' | 'match' | 'trip' | 'nearest' | 'tile'; // permet de changer le chemin le plus rapide pour le chemin le plus court
-	version? : string;
-	profile? : 'car' | 'bike' | 'foot';
-	coordinates? : string; // au format "longitude,latitude;longitude,latitude"
-	format?: 'json' |'flatbuffers';
+interface OSRMResponse {
+	routes: {
+		geometry: {
+			coordinates: [number, number][];
+			type: string;
+		};
+		distance: number;
+		duration: number;
+	}[];
+}
+
+interface Route {
+	points: { latitude: number; longitude: number }[];
+	distance: number;
+	duration: number;
 }
 
 export class OSRMService {
-	private static readonly BASE_URL = "https://router.project-osrm.org";
+	private static readonly BASE_URL = "https://router.project-osrm.org/route/v1";
 
 	static async getRoute(
-		start: Point,
-		end: Point,
-		waypoints: Point[] = [],
+		start: RoutePoint,
+		end: RoutePoint,
+		waypoints: RoutePoint[] = [],
 	): Promise<Route> {
-		const coordinates = [start, ...waypoints, end]
-			.map((point) => `${point.location[1]},${point.location[0]}`)
-			.join(";");
-
-		const params: OSRMparams = {
-			service: 'route',
-			version: 'v1',
-			profile: 'car',
-			coordinates,
-			format: 'json',
-		};
-
-		const url = `${this.BASE_URL}/${params.service}/${params.version}/${params.profile}/${coordinates}?overview=full&geometries=geojson`;
-
 		try {
-			const response = await fetch(url);
-			const data = await response.json();
+			// Construire les coordonnées pour l'URL
+			const coordinates = [start, ...waypoints, end]
+				.map((point) => point.location.join(","))
+				.join(";");
 
-			if (data.code !== "Ok") {
-				throw new Error("Failed to get route");
+			const url = `${this.BASE_URL}/driving/${coordinates}?overview=full&geometries=geojson`;
+
+			const response = await fetch(url);
+			if (!response.ok) {
+				throw new Error(`OSRM API error: ${response.statusText}`);
 			}
 
+			const data: OSRMResponse = await response.json();
+			const route = data.routes[0];
+
+			// Convertir la géométrie GeoJSON en points
+			const points = route.geometry.coordinates.map(([lng, lat]) => ({
+				latitude: lat,
+				longitude: lng,
+			}));
+
 			return {
-				points: data.routes[0].geometry.coordinates.map(
-					([long, lat]: number[]) => ({
-						latitude: lat,
-						longitude: long,
-					}),
-				),
-				distance: data.routes[0].distance,
-				duration: data.routes[0].duration,
+				points,
+				distance: route.distance,
+				duration: route.duration,
 			};
 		} catch (error) {
-			console.error("Error fetching route:", error);
+			console.error("OSRM service error:", error);
 			throw error;
 		}
 	}
 }
+
+export default OSRMService;
