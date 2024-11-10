@@ -4,13 +4,14 @@ import { StyleSheet, ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ThemedText from "../ThemedText";
 import { RouteMap } from "../RouteMap";
-import { Coordinates } from "@/types/map";
+import { Point } from "@/types/map";
 
 interface TripData {
 	date: string;
-	start: Coordinates;
-	end: Coordinates;
-	waypoints?: Coordinates[];
+	start: Point;
+	end: Point;
+	waypoints?: Point[];
+	title?: string;
 }
 
 interface DetailledTripProps {
@@ -29,7 +30,7 @@ export const DetailledTrip: React.FC<DetailledTripProps> = ({
 				type='header5'
 				style={styles.tripTitle}
 			>
-				{`${data.start.title} -> ${data.end.title}`}
+				{`${data.start.name} -> ${data.end.name}`}
 			</ThemedText>
 			<RouteMap
 				style={styles.map}

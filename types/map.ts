@@ -1,9 +1,7 @@
 // types/map.ts
 export interface Point {
-	location: [
-		latitude : number,
-		longitude: number
-	];
+	latitude: number;
+	longitude: number;
 	name?: string;
 }
 
