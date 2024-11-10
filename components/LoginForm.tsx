@@ -18,7 +18,7 @@ export function LoginForm() {
 	return (
 		<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 			<View>
-				{/* TODO: ThemedTextInput */}
+				{/* TODO: ThemedInput */}
 				<TextInput
 					cursorColor={"#000"}
 					style={[styles.input, isFocused && styles.focusedInput]}

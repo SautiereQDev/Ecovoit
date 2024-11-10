@@ -1,26 +1,33 @@
 import {
 	StyleSheet,
 	TextInput,
+	View,
 	StyleProp,
+	ViewStyle,
 	TextStyle,
 	TextInputProps,
-	View,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 
-type ThemedInputProps = TextInputProps & {
-	style?: StyleProp<TextStyle>;
-};
+interface ThemedInputProps extends Omit<TextInputProps, "style"> {
+	style?: StyleProp<ViewStyle>;
+	textStyle?: StyleProp<TextStyle>;
+}
 
-export const ThemedInput = ({ style, ...inputProps }: ThemedInputProps) => {
+// TODO:Mettre en place un système de thème avec un theme par default et des themes customs
+export const ThemedInput = ({
+	style,
+	textStyle,
+	...inputProps
+}: ThemedInputProps) => {
 	const [isFocused, setIsFocused] = useState(false);
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, style]}>
 			<TextInput
 				cursorColor={Colors.light.inputText}
-				style={[styles.input, isFocused && styles.focusedInput, style]}
+				style={[styles.input, isFocused && styles.focusedInput, textStyle]}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 				{...inputProps}

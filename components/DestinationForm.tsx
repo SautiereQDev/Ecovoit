@@ -1,7 +1,6 @@
 import {
 	StyleProp,
 	StyleSheet,
-	TextInput,
 	View,
 	ViewStyle,
 } from "react-native";
@@ -10,6 +9,7 @@ import CustomButton from "./UI/CustomButton";
 import { destinationSearch } from "../types/types.ts";
 import { Colors } from "@/constants/Colors.ts";
 import IconButton from "@/components/UI/IconButton.tsx";
+import ThemedInput from "./UI/ThemedInput.tsx";
 
 type props = {
 	style?: StyleProp<ViewStyle>;
@@ -26,13 +26,11 @@ export function DestinationForm({
 		<View style={[styles.container, style]}>
 			<View style={styles.inputsContainer}>
 				<View style={styles.searchForm}>
-					<TextInput
+					<ThemedInput
 						placeholder='Entrez votre position'
-						style={styles.searchInput}
 					/>
-					<TextInput
+					<ThemedInput
 						placeholder='Entrez votre destination'
-						style={styles.searchInput}
 					/>
 					<CustomButton
 						text='Rechercher'
@@ -76,15 +74,6 @@ const styles = StyleSheet.create({
 		width: "100%",
 		gap: 30,
 	},
-	searchInput: {
-		borderWidth: 1,
-		paddingVertical: 10,
-		paddingHorizontal: 15,
-		width: "100%",
-		borderRadius: 10,
-		flex: 1,
-	},
-	// style du conteneur du parent pour son integration dans la page
 	searchForm: {
 		display: "flex",
 		height: 160,
