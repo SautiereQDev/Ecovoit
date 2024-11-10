@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 	},
 	focusedInput: {
 		borderColor: Colors.light.primary,
+		borderWidth: 2,
 	},
 });
 
