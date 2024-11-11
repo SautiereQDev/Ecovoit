@@ -29,6 +29,7 @@ interface RouteMapProps {
 	}[];
 }
 
+//TODO: integrer un boutton recenter
 export const RouteMap: React.FC<RouteMapProps> = ({
 	style,
 	start,
@@ -74,7 +75,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 	const fitToCoordinates = [start, ...waypoints, end];
 
 	return (
-		<View style={styles.container}>
+		<View style={style}>
 			<MapView
 				ref={mapRef}
 				provider={PROVIDER_GOOGLE}
@@ -117,9 +118,6 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
 	map: {
 		width: "100%",
 		height: "100%",

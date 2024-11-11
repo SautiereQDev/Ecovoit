@@ -13,7 +13,7 @@ export const Colors = {
 		background: "#FDFFFD",
 		inputText: "#616161",
 		inputBackground: "#E6E6E6",
-	},
+		},
 	dark: {
 		hidden: "#DCDCDC",
 		text: "#FFF",
