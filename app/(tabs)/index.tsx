@@ -1,10 +1,8 @@
 import { StyleSheet } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
-import DestinationForm from "@/components/DestinationForm";
+import { DestinationForm, ThemedText, TripCard} from "@/components";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors.ts";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TripCard from "@/components/TripCard.tsx";
 
 export default function Index() {
 	const [data, setData] = useState({ position: "", destination: "" });

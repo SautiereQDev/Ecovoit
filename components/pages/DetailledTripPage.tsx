@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ThemedText from "../ThemedText";
-import { RouteMap } from "../RouteMap";
 import { Point } from "@/types/map";
 import { Colors } from "@/constants/Colors";
+import { TripInfoLabel, RouteMap, ThemedText} from "@/components";
 
 interface TripData {
 	date?: string;
@@ -15,6 +14,8 @@ interface TripData {
 	userImg?: string;
 	driverName?: string;
 	description?: string;
+	distance: number;
+	consommation: number;
 }
 
 export const DetailledTrip = () => {
@@ -34,6 +35,8 @@ export const DetailledTrip = () => {
 		driverName: "Quentin",
 		description:
 			"Trajet rapide avant d'aller faire la fête chez Auguste, on va essayer d'éviter les bouchons",
+		distance: 45,
+		consommation: 12,
 	};
 
 	return (
@@ -53,14 +56,28 @@ export const DetailledTrip = () => {
 						waypoints={data.waypoints}
 					/>
 				</View>
-				<View style={styles.tripDetails}>
+				<View>
+					<TripInfoLabel
+						data={{
+							distance: data.distance,
+							consumption: data.consommation,
+							arrivalTime: "12h30",
+						}}
+					/>
+				</View>
+				<View style={styles.tripInfo}>
 					<View style={styles.userContainer}>
 						<Image
 							source={require("@/assets/images/user-picture.jpg")}
 							style={styles.userImage}
 						/>
 						{data.driverName && (
-							<ThemedText type='header5'>{data.driverName}</ThemedText>
+							<ThemedText
+								type='header5'
+								style={styles.driverName}
+							>
+								{data.driverName}
+							</ThemedText>
 						)}
 					</View>
 					{data.description && (
@@ -82,15 +99,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginTop: 25,
 		backgroundColor: Colors.light.background,
-		alignItems: "center", // Centrer horizontalement
+		alignItems: "center",
 	},
 	tripTitle: {
 		textAlign: "center",
 		marginBottom: 20,
 	},
-	body:{
+	body: {
 		display: "flex",
 		flex: 1,
+		gap: 20,
 		width: "85%",
 	},
 	mapContainer: {
@@ -98,12 +116,11 @@ const styles = StyleSheet.create({
 		borderColor: Colors.light.text,
 		height: "45%",
 	},
-	tripDetails: {
-		backgroundColor: Colors.light.accent,
+	tripInfo: {
+		backgroundColor: Colors.light.accent + "9F", // modifie l'opacité
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginTop: 20,
 		alignItems: "center",
 		paddingHorizontal: 15,
 		paddingBottom: 15,
@@ -119,6 +136,11 @@ const styles = StyleSheet.create({
 		height: 100,
 		borderRadius: 50,
 		marginTop: 20,
+		borderColor: "#FFFA",
+		borderWidth: 2,
+	},
+	driverName: {
+		textAlign: "center",
 	},
 });
 

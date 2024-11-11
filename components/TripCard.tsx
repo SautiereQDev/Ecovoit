@@ -1,8 +1,7 @@
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import TripLabel from "@/components/UI/TripLabel.tsx";
+import { TripLabel, ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors.ts";
-import { ThemedText } from "@/components/ThemedText.tsx";
 import { TripCardType } from "@/types/types";
 
 const backgroundColor = {

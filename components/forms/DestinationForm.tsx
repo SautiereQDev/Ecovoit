@@ -5,9 +5,9 @@ import {
 	ViewStyle,
 } from "react-native";
 import React, { SetStateAction } from "react";
-import { destinationSearch } from "../types/types.ts";
+import { destinationSearch } from "@/types/types";
 import { Colors } from "@/constants/Colors.ts";
-import { ThemedInput, IconButton, CustomButton } from "@/components/UI";
+import { ThemedInput, IconButton, CustomButton } from "@/components";
 
 type props = {
 	style?: StyleProp<ViewStyle>;

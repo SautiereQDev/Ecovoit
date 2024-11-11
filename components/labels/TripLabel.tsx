@@ -1,6 +1,6 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { ThemedText } from "@/components/ThemedText.tsx";
+import { ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors.ts";
 
 type Props = {
