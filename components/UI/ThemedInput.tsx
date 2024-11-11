@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 
 interface ThemedInputProps extends Omit<TextInputProps, "style"> {
-	theme: "Primary" | "Secondary";
+	theme?: "Primary" | "Secondary";
 	style?: StyleProp<ViewStyle>;
 	textStyle?: StyleProp<TextStyle>;
 }

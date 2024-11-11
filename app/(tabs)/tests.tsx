@@ -1,32 +1,30 @@
-import { DetailledTrip } from "@/components";
-import ThemedInput from "../../components/UI/ThemedInput";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+// tests.tsx
 import { StyleSheet } from "react-native";
-import { Colors } from "@/constants/Colors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { RouteMap } from "@/components/RouteMap";
 
 export default function Tests() {
 	const tripData = {
-		date: "Jeudi 24 Novembre",
 		start: {
 			latitude: 48.8584,
 			longitude: 2.2945,
-			title: "Super U",
+			name: "Super U",
 		},
 		end: {
 			latitude: 48.8606,
 			longitude: 2.3376,
-			title: "Chez Auguste",
+			name: "Chez Auguste",
 		},
+		waypoints: [], // optionnel
 	};
 
-	// tests.tsx
 	return (
 		<SafeAreaView style={styles.container}>
-			<ThemedInput
-				placeholder='salut'
-				onChange={() => console.log("j'ai été changé")}
-				style={styles.inputContainer}
+			<RouteMap
+				start={tripData.start}
+				end={tripData.end}
+				waypoints={tripData.waypoints}
+				style={styles.map}
 			/>
 		</SafeAreaView>
 	);
@@ -35,10 +33,9 @@ export default function Tests() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		marginTop: 50,
 	},
-	inputContainer: {
-		width: "80%",
-		margin: 20,
+	map: {
+		width: "100%",
+		height: "100%",
 	},
 });
