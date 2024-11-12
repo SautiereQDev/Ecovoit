@@ -3,7 +3,7 @@ import { StyleSheet, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Point } from "@/types/map";
 import { Colors } from "@/constants/Colors";
-import { TripInfoLabel, RouteMap, ThemedText} from "@/components";
+import { TripInfoLabel, RouteMap, ThemedText } from "@/components";
 
 interface TripData {
 	date?: string;
@@ -54,15 +54,15 @@ export const DetailledTrip = () => {
 						start={data.start}
 						end={data.end}
 						waypoints={data.waypoints}
+						style={styles.map}
 					/>
-				</View>
-				<View>
 					<TripInfoLabel
 						data={{
 							distance: data.distance,
 							consumption: data.consommation,
 							arrivalTime: "12h30",
 						}}
+						style={styles.tripLabel}
 					/>
 				</View>
 				<View style={styles.tripInfo}>
@@ -108,13 +108,17 @@ const styles = StyleSheet.create({
 	body: {
 		display: "flex",
 		flex: 1,
-		gap: 20,
+		gap: 80,
 		width: "85%",
 	},
 	mapContainer: {
+		display: "flex",
+		height: "50%",
+		gap: 10,
+	},
+	map: {
 		borderWidth: 1,
 		borderColor: Colors.light.text,
-		height: "45%",
 	},
 	tripInfo: {
 		backgroundColor: Colors.light.accent + "9F", // modifie l'opacité
