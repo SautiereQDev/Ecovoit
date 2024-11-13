@@ -1,2 +1,2 @@
 export * from "./TripInfoLabel";
-export {TripLabel} from "./TripLabel";
+export * from "./TripLabel";

@@ -1,11 +1,26 @@
 // types/map.ts
-export interface Point {
-	latitude: number;
-	longitude: number;
-	name?: string;
+export enum PointType {
+	START = "start",
+	WAYPOINT = "checkpoint",
+	END = "end",
 }
 
-interface OSRMpoint extends Point {
+export interface Location {
+	name?: string;
+	longitude: number;
+	latitude: number;
+}
+
+export interface Point extends Location {
+	id?: number;
+	trip?: number; //Id du trip correspondant
+	type?: PointType;
+	waitingTime?: number;
+	previous?: number;
+	next?: number;
+}
+
+export interface OSRMpoint extends Point {
 	hint: string;
 	distance: number;
 }

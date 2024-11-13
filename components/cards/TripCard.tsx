@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { TripLabel, ThemedText } from "@/components";
+import { TripLabel} from "../labels";
+import { ThemedText } from "../texts";
 import { Colors } from "@/constants/Colors.ts";
 import { TripCardType } from "@/types/types";
 

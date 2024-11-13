@@ -1,1 +1,1 @@
-export { default as ThemedInput } from "./ThemedInput";
+export * from "./ThemedInput";

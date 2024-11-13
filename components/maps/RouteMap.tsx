@@ -2,31 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { OSRMService } from "@/services/routingServices";
+import {Location} from "@/types";
 
 interface Route {
-	points: {
-		latitude: number;
-		longitude: number;
-	}[];
+	points: Location[];
 }
 
 interface RouteMapProps {
 	style?: any;
-	start: {
-		latitude: number;
-		longitude: number;
-		name?: string;
-	};
-	end: {
-		latitude: number;
-		longitude: number;
-		name?: string;
-	};
-	waypoints?: {
-		latitude: number;
-		longitude: number;
-		name?: string;
-	}[];
+	start: Location
+	end: Location
+	waypoints?: Location[];
 }
 
 //TODO: integrer un boutton recenter
@@ -39,11 +25,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 	const [route, setRoute] = useState<Route | null>(null);
 	const mapRef = useRef<MapView>(null);
 
-	const toRoutePoint = (point: {
-		latitude: number;
-		longitude: number;
-		name?: string;
-	}): { location: [number, number]; name?: string } => ({
+	const toRoutePoint = (point: Location): { location: [number, number]; name?: string } => ({
 		location: [point.longitude, point.latitude] as [number, number],
 		name: point.name,
 	});
@@ -92,16 +74,19 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 				<Marker
 					coordinate={start}
 					title={start.name || "Départ"}
+					description={start.name || "Point de départ"}
 				/>
 				<Marker
 					coordinate={end}
 					title={end.name || "Arrivée"}
+					description={end.name || "Point d'arrivée"}
 				/>
 				{waypoints?.map((point, index) => (
 					<Marker
 						key={index}
 						coordinate={point}
 						title={point.name || `Point ${index + 1}`}
+						description={point.name || `Point ${index + 1}`}
 					/>
 				))}
 				{route?.points && route.points.length > 0 && (
@@ -114,7 +99,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 				)}
 			</MapView>
 		</View>
-			);
+	);
 };
 
 export default RouteMap;

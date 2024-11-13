@@ -1,6 +1,6 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { ThemedText } from "@/components";
+import { ThemedText } from "../texts";
 import { FlatList } from "react-native-gesture-handler";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";

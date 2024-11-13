@@ -1,1 +1,1 @@
-export { default as ThemedText } from "./ThemedText";
+export * from "./ThemedText";
