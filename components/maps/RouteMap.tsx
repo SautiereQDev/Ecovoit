@@ -117,6 +117,8 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 			);
 };
 
+export default RouteMap;
+
 const styles = StyleSheet.create({
 	map: {
 		width: "100%",

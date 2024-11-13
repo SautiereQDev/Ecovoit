@@ -27,10 +27,10 @@ export function ThemedText({
 	);
 
 	const [loaded, error] = useFonts({
-		Inter: require("../assets/fonts/Inter.ttf"),
-		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
-		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
-		"Gabarito-medium": require("../assets/fonts/Gabarito-Medium.ttf"),
+		Inter: require("@/assets/fonts/Inter.ttf"),
+		"Inter-italic": require("@/assets/fonts/InterItalic.ttf"),
+		"Gabarito-bold": require("@/assets/fonts/Gabarito-Bold.ttf"),
+		"Gabarito-medium": require("@/assets/fonts/Gabarito-Medium.ttf"),
 	});
 
 	// fonts import

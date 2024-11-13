@@ -1,7 +1,7 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { ThemedText } from "@/components";
-import { Colors } from "@/constants/Colors.ts";
+import { ThemedText } from "../texts/ThemedText"; 
+import { Colors } from "@/constants/Colors";
 
 type Props = {
 	status: "effectue" | "en cours" | "annule";

@@ -62,7 +62,6 @@ export const DetailledTrip = () => {
 							consumption: data.consommation,
 							arrivalTime: "12h30",
 						}}
-						style={styles.tripLabel}
 					/>
 				</View>
 				<View style={styles.tripInfo}>
@@ -93,6 +92,8 @@ export const DetailledTrip = () => {
 		</SafeAreaView>
 	);
 };
+
+export default DetailledTrip;
 
 const styles = StyleSheet.create({
 	container: {
@@ -148,4 +149,3 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default DetailledTrip;
