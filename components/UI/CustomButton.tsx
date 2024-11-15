@@ -1,30 +1,30 @@
 import {
-	Pressable,
-	PressableProps,
-	StyleProp,
-	StyleSheet,
-	ViewStyle,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
 } from "react-native";
 import React from "react";
-import { ThemedText } from "../ThemedText.tsx";
-import { Colors } from "@/constants/Colors.ts";
+import { ThemedText } from "@/components/ThemedText";
+import { Colors } from "@/constants/Colors";
 
 type Props = PressableProps & {
-	buttonStyle?: StyleProp<ViewStyle>;
-	text: string;
-	textProps?: {
-		type?:
-			| "header1"
-			| "header2"
-			| "header3"
-			| "header4"
-			| "header5"
-			| "small"
-			| "italic"
-			| "accent"
-			| "defaultBody";
-		color: keyof typeof Colors.light;
-	};
+  buttonStyle?: StyleProp<ViewStyle>;
+  text: string;
+  textProps?: {
+    type?:
+      | "header1"
+      | "header2"
+      | "header3"
+      | "header4"
+      | "header5"
+      | "small"
+      | "italic"
+      | "accent"
+      | "defaultBody";
+    color: keyof typeof Colors.light;
+  };
 };
 /**
  * CustomButton component renders a pressable button with customizable text.
@@ -39,37 +39,34 @@ type Props = PressableProps & {
  * @returns {JSX.Element} The rendered button component.
  */
 export function CustomButton({
-	buttonStyle,
-	text,
-	textProps,
-	...restProps
+  buttonStyle,
+  text,
+  textProps,
+  ...restProps
 }: Props): JSX.Element {
-	return (
-		<Pressable
-			style={[styles.button, buttonStyle]}
-			{...restProps}
-		>
-			<ThemedText
-				type={textProps?.type ?? "accent"}
-				color={textProps?.color}
-				style={styles.text}
-			>
-				{text}
-			</ThemedText>
-		</Pressable>
-	);
+  return (
+    <Pressable style={[styles.button, buttonStyle]} {...restProps}>
+      <ThemedText
+        type={textProps?.type ?? "accent"}
+        color={textProps?.color}
+        style={styles.text}
+      >
+        {text}
+      </ThemedText>
+    </Pressable>
+  );
 }
 
 const styles = StyleSheet.create({
-	button: {
-		alignItems: "center",
-		justifyContent: "center",
-		paddingVertical: 6,
-		borderRadius: 10,
-	},
-	text: {
-		textAlign: "center",
-	},
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  text: {
+    textAlign: "center",
+  },
 });
 
 export default CustomButton;
