@@ -1,33 +1,33 @@
 import {
-	ButtonProps,
-	StyleProp,
-	TouchableOpacity,
-	ViewStyle,
+  ButtonProps,
+  StyleProp,
+  TouchableOpacity,
+  ViewStyle,
 } from "react-native";
 import React, { ComponentProps } from "react";
-import { Colors } from "../../constants/Colors";
+import { Colors } from "@/constants/Colors";
 import Octicons from "@expo/vector-icons/Octicons";
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
 
 type Props = ButtonProps &
-	OcticonsProps & {
-		buttonStyle?: StyleProp<ViewStyle>;
-		textProps?: {
-			type?:
-				| "header1"
-				| "header2"
-				| "header3"
-				| "header4"
-				| "header5"
-				| "small"
-				| "italic"
-				| "accent"
-				| "defaultBody";
-			color: keyof typeof Colors.light;
-		};
-		iconStyle?: StyleProp<ViewStyle>;
-	};
+  OcticonsProps & {
+    buttonStyle?: StyleProp<ViewStyle>;
+    textProps?: {
+      type?:
+        | "header1"
+        | "header2"
+        | "header3"
+        | "header4"
+        | "header5"
+        | "small"
+        | "italic"
+        | "accent"
+        | "defaultBody";
+      color: keyof typeof Colors.light;
+    };
+    iconStyle?: StyleProp<ViewStyle>;
+  };
 
 /**
  * IconButton component that renders a button with an icon.
@@ -41,23 +41,17 @@ type Props = ButtonProps &
  * @returns {JSX.Element} A TouchableOpacity component with an icon.
  */
 export function IconButton({
-	buttonStyle,
-	title,
-	textProps,
-	iconStyle,
-	...restProps
+  buttonStyle,
+  title,
+  textProps,
+  iconStyle,
+  ...restProps
 }: Props) {
-	return (
-		<TouchableOpacity
-			style={buttonStyle}
-			{...restProps}
-		>
-			<Octicons
-				{...restProps}
-				style={iconStyle}
-			/>
-		</TouchableOpacity>
-	);
+  return (
+    <TouchableOpacity style={buttonStyle} {...restProps}>
+      <Octicons {...restProps} style={iconStyle} />
+    </TouchableOpacity>
+  );
 }
 
 export default IconButton;
