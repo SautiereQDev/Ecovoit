@@ -5,7 +5,7 @@ import {
 	ViewStyle,
 } from "react-native";
 import React, { ComponentProps } from "react";
-import { Colors } from "../../constants/Colors";
+import { Colors } from "../../constants/colors";
 import Octicons from "@expo/vector-icons/Octicons";
 
 type OcticonsProps = ComponentProps<typeof Octicons>;

@@ -1,11 +1,9 @@
 import React from "react";
-import { ThemedText } from "@/components/ThemedText";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function Profil() {
 	return (
-		<SafeAreaView>
-			<ThemedText type='header1'>Hello </ThemedText>;
-		</SafeAreaView>
+		<View>
+		</View>
 	);
 }

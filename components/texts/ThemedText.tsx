@@ -1,10 +1,10 @@
 import { StyleSheet, Text, type TextProps, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useFonts } from "expo-font";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/colors";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import fonts from "@/constants/Fonts.ts";
+import fonts from "@/constants/fonts";
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
@@ -27,10 +27,10 @@ export function ThemedText({
 	);
 
 	const [loaded, error] = useFonts({
-		Inter: require("../assets/fonts/Inter.ttf"),
-		"Inter-italic": require("../assets/fonts/InterItalic.ttf"),
-		"Gabarito-bold": require("../assets/fonts/Gabarito-Bold.ttf"),
-		"Gabarito-Medium": require("../assets/fonts/Gabarito-Medium.ttf"),
+		Inter: require("@/assets/fonts/Inter.ttf"),
+		"Inter-italic": require("@/assets/fonts/InterItalic.ttf"),
+		"Gabarito-bold": require("@/assets/fonts/Gabarito-Bold.ttf"),
+		"Gabarito-Medium": require("@/assets/fonts/Gabarito-Medium.ttf"),
 	});
 
 	// fonts import

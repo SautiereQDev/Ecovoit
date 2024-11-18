@@ -1,9 +1,9 @@
-export type destinationSearch = {
+export interface destinationSearch {
 	position: string;
 	destination: string;
 };
 
-export type TripCardType = {
+export interface TripCardType {
 	depart: string;
 	destination: string;
 	status: "en cours" | "effectue" | "annule";
@@ -11,7 +11,7 @@ export type TripCardType = {
 	date: string;
 };
 
-export type SearchTripCardType = {
+export interface SearchTripCardType {
 	depart: string;
 	destination: string;
 	nom: string;

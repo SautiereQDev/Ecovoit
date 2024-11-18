@@ -6,7 +6,7 @@ import {
 	Text,
 } from "react-native";
 import { useState } from "react";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 
 export function LoginForm() {
@@ -18,7 +18,7 @@ export function LoginForm() {
 	return (
 		<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 			<View>
-				{/* TODO: ThemedTextInput */}
+				{/* TODO: ThemedInput */}
 				<TextInput
 					cursorColor={"#000"}
 					style={[styles.input, isFocused && styles.focusedInput]}

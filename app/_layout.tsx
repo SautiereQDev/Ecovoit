@@ -1,4 +1,6 @@
 import { Stack } from "expo-router";
+import { StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
 	// const [authenticated, setAuthenticated] = useState(false);
@@ -26,16 +28,19 @@ export default function RootLayout() {
 	// }
 
 	return (
-		<Stack>
-			{/* Utilisateur authentifié ???? */}
-			{/* OUI */}
-
-			{/* NON */}
-
-			<Stack.Screen
-				name='(tabs)'
-				options={{ headerShown: false }}
-			/>
-		</Stack>
+		<GestureHandlerRootView style={styles.container}>
+			<Stack>
+				<Stack.Screen
+					name='(tabs)'
+					options={{ headerShown: false }}
+				/>
+			</Stack>
+		</GestureHandlerRootView>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+});

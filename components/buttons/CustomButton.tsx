@@ -6,8 +6,8 @@ import {
 	ViewStyle,
 } from "react-native";
 import React from "react";
-import { ThemedText } from "../ThemedText.tsx";
-import { Colors } from "@/constants/Colors.ts";
+import { ThemedText } from "../texts";
+import { Colors } from "@/constants/colors";
 
 type Props = PressableProps & {
 	buttonStyle?: StyleProp<ViewStyle>;

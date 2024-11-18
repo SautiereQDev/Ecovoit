@@ -1,31 +1,17 @@
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import TripLabel from "@/components/UI/TripLabel.tsx";
-import { Colors } from "@/constants/Colors.ts";
-import { ThemedText } from "@/components/ThemedText.tsx";
-import { TripCardType } from "@/types";
-
-const backgroundColor = {
-	"en cours": Colors.light.accent,
-	effectue: Colors.light.secondary,
-	annule: Colors.light.inputText,
-};
+import { Colors } from "@/constants/colors";
+import { ThemedText } from "../texts";
+import { SearchTripCardType } from "@/types/types";
 
 type Props = {
 	style?: ViewStyle;
-	data: TripCardType;
+	data: SearchTripCardType;
 };
 
-export function TripCard({ style, data }: Readonly<Props>) {
+export function SearchTripCard({ style, data }: Readonly<Props>) {
 	return (
-		<View
-			style={[
-				styles.container,
-				style,
-				{ backgroundColor: backgroundColor[data.status] },
-				data.status === "annule" && styles.cancelledCard,
-			]}
-		>
+		<View style={[styles.container, style]}>
 			<Image
 				source={require("@/assets/images/user-picture.jpg")}
 				style={styles.userImage}
@@ -39,10 +25,12 @@ export function TripCard({ style, data }: Readonly<Props>) {
 					>
 						{data.nom}
 					</ThemedText>
-					<TripLabel
-						status={data.status}
-						style={{ alignSelf: "baseline" }}
-					/>
+					<ThemedText
+						type={"header5"}
+						color={"background"}
+					>
+						{data.distance}m
+					</ThemedText>
 				</View>
 				<ThemedText color='background'>
 					{data.depart}
@@ -66,9 +54,11 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		width: "100%",
+		justifyContent: "space-between",
 		padding: 10,
 		overflow: "hidden",
 		borderRadius: 5,
+		backgroundColor: Colors.light.secondary,
 	},
 	userImage: {
 		width: "20%",
@@ -77,24 +67,21 @@ const styles = StyleSheet.create({
 		borderRadius: 9999,
 		borderWidth: 1,
 		borderColor: Colors.light.background,
-		marginLeft: 5,
-	},
-	cancelledCard: {
-		opacity: 0.75, // Apply grayscale effect using opacity
-	},
-	textContainer: {
-		marginLeft: "auto",
-		maxWidth: "72%",
+		marginLeft: 10,
 	},
 	header: {
 		display: "flex",
 		flexDirection: "row",
-		gap: 45,
+		gap: 40,
+		alignItems: "center",
 	},
 	date: {
 		alignSelf: "flex-end",
 		marginTop: 5,
 	},
+	textContainer: {
+		marginRight: 3,
+	},
 });
 
-export default TripCard;
+export default SearchTripCard;
