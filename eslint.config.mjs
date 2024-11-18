@@ -11,3 +11,4 @@ const compat = new FlatCompat({
 	allConfig: js.configs.all,
 });
 export default [...compat.extends("expo")];
+
