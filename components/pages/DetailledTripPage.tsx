@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 	mapContainer: {
 		display: "flex",
 		height: "50%",
-		gap: 10,
+		gap: 12,
 	},
 	map: {
 		borderWidth: 1,

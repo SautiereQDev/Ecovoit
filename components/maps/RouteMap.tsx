@@ -57,6 +57,22 @@ export const RouteMap = ({
 	// Calculer les limites pour inclure tous les points
 	const fitToCoordinates = [start, ...waypoints, end];
 
+  const mapStyle = [
+	{
+	  "featureType": "poi",
+	  "stylers": [{ "visibility": "off" }],
+	},
+	{
+	  "featureType": "transit",
+	  "stylers": [{ "visibility": "off" }],
+	},
+	{
+	  "featureType": "road",
+	  "elementType": "labels",
+	  "stylers": [{ "visibility": "off" }],
+	},
+  ];
+
 	return (
 		<View style={style}>
 			<MapView
@@ -64,10 +80,11 @@ export const RouteMap = ({
 				provider={PROVIDER_GOOGLE}
 				style={styles.map}
 				initialRegion={initialRegion}
+				customMapStyle={mapStyle}
 				onLayout={() => {
 					// Ajuster la vue pour montrer toute la route
 					mapRef.current?.fitToCoordinates(fitToCoordinates, {
-						edgePadding: { top: 30, right: 30, bottom: 30, left: 30 },
+						edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
 						animated: true,
 					});
 				}}
