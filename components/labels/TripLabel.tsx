@@ -38,7 +38,7 @@ export function TripLabel({
 			]}
 		>
 			<ThemedText
-				type={theme === "default" ? "small" : "defaultBody"}
+				type={theme === "default" ? "small" : "header5"}
 				style={[
 					{ color: status === "en cours" ? Colors.light.text : "#fff" },
 					styles.text,
@@ -63,8 +63,8 @@ const tiny = StyleSheet.create({
 
 const bigger = StyleSheet.create({
 	container: {
-		width: "35%",
-		paddingVertical: 4,
+		width: "40%",
+		paddingVertical: 5,
 		borderRadius: 10,
 	},
 	text: {
