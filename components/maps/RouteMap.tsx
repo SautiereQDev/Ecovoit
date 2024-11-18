@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { OSRMService } from "@/services/routingServices";
-import {Location} from "@/types";
+import { Location } from "@/types";
 
 interface Route {
 	points: Location[];
@@ -10,22 +10,24 @@ interface Route {
 
 interface RouteMapProps {
 	style?: any;
-	start: Location
-	end: Location
+	start: Location;
+	end: Location;
 	waypoints?: Location[];
 }
 
 //TODO: integrer un boutton recenter
-export const RouteMap: React.FC<RouteMapProps> = ({
+export const RouteMap = ({
 	style,
 	start,
 	end,
 	waypoints = [],
-}) => {
+}: RouteMapProps) => {
 	const [route, setRoute] = useState<Route | null>(null);
 	const mapRef = useRef<MapView>(null);
 
-	const toRoutePoint = (point: Location): { location: [number, number]; name?: string } => ({
+	const toRoutePoint = (
+		point: Location,
+	): { location: [number, number]; name?: string } => ({
 		location: [point.longitude, point.latitude] as [number, number],
 		name: point.name,
 	});
@@ -47,10 +49,9 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 	}, [start, end, waypoints]);
 
 	const initialRegion = {
-		latitude: start.latitude,
-		longitude: start.longitude,
-		latitudeDelta: 0.0922,
-		longitudeDelta: 0.0421,
+		...start,
+		latitudeDelta: 1.00,
+		longitudeDelta: 1.00,
 	};
 
 	// Calculer les limites pour inclure tous les points
@@ -66,7 +67,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 				onLayout={() => {
 					// Ajuster la vue pour montrer toute la route
 					mapRef.current?.fitToCoordinates(fitToCoordinates, {
-						edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+						edgePadding: { top: 30, right: 30, bottom: 30, left: 30 },
 						animated: true,
 					});
 				}}

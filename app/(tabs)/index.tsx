@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { DestinationForm, ThemedText, TripCard} from "@/components";
 import { useState } from "react";
-import { Colors } from "@/constants/Colors.ts";
+import { Colors } from "@/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {

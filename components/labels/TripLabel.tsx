@@ -1,11 +1,12 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { ThemedText } from "../texts"; 
-import { Colors } from "@/constants/Colors";
+import { ThemedText } from "../texts";
+import { Colors } from "@/constants/colors";
 
 type Props = {
 	status: "effectue" | "en cours" | "annule";
 	style?: ViewStyle;
+	theme?: "default" | "bigger";
 };
 
 const backgroundColor = {
@@ -20,7 +21,14 @@ const statusText = {
 	annule: "Annulé",
 };
 
-export function TripLabel({ status, style }: Readonly<Props>) {
+export function TripLabel({
+	status,
+	style,
+	theme = "default",
+}: Readonly<Props>) {
+
+	const styles = theme === "default" ? tiny : bigger;
+
 	return (
 		<View
 			style={[
@@ -30,7 +38,7 @@ export function TripLabel({ status, style }: Readonly<Props>) {
 			]}
 		>
 			<ThemedText
-				type={"small"}
+				type={theme === "default" ? "small" : "defaultBody"}
 				style={[
 					{ color: status === "en cours" ? Colors.light.text : "#fff" },
 					styles.text,
@@ -42,11 +50,21 @@ export function TripLabel({ status, style }: Readonly<Props>) {
 	);
 }
 
-const styles = StyleSheet.create({
+const tiny = StyleSheet.create({
 	container: {
-		margin: "auto",
 		width: "30%",
 		paddingVertical: 3,
+		borderRadius: 10,
+	},
+	text: {
+		textAlign: "center",
+	},
+});
+
+const bigger = StyleSheet.create({
+	container: {
+		width: "35%",
+		paddingVertical: 4,
 		borderRadius: 10,
 	},
 	text: {

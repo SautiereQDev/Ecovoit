@@ -2,7 +2,7 @@ import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import { TripLabel} from "../labels";
 import { ThemedText } from "../texts";
-import { Colors } from "@/constants/Colors.ts";
+import { Colors } from "@/constants/colors";
 import { TripCardType } from "@/types/types";
 
 const backgroundColor = {

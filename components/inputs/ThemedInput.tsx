@@ -8,7 +8,7 @@ import {
 	TextInputProps,
 } from "react-native";
 import React, { useState } from "react";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/colors";
 
 interface ThemedInputProps extends Omit<TextInputProps, "style"> {
 	theme?: "Primary" | "Secondary";

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Colors } from "@/constants/Colors.ts";
+import { Colors } from "@/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchTripCard, ThemedText } from "@/components";
 

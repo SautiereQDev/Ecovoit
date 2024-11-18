@@ -2,10 +2,10 @@ import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Point } from "@/types";
-import { Colors } from "@/constants/Colors";
-import { TripInfoLabel} from "../labels";
-import {RouteMap} from "../maps";
-import {ThemedText} from "../texts";
+import { Colors } from "@/constants/colors";
+import { TripInfoLabel, TripLabel } from "../labels";
+import { RouteMap } from "../maps";
+import { ThemedText } from "../texts";
 
 interface TripData {
 	date?: string;
@@ -20,17 +20,18 @@ interface TripData {
 	consommation: number;
 }
 
+// TODO: Afficher un label "terminé" et le nombres d'étoiles attribuées si le trajet est terminé
 export const DetailledTrip = () => {
 	const data: TripData = {
 		date: "12 Novembre 2024",
 		start: {
-			latitude: 48.8584,
-			longitude: 2.2945,
+			latitude: 46.177673675037354,
+			longitude: -1.1183228504255647,
 			name: "Super U",
 		},
 		end: {
-			latitude: 48.8606,
-			longitude: 2.3376,
+			latitude: 46.15565762058419,
+			longitude: -1.1501020876315642,
 			name: "Chez Auguste",
 		},
 		waypoints: [], // optionnel
@@ -50,6 +51,13 @@ export const DetailledTrip = () => {
 			>
 				{`${data.start.name} -> ${data.end.name}`}
 			</ThemedText>
+			<View style={styles.labelContainer}>
+				<TripLabel
+					status={"effectue"}
+					style={styles.label}
+					theme={"bigger"}
+				/>
+			</View>
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
 					<RouteMap
@@ -112,7 +120,14 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flex: 1,
 		gap: 80,
-		width: "85%",
+		width: "90%",
+	},
+	labelContainer: {
+		width: "90%",
+		marginTop: 10,
+		marginBottom: 30
+	},
+	label: {
 	},
 	mapContainer: {
 		display: "flex",
@@ -150,4 +165,3 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 });
-

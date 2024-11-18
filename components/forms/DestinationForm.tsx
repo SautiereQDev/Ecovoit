@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import React, { SetStateAction } from "react";
 import { destinationSearch } from "@/types";
-import { Colors } from "@/constants/Colors.ts";
+import { Colors } from "@/constants/colors";
 import { IconButton, CustomButton } from "../buttons";
 import {ThemedInput} from '../inputs';
 

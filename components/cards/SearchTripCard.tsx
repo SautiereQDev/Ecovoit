@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
-import { Colors } from "@/constants/Colors.ts";
+import { Colors } from "@/constants/colors";
 import { ThemedText } from "../texts";
 import { SearchTripCardType } from "@/types/types";
 
