@@ -1,22 +1,26 @@
 import { useSession } from "@/components/context/SessionProvider";
 import { Redirect, Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function AppLayout() {
-  // console.warn("-- render AppLayout");
+	// console.warn("-- render AppLayout");
 
-  const { isAuthenticated } = useSession();
+	const { isAuthenticated } = useSession();
 
-  if (!isAuthenticated) {
-    return <Redirect href="/signin" />;
-  }
+	if (!isAuthenticated) {
+		return <Redirect href='/signin' />;
+	}
 
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-    </Stack>
-  );
+	return (
+		// Permet l'utilisation de FlatList "
+		<GestureHandlerRootView>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
+				<Stack.Screen name='(tabs)' />
+			</Stack>
+		</GestureHandlerRootView>
+	);
 }

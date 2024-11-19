@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { Colors } from "@/constants/Colors";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import {fonts} from "@/constants/Fonts";
+import { fonts } from "@/constants/Fonts";
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
@@ -30,7 +30,7 @@ export function ThemedText({
 		Inter: require("@/assets/fonts/Inter.ttf"),
 		"Inter-italic": require("@/assets/fonts/InterItalic.ttf"),
 		"Gabarito-bold": require("@/assets/fonts/Gabarito-Bold.ttf"),
-		"Gabarito-Medium": require("@/assets/fonts/Gabarito-Medium.ttf"),
+		"Gabarito-medium": require("@/assets/fonts/Gabarito-Medium.ttf"),
 	});
 
 	// fonts import
