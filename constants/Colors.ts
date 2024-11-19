@@ -25,3 +25,5 @@ export const Colors = {
 		accent: "#c0392b",
 	},
 };
+
+export default Colors;

@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import { Colors } from "@/constants/colors";
+import {Colors} from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SearchTripCard, ThemedText } from "@/components";
+import { SearchTripCard,  } from "../cards/SearchTripCard";
+import { ThemedText } from "../texts/ThemedText";
 
 export default function Index() {
 	const data = { position: "Super U", destination: "Chez Auguste" };

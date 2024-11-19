@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "../forms/LoginForm";
 
 /**
  * Identifiants de connexion d'un utilisateur

@@ -1,10 +1,10 @@
 import { StyleSheet, Text, type TextProps, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useFonts } from "expo-font";
-import { Colors } from "@/constants/colors";
+import { Colors } from "@/constants/Colors";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
-import fonts from "@/constants/fonts";
+import {fonts} from "@/constants/Fonts";
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;

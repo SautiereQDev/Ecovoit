@@ -2,11 +2,11 @@ import React from "react";
 import {Image, StyleSheet, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Point} from "@/types";
-import {Colors} from "@/constants/colors";
+import {Colors} from "@/constants/Colors";
 import {TripInfoLabel, TripLabel} from "../labels";
 import {RouteMap} from "../maps";
 import {ThemedText} from "../texts";
-import {Stars} from "@/components/Stars.tsx";
+import {Stars} from "../Stars";
 
 interface TripData {
   date?: string;

@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 import React from "react";
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedText } from "../texts/ThemedText";
 import { Colors } from "@/constants/Colors";
 
 type Props = PressableProps & {

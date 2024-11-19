@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
-import DestinationForm from "@/components/DestinationForm";
+import { ThemedText } from "@/components/texts/ThemedText";
+import DestinationForm from "@/components/forms/DestinationForm";
 import { useState } from "react";
-import { Colors } from "@/constants/Colors";
+import {Colors} from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ListHistoricTrip from "@/components/ListHistoricTrip";
+import ListHistoricTrip from "@/components/pages/ListHistoricTrip";
 import { useSession } from "@/components/context/SessionProvider";
 
 export default function SearchTrip() {
