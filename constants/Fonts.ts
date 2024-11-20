@@ -40,7 +40,7 @@ export const fonts = {
 	},
 	header1: {
 		fontFamily: "Gabarito-bold",
-		fontSize: 60.5,
+		fontSize: 70,
 	},
 	header2: {
 		fontFamily: "Gabarito-bold",
@@ -53,7 +53,7 @@ export const fonts = {
 	},
 	header4: {
 		fontFamily: "Gabarito-bold",
-		fontSize: 28.5,
+		fontSize: 30,
 	},
 	header5: {
 		fontFamily: "Gabarito-medium",

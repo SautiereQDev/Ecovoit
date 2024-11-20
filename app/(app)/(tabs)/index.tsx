@@ -1,11 +1,57 @@
-import { StyleSheet, View } from "react-native";
-import { DestinationForm, ThemedText, TripCard } from "@/components";
-import { useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import {
+	CustomButton,
+	IconButton,
+	ThemedInput,
+	ThemedText,
+	TripCard,
+} from "@/components";
+import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NewTripType, TripCardType } from "@/types";
 
 export default function Index() {
-	const [data, setData] = useState({ position: "", destination: "" });
+	const [displayedCards, setDisplayedCards] = useState<TripCardType[]>([
+		{
+			depart: "Super U",
+			destination: "Chez Auguste",
+			status: "current",
+			nom: "Thomas",
+			date: "12/12/2021",
+		},
+		{
+			depart: "Super U",
+			destination: "Chez Auguste",
+			status: "completed",
+			nom: "Thomas",
+			date: "12/12/2021",
+		},
+		{
+			depart: "Super U",
+			destination: "Chez Auguste",
+			status: "completed",
+			nom: "Thomas",
+			date: "12/12/2021",
+		},
+		{
+			depart: "Super U",
+			destination: "Chez Auguste",
+			status: "completed",
+			nom: "Thomas",
+			date: "12/12/2021",
+		},
+	]);
+	const [formData, setFormData] = useState<NewTripType>({
+		username: "",
+		depart: "",
+		destination: "",
+		date: new Date().toDateString(),
+	});
+
+	const handleSubmit = () => {
+		// 		rediriger vers la page de recherche en mode isSearched = true avec les informations de la recherce transmise a la page de recherche
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -13,13 +59,14 @@ export default function Index() {
 				<ThemedText
 					type='header1'
 					color='primary'
+					style={styles.title}
 				>
 					Ecovoit
 				</ThemedText>
-				<DestinationForm
-					formData={data}
-					submitForm={setData}
-					style={styles.searchInput}
+				<CustomButton
+					text={"Chercher un covoiturage"}
+					buttonStyle={styles.searchButton}
+					textProps={{ color: "background", type: "header5" }}
 				/>
 				<ThemedText
 					type='header3'
@@ -27,14 +74,11 @@ export default function Index() {
 				>
 					Mes trajets effectués ou en cours 🌿
 				</ThemedText>
-				<TripCard
-					data={{
-						depart: "Super U",
-						destination: "Chez Auguste",
-						status: "en cours",
-						nom: "Thomas",
-						date: "12/12/2021",
-					}}
+				<FlatList
+					data={displayedCards}
+					renderItem={({ item }) => <TripCard data={item} />}
+					keyExtractor={(item, index) => index.toString()}
+					ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 				/>
 			</View>
 		</SafeAreaView>
@@ -45,17 +89,25 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: Colors.light.background,
 	},
+	title: {
+		marginBottom: 15,
+		textAlign: "center",
+	},
 	content: {
-		marginTop: 10,
-		alignItems: "center",
+		display: "flex",
+		gap: 10,
+		marginTop: 5,
 		width: "90%",
 		marginHorizontal: "auto",
 	},
-	searchInput: {
-		marginTop: 15,
-	},
 	secondaryTitle: {
-		marginTop: 30,
-		marginBottom: 20,
+		marginTop: 15,
+		marginBottom: 25,
+	},
+	searchButton: {
+		backgroundColor: Colors.light.primary,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		margin: "auto",
 	},
 });

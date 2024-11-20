@@ -1,34 +1,34 @@
 export type User = {
-  id: number;
-  firstName: string | null;
-  lastName: string | null;
-  username: string | null;
-  email: string | null;
-  bio: string | null;
-  rank: "member" | "moderator" | "admin";
-  verified: boolean;
-  vehicles: Vehicle[];
-  tripsAsDriver: Trip[];
-  tripsAsPassenger: Trip[];
+	id: number;
+	firstName: string | null;
+	lastName: string | null;
+	username: string | null;
+	email: string | null;
+	bio: string | null;
+	rank: "member" | "moderator" | "admin";
+	verified: boolean;
+	vehicles: Vehicle[];
+	tripsAsDriver: Trip[];
+	tripsAsPassenger: Trip[];
 };
 
 export type Vehicle = {
-  owner: number;
-  label: string | null;
-  consumption: number | null;
-  emission: number | null;
+	owner: number;
+	label: string | null;
+	consumption: number | null;
+	emission: number | null;
 };
 
 export type Point = {
-  type: "start" | "end" | "checkpoint";
-  locationName: string;
-  previous: number | null;
-  next: number | null;
+	type: "start" | "end" | "checkpoint";
+	locationName: string;
+	previous: number | null;
+	next: number | null;
 };
 
 export type Trip = {
-  vehicle: string | null;
-  seats: number | null;
-  datetime: number | null;
-  points: Point[];
+	vehicle: string | null;
+	seats: number | null;
+	datetime: number | null;
+	points: Point[];
 };

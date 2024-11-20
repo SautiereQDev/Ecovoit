@@ -4,21 +4,21 @@ import { ThemedText } from "../texts";
 import { Colors } from "@/constants/Colors";
 
 type Props = {
-	status: "effectue" | "en cours" | "annule";
+	status: "completed" | "current" | "canceled";
 	style?: ViewStyle;
 	theme?: "default" | "bigger";
 };
 
 const backgroundColor = {
-	"en cours": Colors.light.hidden,
-	effectue: "#00B309",
-	annule: "#C00600",
+	current: Colors.light.hidden,
+	completed: "#00B309",
+	canceled: "#C00600",
 };
 
 const statusText = {
-	"en cours": "En cours",
-	effectue: "Effectué",
-	annule: "Annulé",
+	current: "En cours",
+	completed: "Effectué",
+	canceled: "Annulé",
 };
 
 export function TripLabel({
@@ -26,7 +26,6 @@ export function TripLabel({
 	style,
 	theme = "default",
 }: Readonly<Props>) {
-
 	const styles = theme === "default" ? tiny : bigger;
 
 	return (
@@ -40,7 +39,7 @@ export function TripLabel({
 			<ThemedText
 				type={theme === "default" ? "small" : "header5"}
 				style={[
-					{ color: status === "en cours" ? Colors.light.text : "#fff" },
+					{ color: status === "current" ? Colors.light.text : "#fff" },
 					styles.text,
 				]}
 			>
@@ -54,7 +53,7 @@ const tiny = StyleSheet.create({
 	container: {
 		width: "30%",
 		paddingVertical: 3,
-		borderRadius: 10,
+		borderRadius: 10, // Ensure borderRadius is applied
 	},
 	text: {
 		textAlign: "center",
@@ -65,7 +64,7 @@ const bigger = StyleSheet.create({
 	container: {
 		width: "40%",
 		paddingVertical: 5,
-		borderRadius: 10,
+		borderRadius: 10, // Ensure borderRadius is applied
 	},
 	text: {
 		textAlign: "center",

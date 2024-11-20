@@ -56,7 +56,7 @@ export const DetailledTrip = () => {
 			</ThemedText>
 			<View style={styles.labelContainer}>
 				<TripLabel
-					status={"effectue"}
+					status={"completed"}
 					theme={"bigger"}
 				/>
 			</View>

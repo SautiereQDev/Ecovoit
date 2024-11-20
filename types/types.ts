@@ -1,14 +1,21 @@
 export interface destinationSearch {
 	position: string;
 	destination: string;
-};
+}
 
 export interface TripCardType {
 	depart: string;
 	destination: string;
-	status: "en cours" | "effectue" | "annule";
+	status: "current" | "completed" | "canceled";
 	nom: string;
 	date: string;
+}
+
+export type NewTripType = {
+	depart: string;
+	destination: string;
+	date: string;
+	username: string;
 };
 
 export interface SearchTripCardType {
@@ -17,4 +24,4 @@ export interface SearchTripCardType {
 	nom: string;
 	date: string;
 	distance: number | string;
-};
+}
