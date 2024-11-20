@@ -7,7 +7,7 @@ import {
 import React, { ComponentProps } from "react";
 import { Colors } from "@/constants/Colors";
 import Octicons from "@expo/vector-icons/Octicons";
-import { ThemedText } from "@/components";
+import { ThemedText } from "../texts/ThemedText";
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
 
@@ -24,7 +24,8 @@ type Props = ButtonProps &
 				| "small"
 				| "italic"
 				| "accent"
-				| "defaultBody";
+				| "defaultBody"
+				| "bigger";
 			color: keyof typeof Colors.light;
 		};
 		iconStyle?: StyleProp<ViewStyle>;

@@ -1,7 +1,5 @@
-import {DetailledTrip} from '@/components';
+import { DetailledTrip } from "@/components";
 
 export default function Tests() {
-	return (
-		<DetailledTrip/>
-	);
+	return <DetailledTrip />;
 }

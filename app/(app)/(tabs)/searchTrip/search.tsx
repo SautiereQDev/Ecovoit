@@ -1,70 +1,143 @@
-import { ScrollView, StyleSheet } from "react-native";
-import { ThemedText } from "@/components/texts/ThemedText";
-import DestinationForm from "@/components/forms/DestinationForm";
-import { useState } from "react";
-import {Colors} from "@/constants/Colors";
+import { StyleSheet, View } from "react-native";
+import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ListHistoricTrip from "@/components/pages/ListHistoricTrip";
-import { useSession } from "@/components/context/SessionProvider";
+import {
+	IconButton,
+	SearchTripCard,
+	ThemedInput,
+	ThemedText,
+} from "@/components";
+import { useState } from "react";
 
-export default function SearchTrip() {
-  const { currentUser } = useSession();
-  const [data, setData] = useState({ position: "", destination: "" });
+export const SearchPage = () => {
+	// const { currentUser } = useSession();
+	const [searchData, setSearchData] = useState({
+		position: "Super U",
+		destination: "Chez Auguste",
+	});
+	const [isSearch, setIsSearch] = useState(false);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ThemedText type="header1" color="primary">
-        Ecovoit
-      </ThemedText>
-      <DestinationForm
-        formData={data}
-        submitForm={setData}
-        style={styles.searchInput}
-      />
-      <ThemedText type="header3" style={styles.secondaryTitle}>
-        Mes trajets effectués ou en cours 🌿
-      </ThemedText>
-      <ListHistoricTrip
-        data={[
-          {
-            depart: "Super U",
-            destination: "Chez Auguste",
-            status: "en cours",
-            nom: "Thomas",
-            date: "12 Decembre 2021",
-          },
-          {
-            depart: "Super U",
-            destination: "Chez Auguste",
-            status: "effectue",
-            nom: "Thomas",
-            date: "12 Decembre 2021",
-          },
-          {
-            depart: "Super U",
-            destination: "Chez Auguste",
-            status: "annule",
-            nom: "Thomas",
-            date: "12 Decembre 2021",
-          },
-        ]}
-      />
-    </SafeAreaView>
-  );
-}
+	const handleSubmit = (event) => {
+		setIsSearch(true);
+	};
+
+	const resetSearch = (event) => {
+		setSearchData({
+			position: "",
+			destination: "",
+		});
+		setIsSearch(false);
+	};
+
+	return (
+		<SafeAreaView style={styles.container}>
+			{isSearch ? (
+				<>
+					<View style={styles.header}>
+						<View style={styles.searchInput}>
+							<ThemedText color='text'>
+								{searchData.position}
+								{" -> "}
+								{searchData.destination}
+							</ThemedText>
+						</View>
+						<IconButton
+							name='x-circle'
+							size={24}
+							color={Colors.light.primary}
+							onPress={resetSearch}
+							style={styles.resetButton}
+						/>
+					</View>
+					<ThemedText
+						type='header4'
+						style={styles.secondaryTitle}
+					>
+						Trajets correspondants 🔗
+					</ThemedText>
+					<SearchTripCard
+						data={{
+							depart: "Super U",
+							destination: "Chez Auguste",
+							nom: "Thomas",
+							date: "12 Décembre 2021 - 15h20",
+							distance: 500,
+						}}
+					/>
+				</>
+			) : (
+				<>
+					<View>
+						<ThemedText
+							type='header4'
+							style={styles.secondaryTitle}
+						>
+							Rechercher votre trajet 🔎
+						</ThemedText>
+						<View style={styles.formContainer}>
+							<ThemedInput
+								placeholder={"Départ"}
+								value={searchData.position}
+								onChangeText={(val) =>
+									setSearchData({ ...searchData, position: val })
+								}
+								style={styles.searchInput}
+							/>
+							<ThemedInput
+								placeholder={"Destination"}
+								value={searchData.destination}
+								onChangeText={(val) =>
+									setSearchData({ ...searchData, destination: val })
+								}
+								style={styles.searchInput}
+							/>
+							<IconButton
+								name='search'
+								title={"Rechercher"}
+								size={24}
+								color={Colors.light.primary}
+								buttonStyle={styles.submitButton}
+								textProps={{ type: "accent", color: "primary" }}
+								onPress={handleSubmit}
+							/>
+						</View>
+					</View>
+				</>
+			)}
+		</SafeAreaView>
+	);
+};
+
+export default SearchPage;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.light.background,
-    alignItems: "center",
-    padding: 30,
-  },
-  searchInput: {
-    marginTop: 15,
-  },
-  secondaryTitle: {
-    marginTop: 30,
-    marginBottom: 20,
-  },
+	container: {
+		marginTop: 10,
+		flex: 1,
+		backgroundColor: Colors.light.background,
+		paddingHorizontal: 35,
+	},
+	header: {
+		display: "flex",
+		flexDirection: "row",
+	},
+	formContainer: {
+		gap: 20,
+	},
+	secondaryTitle: {
+		marginTop: 25,
+		marginBottom: 25,
+	},
+	resetButton: {},
+	submitButton: {
+		display: "flex",
+		flexDirection: "row",
+		gap: 10,
+		paddingVertical: 8,
+		borderWidth: 2,
+		borderColor: Colors.light.primary,
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center",
+	},
 });
