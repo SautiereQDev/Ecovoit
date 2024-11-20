@@ -4,7 +4,6 @@ import {
 	View,
 	StyleProp,
 	ViewStyle,
-	TextStyle,
 	TextInputProps,
 } from "react-native";
 import React, { useState } from "react";
@@ -13,12 +12,10 @@ import { Colors } from "@/constants/Colors";
 interface ThemedInputProps extends Omit<TextInputProps, "style"> {
 	theme?: "Primary" | "Secondary";
 	style?: StyleProp<ViewStyle>;
-	textStyle?: StyleProp<TextStyle>;
 }
 
 export const ThemedInput = ({
 	style,
-	textStyle,
 	theme = "Primary", // Default theme
 	...inputProps
 }: ThemedInputProps) => {
@@ -29,7 +26,7 @@ export const ThemedInput = ({
 		<View style={[styles.container, style]}>
 			<TextInput
 				cursorColor={Colors.light.inputText}
-				style={[styles.input, isFocused && styles.focusedInput, textStyle]}
+				style={[styles.input, isFocused && styles.focusedInput]}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 				{...inputProps}
@@ -62,11 +59,11 @@ const secondary = StyleSheet.create({
 		width: "100%",
 	},
 	input: {
-		borderWidth: 1,
+		borderWidth: 1.5,
 		paddingVertical: 10,
 		paddingHorizontal: 15,
-		width: "100%",
 		borderRadius: 10,
+		width: "100%",
 		backgroundColor: Colors.light.background,
 		borderColor: Colors.light.inputText,
 	},
@@ -74,6 +71,6 @@ const secondary = StyleSheet.create({
 		borderColor: Colors.light.secondary,
 		borderWidth: 2,
 	},
-})
+});
 
 export default ThemedInput;
