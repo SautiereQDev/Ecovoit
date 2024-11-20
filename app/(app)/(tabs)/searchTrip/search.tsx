@@ -17,11 +17,11 @@ export const SearchPage = () => {
 	});
 	const [isSearch, setIsSearch] = useState(false);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = () => {
 		setIsSearch(true);
 	};
 
-	const resetSearch = (event) => {
+	const resetSearch = () => {
 		setSearchData({
 			position: "",
 			destination: "",
@@ -34,7 +34,7 @@ export const SearchPage = () => {
 			{isSearch ? (
 				<>
 					<View style={styles.header}>
-						<View style={styles.searchInput}>
+						<View style={styles.destination}>
 							<ThemedText color='text'>
 								{searchData.position}
 								{" -> "}
@@ -42,11 +42,11 @@ export const SearchPage = () => {
 							</ThemedText>
 						</View>
 						<IconButton
-							name='x-circle'
-							size={24}
-							color={Colors.light.primary}
+							name='x'
+							color={Colors.light.resetButton}
 							onPress={resetSearch}
-							style={styles.resetButton}
+							size={30}
+							buttonStyle={styles.resetButton}
 						/>
 					</View>
 					<ThemedText
@@ -81,7 +81,6 @@ export const SearchPage = () => {
 								onChangeText={(val) =>
 									setSearchData({ ...searchData, position: val })
 								}
-								style={styles.searchInput}
 							/>
 							<ThemedInput
 								placeholder={"Destination"}
@@ -89,8 +88,8 @@ export const SearchPage = () => {
 								onChangeText={(val) =>
 									setSearchData({ ...searchData, destination: val })
 								}
-								style={styles.searchInput}
 							/>
+							{/*	TODO: Ajouter un input Date pour selectionner la date et l'heure du covoiturage*/}
 							<IconButton
 								name='search'
 								title={"Rechercher"}
@@ -120,6 +119,9 @@ const styles = StyleSheet.create({
 	header: {
 		display: "flex",
 		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		gap: 15,
 	},
 	formContainer: {
 		gap: 20,
@@ -128,7 +130,22 @@ const styles = StyleSheet.create({
 		marginTop: 25,
 		marginBottom: 25,
 	},
-	resetButton: {},
+	destination: {
+		borderWidth: 1.5,
+		borderColor: Colors.light.inputText,
+		padding: 10,
+		borderRadius: 10,
+	},
+	resetButton: {
+		borderWidth: 2,
+		borderColor: Colors.light.resetButton,
+		borderRadius: 99999,
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "center",
+		height: 40,
+		width: 40,
+	},
 	submitButton: {
 		display: "flex",
 		flexDirection: "row",

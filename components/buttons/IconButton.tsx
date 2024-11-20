@@ -11,25 +11,25 @@ import { ThemedText } from "../texts/ThemedText";
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
 
-type Props = ButtonProps &
-	OcticonsProps & {
-		buttonStyle?: StyleProp<ViewStyle>;
-		textProps?: {
-			type?:
-				| "header1"
-				| "header2"
-				| "header3"
-				| "header4"
-				| "header5"
-				| "small"
-				| "italic"
-				| "accent"
-				| "defaultBody"
-				| "bigger";
-			color: keyof typeof Colors.light;
-		};
-		iconStyle?: StyleProp<ViewStyle>;
+interface Props extends Omit<ButtonProps, "title">, OcticonsProps {
+	buttonStyle?: StyleProp<ViewStyle>;
+	textProps?: {
+		type?:
+			| "header1"
+			| "header2"
+			| "header3"
+			| "header4"
+			| "header5"
+			| "small"
+			| "italic"
+			| "accent"
+			| "defaultBody"
+			| "bigger";
+		color: keyof typeof Colors.light;
 	};
+	iconStyle?: StyleProp<ViewStyle>;
+	title?: string;
+}
 
 /**
  * IconButton component that renders a button with an icon.

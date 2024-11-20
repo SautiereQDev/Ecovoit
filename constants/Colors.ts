@@ -3,6 +3,8 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
+const resetButton = "#d60d0d";
+
 export const Colors = {
 	light: {
 		hidden: "#DCDCDC",
@@ -13,6 +15,7 @@ export const Colors = {
 		background: "#FDFFFD",
 		inputText: "#616161",
 		inputBackground: "#E6E6E6",
+		resetButton,
 	},
 	dark: {
 		hidden: "#DCDCDC",
@@ -23,6 +26,7 @@ export const Colors = {
 		inputText: "#ccc",
 		inputBackground: "#333",
 		accent: "#c0392b",
+		resetButton,
 	},
 };
 
