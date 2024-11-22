@@ -1,15 +1,10 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import {
-	CustomButton,
-	IconButton,
-	ThemedInput,
-	ThemedText,
-	TripCard,
-} from "@/components";
+import { ThemedText, TripCard } from "@/components";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NewTripType, TripCardType } from "@/types";
+import { Link } from "expo-router";
 
 export default function Index() {
 	const [displayedCards, setDisplayedCards] = useState<TripCardType[]>([
@@ -18,7 +13,7 @@ export default function Index() {
 			destination: "Chez Auguste",
 			status: "current",
 			nom: "Thomas",
-			date: "12/12/2021",
+			date: "12/12/2024",
 		},
 		{
 			depart: "Super U",
@@ -39,7 +34,7 @@ export default function Index() {
 			destination: "Chez Auguste",
 			status: "completed",
 			nom: "Thomas",
-			date: "12/12/2021",
+			date: "12/12/2024",
 		},
 	]);
 	const [formData, setFormData] = useState<NewTripType>({
@@ -63,11 +58,17 @@ export default function Index() {
 				>
 					Ecovoit
 				</ThemedText>
-				<CustomButton
-					text={"Chercher un covoiturage"}
-					buttonStyle={styles.searchButton}
-					textProps={{ color: "background", type: "header5" }}
-				/>
+				<Link
+					href={"/(app)/(tabs)/searchTrip"}
+					style={styles.searchButton}
+				>
+					<ThemedText
+						color='background'
+						type='header5'
+					>
+						Chercher un covoiturage
+					</ThemedText>
+				</Link>
 				<ThemedText
 					type='header3'
 					style={styles.secondaryTitle}
@@ -109,5 +110,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 		margin: "auto",
+		borderRadius: 10,
 	},
 });
