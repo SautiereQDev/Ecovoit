@@ -2,8 +2,6 @@
 
 Cette documentation présente les composants fournisseurs de contexte utilisés dans notre application. Ces composants jouent un rôle crucial en permettant de partager l'état et des fonctionnalités entre les différents composants sans avoir à passer des props manuellement à chaque niveau de la hiérarchie.
 
-Le contexte est particulièrement utile pour gérer des états globaux tels que l'authentification des utilisateurs, les préférences de l'application ou des services partagés. Les deux principaux fournisseurs de contexte que nous utilisons sont le `SessionProvider`, qui gère l'état de la session utilisateur, et le `MockServiceProvider`, qui fournit un contexte pour un service de simulation de requêtes vers une API afin de ne pas dépendre du back-end durant le développement.
-
 Chaque fournisseur de contexte est accompagné d'exemples d'utilisation pour faciliter leur intégration.
 
 ## `SessionProvider`
@@ -59,43 +57,13 @@ Le composant fournit un contexte `SessionContext` avec les valeurs suivantes :
 ### Exemple d'utilisation
 
 ```jsx
-import { SessionProvider } from "./SessionProvider";
+import { SessionProvider } from './SessionProvider';
 
 function App() {
-  return (
-    <SessionProvider>
-      <ChildComponent />
-    </SessionProvider>
-  );
-}
-```
-
-## `MockServiceProvider`
-
-Le composant `MockServiceProvider` fournit un contexte pour le service de simulation. Il exécute le service de simulation lors du premier rendu.
-
-### Props
-
-- `children`: Les composants enfants à rendre à l'intérieur du `MockServiceProvider`.
-
-### Effets
-
-Lors du premier rendu, le composant exécute la fonction `mockService` pour initialiser le service.
-
-### Contexte
-
-Le composant crée un contexte `MockServiceContext` avec une valeur par défaut de `null`.
-
-### Exemple d'utilisation
-
-```jsx
-import { MockServiceProvider } from "./MockServiceProvider";
-
-function App() {
-  return (
-    <MockServiceProvider>
-      <ChildComponent />
-    </MockServiceProvider>
-  );
+	return (
+		<SessionProvider>
+			<ChildComponent />
+		</SessionProvider>
+	);
 }
 ```
