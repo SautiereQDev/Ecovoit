@@ -18,6 +18,7 @@ export default function AppLayout() {
 				}}
 			>
 				<Stack.Screen name='(tabs)' />
+				<Stack.Screen name='(post-trip)' />
 			</Stack>
 		</GestureHandlerRootView>
 	);
