@@ -1,5 +1,5 @@
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabsLayout() {
 	// console.warn("-- render TabsLayout");
@@ -12,23 +12,23 @@ export default function TabsLayout() {
 					let iconName;
 
 					switch (route.name) {
-						case "index":
-							iconName = focused ? "home" : "home-outline";
+						case 'index':
+							iconName = focused ? 'home' : 'home-outline';
 							break;
-						case "searchTrip":
-							iconName = focused ? "search" : "search-outline";
+						case 'searchTrip':
+							iconName = focused ? 'search' : 'search-outline';
 							break;
-						case "postTrip":
-							iconName = focused ? "add-circle" : "add-circle-outline";
+						case 'post-trip':
+							iconName = focused ? 'add-circle' : 'add-circle-outline';
 							break;
-						case "user":
-							iconName = focused ? "person" : "person-outline";
+						case 'user':
+							iconName = focused ? 'person' : 'person-outline';
 							break;
-						case "tests":
-							iconName = focused ? "flask" : "flask-outline";
+						case 'tests':
+							iconName = focused ? 'flask' : 'flask-outline';
 							break;
 						default:
-							iconName = "alert";
+							iconName = 'alert';
 							break;
 					}
 
@@ -45,28 +45,28 @@ export default function TabsLayout() {
 			<Tabs.Screen
 				name='index'
 				options={{
-					title: "Accueil",
+					title: 'Accueil',
 					tabBarHideOnKeyboard: true,
 				}}
 			/>
 			<Tabs.Screen
 				name='searchTrip'
 				options={{
-					title: "Rechercher",
+					title: 'Rechercher',
 					tabBarHideOnKeyboard: true,
 				}}
 			/>
 			<Tabs.Screen
-				name='postTrip'
+				name='post-trip'
 				options={{
-					title: "Publier",
+					title: 'Publier',
 					tabBarHideOnKeyboard: true,
 				}}
 			/>
 			<Tabs.Screen
 				name='user'
 				options={{
-					title: "Profil",
+					title: 'Profil',
 					tabBarHideOnKeyboard: true,
 				}}
 			/>

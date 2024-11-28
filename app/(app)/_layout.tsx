@@ -1,10 +1,8 @@
-import { useSession } from "@/components/context/SessionProvider";
-import { Redirect, Stack } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSession } from '@/components/context/SessionProvider';
+import { Redirect, Stack } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function AppLayout() {
-	// console.warn("-- render AppLayout");
-
 	const { isAuthenticated } = useSession();
 
 	if (!isAuthenticated) {
@@ -12,7 +10,7 @@ export default function AppLayout() {
 	}
 
 	return (
-		// Permet l'utilisation de FlatList "
+		// Permet l'utilisation de FlatList
 		<GestureHandlerRootView>
 			<Stack
 				screenOptions={{
