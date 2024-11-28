@@ -1,3 +1,9 @@
+/**
+ * Type definitions for the Ecovoit API.
+ * ***************************************
+ * @see https://doc-ev-qq.pimous.dev/
+ */
+
 export type User = {
 	id: number;
 	firstName: string;
