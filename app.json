@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "_ecovoit_",
-    "slug": "_ecovoit_",
+    "name": "Ecovoit",
+    "slug": "ecovoit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
