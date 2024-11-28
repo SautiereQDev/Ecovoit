@@ -2,7 +2,6 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-	CustomButton,
 	IconButton,
 	SearchTripCard,
 	ThemedInput,
