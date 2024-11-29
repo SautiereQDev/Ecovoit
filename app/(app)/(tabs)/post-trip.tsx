@@ -18,7 +18,6 @@ export default function PostTrip() {
 				iconLeft='add'
 				title='Publier un trajet'
 				onPress={handlePostTrip}
-				variant='success'
 				style={{ marginVertical: 10, elevation: 5 }}
 			/>
 		</View>

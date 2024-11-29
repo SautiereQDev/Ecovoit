@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { fontSize } from '@/constants/Fonts';
+import { useThemeColor } from '@/constants/drafts/useThemeColor';
 
 type CustomButtonProps = {
 	iconLeft?: keyof typeof Ionicons.glyphMap;
@@ -16,15 +16,15 @@ type CustomButtonProps = {
 	iconRight?: keyof typeof Ionicons.glyphMap;
 	onPress: () => void;
 	style?: StyleProp<ViewStyle>;
-	variant?:
+	theme?: 'light' | 'dark';
+	color?:
 		| 'primary'
 		| 'secondary'
+		| 'background'
 		| 'success'
-		| 'danger'
+		| 'error'
 		| 'warning'
-		| 'info'
-		| 'light'
-		| 'dark';
+		| 'info';
 	size?: 'small' | 'medium' | 'large';
 };
 
@@ -34,16 +34,19 @@ export default function CustomButton({
 	iconRight,
 	onPress,
 	style,
-	variant = 'danger',
+	theme,
+	color = 'primary',
 	size = 'medium',
 }: CustomButtonProps) {
+	const colors = useThemeColor(theme);
+
 	return (
 		<View
 			style={[
 				{
 					height: sizes.container[size].height,
 					marginHorizontal: sizes.container[size].margin,
-					backgroundColor: variants[variant].backgroundColor,
+					backgroundColor: colors[color][500],
 				},
 				styles.container,
 				style,
@@ -57,7 +60,7 @@ export default function CustomButton({
 					<Ionicons
 						name={iconLeft}
 						size={sizes.icon[size]}
-						color={variants[variant].color}
+						color={colors['textMuted']}
 						style={styles.iconLeft}
 					/>
 				)}
@@ -65,7 +68,7 @@ export default function CustomButton({
 				<Text
 					style={[
 						styles.text,
-						{ color: variants[variant].color, fontSize: sizes.font[size] },
+						{ color: colors['textMuted'], fontSize: sizes.font[size] },
 						iconLeft && !iconRight ? { marginLeft: 20 } : {},
 						iconRight && !iconLeft ? { marginRight: 20 } : {},
 					]}
@@ -77,7 +80,7 @@ export default function CustomButton({
 					<Ionicons
 						name={iconRight}
 						size={sizes.icon[size]}
-						color={variants[variant].color}
+						color={colors['textMuted']}
 						style={styles.iconRight}
 					/>
 				)}
@@ -85,41 +88,6 @@ export default function CustomButton({
 		</View>
 	);
 }
-
-const variants = {
-	primary: {
-		backgroundColor: '#007bff',
-		color: '#fff',
-	},
-	secondary: {
-		backgroundColor: '#6c757d',
-		color: '#fff',
-	},
-	success: {
-		backgroundColor: '#28a745',
-		color: '#fff',
-	},
-	danger: {
-		backgroundColor: '#dc3545',
-		color: '#fff',
-	},
-	warning: {
-		backgroundColor: '#ffc107',
-		color: '#000',
-	},
-	info: {
-		backgroundColor: '#17a2b8',
-		color: '#fff',
-	},
-	light: {
-		backgroundColor: '#f8f9fa',
-		color: '#000',
-	},
-	dark: {
-		backgroundColor: '#343a40',
-		color: '#fff',
-	},
-};
 
 const sizes = {
 	container: {
