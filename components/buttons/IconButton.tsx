@@ -4,28 +4,28 @@ import {
 	TextStyle,
 	TouchableOpacity,
 	ViewStyle,
-} from "react-native";
-import React, { ComponentProps, ReactNode } from "react";
-import { Colors } from "@/constants/Colors";
-import Octicons from "@expo/vector-icons/Octicons";
-import { ThemedText } from "../texts/ThemedText";
+} from 'react-native';
+import React, { ComponentProps, ReactNode } from 'react';
+import { Colors } from '@/constants/Colors';
+import Octicons from '@expo/vector-icons/Octicons';
+import { ThemedText } from '../texts/ThemedText';
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
 
-interface Props extends Omit<ButtonProps, "title">, OcticonsProps {
+interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	buttonStyle?: StyleProp<ViewStyle>;
 	textProps?: {
 		type?:
-			| "header1"
-			| "header2"
-			| "header3"
-			| "header4"
-			| "header5"
-			| "small"
-			| "italic"
-			| "accent"
-			| "defaultBody"
-			| "bigger";
+			| 'header1'
+			| 'header2'
+			| 'header3'
+			| 'header4'
+			| 'header5'
+			| 'small'
+			| 'italic'
+			| 'accent'
+			| 'defaultBody'
+			| 'bigger';
 		color: keyof typeof Colors.light;
 	};
 	iconStyle?: StyleProp<TextStyle>;
@@ -33,53 +33,34 @@ interface Props extends Omit<ButtonProps, "title">, OcticonsProps {
 	iconFirst?: boolean;
 }
 
-/**
- * IconButton component that renders a button with an icon.
- *
- * @param {StyleProp<ViewStyle>} buttonStyle - Custom style for the button.
- * @param {string} title - Title of the button.
- * @param {object} textProps - Properties for the text inside the button.
- * @param {StyleProp<ViewStyle>} iconStyle - Custom style for the icon.
- * @param iconFirst
- * @param {Props} restProps - Other properties passed to the button.
- *
- * @returns {JSX.Element} A TouchableOpacity component with an icon.
- */
 export function IconButton({
 	buttonStyle,
 	title,
-	textProps = { type: "defaultBody", color: "text" },
+	textProps = { type: 'defaultBody', color: 'text' },
 	iconStyle,
 	iconFirst = false,
 	...restProps
-}: Props): ReactNode {
-	if (iconFirst) {
-		return (
-			<TouchableOpacity
-				style={buttonStyle}
-				{...restProps}
-			>
+}: Readonly<Props>): ReactNode {
+	return (
+		<TouchableOpacity
+			style={[{ flexDirection: 'row', alignItems: 'center' }, buttonStyle]}
+			{...restProps}
+		>
+			{iconFirst && (
 				<Octicons
 					{...restProps}
-					style={iconStyle}
+					style={iconStyle as TextStyle}
 				/>
-				{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
-			</TouchableOpacity>
-		);
-	} else {
-		return (
-			<TouchableOpacity
-				style={buttonStyle}
-				{...restProps}
-			>
-				{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
+			)}
+			{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
+			{!iconFirst && (
 				<Octicons
 					{...restProps}
-					style={iconStyle}
+					style={iconStyle as TextStyle}
 				/>
-			</TouchableOpacity>
-		);
-	}
+			)}
+		</TouchableOpacity>
+	);
 }
 
 export default IconButton;
