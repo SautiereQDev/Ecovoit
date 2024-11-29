@@ -1,15 +1,19 @@
 import CustomButton from '@/components/drafts/CustomButton';
 import { StyleSheet, View, Image } from 'react-native';
-import Cover from '@/assets/images/Ecovoit_logo.png';
+import Cover from '@/assets/images/Ecovoit_logo.png'; // TODO: Fix the TS
 import { router } from 'expo-router';
+import { useThemeColor } from '@/constants/drafts/useThemeColor';
 
 export default function PostTrip() {
+	const colors = useThemeColor();
 	const handlePostTrip = () => {
 		router.navigate('/(app)/(post-trip)/start');
 	};
 
 	return (
-		<View style={[styles.container]}>
+		<View
+			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
+		>
 			<Image
 				style={[styles.image, { alignSelf: 'center' }]}
 				source={Cover}
@@ -19,7 +23,6 @@ export default function PostTrip() {
 				title='Publier un trajet'
 				onPress={handlePostTrip}
 				style={{ marginVertical: 10, elevation: 5 }}
-				theme='light'
 				color='primary-1'
 			/>
 		</View>
@@ -29,7 +32,6 @@ export default function PostTrip() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#FDFFFD',
 	},
 	image: {
 		width: '80%',

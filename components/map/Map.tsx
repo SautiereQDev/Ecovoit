@@ -1,4 +1,4 @@
-import MapView, { Region } from 'react-native-maps';
+import MapView, { MarkerPressEvent, Region } from 'react-native-maps';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import { PropsWithChildren, useState } from 'react';
 import { LocationObject } from 'expo-location';
@@ -10,11 +10,13 @@ const LONGITUDE_DELTA = 0.0;
 
 interface MapProps {
 	location?: LocationObject | null;
+	onMarkerPress?: (e: MarkerPressEvent) => void;
 }
 
 export default function Map({
 	location,
 	children,
+	onMarkerPress,
 	...props
 }: MapProps & PropsWithChildren & ViewProps) {
 	const [region, setRegion] = useState({
@@ -41,6 +43,8 @@ export default function Map({
 				style={styles.map}
 				initialRegion={region}
 				onRegionChangeComplete={handleOnRegionChangeComplete}
+				onMarkerPress={onMarkerPress}
+				toolbarEnabled={false}
 			>
 				{children}
 			</MapView>

@@ -44,7 +44,7 @@ export default function CircleButton({
 				<Ionicons
 					name={iconName}
 					size={sizes.icon[size]}
-					color={colors['text-primary']}
+					color={colors['text-secondary']}
 				/>
 			</Pressable>
 		</View>
