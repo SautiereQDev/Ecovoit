@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { EVColor } from '@/constants/drafts/Colors';
 
 type CustomButtonProps = {
 	iconLeft?: keyof typeof Ionicons.glyphMap;
@@ -17,14 +18,7 @@ type CustomButtonProps = {
 	onPress: () => void;
 	style?: StyleProp<ViewStyle>;
 	theme?: 'light' | 'dark';
-	color?:
-		| 'primary'
-		| 'secondary'
-		| 'background'
-		| 'success'
-		| 'error'
-		| 'warning'
-		| 'info';
+	color?: keyof EVColor;
 	size?: 'small' | 'medium' | 'large';
 };
 
@@ -35,7 +29,7 @@ export default function CustomButton({
 	onPress,
 	style,
 	theme,
-	color = 'primary',
+	color = 'primary-1',
 	size = 'medium',
 }: CustomButtonProps) {
 	const colors = useThemeColor(theme);
@@ -46,7 +40,7 @@ export default function CustomButton({
 				{
 					height: sizes.container[size].height,
 					marginHorizontal: sizes.container[size].margin,
-					backgroundColor: colors[color][500],
+					backgroundColor: colors[color],
 				},
 				styles.container,
 				style,
@@ -60,7 +54,7 @@ export default function CustomButton({
 					<Ionicons
 						name={iconLeft}
 						size={sizes.icon[size]}
-						color={colors['textMuted']}
+						color={colors['text-secondary']}
 						style={styles.iconLeft}
 					/>
 				)}
@@ -68,7 +62,7 @@ export default function CustomButton({
 				<Text
 					style={[
 						styles.text,
-						{ color: colors['textMuted'], fontSize: sizes.font[size] },
+						{ color: colors['text-secondary'], fontSize: sizes.font[size] },
 						iconLeft && !iconRight ? { marginLeft: 20 } : {},
 						iconRight && !iconLeft ? { marginRight: 20 } : {},
 					]}
@@ -80,7 +74,7 @@ export default function CustomButton({
 					<Ionicons
 						name={iconRight}
 						size={sizes.icon[size]}
-						color={colors['textMuted']}
+						color={colors['text-secondary']}
 						style={styles.iconRight}
 					/>
 				)}

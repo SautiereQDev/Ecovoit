@@ -8,10 +8,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { EVColor } from '@/constants/drafts/Colors';
+import { useThemeColor } from '@/constants/drafts/useThemeColor';
 
 type IconButtonProps = {
 	iconName: keyof typeof Ionicons.glyphMap;
-	color?: keyof typeof colors;
+	theme?: 'light' | 'dark';
+	color?: keyof EVColor;
 	title?: string;
 	onPress: () => void;
 	style?: StyleProp<ViewStyle>;
@@ -22,10 +25,12 @@ export default function IconButton({
 	iconName,
 	onPress,
 	style,
-	color = 'dark',
+	theme,
+	color = 'secondary-1',
 	title,
 	size = 'large',
 }: IconButtonProps) {
+	const colors = useThemeColor(theme);
 	return (
 		<View
 			style={[
@@ -50,17 +55,6 @@ export default function IconButton({
 		</View>
 	);
 }
-
-const colors = {
-	primary: '#007bff',
-	secondary: '#6c757d',
-	success: '#28a745',
-	danger: '#dc3545',
-	warning: '#ffc107',
-	info: '#17a2b8',
-	light: '#f8f9fa',
-	dark: '#343a40',
-};
 
 const sizes = {
 	container: {

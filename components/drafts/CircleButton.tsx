@@ -7,20 +7,15 @@ import {
 } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { EVColor } from '@/constants/drafts/Colors';
+import { useThemeColor } from '@/constants/drafts/useThemeColor';
 
 type CircleButtonProps = {
 	iconName: keyof typeof Ionicons.glyphMap;
 	onPress: () => void;
 	style?: StyleProp<ViewStyle>;
-	variant?:
-		| 'primary'
-		| 'secondary'
-		| 'success'
-		| 'danger'
-		| 'warning'
-		| 'info'
-		| 'light'
-		| 'dark';
+	theme?: 'light' | 'dark';
+	color?: keyof EVColor;
 	size?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge';
 };
 
@@ -28,16 +23,18 @@ export default function CircleButton({
 	iconName,
 	onPress,
 	style,
-	variant = 'primary',
+	color = 'info-2',
+	theme,
 	size = 'medium',
 }: CircleButtonProps) {
+	const colors = useThemeColor(theme);
 	return (
 		<View
 			style={[
 				{
 					width: sizes.container[size].width,
 					height: sizes.container[size].height,
-					backgroundColor: variants[variant].backgroundColor,
+					backgroundColor: colors[color],
 				},
 				styles.container,
 				style,
@@ -47,47 +44,12 @@ export default function CircleButton({
 				<Ionicons
 					name={iconName}
 					size={sizes.icon[size]}
-					color={variants[variant].color}
+					color={colors['text-primary']}
 				/>
 			</Pressable>
 		</View>
 	);
 }
-
-const variants = {
-	primary: {
-		backgroundColor: '#007bff',
-		color: '#fff',
-	},
-	secondary: {
-		backgroundColor: '#6c757d',
-		color: '#fff',
-	},
-	success: {
-		backgroundColor: '#28a745',
-		color: '#fff',
-	},
-	danger: {
-		backgroundColor: '#dc3545',
-		color: '#fff',
-	},
-	warning: {
-		backgroundColor: '#ffc107',
-		color: '#000',
-	},
-	info: {
-		backgroundColor: '#17a2b8',
-		color: '#fff',
-	},
-	light: {
-		backgroundColor: '#f8f9fa',
-		color: '#000',
-	},
-	dark: {
-		backgroundColor: '#343a40',
-		color: '#fff',
-	},
-};
 
 const sizes = {
 	container: {

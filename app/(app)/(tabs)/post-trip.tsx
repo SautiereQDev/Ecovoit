@@ -19,6 +19,8 @@ export default function PostTrip() {
 				title='Publier un trajet'
 				onPress={handlePostTrip}
 				style={{ marginVertical: 10, elevation: 5 }}
+				theme='light'
+				color='primary-1'
 			/>
 		</View>
 	);
