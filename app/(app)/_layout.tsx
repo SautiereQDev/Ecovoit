@@ -11,15 +11,13 @@ export default function AppLayout() {
 
 	return (
 		// Permet l'utilisation de FlatList
-		<GestureHandlerRootView>
-			<Stack
-				screenOptions={{
-					headerShown: false,
-				}}
-			>
-				<Stack.Screen name='(tabs)' />
-				<Stack.Screen name='(post-trip)' />
-			</Stack>
-		</GestureHandlerRootView>
+		<Stack
+			screenOptions={{
+				headerShown: false,
+			}}
+		>
+			<Stack.Screen name='(tabs)' />
+			<Stack.Screen name='(post-trip)' />
+		</Stack>
 	);
 }

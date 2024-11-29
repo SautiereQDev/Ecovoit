@@ -49,6 +49,7 @@ export default function Map({
 }
 const styles = StyleSheet.create({
 	container: {},
+
 	map: {
 		width: '100%',
 		height: '100%',
