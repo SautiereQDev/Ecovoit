@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { EVColor } from '@/constants/drafts/Colors';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 type IconButtonProps = {
 	iconName: keyof typeof Ionicons.glyphMap;

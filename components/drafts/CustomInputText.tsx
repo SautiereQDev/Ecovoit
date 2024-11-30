@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { EVColor } from '@/constants/drafts/Colors';
 
 type CustomInputTextProps = {

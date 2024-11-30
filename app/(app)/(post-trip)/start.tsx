@@ -1,82 +1,31 @@
-import { StyleSheet, View } from 'react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { router } from 'expo-router';
-import CircleButton from '@/components/drafts/CircleButton';
-import IconButton from '@/components/drafts/IconButton';
-import Map from '@/components/map/Map';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
-import CustomInputText from '@/components/drafts/CustomInputText';
-import { ThemedText } from '@/components/drafts/ThemedText';
-import LRDistrictsMarkers from '@/components/map/LRDistrictsMarker';
-import { MarkerPressEvent } from 'react-native-maps';
+import ChooseLocationLayout from '@/components/layouts/post-trip/ChooseLocationLayout';
 
 export default function Start() {
-	const colors = useThemeColor();
-	const [searchBarValue, setSearchBarValue] = useState('');
+	const [nextButtonVisible, setNextButtonVisible] = useState(false);
 
-	const handleOnChangeText = (text: string) => {
-		setSearchBarValue(text);
+	const handleClose = () => {
+		router.navigate('/(app)/(tabs)/post-trip');
 	};
 
-	const handleOnMarkerPress = (e: MarkerPressEvent) => {
-		// TODO: mettre à jour la searchBar avec l'emplacement du marker
+	const handleMarkerPress = () => {
+		setNextButtonVisible(true);
+	};
+
+	const handleNextButtonPress = () => {
+		router.navigate('/(app)/(post-trip)/destination');
+		// TODO: Mettre à jour le PostTripContext
+		// NOTE: Il serait bien de renommer ce contexte par la même occasion.
 	};
 
 	return (
-		<View
-			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
-		>
-			<IconButton
-				iconName='close'
-				onPress={() => {
-					router.navigate('/(app)/(tabs)/post-trip');
-				}}
-				size='large'
-				style={{ position: 'absolute', top: 0, left: 0 }}
-			/>
-			<ThemedText
-				type='title'
-				style={{ marginTop: 60 }}
-			>
-				D'où partez-vous ?
-			</ThemedText>
-
-			<CustomInputText
-				value={searchBarValue}
-				label='Choisissez un point de départ'
-				iconRight='search-outline'
-				style={{ marginTop: 40, elevation: 10, borderRadius: 10 }}
-				placeholder='Saisissez une adresse'
-				onChangeText={handleOnChangeText}
-			/>
-			<Map
-				style={{
-					width: '90%',
-					height: '70%',
-					elevation: 10,
-					borderRadius: 10,
-					overflow: 'hidden',
-					marginTop: 20,
-				}}
-				onMarkerPress={handleOnMarkerPress}
-			>
-				<LRDistrictsMarkers />
-			</Map>
-			<CircleButton
-				iconName='arrow-forward'
-				onPress={() => {
-					router.navigate('/(app)/(post-trip)/destination');
-				}}
-				size='medium'
-				style={{ position: 'absolute', bottom: 25, right: 25 }}
-			/>
-		</View>
+		<ChooseLocationLayout
+			title="D'où partez-vous ?"
+			nextButton={nextButtonVisible}
+			onClose={handleClose}
+			onMarkerPress={handleMarkerPress}
+			onNextButtonPress={handleNextButtonPress}
+		/>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-	},
-});

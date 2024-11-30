@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import IconButton from '@/components/drafts/IconButton';
 import Map from '@/components/map/Map';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import CustomInputText from '@/components/drafts/CustomInputText';
 import { ThemedText } from '@/components/drafts/ThemedText';
 

@@ -2,7 +2,7 @@ import CustomButton from '@/components/drafts/CustomButton';
 import { StyleSheet, View, Image } from 'react-native';
 import Cover from '@/assets/images/Ecovoit_logo.png'; // TODO: Fix the TS
 import { router } from 'expo-router';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export default function PostTrip() {
 	const colors = useThemeColor();

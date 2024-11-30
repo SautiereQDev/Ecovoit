@@ -1,5 +1,5 @@
 import { StyleSheet, Text, type TextProps, View } from 'react-native';
-import { useThemeColor } from '@/constants/drafts/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { useFonts } from 'expo-font';
 import { Colors } from '@/constants/Colors';
 import { useEffect } from 'react';
