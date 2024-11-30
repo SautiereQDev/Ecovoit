@@ -1,46 +1,46 @@
-import { FlatList, StyleSheet, View } from "react-native";
-import { ThemedText, TripCard } from "@/components";
-import React, { useState } from "react";
-import { Colors } from "@/constants/Colors";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { NewTripType, TripCardType } from "@/types";
-import { Link } from "expo-router";
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ThemedText, TripCard } from '@/components';
+import React, { useState } from 'react';
+import { Colors } from '@/constants/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NewTripType, TripCardType } from '@/types';
+import { Link } from 'expo-router';
 
 export default function Index() {
 	const [displayedCards, setDisplayedCards] = useState<TripCardType[]>([
 		{
-			depart: "Super U",
-			destination: "Chez Auguste",
-			status: "current",
-			nom: "Thomas",
-			date: "12/12/2024",
+			depart: 'Super U',
+			destination: 'Chez Auguste',
+			status: 'current',
+			nom: 'Thomas',
+			date: '12/12/2024',
 		},
 		{
-			depart: "Super U",
-			destination: "Chez Auguste",
-			status: "completed",
-			nom: "Thomas",
-			date: "12/12/2021",
+			depart: 'Super U',
+			destination: 'Chez Auguste',
+			status: 'completed',
+			nom: 'Thomas',
+			date: '12/12/2021',
 		},
 		{
-			depart: "Super U",
-			destination: "Chez Auguste",
-			status: "completed",
-			nom: "Thomas",
-			date: "12/12/2021",
+			depart: 'Super U',
+			destination: 'Chez Auguste',
+			status: 'completed',
+			nom: 'Thomas',
+			date: '12/12/2021',
 		},
 		{
-			depart: "Super U",
-			destination: "Chez Auguste",
-			status: "completed",
-			nom: "Thomas",
-			date: "12/12/2024",
+			depart: 'Super U',
+			destination: 'Chez Auguste',
+			status: 'completed',
+			nom: 'Thomas',
+			date: '12/12/2024',
 		},
 	]);
 	const [formData, setFormData] = useState<NewTripType>({
-		username: "",
-		depart: "",
-		destination: "",
+		username: '',
+		depart: '',
+		destination: '',
 		date: new Date().toDateString(),
 	});
 
@@ -59,12 +59,13 @@ export default function Index() {
 					Ecovoit
 				</ThemedText>
 				<Link
-					href={"/(app)/(tabs)/searchTrip"}
+					href={'/(app)/(tabs)/searchTrip/search'}
 					style={styles.searchButton}
 				>
 					<ThemedText
 						color='background'
 						type='header5'
+						style={{ textAlign: 'center' }}
 					>
 						Chercher un covoiturage
 					</ThemedText>
@@ -92,14 +93,14 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		marginBottom: 15,
-		textAlign: "center",
+		textAlign: 'center',
 	},
 	content: {
-		display: "flex",
+		display: 'flex',
 		gap: 10,
 		marginTop: 5,
-		width: "90%",
-		marginHorizontal: "auto",
+		width: '90%',
+		marginHorizontal: 'auto',
 	},
 	secondaryTitle: {
 		marginTop: 15,
@@ -107,9 +108,9 @@ const styles = StyleSheet.create({
 	},
 	searchButton: {
 		backgroundColor: Colors.light.primary,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		margin: "auto",
+		paddingVertical: 12,
+		width: '90%',
+		marginHorizontal: 'auto',
 		borderRadius: 10,
 	},
 });

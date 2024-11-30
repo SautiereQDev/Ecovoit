@@ -1,5 +1,5 @@
-import { DetailledTrip } from "@/components";
+import RegisterPage from '@/components/pages/RegisterPage';
 
 export default function Tests() {
-	return <DetailledTrip />;
+	return <RegisterPage />;
 }
