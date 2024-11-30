@@ -17,7 +17,7 @@ interface formType {
 	carEmission?: number;
 }
 
-const Register = () => {
+const RegisterPage = () => {
 	const [formData, setFormData] = useState<formType>({
 		username: '',
 		email: '',
@@ -154,7 +154,7 @@ const Register = () => {
 		case 3:
 			return (
 				<SafeAreaView style={styles.container}>
-					<View style={styles.content}>
+					<View style={styles.confirmationPage}>
 						<CustomButton
 							text={'Retour'}
 							textProps={{ color: 'background' }}
@@ -162,8 +162,11 @@ const Register = () => {
 							buttonStyle={styles.buttonPrevius}
 							onPress={previousStep}
 						/>
-						<ThemedText type={'header3'}>
-							Shouaitez vous enregistrer votre véhicule ?
+						<ThemedText
+							type={'header3'}
+							style={styles.confirmationPage}
+						>
+							Souhaitez vous enregistrer votre véhicule ?
 						</ThemedText>
 						<View style={styles.buttons}>
 							<CustomButton
@@ -247,7 +250,7 @@ const Register = () => {
 	}
 };
 
-export default Register;
+export default RegisterPage;
 
 const styles = StyleSheet.create({
 	container: {
@@ -264,7 +267,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 'auto',
 		marginTop: '10%',
 		width: '80%',
-		gap: 25,
+		gap: 30,
 	},
 	header: {
 		marginBottom: 15,

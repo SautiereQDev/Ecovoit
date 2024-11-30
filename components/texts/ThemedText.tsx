@@ -1,10 +1,10 @@
-import { StyleSheet, Text, type TextProps, TextStyle} from 'react-native';
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { useFonts } from "expo-font";
-import { Colors } from "@/constants/Colors";
-import { useEffect } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import { fonts } from "@/constants/Fonts";
+import { StyleSheet, Text, type TextProps, TextStyle } from 'react-native';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { useFonts } from 'expo-font';
+import { Colors } from '@/constants/Colors';
+import { useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { fonts } from '@/constants/Fonts';
 
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
@@ -14,23 +14,23 @@ export type ThemedTextProps = TextProps & {
 };
 
 export function ThemedText({
-														 style,
-														 lightColor,
-														 darkColor,
-														 type = "defaultBody",
-														 color = "text",
-														 ...rest
-													 }: ThemedTextProps) {
+	style,
+	lightColor,
+	darkColor,
+	type = 'defaultBody',
+	color = 'text',
+	...rest
+}: ThemedTextProps) {
 	const textColor = useThemeColor(
 		{ light: lightColor, dark: darkColor },
-		color,
+		color
 	);
 
 	const [loaded, error] = useFonts({
-		Inter: require("@/assets/fonts/Inter.ttf"),
-		"Inter-italic": require("@/assets/fonts/InterItalic.ttf"),
-		"Gabarito-bold": require("@/assets/fonts/Gabarito-Bold.ttf"),
-		"Gabarito-medium": require("@/assets/fonts/Gabarito-Medium.ttf"),
+		Inter: require('@/assets/fonts/Inter.ttf'),
+		'Inter-italic': require('@/assets/fonts/InterItalic.ttf'),
+		'Gabarito-bold': require('@/assets/fonts/Gabarito-Bold.ttf'),
+		'Gabarito-medium': require('@/assets/fonts/Gabarito-Medium.ttf'),
 	});
 
 	// fonts import
@@ -66,4 +66,5 @@ const styles = StyleSheet.create({
 	header3: fonts.header3,
 	header4: fonts.header4,
 	header5: fonts.header5,
+	header6: fonts.header5,
 });
