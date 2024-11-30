@@ -19,6 +19,10 @@ export const fonts = {
 		fontFamily: "Inter",
 		fontSize: 16,
 	},
+	bigger:{
+		fontFamily: "Inter",
+		fontSize: 19,
+	},
 	italic: {
 		fontFamily: "Inter-italic",
 		fontStyle: "italic",

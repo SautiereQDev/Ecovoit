@@ -1,5 +1,5 @@
-import { DetailledTrip } from "@/components";
+import Register from '@/components/forms/Register';
 
 export default function Tests() {
-	return <DetailledTrip />;
+	return <Register/>
 }

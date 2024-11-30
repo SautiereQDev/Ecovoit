@@ -59,7 +59,7 @@ export default function Index() {
 					Ecovoit
 				</ThemedText>
 				<Link
-					href={"/(app)/(tabs)/searchTrip"}
+					href={"/(app)/(tabs)/searchTrip/search"}
 					style={styles.searchButton}
 				>
 					<ThemedText
