@@ -22,7 +22,8 @@ type Props = PressableProps & {
 			| "small"
 			| "italic"
 			| "accent"
-			| "defaultBody";
+			| "defaultBody"
+			| "bigger"
 		color?: keyof typeof Colors.light;
 	};
 	backgroundColor?: keyof typeof Colors.light;
@@ -34,20 +35,20 @@ type Props = PressableProps & {
  * @param {StyleProp<ViewStyle>} buttonStyle - Optional style for the button.
  * @param {string} text - The text to display inside the button.
  * @param {Object} textProps - Optional properties for the text.
- * @param backgroundColor
  * @param {string} textProps.type - The type of text style.
  * @param {keyof typeof Colors.light} textProps.color - The color of the text.
+ * @param {keyof typeof Colors.light} backgroundColor - The background color of the button.
  * @param {PressableProps} restProps - Additional props for the Pressable component.
  *
  * @returns {JSX.Element} The rendered button component.
  */
 export function CustomButton({
-	buttonStyle,
-	text,
-	textProps = { color: "primary" },
-	backgroundColor = "primary",
-	...restProps
-}: Props): JSX.Element {
+															 buttonStyle,
+															 text,
+															 textProps = { color: "primary" },
+															 backgroundColor = "primary",
+															 ...restProps
+														 }: Props): JSX.Element {
 	return (
 		<Pressable
 			style={[

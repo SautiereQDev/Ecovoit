@@ -4,6 +4,7 @@
  */
 
 const resetButton = "#d60d0d";
+const acceptButton = "#01b301";
 
 export const Colors = {
 	light: {
@@ -16,6 +17,8 @@ export const Colors = {
 		inputText: "#616161",
 		inputBackground: "#E6E6E6",
 		resetButton,
+		acceptButton,
+		deniedButton : resetButton,
 	},
 	dark: {
 		hidden: "#DCDCDC",
@@ -27,6 +30,8 @@ export const Colors = {
 		inputBackground: "#333",
 		accent: "#c0392b",
 		resetButton,
+		acceptButton,
+		deniedButton : resetButton,
 	},
 };
 
