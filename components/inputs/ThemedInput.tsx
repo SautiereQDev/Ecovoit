@@ -44,7 +44,7 @@ export const ThemedInput = ({
 				cursorColor={Colors.light.inputText}
 				style={[
 					styles.input,
-					styles[size],
+					theme !== 'TextArea' && styles[size],
 					isFocused && styles.focusedInput,
 					hasError && styles.errorInput,
 				]}
@@ -151,7 +151,7 @@ const textArea = StyleSheet.create({
 		borderRadius: 10,
 		backgroundColor: Colors.light.background,
 		borderColor: Colors.light.inputText,
-		height: 150,
+		height: 100,
 		textAlignVertical: 'top',
 	},
 	focusedInput: {
