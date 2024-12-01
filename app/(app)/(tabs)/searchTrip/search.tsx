@@ -11,67 +11,109 @@ import React, { useState } from 'react';
 import DateTimePicker, {
 	DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import validTimestamp from 'ajv/lib/runtime/timestamp';
 
+type tripType = {
+	depart: string;
+	destination: string;
+	date: number;
+};
+
+/**
+ * SearchPage component allows users to search for trips by specifying departure, destination, and date.
+ * It displays a list of matching trips or a form to input search criteria.
+ */
 export const SearchPage = () => {
-	const [searchData, setSearchData] = useState({
+	const [searchData, setSearchData] = useState<tripType>({
 		depart: 'Super U',
 		destination: 'Chez Auguste',
-		date: new Date(),
+		date: new Date().getTime(),
 	});
 	const [isSearch, setIsSearch] = useState(false);
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
 
+	/**
+	 * Handles the date change event from the DateTimePicker.
+	 * @param {DateTimePickerEvent} event - The event object from the DateTimePicker.
+	 * @param {Date} [selectedDate] - The selected date.
+	 */
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
 		if (Platform.OS === 'android') {
 			if (event.type === 'set') {
 				if (mode === 'date') {
-					// Après avoir sélectionné la date, passez au mode heure
 					setMode('time');
 					return;
 				} else if (mode === 'time') {
-					// Fin de la sélection
-					const currentDate = selectedDate || searchData.date;
-					setSearchData({ ...searchData, date: currentDate });
+					if (!validTimestamp(selectedDate?.toISOString() || '', true)) {
+						throw new Error('Invalid date');
+					}
+					setSearchData({
+						...searchData,
+						date: selectedDate?.getTime() || searchData.date,
+					});
 					setShowDatePicker(false);
-					setMode('date'); // Réinitialisez le mode
+					setMode('date');
 				}
 			} else if (event.type === 'dismissed') {
 				setShowDatePicker(false);
-				setMode('date'); // Réinitialisez le mode
+				setMode('date');
 			}
 		} else {
-			// Logique pour iOS si nécessaire
-			const currentDate = selectedDate || searchData.date;
-			setSearchData({ ...searchData, date: currentDate });
+			setSearchData({
+				...searchData,
+				date: selectedDate?.getTime() || searchData.date,
+			});
 			setShowDatePicker(false);
 		}
 	};
 
+	/**
+	 * Shows the DateTimePicker with the specified mode.
+	 * @param {'date' | 'time'} currentMode - The mode to show the DateTimePicker in.
+	 */
 	const showMode = (currentMode: 'date' | 'time') => {
 		setMode(currentMode);
 		setShowDatePicker(true);
 	};
 
+	/**
+	 * Handles the search form submission.
+	 */
 	const handleSubmit = () => {
 		setIsSearch(true);
 		console.log(searchData);
 	};
 
+	/**
+	 * Resets the search form to its initial state.
+	 */
 	const resetSearch = () => {
 		setSearchData({
 			depart: '',
 			destination: '',
-			date: new Date(),
+			date: new Date().getTime(),
 		});
 		setIsSearch(false);
 	};
 
-	const formatDate = (date: Date) => {
-		return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+	/**
+	 * Formats a timestamp into a date string with time.
+	 * @param {number} timestamp - The timestamp to format.
+	 * @returns {string} - The formatted date string.
+	 */
+	const formatDate = (timestamp: number) => {
+		const date = new Date(timestamp);
+		return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
 	};
 
-	const formatDateReverse = (date: Date) => {
+	/**
+	 * Formats a timestamp into a localized date string with time.
+	 * @param {number} timestamp - The timestamp to format.
+	 * @returns {string} - The formatted date string.
+	 */
+	const formatDateReverse = (timestamp: number) => {
+		const date = new Date(timestamp);
 		return `${date.toLocaleDateString('fr-FR', {
 			day: 'numeric',
 			month: 'long',
@@ -111,9 +153,7 @@ export const SearchPage = () => {
 						<View style={styles.header}>
 							<View style={styles.destination}>
 								<ThemedText color='text'>
-									{searchData.depart}
-									{' -> '}
-									{searchData.destination}
+									{searchData.depart} {' -> '} {searchData.destination}
 								</ThemedText>
 							</View>
 							<IconButton
@@ -141,7 +181,7 @@ export const SearchPage = () => {
 										date: item.date,
 										distance: item.distance,
 									}}
-								></SearchTripCard>
+								/>
 							)}
 							keyExtractor={(item, index) => index.toString()}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
@@ -181,11 +221,10 @@ export const SearchPage = () => {
 								/>
 								{showDatePicker && (
 									<DateTimePicker
-										testID='dateTimePicker'
-										value={searchData.date}
+										value={new Date(searchData.date)}
 										mode={mode}
 										is24Hour={true}
-										display='spinner' // Utilisez 'spinner' pour plus de compatibilité
+										display='default'
 										onChange={(event, date) =>
 											onDateChange(event as DateTimePickerEvent, date as Date)
 										}
