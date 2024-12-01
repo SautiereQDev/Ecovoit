@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +8,6 @@ import {
 	ThemedInput,
 	ThemedText,
 } from '@/components';
-import React, { useState } from 'react';
 import DateTimePicker, {
 	DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
@@ -19,25 +19,30 @@ type tripType = {
 	date: number;
 };
 
-/**
- * SearchPage component allows users to search for trips by specifying departure, destination, and date.
- * It displays a list of matching trips or a form to input search criteria.
- */
 export const SearchPage = () => {
 	const [searchData, setSearchData] = useState<tripType>({
-		depart: 'Super U',
-		destination: 'Chez Auguste',
+		depart: '',
+		destination: '',
 		date: new Date().getTime(),
 	});
 	const [isSearch, setIsSearch] = useState(false);
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
+	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-	/**
-	 * Handles the date change event from the DateTimePicker.
-	 * @param {DateTimePickerEvent} event - The event object from the DateTimePicker.
-	 * @param {Date} [selectedDate] - The selected date.
-	 */
+	const validate = () => {
+		const newErrors: { [key: string]: string } = {};
+		if (searchData.depart.length < 3)
+			newErrors.depart = 'Le nom du départ doit contenir au moins 3 caractères';
+		if (searchData.destination.length < 3)
+			newErrors.destination =
+				'Le nom de la destination doit contenir au moins 3 caractères';
+		if (!validTimestamp(new Date(searchData.date).toISOString(), true))
+			newErrors.date = 'Date invalide';
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
+	};
+
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
 		if (Platform.OS === 'android') {
 			if (event.type === 'set') {
@@ -46,7 +51,8 @@ export const SearchPage = () => {
 					return;
 				} else if (mode === 'time') {
 					if (!validTimestamp(selectedDate?.toISOString() || '', true)) {
-						throw new Error('Invalid date');
+						setErrors({ ...errors, date: 'Date invalide' });
+						return;
 					}
 					setSearchData({
 						...searchData,
@@ -68,26 +74,13 @@ export const SearchPage = () => {
 		}
 	};
 
-	/**
-	 * Shows the DateTimePicker with the specified mode.
-	 * @param {'date' | 'time'} currentMode - The mode to show the DateTimePicker in.
-	 */
-	const showMode = (currentMode: 'date' | 'time') => {
-		setMode(currentMode);
-		setShowDatePicker(true);
-	};
-
-	/**
-	 * Handles the search form submission.
-	 */
 	const handleSubmit = () => {
-		setIsSearch(true);
-		console.log(searchData);
+		if (validate()) {
+			setIsSearch(true);
+			console.log(searchData);
+		}
 	};
 
-	/**
-	 * Resets the search form to its initial state.
-	 */
 	const resetSearch = () => {
 		setSearchData({
 			depart: '',
@@ -95,24 +88,15 @@ export const SearchPage = () => {
 			date: new Date().getTime(),
 		});
 		setIsSearch(false);
+		setErrors({});
 	};
 
-	/**
-	 * Formats a timestamp into a date string with time.
-	 * @param {number} timestamp - The timestamp to format.
-	 * @returns {string} - The formatted date string.
-	 */
-	const formatDate = (timestamp: number) => {
+	const formatDate = (timestamp: number): string => {
 		const date = new Date(timestamp);
 		return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
 	};
 
-	/**
-	 * Formats a timestamp into a localized date string with time.
-	 * @param {number} timestamp - The timestamp to format.
-	 * @returns {string} - The formatted date string.
-	 */
-	const formatDateReverse = (timestamp: number) => {
+	const formatDateReverse = (timestamp: number): string => {
 		const date = new Date(timestamp);
 		return `${date.toLocaleDateString('fr-FR', {
 			day: 'numeric',
@@ -198,18 +182,26 @@ export const SearchPage = () => {
 							</ThemedText>
 							<View style={styles.formContainer}>
 								<ThemedInput
-									placeholder={'Départ'}
+									label='Départ'
+									placeholder='Départ'
 									value={searchData.depart}
 									onChangeText={(val) =>
 										setSearchData({ ...searchData, depart: val })
 									}
+									hasError={!!errors.depart}
+									errorMessage={errors.depart}
+									size='medium'
 								/>
 								<ThemedInput
-									placeholder={'Destination'}
+									label='Destination'
+									placeholder='Destination'
 									value={searchData.destination}
 									onChangeText={(val) =>
 										setSearchData({ ...searchData, destination: val })
 									}
+									hasError={!!errors.destination}
+									errorMessage={errors.destination}
+									size='medium'
 								/>
 								<IconButton
 									name='calendar'
@@ -230,9 +222,14 @@ export const SearchPage = () => {
 										}
 									/>
 								)}
+								{errors.date && (
+									<ThemedText style={styles.errorText}>
+										{errors.date}
+									</ThemedText>
+								)}
 								<IconButton
 									name='search'
-									title={'Rechercher'}
+									title='Rechercher'
 									size={24}
 									color={Colors.light.primary}
 									buttonStyle={styles.submitButton}
@@ -312,5 +309,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 		backgroundColor: Colors.light.background,
 		borderColor: Colors.light.inputText,
+	},
+	errorText: {
+		color: Colors.light.error,
+		marginTop: 5,
 	},
 });
