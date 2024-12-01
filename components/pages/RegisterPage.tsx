@@ -8,7 +8,7 @@ import Colors from '@/constants/Colors';
 
 interface formType {
 	firstName: string;
-	lastName: string | null;
+	lastName: string | undefined;
 	username: string;
 	email: string;
 	password: string;
@@ -27,7 +27,7 @@ const RegisterPage = () => {
 		username: '',
 		email: '',
 		firstName: '',
-		lastName: '',
+		lastName: undefined,
 		password: '',
 		carName: undefined,
 		carConsommation: undefined,
@@ -243,6 +243,8 @@ const RegisterPage = () => {
 					}}
 					hasError={!!errors.username}
 					errorMessage={errors.username}
+					label={'Pseudo'}
+					value={formData.username}
 				/>
 				<ThemedInput
 					placeholder='Email'
@@ -253,6 +255,8 @@ const RegisterPage = () => {
 					keyboardType={'email-address'}
 					hasError={!!errors.email}
 					errorMessage={errors.email}
+					label={'Email'}
+					value={formData.email}
 				/>
 				<ThemedInput
 					placeholder='Mot de passe'
@@ -263,6 +267,8 @@ const RegisterPage = () => {
 					secureTextEntry={true}
 					hasError={!!errors.password}
 					errorMessage={errors.password}
+					label={'Mot de passe'}
+					value={formData.password}
 				/>
 				<CustomButton
 					text='Suivant'
@@ -309,6 +315,8 @@ const RegisterPage = () => {
 						}}
 						hasError={!!errors.firstName}
 						errorMessage={errors.firstName}
+						label={'Prénom'}
+						value={formData.firstName}
 					/>
 					<ThemedInput
 						placeholder='Nom'
@@ -318,6 +326,8 @@ const RegisterPage = () => {
 						}}
 						hasError={!!errors.lastName}
 						errorMessage={errors.lastName}
+						label={'Nom'}
+						value={formData.lastName}
 					/>
 					<ThemedInput
 						placeholder='Biographie de 128 caractères maximum'
@@ -329,6 +339,8 @@ const RegisterPage = () => {
 						hasError={!!errors.biographie}
 						errorMessage={errors.biographie}
 						theme={'TextArea'}
+						label={'Biographie (optionelle)'}
+						value={formData.biographie}
 					/>
 					<CustomButton
 						text="Finaliser l'inscription"
@@ -353,8 +365,8 @@ const RegisterPage = () => {
 					onPress={previousStep}
 				/>
 				<ThemedText
-					type={'header3'}
-					style={styles.confirmationPage}
+					type={'header5'}
+					style={styles.confirmationPageHeader}
 				>
 					Souhaitez vous enregistrer votre véhicule ?
 				</ThemedText>
@@ -412,22 +424,28 @@ const RegisterPage = () => {
 						}}
 						hasError={!!errors.carName}
 						errorMessage={errors.carName}
+						label={'Nom du véhicule'}
+						value={formData.carName}
 					/>
 					<ThemedInput
-						placeholder='Consommation moyenne'
+						placeholder='en L/100km'
 						onChangeText={(value) => {
 							setFormData({ ...formData, carConsommation: Number(value) });
 							if (showErrors) validate('carConsommation', value);
 						}}
 						keyboardType={'numeric'}
+						label={'Consommation moyenne'}
+						value={formData.carConsommation?.toString()}
 					/>
 					<ThemedInput
-						placeholder='Emission de CO2'
+						placeholder='en g/km'
 						onChangeText={(value) => {
 							setFormData({ ...formData, carEmission: Number(value) });
 							if (showErrors) validate('carEmission', value);
 						}}
 						keyboardType={'numeric'}
+						label={'Emission de CO2'}
+						value={formData.carEmission?.toString()}
 					/>
 					<CustomButton
 						text='Enregistrer'
@@ -474,8 +492,12 @@ const styles = StyleSheet.create({
 		width: '80%',
 		gap: 30,
 	},
+	confirmationPageHeader: {
+		textAlign: 'center',
+		marginTop: '30%',
+	},
 	header: {
-		marginBottom: 15,
+		marginBottom: 5,
 		display: 'flex',
 		gap: 12,
 	},
@@ -492,11 +514,11 @@ const styles = StyleSheet.create({
 	buttonNext: {
 		marginLeft: 'auto',
 		paddingHorizontal: '8%',
-		paddingVertical: '2%',
+		paddingVertical: '3%',
 	},
 	buttonPrevius: {
 		width: '35%',
-		marginBottom: 50,
+		marginBottom: 20,
 	},
 	buttonHome: {
 		alignItems: 'center',
