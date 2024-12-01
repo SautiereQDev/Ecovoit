@@ -1,26 +1,38 @@
-import { useSession } from "@/components/context/SessionProvider";
-import { Redirect, Stack } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSession } from '@/components/context/SessionProvider';
+import { Redirect, Stack } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { createNotifications } from 'react-native-notificated';
 
 export default function AppLayout() {
-	// console.warn("-- render AppLayout");
-
 	const { isAuthenticated } = useSession();
+	const { NotificationsProvider } = createNotifications({
+		defaultStylesSettings: {
+			globalConfig: {
+				borderWidth: 2,
+				multiline: 3,
+			},
+			successConfig: {
+				leftIconSource: require('@/assets/images/icons/success.png'),
+				accentColor: '#20c200',
+			},
+		},
+	});
 
 	if (!isAuthenticated) {
 		return <Redirect href='/signin' />;
 	}
 
 	return (
-		// Permet l'utilisation de FlatList "
 		<GestureHandlerRootView>
-			<Stack
-				screenOptions={{
-					headerShown: false,
-				}}
-			>
-				<Stack.Screen name='(tabs)' />
-			</Stack>
+			<NotificationsProvider>
+				<Stack
+					screenOptions={{
+						headerShown: false,
+					}}
+				>
+					<Stack.Screen name='(tabs)' />
+				</Stack>
+			</NotificationsProvider>
 		</GestureHandlerRootView>
 	);
 }
