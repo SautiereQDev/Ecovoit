@@ -57,7 +57,9 @@ export function ThemedText({
 const styles = StyleSheet.create({
 	defaultBody: fonts.defaultBody,
 	bigger: fonts.bigger,
+	// @ts-ignore
 	italic: fonts.italic,
+	// @ts-ignore
 	accent: fonts.accent,
 	small: fonts.small,
 	smaller: fonts.smaller,
