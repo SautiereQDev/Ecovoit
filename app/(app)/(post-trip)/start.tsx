@@ -3,14 +3,10 @@ import { router } from 'expo-router';
 import ChooseLocationLayout from '@/components/layouts/post-trip/ChooseLocationLayout';
 
 export default function Start() {
-	const [nextButtonVisible, setNextButtonVisible] = useState(false);
+	const [nextButtonVisible, setNextButtonVisible] = useState(true);
 
 	const handleClose = () => {
 		router.navigate('/(app)/(tabs)/post-trip');
-	};
-
-	const handleMarkerPress = () => {
-		setNextButtonVisible(true);
 	};
 
 	const handleNextButtonPress = () => {
@@ -24,7 +20,6 @@ export default function Start() {
 			title="D'où partez-vous ?"
 			nextButton={nextButtonVisible}
 			onClose={handleClose}
-			onMarkerPress={handleMarkerPress}
 			onNextButtonPress={handleNextButtonPress}
 		/>
 	);

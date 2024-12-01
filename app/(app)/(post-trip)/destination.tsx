@@ -1,5 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import {
+	FlatList,
+	Pressable,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native';
+import React, { useState } from 'react';
 import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import IconButton from '@/components/drafts/IconButton';
@@ -7,9 +13,39 @@ import Map from '@/components/map/Map';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import CustomInputText from '@/components/drafts/CustomInputText';
 import { ThemedText } from '@/components/drafts/ThemedText';
+import LocRecord from '@/types/LocRecords';
+const lr_cda = require('@/assets/data/lr_cda_division.json');
 
 export default function Destination() {
 	const colors = useThemeColor();
+	const [searchBarValue, setSearchBarValue] = useState('');
+	const [suggestedCDA, setSuggestedCDA] = useState<string[]>([]);
+
+	const handleOnChangeText = (text: string) => {
+		setSearchBarValue(text);
+
+		const lrCdaFiltered = lr_cda.filter((field: LocRecord.LRCDADivision) => {
+			const textLength = text.length;
+			return (
+				field.fields.nom_commune.toLowerCase().slice(0, textLength) ===
+				text.toLowerCase()
+			);
+		});
+		const currentSuggestedCDA: string[] = [];
+		lrCdaFiltered.forEach((field: LocRecord.LRCDADivision) => {
+			currentSuggestedCDA.push(field.fields.nom_commune);
+		});
+
+		if (currentSuggestedCDA.length > 0) {
+			setSuggestedCDA(currentSuggestedCDA);
+		} else {
+			setSuggestedCDA(['Aucun résultat trouvé']);
+		}
+
+		if (text === '') {
+			setSuggestedCDA([]);
+		}
+	};
 	return (
 		<View
 			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
@@ -35,17 +71,40 @@ export default function Destination() {
 				iconRight='search-outline'
 				style={{ marginTop: 40, elevation: 10, borderRadius: 10 }}
 				placeholder='Saisissez une adresse'
+				onChangeText={handleOnChangeText}
 			/>
-			<Map
-				style={{
-					width: '90%',
-					height: '70%',
-					elevation: 10,
-					borderRadius: 10,
-					overflow: 'hidden',
-					marginTop: 20,
+			<FlatList
+				style={{ width: '90%' }}
+				data={suggestedCDA}
+				renderItem={(item) => {
+					return (
+						<TouchableOpacity
+							style={{
+								zIndex: 100,
+								borderRadius: 10,
+								padding: 10,
+								marginTop: 10,
+								backgroundColor: colors['background-2'],
+							}}
+							onPress={() => {
+								if (item.item === 'Aucun résultat trouvé') {
+									return;
+								}
+								setSearchBarValue(item.item);
+								setSuggestedCDA([item.item]);
+							}}
+						>
+							<ThemedText
+								style={{ width: '100%' }}
+								type='subtitle'
+							>
+								{item.item}
+							</ThemedText>
+						</TouchableOpacity>
+					);
 				}}
 			/>
+
 			<CircleButton
 				iconName='arrow-back'
 				onPress={() => {

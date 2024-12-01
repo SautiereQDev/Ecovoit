@@ -9,7 +9,7 @@ export const colors = {
 		'primary-5': '#0D641B',
 		'secondary-1': '#002F36',
 		'secondary-2': '#9DC3CA',
-		'background-1': '#F5F5F5',
+		'background-1': '#FFFFFF',
 		'background-2': '#EEEEEE',
 		'text-primary': '#212121',
 		'text-secondary': '#F5F5F5',

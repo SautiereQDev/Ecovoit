@@ -37,6 +37,7 @@ export default function CustomInputText({
 	iconRight,
 	style,
 	theme,
+	onChangeText,
 	value,
 	color = 'secondary-1',
 	size = 'medium',
@@ -75,6 +76,7 @@ export default function CustomInputText({
 				style={[{ fontSize: sizes['font'][size] }, styles.input]}
 				cursorColor={colors['text-primary']}
 				placeholder={placeholder}
+				onChangeText={onChangeText}
 			>
 				{value}
 			</TextInput>

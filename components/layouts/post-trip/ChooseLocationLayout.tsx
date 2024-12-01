@@ -1,13 +1,19 @@
-import { StyleSheet, View } from 'react-native';
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+} from 'react-native';
 import React, { PropsWithChildren, useState } from 'react';
 import CircleButton from '@/components/drafts/CircleButton';
 import IconButton from '@/components/drafts/IconButton';
-import Map from '@/components/map/Map';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import CustomInputText from '@/components/drafts/CustomInputText';
 import { ThemedText } from '@/components/drafts/ThemedText';
-import LRDistrictsMarkers from '@/components/map/LRDistrictsMarker';
-import { MarkerPressEvent } from 'react-native-maps';
+import LocRecord from '@/types/LocRecords';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 type ChooseLocationLayoutProps = {
 	title: string;
@@ -16,8 +22,9 @@ type ChooseLocationLayoutProps = {
 	onClose: () => void;
 	onBackButtonPress?: () => void;
 	onNextButtonPress?: () => void;
-	onMarkerPress?: () => void;
 };
+
+const lr_cda = require('@/assets/data/lr_cda_division.json');
 
 export default function ChooseLocationLayout({
 	title,
@@ -26,22 +33,43 @@ export default function ChooseLocationLayout({
 	onClose,
 	onBackButtonPress = () => {},
 	onNextButtonPress = () => {},
-	onMarkerPress = () => {},
 	children,
 }: ChooseLocationLayoutProps & PropsWithChildren) {
 	const colors = useThemeColor();
+	const [nextButtonVisible, setNextButtonVisible] = useState(false);
+
 	const [searchBarValue, setSearchBarValue] = useState('');
+	const [suggestedCDA, setSuggestedCDA] = useState<string[]>([]);
 
 	const handleOnChangeText = (text: string) => {
 		setSearchBarValue(text);
-	};
 
-	const handleOnMarkerPress = (e: MarkerPressEvent) => {
-		// TODO: mettre à jour la searchBar avec l'emplacement du marker
+		const lrCdaFiltered = lr_cda.filter((field: LocRecord.LRCDADivision) => {
+			const textLength = text.length;
+			return (
+				field.fields.nom_commune.toLowerCase().slice(0, textLength) ===
+				text.toLowerCase()
+			);
+		});
+		const currentSuggestedCDA: string[] = [];
+		lrCdaFiltered.forEach((field: LocRecord.LRCDADivision) => {
+			currentSuggestedCDA.push(field.fields.nom_commune);
+		});
+
+		if (currentSuggestedCDA.length > 0) {
+			setSuggestedCDA(currentSuggestedCDA);
+		} else {
+			setSuggestedCDA(['Aucun résultat trouvé']);
+		}
+
+		if (text === '') {
+			setSuggestedCDA([]);
+			setNextButtonVisible(false);
+		}
 	};
 
 	return (
-		<View
+		<SafeAreaView
 			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
 		>
 			<IconButton
@@ -56,27 +84,46 @@ export default function ChooseLocationLayout({
 			>
 				{title}
 			</ThemedText>
-
 			<CustomInputText
 				value={searchBarValue}
 				iconRight='search-outline'
 				style={{ marginTop: 40, elevation: 10, borderRadius: 10 }}
-				placeholder='Saisissez une adresse'
+				placeholder='Saisissez une commune'
 				onChangeText={handleOnChangeText}
 			/>
-			<Map
-				style={{
-					width: '90%',
-					height: '70%',
-					elevation: 10,
-					borderRadius: 10,
-					overflow: 'hidden',
-					marginTop: 20,
-				}}
-				onMarkerPress={onMarkerPress}
-			>
-				<LRDistrictsMarkers />
-			</Map>
+
+			<KeyboardAvoidingView style={{ width: '90%' }}>
+				<ScrollView keyboardShouldPersistTaps='handled'>
+					{suggestedCDA.map((cda) => {
+						return (
+							<TouchableOpacity
+								style={{
+									borderRadius: 10,
+									padding: 10,
+									marginTop: 10,
+									backgroundColor: colors['background-2'],
+								}}
+								onPress={() => {
+									if (cda === 'Aucun résultat trouvé') {
+										return;
+									}
+									setSearchBarValue(cda);
+									setSuggestedCDA([]);
+									setNextButtonVisible(true);
+								}}
+							>
+								<ThemedText
+									style={{ width: '100%' }}
+									type='subtitle'
+								>
+									{cda}
+								</ThemedText>
+							</TouchableOpacity>
+						);
+					})}
+				</ScrollView>
+			</KeyboardAvoidingView>
+
 			<CircleButton
 				iconName='arrow-back'
 				onPress={onBackButtonPress}
@@ -90,16 +137,21 @@ export default function ChooseLocationLayout({
 			/>
 			<CircleButton
 				iconName='arrow-forward'
-				onPress={onNextButtonPress}
+				onPress={() => {
+					if (suggestedCDA.length > 0) {
+						setSearchBarValue(suggestedCDA[0]);
+					}
+					router.navigate('/(app)/(post-trip)/destination');
+				}}
 				size='medium'
 				style={{
 					position: 'absolute',
 					bottom: 25,
 					right: 25,
-					display: nextButton ? 'flex' : 'none',
+					display: nextButtonVisible && Keyboard.isVisible() ? 'flex' : 'none',
 				}}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }
 
