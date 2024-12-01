@@ -2,6 +2,7 @@ import { useSession } from '@/components/context/SessionProvider';
 import { Redirect, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNotifications } from 'react-native-notificated';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function AppLayout() {
 	const { isAuthenticated } = useSession();
@@ -12,18 +13,42 @@ export default function AppLayout() {
 				multiline: 3,
 			},
 			successConfig: {
-				leftIconSource: require('@/assets/images/icons/success.png'),
+				leftIconSource: (
+					<Ionicons
+						name={'checkmark-circle-outline'}
+						size={30}
+						color={'#20c200'}
+					/>
+				),
 				accentColor: '#20c200',
 			},
 			errorConfig: {
-				leftIconSource: require('@/assets/images/icons/error.png'),
+				leftIconSource: (
+					<Ionicons
+						name={'alert-circle-outline'}
+						size={30}
+						color={'#FC6060'}
+					/>
+				),
 			},
 			warningConfig: {
-				leftIconSource: require('@/assets/images/icons/warning.png'),
+				leftIconSource: (
+					<Ionicons
+						name={'warning-outline'}
+						size={30}
+						color={'#ff7b00'}
+					/>
+				),
 				accentColor: '#ff7b00',
 			},
 			infoConfig: {
-				leftIconSource: require('@/assets/images/icons/info.png'),
+				leftIconSource: (
+					<Ionicons
+						name={'information-circle-outline'}
+						size={30}
+						color={'#147aff'}
+					/>
+				),
 				accentColor: '#147aff',
 			},
 		},

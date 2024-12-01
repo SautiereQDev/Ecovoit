@@ -13,11 +13,10 @@ export default function Tests() {
 				buttonStyle={styles.button}
 				textProps={{ color: 'background' }}
 				onPress={() =>
-					notify('info', {
+					notify('success', {
 						params: {
-							title: 'Attention',
-							description:
-								"Vous n'avez pas correctement saisi les informations",
+							title: 'Errror !',
+							description: 'Compte crée avec succès !',
 						},
 					})
 				}
