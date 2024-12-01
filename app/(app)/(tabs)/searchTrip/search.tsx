@@ -1,31 +1,56 @@
-import { StyleSheet, View, FlatList } from "react-native";
-import { Colors } from "@/constants/Colors";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-	CustomButton,
 	IconButton,
 	SearchTripCard,
 	ThemedInput,
 	ThemedText,
-} from "@/components";
-import React, { useState } from "react";
+} from '@/components';
+import React, { useState } from 'react';
 import DateTimePicker, {
 	DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+} from '@react-native-community/datetimepicker';
 
 export const SearchPage = () => {
 	const [searchData, setSearchData] = useState({
-		depart: "Super U",
-		destination: "Chez Auguste",
+		depart: 'Super U',
+		destination: 'Chez Auguste',
 		date: new Date(),
 	});
 	const [isSearch, setIsSearch] = useState(false);
 	const [showDatePicker, setShowDatePicker] = useState(false);
+	const [mode, setMode] = useState<'date' | 'time'>('date');
 
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-		const currentDate = selectedDate || searchData.date;
-		setShowDatePicker(false);
-		setSearchData({ ...searchData, date: currentDate });
+		if (Platform.OS === 'android') {
+			if (event.type === 'set') {
+				if (mode === 'date') {
+					// Après avoir sélectionné la date, passez au mode heure
+					setMode('time');
+					return;
+				} else if (mode === 'time') {
+					// Fin de la sélection
+					const currentDate = selectedDate || searchData.date;
+					setSearchData({ ...searchData, date: currentDate });
+					setShowDatePicker(false);
+					setMode('date'); // Réinitialisez le mode
+				}
+			} else if (event.type === 'dismissed') {
+				setShowDatePicker(false);
+				setMode('date'); // Réinitialisez le mode
+			}
+		} else {
+			// Logique pour iOS si nécessaire
+			const currentDate = selectedDate || searchData.date;
+			setSearchData({ ...searchData, date: currentDate });
+			setShowDatePicker(false);
+		}
+	};
+
+	const showMode = (currentMode: 'date' | 'time') => {
+		setMode(currentMode);
+		setShowDatePicker(true);
 	};
 
 	const handleSubmit = () => {
@@ -35,8 +60,8 @@ export const SearchPage = () => {
 
 	const resetSearch = () => {
 		setSearchData({
-			depart: "",
-			destination: "",
+			depart: '',
+			destination: '',
 			date: new Date(),
 		});
 		setIsSearch(false);
@@ -47,10 +72,10 @@ export const SearchPage = () => {
 	};
 
 	const formatDateReverse = (date: Date) => {
-		return `${date.toLocaleDateString("fr-FR", {
-			day: "numeric",
-			month: "long",
-			year: "numeric",
+		return `${date.toLocaleDateString('fr-FR', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
 		})} - ${date.getHours()}h${date.getMinutes()}`;
 	};
 
@@ -58,21 +83,21 @@ export const SearchPage = () => {
 		{
 			depart: searchData.depart,
 			destination: searchData.destination,
-			nom: "Thomas",
+			nom: 'Thomas',
 			date: formatDateReverse(searchData.date),
 			distance: 500,
 		},
 		{
 			depart: searchData.depart,
 			destination: searchData.destination,
-			nom: "Thomas",
+			nom: 'Thomas',
 			date: formatDateReverse(searchData.date),
 			distance: 500,
 		},
 		{
 			depart: searchData.depart,
 			destination: searchData.destination,
-			nom: "Thomas",
+			nom: 'Thomas',
 			date: formatDateReverse(searchData.date),
 			distance: 500,
 		},
@@ -87,7 +112,7 @@ export const SearchPage = () => {
 							<View style={styles.destination}>
 								<ThemedText color='text'>
 									{searchData.depart}
-									{" -> "}
+									{' -> '}
 									{searchData.destination}
 								</ThemedText>
 							</View>
@@ -133,14 +158,14 @@ export const SearchPage = () => {
 							</ThemedText>
 							<View style={styles.formContainer}>
 								<ThemedInput
-									placeholder={"Départ"}
+									placeholder={'Départ'}
 									value={searchData.depart}
 									onChangeText={(val) =>
 										setSearchData({ ...searchData, depart: val })
 									}
 								/>
 								<ThemedInput
-									placeholder={"Destination"}
+									placeholder={'Destination'}
 									value={searchData.destination}
 									onChangeText={(val) =>
 										setSearchData({ ...searchData, destination: val })
@@ -156,21 +181,23 @@ export const SearchPage = () => {
 								/>
 								{showDatePicker && (
 									<DateTimePicker
+										testID='dateTimePicker'
 										value={searchData.date}
-										mode='date'
-										display='default'
-										onChange={onDateChange}
+										mode={mode}
+										is24Hour={true}
+										display='spinner' // Utilisez 'spinner' pour plus de compatibilité
+										onChange={(event, date) =>
+											onDateChange(event as DateTimePickerEvent, date as Date)
+										}
 									/>
 								)}
-								{/*	TODO : Faire un modal d'erreur */}
-								{/*	TODO: Afficher une erreur si les inputs sont vide lors du submit*/}
 								<IconButton
 									name='search'
-									title={"Rechercher"}
+									title={'Rechercher'}
 									size={24}
 									color={Colors.light.primary}
 									buttonStyle={styles.submitButton}
-									textProps={{ type: "header5", color: "background" }}
+									textProps={{ type: 'header5', color: 'background' }}
 									onPress={handleSubmit}
 									iconStyle={{ color: Colors.light.background }}
 								/>
@@ -192,14 +219,14 @@ const styles = StyleSheet.create({
 	content: {
 		marginTop: 10,
 		flex: 0,
-		width: "90%",
-		marginHorizontal: "auto",
+		width: '90%',
+		marginHorizontal: 'auto',
 	},
 	header: {
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		gap: 20,
 	},
 	formContainer: {
@@ -219,31 +246,31 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderColor: Colors.light.resetButton,
 		borderRadius: 99999,
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'center',
 		height: 40,
 		width: 40,
 	},
 	submitButton: {
-		display: "flex",
-		flexDirection: "row",
+		display: 'flex',
+		flexDirection: 'row',
 		gap: 10,
 		paddingVertical: 10,
 		borderRadius: 10,
-		justifyContent: "center",
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 		backgroundColor: Colors.light.primary,
 	},
 	dateButton: {
-		display: "flex",
-		flexDirection: "row",
+		display: 'flex',
+		flexDirection: 'row',
 		paddingVertical: 10,
 		paddingHorizontal: 15,
 		borderRadius: 10,
 		borderWidth: 1.5,
 		gap: 10,
-		width: "100%",
+		width: '100%',
 		backgroundColor: Colors.light.background,
 		borderColor: Colors.light.inputText,
 	},
