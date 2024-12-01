@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
+import { ThemedText } from '@/components/drafts/ThemedText';
 
 interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
-	theme?: 'Primary' | 'Secondary';
+	theme?: 'Primary' | 'Secondary' | 'TextArea';
 	style?: StyleProp<ViewStyle>;
 	label?: string;
 	errorMessage?: string;
@@ -29,11 +30,16 @@ export const ThemedInput = ({
 	...inputProps
 }: ThemedInputProps) => {
 	const [isFocused, setIsFocused] = useState(false);
-	const styles = theme === 'Primary' ? primary : secondary;
+	const styles =
+		theme === 'Primary'
+			? primary
+			: theme === 'Secondary'
+				? secondary
+				: textArea;
 
 	return (
 		<View style={[styles.container, style]}>
-			{label && <Text style={styles.label}>{label}</Text>}
+			{label && <ThemedText style={styles.label}>{label}</ThemedText>}
 			<TextInput
 				cursorColor={Colors.light.inputText}
 				style={[
@@ -44,6 +50,7 @@ export const ThemedInput = ({
 				]}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
+				multiline={theme === 'TextArea'}
 				{...inputProps}
 			/>
 			{hasError && errorMessage && (
@@ -126,6 +133,37 @@ const secondary = StyleSheet.create({
 	},
 	large: {
 		height: 60,
+	},
+});
+
+const textArea = StyleSheet.create({
+	container: {
+		width: '100%',
+	},
+	label: {
+		marginBottom: 5,
+		color: Colors.light.text,
+	},
+	input: {
+		borderWidth: 1.5,
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		borderRadius: 10,
+		backgroundColor: Colors.light.background,
+		borderColor: Colors.light.inputText,
+		height: 150,
+		textAlignVertical: 'top',
+	},
+	focusedInput: {
+		borderColor: Colors.light.secondary,
+		borderWidth: 2,
+	},
+	errorInput: {
+		borderColor: Colors.light.error,
+	},
+	errorText: {
+		color: Colors.light.error,
+		marginTop: 5,
 	},
 });
 
