@@ -16,7 +16,7 @@ export default function AppLayout() {
 				leftIconSource: (
 					<Ionicons
 						name={'checkmark-circle-outline'}
-						size={30}
+						size={32}
 						color={'#20c200'}
 					/>
 				),
@@ -26,7 +26,7 @@ export default function AppLayout() {
 				leftIconSource: (
 					<Ionicons
 						name={'alert-circle-outline'}
-						size={30}
+						size={32}
 						color={'#FC6060'}
 					/>
 				),
@@ -35,7 +35,7 @@ export default function AppLayout() {
 				leftIconSource: (
 					<Ionicons
 						name={'warning-outline'}
-						size={30}
+						size={32}
 						color={'#ff7b00'}
 					/>
 				),
@@ -45,7 +45,7 @@ export default function AppLayout() {
 				leftIconSource: (
 					<Ionicons
 						name={'information-circle-outline'}
-						size={30}
+						size={32}
 						color={'#147aff'}
 					/>
 				),
