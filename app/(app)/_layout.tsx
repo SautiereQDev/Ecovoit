@@ -15,6 +15,17 @@ export default function AppLayout() {
 				leftIconSource: require('@/assets/images/icons/success.png'),
 				accentColor: '#20c200',
 			},
+			errorConfig: {
+				leftIconSource: require('@/assets/images/icons/error.png'),
+			},
+			warningConfig: {
+				leftIconSource: require('@/assets/images/icons/warning.png'),
+				accentColor: '#ff7b00',
+			},
+			infoConfig: {
+				leftIconSource: require('@/assets/images/icons/info.png'),
+				accentColor: '#147aff',
+			},
 		},
 	});
 
