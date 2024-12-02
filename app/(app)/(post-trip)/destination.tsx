@@ -67,7 +67,6 @@ export default function Destination() {
 
 			<CustomInputText
 				value=''
-				label="Choisissez un point d'arrivée"
 				iconRight='search-outline'
 				style={{ marginTop: 40, elevation: 10, borderRadius: 10 }}
 				placeholder='Saisissez une adresse'

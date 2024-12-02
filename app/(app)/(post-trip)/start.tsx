@@ -9,7 +9,7 @@ export default function Start() {
 		router.navigate('/(app)/(tabs)/post-trip');
 	};
 
-	const handleNextButtonPress = () => {
+	const handleNext = () => {
 		router.navigate('/(app)/(post-trip)/destination');
 		// TODO: Mettre à jour le PostTripContext
 		// NOTE: Il serait bien de renommer ce contexte par la même occasion.
@@ -20,7 +20,8 @@ export default function Start() {
 			title="D'où partez-vous ?"
 			nextButton={nextButtonVisible}
 			onClose={handleClose}
-			onNextButtonPress={handleNextButtonPress}
+			onNext={handleNext}
+			onBack={() => router.back()}
 		/>
 	);
 }

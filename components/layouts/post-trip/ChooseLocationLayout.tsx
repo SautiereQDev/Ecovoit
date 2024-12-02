@@ -20,8 +20,8 @@ type ChooseLocationLayoutProps = {
 	backButton?: boolean;
 	nextButton?: boolean;
 	onClose: () => void;
-	onBackButtonPress?: () => void;
-	onNextButtonPress?: () => void;
+	onBack?: () => void;
+	onNext?: () => void;
 };
 
 const lr_cda = require('@/assets/data/lr_cda_division.json');
@@ -31,8 +31,8 @@ export default function ChooseLocationLayout({
 	backButton = false,
 	nextButton = false,
 	onClose,
-	onBackButtonPress = () => {},
-	onNextButtonPress = () => {},
+	onBack = () => {},
+	onNext = () => {},
 	children,
 }: ChooseLocationLayoutProps & PropsWithChildren) {
 	const colors = useThemeColor();
@@ -45,9 +45,8 @@ export default function ChooseLocationLayout({
 		setSearchBarValue(text);
 
 		const lrCdaFiltered = lr_cda.filter((field: LocRecord.LRCDADivision) => {
-			const textLength = text.length;
 			return (
-				field.fields.nom_commune.toLowerCase().slice(0, textLength) ===
+				field.fields.nom_commune.toLowerCase().slice(0, text.length) ===
 				text.toLowerCase()
 			);
 		});
@@ -76,6 +75,12 @@ export default function ChooseLocationLayout({
 				iconName='close'
 				onPress={onClose}
 				size='large'
+				style={{ position: 'absolute', top: 0, right: 0 }}
+			/>
+			<IconButton
+				iconName='arrow-back'
+				onPress={onBack}
+				size='large'
 				style={{ position: 'absolute', top: 0, left: 0 }}
 			/>
 			<ThemedText
@@ -91,12 +96,12 @@ export default function ChooseLocationLayout({
 				placeholder='Saisissez une commune'
 				onChangeText={handleOnChangeText}
 			/>
-
 			<KeyboardAvoidingView style={{ width: '90%' }}>
 				<ScrollView keyboardShouldPersistTaps='handled'>
-					{suggestedCDA.map((cda) => {
+					{suggestedCDA.map((cda, index) => {
 						return (
 							<TouchableOpacity
+								key={index}
 								style={{
 									borderRadius: 10,
 									padding: 10,
@@ -126,7 +131,7 @@ export default function ChooseLocationLayout({
 
 			<CircleButton
 				iconName='arrow-back'
-				onPress={onBackButtonPress}
+				onPress={onBack}
 				size='medium'
 				style={{
 					position: 'absolute',
