@@ -71,3 +71,12 @@ export type EVColor = {
 	'info-1': string;
 	'info-2': string;
 };
+
+export type EVColorTheme = {
+	light: EVColor;
+	dark: EVColor;
+};
+
+export type EVColors = {
+	[key: string]: EVColorTheme;
+};
