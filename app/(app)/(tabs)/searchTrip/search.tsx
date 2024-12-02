@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, SearchTripCard, ThemedInput, ThemedText } from '@/components';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
+import FilterDropDown from '@/components/inputs/FilterDropDown';
 
 /**
  * Type definition for trip data.
@@ -23,6 +24,18 @@ type Error = {
 	[key: string]: string;
 };
 
+enum Elements {
+	CONSOMMATION,
+	DISTANCE,
+	DATE,
+	HEURE,
+	ECART_TEMPS,
+}
+
+type Filter = {
+	[key in Elements]: { value: number; condition: 'uper' | 'lower' };
+};
+
 /**
  * SearchPage component allows users to search for trips by providing departure, destination, and date.
  * It validates the inputs and displays error messages if the inputs are invalid.
@@ -37,7 +50,7 @@ export const SearchPage = () => {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
 	const [errors, setErrors] = useState<Error>({});
-
+	const [filters, setFilters] = useState<Filter>([]);
 	/**
 	 * Validates the input fields and sets error messages if the inputs are invalid.
 	 * @param {string} field - The field to validate.
@@ -256,14 +269,25 @@ export const SearchPage = () => {
 									errorMessage={errors.destination}
 									size='medium'
 								/>
-								<IconButton
-									name='calendar'
-									title={`${formatDate(searchData.date)}`}
-									onPress={() => setShowDatePicker(true)}
-									style={styles.dateButton}
-									size={20}
-									iconFirst={true}
-								/>
+								<View>
+									<FilterDropDown />
+									<ThemedText
+										type='defaultBody'
+										color='text'
+									>
+										Date
+									</ThemedText>
+
+									<IconButton
+										name='calendar'
+										title={`${formatDate(searchData.date)}`}
+										onPress={() => setShowDatePicker(true)}
+										style={styles.dateButton}
+										size={20}
+										iconFirst={true}
+									/>
+								</View>
+
 								{showDatePicker && (
 									<DateTimePicker
 										value={new Date(searchData.date)}
@@ -344,7 +368,8 @@ const styles = StyleSheet.create({
 	submitButton: {
 		display: 'flex',
 		flexDirection: 'row',
-		gap: 10,
+		gap: 15,
+		marginTop: 5,
 		paddingVertical: 10,
 		borderRadius: 10,
 		justifyContent: 'center',
