@@ -5,6 +5,8 @@
 
 const resetButton = '#d60d0d';
 const acceptButton = '#01b301';
+const disabledBackground = '#f0f0f0';
+const disabledBorder = '#d0d0d0';
 
 export const Colors = {
 	light: {
@@ -20,6 +22,8 @@ export const Colors = {
 		acceptButton,
 		deniedButton: resetButton,
 		error: '#ff0000',
+		disabledBackground,
+		disabledBorder,
 	},
 	dark: {
 		hidden: '#DCDCDC',
@@ -33,6 +37,9 @@ export const Colors = {
 		resetButton,
 		acceptButton,
 		deniedButton: resetButton,
+		error: '#ff0000',
+		disabledBackground,
+		disabledBorder,
 	},
 };
 

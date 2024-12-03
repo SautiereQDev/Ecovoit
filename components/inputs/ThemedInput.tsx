@@ -18,6 +18,7 @@ interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
 	errorMessage?: string;
 	hasError?: boolean;
 	size?: 'small' | 'medium' | 'large';
+	disabled?: boolean;
 }
 
 export const ThemedInput = ({
@@ -27,6 +28,7 @@ export const ThemedInput = ({
 	errorMessage,
 	hasError = false,
 	size = 'medium',
+	disabled = false,
 	...inputProps
 }: ThemedInputProps) => {
 	const [isFocused, setIsFocused] = useState(false);
@@ -37,8 +39,26 @@ export const ThemedInput = ({
 				? secondary
 				: textArea;
 
+	if (disabled) {
+		return (
+			<View style={[disabledStyle.container, style]}>
+				{label && <ThemedText style={disabledStyle.label}>{label}</ThemedText>}
+				<TextInput
+					cursorColor={Colors.light.inputText}
+					style={[
+						disabledStyle.input,
+						// @ts-ignore
+						theme !== 'TextArea' && styles[size],
+					]}
+					editable={false}
+					{...inputProps}
+				/>
+			</View>
+		);
+	}
+
 	return (
-		<View style={[styles.container, style]}>
+		<View style={[styles.container, style, ]}>
 			{label && <ThemedText style={styles.label}>{label}</ThemedText>}
 			<TextInput
 				cursorColor={Colors.light.inputText}
@@ -167,5 +187,43 @@ const textArea = StyleSheet.create({
 		marginTop: 5,
 	},
 });
+
+const disabledStyle = StyleSheet.create({
+	container: {
+		width: '100%',
+	},
+	label: {
+		marginBottom: 5,
+		color: Colors.light.text,
+	},
+	input: {
+		borderWidth: 1.5,
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		borderRadius: 10,
+		backgroundColor: Colors.light.disabledBackground,
+		borderColor: Colors.light.disabledBorder,
+	},
+	focusedInput: {
+		borderColor: Colors.light.secondary,
+		borderWidth: 2,
+	},
+	errorInput: {
+		borderColor: Colors.light.error,
+	},
+	errorText: {
+		color: Colors.light.error,
+		marginTop: 5,
+	},
+	small: {
+		height: 40,
+	},
+	medium: {
+		height: 50,
+	},
+	large: {
+		height: 60,
+	},
+})
 
 export default ThemedInput;

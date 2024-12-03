@@ -182,6 +182,7 @@ export const SearchPage = () => {
 							/>
 						</View>
 						<IconButton
+							// TODO : Afficher le boutton avec un font transparant si il n'y a pas de filtre et en vert si il y en a
 							name={'filter'}
 							lib={'MaterialCommunityIcons'}
 							size={26}

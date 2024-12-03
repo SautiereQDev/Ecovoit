@@ -55,28 +55,36 @@ export const ShowFilters = ({
 						Filtres
 					</ThemedText>
 					<FlatList
+						// TODO: ajouter un boutton suprimer les filtres
 						data={filters}
 						renderItem={({ item }) => (
 							<View style={styles.filter}>
 								<BouncyCheckbox
 									isChecked={isChecked(item.name)}
 									onPress={() => toggleCheck(item.name)}
-									disableText={false}
 									useBuiltInState={false}
+									style={styles.checkbox}
+									textComponent={
+										<>
+											<ThemedText style={styles.filterName} color={item.active ? 'text' : 'hidden'}>
+												{item.name.toString() !==
+												FiltreType[FiltreType.ecart_horraire]
+													? item.name.toString().charAt(0).toUpperCase() +
+													item.name.toString().slice(1)
+													: item.name.toString() === FiltreType[FiltreType.distance]
+														? 'Distance départ'
+														: 'Ecart horraire'}
+											</ThemedText>
+											<ThemedInput
+												size={'small'}
+												placeholder={'valeur'}
+												style={styles.input}
+												disabled={!item.active}
+											/>
+										</>
+									}
 								/>
-								<ThemedText style={styles.filterName}>
-									{item.name.toString() !==
-									FiltreType[FiltreType.ecart_horraire]
-										? item.name.toString().charAt(0).toUpperCase() +
-										item.name.toString().slice(1)
-										: item.name.toString() === FiltreType[FiltreType.distance]
-											? 'Distance départ'
-											: 'Ecart horraire'}
-								</ThemedText>
-								<ThemedInput
-									placeholder={'valeur'}
-									style={styles.input}
-								/>
+
 							</View>
 						)}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
@@ -110,6 +118,7 @@ const styles = StyleSheet.create({
 		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
+
 	},
 	title: {
 		textAlign: 'center',
@@ -130,12 +139,14 @@ const styles = StyleSheet.create({
 		margin: 'auto',
 		verticalAlign: 'middle',
 	},
+	filterName: {
+		margin: 'auto'
+	},
 	input: {
-		flex: 1,
 		maxWidth: '40%',
 		marginLeft: 'auto',
 	},
-	filterName: {
-		margin: 'auto',
-	},
+	checkbox: {
+		width: '100%'
+	}
 });
