@@ -7,7 +7,11 @@ import {
 } from 'react-native';
 import React, { ComponentProps, ReactNode } from 'react';
 import { Colors } from '@/constants/Colors';
-import { FontAwesome6, Octicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import {
+	FontAwesome6,
+	MaterialCommunityIcons,
+	Octicons,
+} from '@expo/vector-icons';
 import { ThemedText } from '../texts/ThemedText';
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
@@ -34,6 +38,7 @@ interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	title?: string;
 	iconFirst?: boolean;
 	lib?: IconLibraries;
+	backgroundColor?: keyof typeof Colors.light;
 }
 
 export function IconButton({
@@ -43,6 +48,7 @@ export function IconButton({
 	                           iconStyle,
 	                           iconFirst = false,
 	                           lib = 'octicons',
+	                           backgroundColor = 'background',
 	                           ...restProps
                            }: Readonly<Props>): ReactNode {
 	const Icon =
@@ -55,7 +61,7 @@ export function IconButton({
 	return (
 		<TouchableOpacity
 			// @ts-ignore
-			style={[{ flexDirection: 'row', alignItems: 'center' }, buttonStyle]}
+			style={[{ flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.light[backgroundColor] }, buttonStyle as ViewStyle]}
 			{...restProps}
 		>
 			{iconFirst && (
