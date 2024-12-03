@@ -25,3 +25,18 @@ export interface SearchTripCardType {
 	date: string;
 	distance: number | string;
 }
+
+//Trip Search
+export enum FiltreType {
+	consommation,
+	distance,
+	emission,
+	ecart_horraire
+}
+
+export interface Filter {
+	name: keyof typeof FiltreType;
+	value: number;
+	condition: 'uper' | 'lower';
+	active: boolean;
+};

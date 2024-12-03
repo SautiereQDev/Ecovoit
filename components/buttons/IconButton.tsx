@@ -7,10 +7,12 @@ import {
 } from 'react-native';
 import React, { ComponentProps, ReactNode } from 'react';
 import { Colors } from '@/constants/Colors';
-import Octicons from '@expo/vector-icons/Octicons';
+import { FontAwesome6, Octicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import { ThemedText } from '../texts/ThemedText';
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
+
+type IconLibraries = 'octicons' | 'fontawesome6' | 'MaterialCommunityIcons';
 
 interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	buttonStyle?: StyleProp<ViewStyle>;
@@ -31,30 +33,40 @@ interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	iconStyle?: StyleProp<TextStyle>;
 	title?: string;
 	iconFirst?: boolean;
+	lib?: IconLibraries;
 }
 
 export function IconButton({
-	buttonStyle,
-	title,
-	textProps = { type: 'defaultBody', color: 'text' },
-	iconStyle,
-	iconFirst = false,
-	...restProps
-}: Readonly<Props>): ReactNode {
+	                           buttonStyle,
+	                           title,
+	                           textProps = { type: 'defaultBody', color: 'text' },
+	                           iconStyle,
+	                           iconFirst = false,
+	                           lib = 'octicons',
+	                           ...restProps
+                           }: Readonly<Props>): ReactNode {
+	const Icon =
+		lib === 'octicons'
+			? Octicons
+			: lib === 'fontawesome6'
+				? FontAwesome6
+				: MaterialCommunityIcons;
+
 	return (
 		<TouchableOpacity
+			// @ts-ignore
 			style={[{ flexDirection: 'row', alignItems: 'center' }, buttonStyle]}
 			{...restProps}
 		>
 			{iconFirst && (
-				<Octicons
+				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}
 				/>
 			)}
 			{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
 			{!iconFirst && (
-				<Octicons
+				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}
 				/>

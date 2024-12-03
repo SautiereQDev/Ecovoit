@@ -2,44 +2,30 @@ import React, { useState } from 'react';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IconButton, SearchTripCard, ThemedInput, ThemedText } from '@/components';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import {
+	IconButton,
+	SearchTripCard,
+	ThemedInput,
+	ThemedText,
+} from '@/components';
+import DateTimePicker, {
+	DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
-import FilterDropDown from '@/components/inputs/FilterDropDown';
+import { Filter, FiltreType } from '@/types';
+import ShowFilters from '@/components/modal/ShowFilters';
+import { formatDate, formatDateReverse } from '@/utils/date';
 
-/**
- * Type definition for trip data.
- */
 type tripType = {
 	depart: string;
 	destination: string;
 	date: number;
 };
 
-/**
- * @override
- * Error type definition.
- */
 type Error = {
 	[key: string]: string;
 };
 
-enum Elements {
-	CONSOMMATION,
-	DISTANCE,
-	DATE,
-	HEURE,
-	ECART_TEMPS,
-}
-
-type Filter = {
-	[key in Elements]: { value: number; condition: 'uper' | 'lower' };
-};
-
-/**
- * SearchPage component allows users to search for trips by providing departure, destination, and date.
- * It validates the inputs and displays error messages if the inputs are invalid.
- */
 export const SearchPage = () => {
 	const [searchData, setSearchData] = useState<tripType>({
 		depart: '',
@@ -50,33 +36,40 @@ export const SearchPage = () => {
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
 	const [errors, setErrors] = useState<Error>({});
-	const [filters, setFilters] = useState<Filter>([]);
-	/**
-	 * Validates the input fields and sets error messages if the inputs are invalid.
-	 * @param {string} field - The field to validate.
-	 * @param {string | number} value - The value of the field to validate.
-	 */
+
+	const initialFilters: Filter[] = [
+		{ name: 'consommation', value: 0, condition: 'lower', active: false },
+		{ name: 'distance', value: 0, condition: 'lower', active: false },
+		{ name: 'emission', value: 0, condition: 'lower', active: false },
+		{ name: 'ecart_horraire', value: 0, condition: 'lower', active: false },
+	];
+
+	const [filters, setFilters] = useState(initialFilters);
+	const [showFilters, setShowFilters] = useState(false);
+
 	const validate = (field: string, value: string | number) => {
 		switch (field) {
 			case 'depart':
-				if ((value as string).length >= 3 && (value as string).length <= 32) {
-					setErrors({
-						...errors,
-						[field]: 'Le username doit contenir entre 3 et 32 caractères',
-					});
-				}
-				break;
 			case 'destination':
-				if ((value as string).length >= 3 && (value as string).length <= 32) {
+				if ((value as string).length < 3 || (value as string).length > 32) {
 					setErrors({
 						...errors,
-						[field]: 'Le username doit contenir entre 3 et 32 caractères',
+						[field]:
+							'Le champ de recherche doit contenir entre 3 et 32 caractères',
 					});
+				} else {
+					const newErrors = { ...errors };
+					delete newErrors[field];
+					setErrors(newErrors);
 				}
 				break;
 			case 'date':
 				if (!validTimestamp(new Date(value as number).toISOString(), true)) {
 					setErrors({ ...errors, [field]: 'Date invalide' });
+				} else {
+					const newErrors = { ...errors };
+					delete newErrors[field];
+					setErrors(newErrors);
 				}
 				break;
 			default:
@@ -84,11 +77,6 @@ export const SearchPage = () => {
 		}
 	};
 
-	/**
-	 * Handles the date change event from the DateTimePicker.
-	 * @param {DateTimePickerEvent} event - The event object from the DateTimePicker.
-	 * @param {Date} [selectedDate] - The selected date.
-	 */
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
 		if (Platform.OS === 'android') {
 			if (event.type === 'set') {
@@ -102,9 +90,9 @@ export const SearchPage = () => {
 					}
 					setSearchData({
 						...searchData,
-						date: selectedDate?.getTime() || searchData.date,
+						date: selectedDate?.getTime() ?? searchData.date,
 					});
-					validate('date', selectedDate?.getTime() || searchData.date);
+					validate('date', selectedDate?.getTime() ?? searchData.date);
 					setShowDatePicker(false);
 					setMode('date');
 				}
@@ -115,26 +103,28 @@ export const SearchPage = () => {
 		} else {
 			setSearchData({
 				...searchData,
-				date: selectedDate?.getTime() || searchData.date,
+				date: selectedDate?.getTime() ?? searchData.date,
 			});
-			validate('date', selectedDate?.getTime() || searchData.date);
+			validate('date', selectedDate?.getTime() ?? searchData.date);
 			setShowDatePicker(false);
 		}
 	};
 
-	/**
-	 * Handles the form submission. Validates the inputs and sets the search state if valid.
-	 */
 	const handleSubmit = () => {
-		if (Object.keys(errors).length === 0) {
+		if (
+			Object.keys(errors).length === 0 &&
+			searchData.depart &&
+			searchData.destination
+		) {
 			setIsSearch(true);
 			console.log(searchData);
+		} else {
+			validate('depart', searchData.depart);
+			validate('destination', searchData.destination);
+			validate('date', searchData.date);
 		}
 	};
 
-	/**
-	 * Resets the search form and clears the search data and errors.
-	 */
 	const resetSearch = () => {
 		setSearchData({
 			depart: '',
@@ -143,30 +133,6 @@ export const SearchPage = () => {
 		});
 		setIsSearch(false);
 		setErrors({});
-	};
-
-	/**
-	 * Formats the date to a string in the format "DD/MM/YYYY HH:MM".
-	 * @param {number} timestamp - The timestamp to format.
-	 * @returns {string} - The formatted date string.
-	 */
-	const formatDate = (timestamp: number): string => {
-		const date = new Date(timestamp);
-		return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-	};
-
-	/**
-	 * Formats the date to a string in the format "DD Month YYYY - HHhMM".
-	 * @param {number} timestamp - The timestamp to format.
-	 * @returns {string} - The formatted date string.
-	 */
-	const formatDateReverse = (timestamp: number): string => {
-		const date = new Date(timestamp);
-		return `${date.toLocaleDateString('fr-FR', {
-			day: 'numeric',
-			month: 'long',
-			year: 'numeric',
-		})} - ${date.getHours()}h${date.getMinutes()}`;
 	};
 
 	const data = [
@@ -197,8 +163,8 @@ export const SearchPage = () => {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
 				{isSearch ? (
-					<>
-						<View style={styles.header}>
+					<View style={styles.header}>
+						<View style={styles.searchBar}>
 							<View style={styles.destination}>
 								<ThemedText color='text'>
 									{searchData.depart} {' -> '} {searchData.destination}
@@ -212,12 +178,21 @@ export const SearchPage = () => {
 								buttonStyle={styles.resetButton}
 							/>
 						</View>
-						<ThemedText
-							type='header4'
-							style={styles.secondaryTitle}
-						>
-							Trajets correspondants 🔗
-						</ThemedText>
+						<IconButton
+							name={'filter'}
+							lib={'MaterialCommunityIcons'}
+							size={26}
+							buttonStyle={styles.buttonFilter}
+							color={Colors.light.background}
+							onPress={() => setShowFilters(!showFilters)}
+						/>
+						<ShowFilters
+							visible={showFilters}
+							onClose={() => setShowFilters(false)}
+							filters={filters}
+							setFilters={setFilters}
+						/>
+						<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
 						<FlatList
 							data={data}
 							renderItem={({ item }) => (
@@ -231,92 +206,80 @@ export const SearchPage = () => {
 									}}
 								/>
 							)}
-							keyExtractor={(item, index) => index.toString()}
+							keyExtractor={(_, index) => index.toString()}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 						/>
-					</>
+					</View>
 				) : (
-					<>
-						<View>
-							<ThemedText
-								type='header4'
-								style={styles.secondaryTitle}
-							>
-								Rechercher votre trajet 🔎
-							</ThemedText>
-							<View style={styles.formContainer}>
-								<ThemedInput
-									label='Départ'
-									placeholder='Départ'
-									value={searchData.depart}
-									onChangeText={(val) => {
-										setSearchData({ ...searchData, depart: val });
-										validate('depart', val);
-									}}
-									hasError={!!errors.depart}
-									errorMessage={errors.depart}
-									size='medium'
-								/>
-								<ThemedInput
-									label='Destination'
-									placeholder='Destination'
-									value={searchData.destination}
-									onChangeText={(val) => {
-										setSearchData({ ...searchData, destination: val });
-										validate('destination', val);
-									}}
-									hasError={!!errors.destination}
-									errorMessage={errors.destination}
-									size='medium'
-								/>
-								<View>
-									<FilterDropDown />
-									<ThemedText
-										type='defaultBody'
-										color='text'
-									>
-										Date
-									</ThemedText>
+					<View>
+						<ThemedText type='header4'>Rechercher votre trajet 🔎</ThemedText>
+						<View style={styles.formContainer}>
+							<ThemedInput
+								label='Départ'
+								placeholder='Départ'
+								value={searchData.depart}
+								onChangeText={(val) => {
+									setSearchData({ ...searchData, depart: val });
+									validate('depart', val);
+								}}
+								hasError={!!errors.depart}
+								errorMessage={errors.depart}
+								size='medium'
+							/>
+							<ThemedInput
+								label='Destination'
+								placeholder='Destination'
+								value={searchData.destination}
+								onChangeText={(val) => {
+									setSearchData({ ...searchData, destination: val });
+									validate('destination', val);
+								}}
+								hasError={!!errors.destination}
+								errorMessage={errors.destination}
+								size='medium'
+							/>
+							<View>
+								<ThemedText
+									type='defaultBody'
+									color='text'
+								>
+									Date
+								</ThemedText>
 
-									<IconButton
-										name='calendar'
-										title={`${formatDate(searchData.date)}`}
-										onPress={() => setShowDatePicker(true)}
-										style={styles.dateButton}
-										size={20}
-										iconFirst={true}
-									/>
-								</View>
-
-								{showDatePicker && (
-									<DateTimePicker
-										value={new Date(searchData.date)}
-										mode={mode}
-										is24Hour={true}
-										display='default'
-										onChange={(event, date) =>
-											onDateChange(event as DateTimePickerEvent, date as Date)
-										}
-									/>
-								)}
-								{errors.date && (
-									<ThemedText style={styles.errorText}>
-										{errors.date}
-									</ThemedText>
-								)}
 								<IconButton
-									name='search'
-									title='Rechercher'
-									size={24}
-									color={Colors.light.primary}
-									buttonStyle={styles.submitButton}
-									textProps={{ type: 'header5', color: 'background' }}
-									onPress={handleSubmit}
-									iconStyle={{ color: Colors.light.background }}
+									name='calendar'
+									title={`${formatDate(searchData.date)}`}
+									onPress={() => setShowDatePicker(true)}
+									style={styles.dateButton}
+									size={20}
+									iconFirst={true}
 								/>
 							</View>
+
+							{showDatePicker && (
+								<DateTimePicker
+									value={new Date(searchData.date)}
+									mode={mode}
+									is24Hour={true}
+									display='default'
+									onChange={(event, date) => onDateChange(event, date as Date)}
+								/>
+							)}
+							{errors.date && (
+								<ThemedText style={styles.errorText}>{errors.date}</ThemedText>
+							)}
+							<IconButton
+								name='search'
+								title='Rechercher'
+								size={24}
+								color={Colors.light.primary}
+								buttonStyle={styles.submitButton}
+								textProps={{ type: 'header5', color: 'background' }}
+								onPress={handleSubmit}
+								iconStyle={{ color: Colors.light.background }}
+							/>
 						</View>
-					</>
+					</View>
 				)}
 			</View>
 		</SafeAreaView>
@@ -337,6 +300,11 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		display: 'flex',
+		flexDirection: 'column',
+		gap: 25,
+	},
+	searchBar: {
+		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -344,10 +312,6 @@ const styles = StyleSheet.create({
 	},
 	formContainer: {
 		gap: 20,
-	},
-	secondaryTitle: {
-		marginTop: 25,
-		marginBottom: 25,
 	},
 	destination: {
 		borderWidth: 1.5,
@@ -391,5 +355,11 @@ const styles = StyleSheet.create({
 	errorText: {
 		color: Colors.light.error,
 		marginTop: 5,
+	},
+	buttonFilter: {
+		padding: '3%',
+		borderRadius: 10,
+		backgroundColor: Colors.light.primary,
+		marginRight: 'auto',
 	},
 });
