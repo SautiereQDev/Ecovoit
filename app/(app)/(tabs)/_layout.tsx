@@ -70,7 +70,13 @@ export default function TabsLayout() {
 					tabBarHideOnKeyboard: true,
 				}}
 			/>
-			<Tabs.Screen name='tests' />
+			<Tabs.Screen
+				name='tests'
+				options={{
+					title: 'Tests',
+					tabBarHideOnKeyboard: true,
+				}}
+			/>
 		</Tabs>
 	);
 }

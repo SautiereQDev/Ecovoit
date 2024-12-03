@@ -1,128 +1,59 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import LocRecord from '@/types/LocRecords';
-import {
-	Keyboard,
-	ScrollView,
-	TouchableOpacity,
-	StyleSheet,
-	View,
-} from 'react-native';
-import IconButton from '@/components/drafts/IconButton';
-import { ThemedText } from '@/components/drafts/ThemedText';
-import CustomInputText from '@/components/drafts/CustomInputText';
 import CircleButton from '@/components/drafts/CircleButton';
-import { StatusBar } from 'expo-status-bar';
+import PostTripLayout from '@/components/layouts/PostTripLayout';
+import SearchBar from '@/components/drafts/SearchBar';
+import Map from '@/components/map/Map';
 const lr_cda = require('@/assets/data/lr_cda_division.json');
+const lr_districts = require('@/assets/data/lr_districts.json');
 
 export default function Start() {
-	const colors = useThemeColor();
-
 	const [nextButtonVisible, setNextButtonVisible] = useState<boolean>(false);
-	const [searchBarValue, setSearchBarValue] = useState<string>('');
-	const [suggestedCDA, setSuggestedCDA] = useState<string[]>([]);
 
-	const handleOnChangeText = (text: string) => {
-		setSearchBarValue(text);
-
-		const lrCdaFiltered = lr_cda.filter((field: LocRecord.LRCDADivision) => {
-			return (
-				field.fields.nom_commune.toLowerCase().slice(0, text.length) ===
-				text.toLowerCase()
-			);
-		});
-		const currentSuggestedCDA: string[] = [];
-		lrCdaFiltered.forEach((field: LocRecord.LRCDADivision) => {
-			currentSuggestedCDA.push(field.fields.nom_commune);
-		});
-
-		if (currentSuggestedCDA.length > 0) {
-			setSuggestedCDA(currentSuggestedCDA);
-		} else {
-			setSuggestedCDA(['Aucun résultat trouvé']);
-		}
-
-		if (text === '') {
-			setSuggestedCDA([]);
-			setNextButtonVisible(false);
-		}
-	};
+	const data = lr_cda.map((field: any) => field.fields.nom_commune);
+	data.push(...lr_districts.map((field: any) => field.fields.cq_nom));
 
 	return (
-		<View
-			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
+		<PostTripLayout
+			title="D'où partez-vous ?"
+			iconTopLeft='arrow-back-sharp'
+			iconTopRight='close-sharp'
+			onPressTopLeft={() => {
+				router.back();
+			}}
+			onPressTopRight={() => {
+				router.navigate('/(app)/(tabs)/post-trip');
+			}}
 		>
-			<StatusBar translucent />
-			<IconButton
-				iconName='arrow-back'
-				onPress={() => {
-					router.back();
+			<SearchBar
+				headerIcon='location-outline'
+				placeholder='Rechercher un lieu'
+				headerText='Utiliser ma position actuelle'
+				data={data}
+				onSuggestionsHeaderPress={() => {
+					alert('Header pressed');
+					console.log(data);
 				}}
-				size='large'
-				style={{ position: 'absolute', top: 15, left: 0 }}
-			/>
-			<IconButton
-				iconName='close'
-				onPress={() => {
-					router.navigate('/(app)/(tabs)/post-trip');
+				onSearch={(value) => {
+					alert(value);
+					router.navigate(`/(app)/(post-trip)/${value}`);
 				}}
-				size='large'
-				style={{ position: 'absolute', top: 15, right: 0 }}
+				// onSuggestionPress={() => {
+				// 	setNextButtonVisible(true);
+				// }}
+				// onChangeText={(text: string) => {
+				// 	if (text === '') {
+				// 		setNextButtonVisible(false);
+				// 	}
+				// }}
+				// onNoResult={() => {
+				// 	setNextButtonVisible(false);
+				// }}
 			/>
-
-			<ThemedText
-				type='title'
-				style={{ marginTop: 100 }}
-			>
-				D'où partez-vous ?
-			</ThemedText>
-			<CustomInputText
-				value={searchBarValue}
-				iconRight='search-outline'
-				style={{ marginTop: 40, elevation: 10, borderRadius: 10 }}
-				placeholder='Saisissez une commune'
-				onChangeText={handleOnChangeText}
-			/>
-			<View style={{ width: '90%' }}>
-				<ScrollView keyboardShouldPersistTaps='handled'>
-					{suggestedCDA.map((cda, index) => {
-						return (
-							<TouchableOpacity
-								key={index}
-								style={{
-									borderRadius: 10,
-									padding: 10,
-									marginTop: 10,
-									backgroundColor: colors['background-2'],
-								}}
-								onPress={() => {
-									if (cda === 'Aucun résultat trouvé') {
-										return;
-									}
-									setSearchBarValue(cda);
-									setSuggestedCDA([]);
-									setNextButtonVisible(true);
-								}}
-							>
-								<ThemedText
-									style={{ width: '100%' }}
-									type='subtitle'
-								>
-									{cda}
-								</ThemedText>
-							</TouchableOpacity>
-						);
-					})}
-				</ScrollView>
-			</View>
 
 			<CircleButton
 				iconName='arrow-forward'
 				onPress={() => {
-					if (suggestedCDA.length > 0) {
-						setSearchBarValue(suggestedCDA[0]);
-					}
 					router.navigate('/(app)/(post-trip)/destination');
 				}}
 				size='medium'
@@ -130,16 +61,9 @@ export default function Start() {
 					position: 'absolute',
 					bottom: 25,
 					right: 25,
-					display: nextButtonVisible && Keyboard.isVisible() ? 'flex' : 'none',
+					display: nextButtonVisible ? 'flex' : 'none',
 				}}
 			/>
-		</View>
+		</PostTripLayout>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-	},
-});

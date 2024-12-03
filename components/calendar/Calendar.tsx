@@ -1,5 +1,5 @@
 import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
@@ -46,19 +46,25 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-export default function CustomCalendar() {
+export default function CustomCalendar({
+	selected,
+	today,
+	onDayPress,
+	style,
+}: {
+	selected: string;
+	today: string;
+	onDayPress: (day: DateData) => void;
+	style?: StyleProp<ViewStyle>;
+}) {
 	const colors = useThemeColor();
-	const today = new Date().toISOString().slice(0, 10);
-	const [selectedDay, setSelectedDay] = useState<string>(today);
 	return (
-		<View style={[{ width: '90%' }, styles.container]}>
+		<View style={[{ width: '90%' }, styles.container, style]}>
 			<Calendar
 				minDate={today}
-				onDayPress={(day: DateData) => {
-					setSelectedDay(day.dateString);
-				}}
+				onDayPress={onDayPress}
 				markedDates={{
-					[selectedDay]: { selected: true },
+					[selected]: { selected: true },
 				}}
 				enableSwipeMonths={true}
 				style={{
@@ -69,9 +75,7 @@ export default function CustomCalendar() {
 					textSectionTitleColor: colors['secondary-2'],
 					selectedDayBackgroundColor: colors['primary-1'],
 					selectedDayTextColor:
-						selectedDay === today
-							? colors['text-secondary']
-							: colors['primary-1'],
+						selected === today ? colors['text-secondary'] : colors['primary-1'],
 					todayTextColor: colors['primary-1'],
 					dayTextColor: colors['secondary-1'],
 					textDisabledColor: colors['text-muted'],

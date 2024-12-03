@@ -37,6 +37,7 @@ export default function CustomInputText({
 	iconRight,
 	style,
 	theme,
+	onIconRightPress,
 	onChangeText,
 	value,
 	color = 'secondary-1',
@@ -48,8 +49,8 @@ export default function CustomInputText({
 		<View
 			style={[
 				{
-					width: '90%',
 					paddingLeft: 20,
+					paddingRight: 80,
 					backgroundColor: colors['background-1'],
 					borderColor: colors[color],
 				},
@@ -82,6 +83,7 @@ export default function CustomInputText({
 			</TextInput>
 			{iconRight && (
 				<Ionicons
+					onPress={onIconRightPress}
 					name={iconRight}
 					size={sizes.icon[size]}
 					color={colors['text-primary']}
@@ -125,6 +127,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
+		height: 60,
 	},
 	label: {
 		position: 'absolute',
@@ -133,6 +136,7 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		width: '100%',
+		overflow: 'hidden',
 	},
 	iconLeft: {},
 	iconRight: {

@@ -10,6 +10,8 @@ export default function Layout() {
 			<Stack.Screen name='start' />
 			<Stack.Screen name='destination' />
 			<Stack.Screen name='date' />
+			<Stack.Screen name='time' />
+			<Stack.Screen name='[location]' />
 		</Stack>
 	);
 }

@@ -1,23 +1,16 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { StyleSheet } from 'react-native';
 import CircleButton from '@/components/drafts/CircleButton';
-import CustomCalendar from '@/components/calendar/Calendar';
-import { DateData } from 'react-native-calendars';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 
-export default function Destination() {
-	const today = new Date().toISOString().slice(0, 10);
-
-	const [selectedDay, setSelectedDay] = useState<string>(today);
+export default function Time() {
 	const [nextButtonVisible, setNextButtonVisible] = useState<boolean>(true);
-
-	const handleOnDayPress = (day: DateData) => {
-		setSelectedDay(day.dateString);
-	};
 
 	return (
 		<PostTripLayout
-			title='Quel jour ?'
+			title='À quelle heure ?'
 			iconTopLeft='arrow-back-sharp'
 			iconTopRight='close-sharp'
 			onPressTopLeft={() => {
@@ -27,17 +20,9 @@ export default function Destination() {
 				router.navigate('/(app)/(tabs)/post-trip');
 			}}
 		>
-			<CustomCalendar
-				today={today}
-				selected={selectedDay}
-				onDayPress={handleOnDayPress}
-			/>
-
 			<CircleButton
 				iconName='arrow-forward'
-				onPress={() => {
-					router.navigate('/(app)/(post-trip)/time');
-				}}
+				onPress={() => {}}
 				size='medium'
 				style={{
 					position: 'absolute',

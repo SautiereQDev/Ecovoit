@@ -9,11 +9,10 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import IconButton from '@/components/drafts/IconButton';
 import { ThemedText } from '@/components/drafts/ThemedText';
 import CustomInputText from '@/components/drafts/CustomInputText';
 import CircleButton from '@/components/drafts/CircleButton';
-import { StatusBar } from 'expo-status-bar';
+import PostTripLayout from '@/components/layouts/PostTripLayout';
 const lr_cda = require('@/assets/data/lr_cda_division.json');
 
 export default function Destination() {
@@ -50,33 +49,17 @@ export default function Destination() {
 	};
 
 	return (
-		<View
-			style={[{ backgroundColor: colors['background-1'] }, styles.container]}
+		<PostTripLayout
+			title='Où allez-vous ?'
+			iconTopLeft='arrow-back-sharp'
+			iconTopRight='close-sharp'
+			onPressTopLeft={() => {
+				router.back();
+			}}
+			onPressTopRight={() => {
+				router.navigate('/(app)/(tabs)/post-trip');
+			}}
 		>
-			<StatusBar translucent />
-			<IconButton
-				iconName='arrow-back'
-				onPress={() => {
-					router.back();
-				}}
-				size='large'
-				style={{ position: 'absolute', top: 15, left: 0 }}
-			/>
-			<IconButton
-				iconName='close'
-				onPress={() => {
-					router.navigate('/(app)/(tabs)/post-trip');
-				}}
-				size='large'
-				style={{ position: 'absolute', top: 15, right: 0 }}
-			/>
-
-			<ThemedText
-				type='title'
-				style={{ marginTop: 100 }}
-			>
-				Où allez-vous ?
-			</ThemedText>
 			<CustomInputText
 				value={searchBarValue}
 				iconRight='search-outline'
@@ -133,13 +116,6 @@ export default function Destination() {
 					display: nextButtonVisible && Keyboard.isVisible() ? 'flex' : 'none',
 				}}
 			/>
-		</View>
+		</PostTripLayout>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-	},
-});
