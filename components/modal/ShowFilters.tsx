@@ -16,12 +16,11 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	visible,
-	onClose,
-	filters,
-	setFilters,
-}: Props) => {
-
+	                            visible,
+	                            onClose,
+	                            filters,
+	                            setFilters,
+                            }: Props) => {
 	const isChecked = (name: FiltreType) => {
 		const filter = filters.find((filter) => filter.name === name);
 		return filter?.active;
@@ -65,15 +64,24 @@ export const ShowFilters = ({
 									disableText={false}
 									useBuiltInState={false}
 								/>
-								<ThemedText style={styles.filterName}>{item.name}</ThemedText>
+								<ThemedText style={styles.filterName}>
+									{item.name.toString() !==
+									FiltreType[FiltreType.ecart_horraire]
+										? item.name.toString().charAt(0).toUpperCase() +
+										item.name.toString().slice(1)
+										: item.name.toString() === FiltreType[FiltreType.distance]
+											? 'Distance départ'
+											: 'Ecart horraire'}
+								</ThemedText>
 								<ThemedInput
-									placeholder={'value'}
+									placeholder={'valeur'}
 									style={styles.input}
 								/>
 							</View>
 						)}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 						keyExtractor={(item) => item.name.toString()}
+						style={styles.filters}
 					/>
 					<CustomButton
 						onPress={onClose}
@@ -98,7 +106,8 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		width: '90%',
-		height: "50%",
+		height: '50%',
+		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
 	},
@@ -107,17 +116,19 @@ const styles = StyleSheet.create({
 	},
 	closingButton: {
 		paddingHorizontal: '5%',
-		paddingVertical: '2%',
 		position: 'absolute',
 		bottom: 15,
 		right: 15,
+	},
+	filters: {
+		marginTop: '5%',
 	},
 	filter: {
 		width: '90%',
 		display: 'flex',
 		flexDirection: 'row',
-		margin: "auto",
-		verticalAlign: "middle",
+		margin: 'auto',
+		verticalAlign: 'middle',
 	},
 	input: {
 		flex: 1,
@@ -125,6 +136,6 @@ const styles = StyleSheet.create({
 		marginLeft: 'auto',
 	},
 	filterName: {
-		margin: "auto"
-	}
+		margin: 'auto',
+	},
 });

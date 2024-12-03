@@ -28,10 +28,10 @@ export interface SearchTripCardType {
 
 //Trip Search
 export enum FiltreType {
-	consommation,
-	distance,
-	emission,
-	ecart_horraire
+	'consommation',
+	'distance',
+	'emission',
+	'ecart_horraire',
 }
 
 export interface Filter {
