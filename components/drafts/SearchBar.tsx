@@ -18,18 +18,18 @@ export default function SearchBar({
 	headerText,
 	headerIcon,
 	placeholder,
-	// onNoResult,
-	// onChangeText,
-	// onSuggestionPress,
+	onNoResult,
+	onChangeText,
+	onSuggestionPress,
 	onSearch,
 	onSuggestionsHeaderPress,
 }: {
 	data: any;
 	headerText: string;
 	placeholder: string;
-	// onNoResult: () => void;
-	// onChangeText: (text: string) => void;
-	// onSuggestionPress: () => void;
+	onNoResult: () => void;
+	onChangeText: (text: string) => void;
+	onSuggestionPress: () => void;
 	onSearch: (value: string) => void;
 	onSuggestionsHeaderPress: () => void;
 	headerIcon: keyof typeof Ionicons.glyphMap;
@@ -52,8 +52,8 @@ export default function SearchBar({
 		if (currentSuggestions.length > 0) {
 			setSuggestions(currentSuggestions);
 		} else {
-			setSuggestions(['Aucun résultat trouvé']);
-			// onNoResult();
+			setSuggestions(['Aucun résultat']);
+			onNoResult();
 		}
 
 		if (text === '') {
@@ -70,10 +70,15 @@ export default function SearchBar({
 				placeholder={placeholder}
 				onChangeText={(text) => {
 					handleOnChangeText(text);
-					// onChangeText(text);
+					onChangeText(text);
 				}}
 				onIconRightPress={() => {
 					onSearch(searchBarValue);
+				}}
+				onEndEditing={() => {
+					if (suggestions.length > 0) {
+						setSearchBarValue(suggestions[0]);
+					}
 				}}
 			/>
 			<View>
@@ -124,12 +129,12 @@ export default function SearchBar({
 								backgroundColor: colors['background-2'],
 							}}
 							onPress={() => {
-								if (item === 'Aucun résultat trouvé') {
+								if (item === 'Aucun résultat') {
 									return;
 								}
 								setSearchBarValue(item);
 								setSuggestions([]);
-								// onSuggestionPress();
+								onSuggestionPress();
 							}}
 						>
 							<ThemedText

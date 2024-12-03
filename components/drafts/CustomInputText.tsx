@@ -27,6 +27,7 @@ type CustomInputTextProps = {
 	onBlur?: () => void;
 	onIconLeftPress?: () => void;
 	onIconRightPress?: () => void;
+	onEndEditing?: () => void;
 };
 
 export default function CustomInputText({
@@ -39,6 +40,7 @@ export default function CustomInputText({
 	theme,
 	onIconRightPress,
 	onChangeText,
+	onEndEditing = () => {},
 	value,
 	color = 'secondary-1',
 	size = 'medium',
@@ -78,6 +80,9 @@ export default function CustomInputText({
 				cursorColor={colors['text-primary']}
 				placeholder={placeholder}
 				onChangeText={onChangeText}
+				onEndEditing={() => {
+					onEndEditing();
+				}}
 			>
 				{value}
 			</TextInput>

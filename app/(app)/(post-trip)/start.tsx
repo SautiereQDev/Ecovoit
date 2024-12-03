@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import SearchBar from '@/components/drafts/SearchBar';
-import Map from '@/components/map/Map';
 const lr_cda = require('@/assets/data/lr_cda_division.json');
 const lr_districts = require('@/assets/data/lr_districts.json');
 
@@ -30,25 +29,19 @@ export default function Start() {
 				placeholder='Rechercher un lieu'
 				headerText='Utiliser ma position actuelle'
 				data={data}
-				onSuggestionsHeaderPress={() => {
-					alert('Header pressed');
-					console.log(data);
+				onSuggestionsHeaderPress={() => {}} // TODO
+				onSearch={(value) => {}} // TODO
+				onSuggestionPress={() => {
+					setNextButtonVisible(true);
 				}}
-				onSearch={(value) => {
-					alert(value);
-					router.navigate(`/(app)/(post-trip)/${value}`);
+				onChangeText={(text) => {
+					if (text === '') {
+						setNextButtonVisible(false);
+					}
 				}}
-				// onSuggestionPress={() => {
-				// 	setNextButtonVisible(true);
-				// }}
-				// onChangeText={(text: string) => {
-				// 	if (text === '') {
-				// 		setNextButtonVisible(false);
-				// 	}
-				// }}
-				// onNoResult={() => {
-				// 	setNextButtonVisible(false);
-				// }}
+				onNoResult={() => {
+					setNextButtonVisible(false);
+				}}
 			/>
 
 			<CircleButton

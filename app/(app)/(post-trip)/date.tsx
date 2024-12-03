@@ -9,10 +9,10 @@ export default function Destination() {
 	const today = new Date().toISOString().slice(0, 10);
 
 	const [selectedDay, setSelectedDay] = useState<string>(today);
-	const [nextButtonVisible, setNextButtonVisible] = useState<boolean>(true);
 
 	const handleOnDayPress = (day: DateData) => {
 		setSelectedDay(day.dateString);
+		router.navigate('/(app)/(post-trip)/time');
 	};
 
 	return (
@@ -31,20 +31,6 @@ export default function Destination() {
 				today={today}
 				selected={selectedDay}
 				onDayPress={handleOnDayPress}
-			/>
-
-			<CircleButton
-				iconName='arrow-forward'
-				onPress={() => {
-					router.navigate('/(app)/(post-trip)/time');
-				}}
-				size='medium'
-				style={{
-					position: 'absolute',
-					bottom: 25,
-					right: 25,
-					display: nextButtonVisible ? 'flex' : 'none',
-				}}
 			/>
 		</PostTripLayout>
 	);
