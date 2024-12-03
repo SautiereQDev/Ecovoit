@@ -52,6 +52,22 @@ export const ShowFilters = ({
 		setFilters(initialFilters);
 	}
 
+	const updateValue = (name: FiltreType, value: string) => {
+		const numericValue = Number(value);
+		if (!isNaN(numericValue)) {
+			const newFilters = filters.map((filter) => {
+				if (filter.name === name) {
+					return {
+						...filter,
+						value: numericValue,
+					};
+				}
+				return filter;
+			});
+			setFilters(newFilters);
+		}
+	};
+
 	return (
 		<Modal
 			visible={visible}
@@ -76,6 +92,7 @@ export const ShowFilters = ({
 									onPress={() => toggleCheck(item.name)}
 									useBuiltInState={false}
 									style={styles.checkbox}
+									fillColor={Colors.light.primary}
 									textComponent={
 										<>
 											<ThemedText style={styles.filterName} color={item.active ? 'text' : 'hidden'}>
@@ -92,6 +109,9 @@ export const ShowFilters = ({
 												placeholder={'valeur'}
 												style={styles.input}
 												disabled={!item.active}
+												value={item.value.toString()}
+												onChangeText={(val) => updateValue(item.name, val)}
+												keyboardType={'numeric'}
 											/>
 										</>
 									}
@@ -159,7 +179,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: "5%",
 	},
 	filters: {
-		marginTop: '5%',
+		marginTop: '7%',
 	},
 	filter: {
 		width: '90%',
