@@ -37,14 +37,17 @@ export const SearchPage = () => {
 	const [mode, setMode] = useState<'date' | 'time'>('date');
 	const [errors, setErrors] = useState<Error>({});
 
-	const initialFilters: Filter[] = [
-		{ name: 'consommation', value: 0, condition: 'lower', active: false },
-		{ name: 'distance', value: 0, condition: 'lower', active: false },
-		{ name: 'emission', value: 0, condition: 'lower', active: false },
-		{ name: 'ecart_horraire', value: 0, condition: 'lower', active: false },
-	];
+	const initialFilters: Filter[] = Object.keys(FiltreType)
+		.filter((key) => !isNaN(Number(key))) // Filter out numeric keys
+		.map((key) => ({
+			name: FiltreType[key as keyof typeof FiltreType],
+			value: 0,
+			active: false,
+		}));
 
-	const [filters, setFilters] = useState(initialFilters);
+	console.log(initialFilters);
+
+	const [filters, setFilters] = useState<Filter[]>(initialFilters);
 	const [showFilters, setShowFilters] = useState(false);
 
 	const validate = (field: string, value: string | number) => {

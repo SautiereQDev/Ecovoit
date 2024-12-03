@@ -35,8 +35,7 @@ export enum FiltreType {
 }
 
 export interface Filter {
-	name: keyof typeof FiltreType;
+	name: FiltreType;
 	value: number;
-	condition: 'uper' | 'lower';
 	active: boolean;
-};
+}

@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/texts/ThemedText';
 import CustomButton from '@/components/buttons/CustomButton';
-import { Filter } from '@/types';
+import { Filter, FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
-import Checkbox from 'react-native-bouncy-checkbox';
+import BouncyCheckbox from 'react-native-bouncy-checkbox/lib';
 import ThemedInput from '@/components/inputs/ThemedInput';
 
 type Props = {
@@ -15,22 +15,29 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	                            visible,
-	                            onClose,
-	                            filters,
-	                            setFilters,
-                            }: Props) => {
-	const toggleCondition = (name: string) => {
-		setFilters((prevFilters) =>
-			prevFilters.map((filter) =>
-				filter.name === name
-					? {
-						...filter,
-						condition: filter.condition === 'lower' ? 'uper' : 'lower',
-					}
-					: filter
-			)
-		);
+	visible,
+	onClose,
+	filters,
+	setFilters,
+}: Props) => {
+
+	const isChecked = (name: FiltreType) => {
+		const filter = filters.find((filter) => filter.name === name);
+		return filter?.active;
+	};
+
+	const toggleCheck = (name: FiltreType) => {
+		const newFilters = filters.map((filter) => {
+			if (filter.name === name) {
+				return {
+					...filter,
+					active: !filter.active,
+				};
+			}
+			return filter;
+		});
+		// @ts-ignore
+		setFilters(newFilters);
 	};
 
 	return (
@@ -57,46 +64,17 @@ export const ShowFilters = ({
 						data={filters}
 						renderItem={({ item }) => (
 							<View style={styles.filter}>
-								<Checkbox
-									onPress={() => {
-										setFilters((prevFilters) => {
-											return prevFilters.map((filter) => {
-												if (filter.name === item.name) {
-													return {
-														...filter,
-														active: !filter.active,
-													};
-												}
-												return filter;
-											});
-										});
-									}}
+								<BouncyCheckbox
+									isChecked={isChecked(item.name)}
+									onPress={() => toggleCheck(item.name)}
+									disableText={false}
+									useBuiltInState={false}
 								/>
 								<ThemedText>{item.name}</ThemedText>
-								<CustomButton
-									text={item.condition === 'lower' ? '<' : '>'}
-									onPress={() => toggleCondition(item.name)}
-									textProps={{ type: 'bigger', color: 'background' }}
-									buttonStyle={styles.conditionButton}
-								/>
-								<ThemedInput
-									placeholder={"Valeur"}
-									onChangeText={(value) => setFilters((prevFilters) => {
-										return prevFilters.map((filter) => {
-											if (filter.name === item.name) {
-												return {
-													...filter,
-													value: parseFloat(value),
-												};
-											}
-											return filter;
-										});
-									})}
-									style={styles.input}
-								/>
+								<ThemedInput placeholder={'value'} style={styles.input}/>
 							</View>
 						)}
-						keyExtractor={(item) => item.name}
+						keyExtractor={(item) => item.name.toString()}
 					/>
 				</View>
 			</View>
@@ -114,13 +92,14 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
 	},
 	container: {
-		width: '80%',
-		height: '50%',
+		width: '90%',
+		height: "50%",
 		backgroundColor: 'white',
 		borderRadius: 10,
-		padding: 20,
 		marginHorizontal: '10%',
 		marginVertical: '10%',
+		display: 'flex',
+		flexDirection: 'column',
 	},
 	content: {
 		flex: 1,
@@ -138,17 +117,13 @@ const styles = StyleSheet.create({
 		right: 15,
 	},
 	filter: {
+		display: 'flex',
 		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginVertical: 10,
 	},
 	conditionButton: {
-		paddingVertical: '2%',
-		marginLeft: 10,
+		flex: 1,
 	},
 	input: {
-		flex: 1,
-		marginLeft: 10,
-	},
+		flex: 1
+	}
 });
