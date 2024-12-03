@@ -6,6 +6,7 @@ import { Filter, FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
 import BouncyCheckbox from 'react-native-bouncy-checkbox/lib';
 import ThemedInput from '@/components/inputs/ThemedInput';
+import Colors from '@/constants/Colors';
 
 type Props = {
 	visible: boolean;
@@ -54,12 +55,6 @@ export const ShowFilters = ({
 					>
 						Filtres
 					</ThemedText>
-					<CustomButton
-						onPress={onClose}
-						text={'Fermer'}
-						textProps={{ type: 'bigger', color: 'background' }}
-						buttonStyle={styles.closingButton}
-					/>
 					<FlatList
 						data={filters}
 						renderItem={({ item }) => (
@@ -70,11 +65,21 @@ export const ShowFilters = ({
 									disableText={false}
 									useBuiltInState={false}
 								/>
-								<ThemedText>{item.name}</ThemedText>
-								<ThemedInput placeholder={'value'} style={styles.input}/>
+								<ThemedText style={styles.filterName}>{item.name}</ThemedText>
+								<ThemedInput
+									placeholder={'value'}
+									style={styles.input}
+								/>
 							</View>
 						)}
+						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 						keyExtractor={(item) => item.name.toString()}
+					/>
+					<CustomButton
+						onPress={onClose}
+						text={'Fermer'}
+						textProps={{ type: 'bigger', color: 'background' }}
+						buttonStyle={styles.closingButton}
 					/>
 				</View>
 			</View>
@@ -94,17 +99,8 @@ const styles = StyleSheet.create({
 	container: {
 		width: '90%',
 		height: "50%",
-		backgroundColor: 'white',
+		backgroundColor: Colors.light.background,
 		borderRadius: 10,
-		marginHorizontal: '10%',
-		marginVertical: '10%',
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	content: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 	},
 	title: {
 		textAlign: 'center',
@@ -117,13 +113,18 @@ const styles = StyleSheet.create({
 		right: 15,
 	},
 	filter: {
+		width: '90%',
 		display: 'flex',
 		flexDirection: 'row',
-	},
-	conditionButton: {
-		flex: 1,
+		margin: "auto",
+		verticalAlign: "middle",
 	},
 	input: {
-		flex: 1
+		flex: 1,
+		maxWidth: '40%',
+		marginLeft: 'auto',
+	},
+	filterName: {
+		margin: "auto"
 	}
 });
