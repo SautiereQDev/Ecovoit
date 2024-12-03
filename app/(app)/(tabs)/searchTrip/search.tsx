@@ -45,8 +45,6 @@ export const SearchPage = () => {
 			active: false,
 		}));
 
-	console.log(initialFilters);
-
 	const [filters, setFilters] = useState<Filter[]>(initialFilters);
 	const [showFilters, setShowFilters] = useState(false);
 
@@ -162,6 +160,8 @@ export const SearchPage = () => {
 		},
 	];
 
+	const isFilterActive = filters.some((filter) => filter.active);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
@@ -182,12 +182,12 @@ export const SearchPage = () => {
 							/>
 						</View>
 						<IconButton
-							// TODO : Afficher le boutton avec un font transparant si il n'y a pas de filtre et en vert si il y en a
 							name={'filter'}
 							lib={'MaterialCommunityIcons'}
 							size={26}
-							buttonStyle={styles.buttonFilter}
-							color={Colors.light.background}
+							buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
+							backgroundColor={isFilterActive ? 'primary' : 'background'}
+							color={isFilterActive ? Colors.light.background : Colors.light.primary}
 							onPress={() => setShowFilters(!showFilters)}
 						/>
 						<ShowFilters
@@ -363,7 +363,14 @@ const styles = StyleSheet.create({
 	buttonFilter: {
 		padding: '3%',
 		borderRadius: 10,
-		backgroundColor: Colors.light.primary,
 		marginRight: 'auto',
+		borderWidth: 1,
+		borderColor: Colors.light.primary,
 	},
+	buttonFilterActive: {
+		padding: '3%',
+		borderRadius: 10,
+		marginRight: 'auto',
+		borderWidth: 1,
+	}
 });
