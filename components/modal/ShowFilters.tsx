@@ -40,6 +40,18 @@ export const ShowFilters = ({
 		setFilters(newFilters);
 	};
 
+	const initialFilters: Filter[] = Object.keys(FiltreType)
+		.filter((key) => !isNaN(Number(key))) // Filter out numeric keys
+		.map((key) => ({
+			name: FiltreType[key as keyof typeof FiltreType],
+			value: 0,
+			active: false,
+		}));
+
+	const resetFilters = () => {
+		setFilters(initialFilters);
+	}
+
 	return (
 		<Modal
 			visible={visible}
@@ -91,12 +103,22 @@ export const ShowFilters = ({
 						keyExtractor={(item) => item.name.toString()}
 						style={styles.filters}
 					/>
-					<CustomButton
-						onPress={onClose}
-						text={'Fermer'}
-						textProps={{ type: 'bigger', color: 'background' }}
-						buttonStyle={styles.closingButton}
-					/>
+					<View style={styles.bottomButtons}>
+						<CustomButton
+							onPress={resetFilters}
+							text={'Supprimer les filtres'}
+							textProps={{ type: 'bigger', color: 'background' }}
+							buttonStyle={styles.buttons}
+							backgroundColor={'resetButton'}
+						/>
+						<CustomButton
+							onPress={onClose}
+							text={'Fermer'}
+							textProps={{ type: 'bigger', color: 'background' }}
+							buttonStyle={styles.buttons}
+							backgroundColor={'primary'}
+						/>
+					</View>
 				</View>
 			</View>
 		</Modal>
@@ -123,11 +145,18 @@ const styles = StyleSheet.create({
 	title: {
 		textAlign: 'center',
 	},
-	closingButton: {
-		paddingHorizontal: '5%',
+	bottomButtons: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		gap: 20,
 		position: 'absolute',
 		bottom: 15,
-		right: 15,
+		right: 10
+	},
+	buttons: {
+		paddingVertical: "2%",
+		paddingHorizontal: "5%",
 	},
 	filters: {
 		marginTop: '5%',
@@ -137,7 +166,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		margin: 'auto',
-		verticalAlign: 'middle',
 	},
 	filterName: {
 		margin: 'auto'
