@@ -1,9 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import CircleButton from '@/components/drafts/CircleButton';
+import SeatPicker from '@/components/drafts/SeatPicker';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { router } from 'expo-router';
+import { useState } from 'react';
 
 export default function Seats() {
+	const colors = useThemeColor();
+	const [seats, setSeats] = useState<number>(1);
 	return (
 		<PostTripLayout
 			title='Combien de passagers ?'
@@ -15,8 +19,31 @@ export default function Seats() {
 			onPressTopRight={() => {
 				router.navigate('/(app)/(tabs)/post-trip');
 			}}
-		></PostTripLayout>
+		>
+			<SeatPicker
+				activeColor={colors['secondary-1']}
+				inactiveColor={colors['text-muted']}
+				availableSeats={4}
+				style={{ marginTop: 50 }}
+				onAdd={() => {
+					setSeats(seats + 1);
+				}}
+				onRemove={() => {
+					setSeats(seats - 1);
+				}}
+			/>
+			<CircleButton
+				iconName='arrow-forward'
+				onPress={() => {
+					router.navigate('/(app)/(post-trip)/confirm');
+				}}
+				size='medium'
+				style={{
+					position: 'absolute',
+					bottom: 25,
+					right: 25,
+				}}
+			/>
+		</PostTripLayout>
 	);
 }
-
-const styles = StyleSheet.create({});
