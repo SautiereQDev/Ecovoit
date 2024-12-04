@@ -15,6 +15,7 @@ import validTimestamp from 'ajv/lib/runtime/timestamp';
 import { Filter, FiltreType } from '@/types';
 import ShowFilters from '@/components/modal/ShowFilters';
 import { formatDate, formatDateReverse } from '@/utils/date';
+import ShowOrder from '@/components/modal/ShowOrder';
 
 type tripType = {
 	depart: string;
@@ -46,7 +47,10 @@ export const SearchPage = () => {
 		}));
 
 	const [filters, setFilters] = useState<Filter[]>(initialFilters);
-	const [showFilters, setShowFilters] = useState(false);
+	const [showFilters, setShowFilters] = useState<boolean>(false);
+	const [order, setOrder] = useState<FiltreType>(FiltreType.emission);
+	const [showOrder, setShowOrder] = useState<boolean>(false);
+	const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('asc');
 
 	const validate = (field: string, value: string | number) => {
 		switch (field) {
@@ -162,6 +166,8 @@ export const SearchPage = () => {
 
 	const isFilterActive = filters.some((filter) => filter.active);
 
+	// TODO: Recupération des donnés de manière dynamique et en incluant les filtres et l'ordre de tri
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
@@ -186,26 +192,49 @@ export const SearchPage = () => {
 								name={'filter'}
 								lib={'MaterialCommunityIcons'}
 								size={26}
-								buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
+								buttonStyle={styles.button}
 								backgroundColor={isFilterActive ? 'primary' : 'background'}
-								color={isFilterActive ? Colors.light.background : Colors.light.primary}
+								color={
+									isFilterActive
+										? Colors.light.background
+										: Colors.light.primary
+								}
 								onPress={() => setShowFilters(!showFilters)}
 							/>
-							<IconButton
-								name={'sort-alpha-asc'}
-								lib={'FontAwesome'}
-								size={26}
-								buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
-								backgroundColor={isFilterActive ? 'primary' : 'background'}
-								color={isFilterActive ? Colors.light.background : Colors.light.primary}
-								onPress={() => setShowFilters(!showFilters)}
-							/>
+							<View style={styles.orderButtons}>
+								<IconButton
+									// @ts-ignore
+									name={'sort-alpha-asc'}
+									lib={'FontAwesome'}
+									size={30}
+									buttonStyle={styles.button}
+									backgroundColor={'background'}
+									color={Colors.light.primary}
+									onPress={() => setShowOrder(!showOrder)}
+								/>
+								<IconButton
+									// @ts-ignore
+									name={orderDirection === 'asc' ? 'arrow-down': 'arrow-up'}
+									lib={'FontAwesome'}
+									size={30}
+									buttonStyle={styles.button}
+									backgroundColor={'background'}
+									color={Colors.light.primary}
+									onPress={() => setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc')}
+								/>
+							</View>
 						</View>
 						<ShowFilters
 							visible={showFilters}
 							onClose={() => setShowFilters(false)}
 							filters={filters}
 							setFilters={setFilters}
+						/>
+						<ShowOrder
+							visible={showOrder}
+							order={order}
+							setOrder={setOrder}
+							onClose={() => setShowOrder(false)}
 						/>
 						<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
 						<FlatList
@@ -280,7 +309,7 @@ export const SearchPage = () => {
 									onChange={(event, date) => onDateChange(event, date as Date)}
 								/>
 							)}
-							{errors.date && (
+							{Boolean(errors.date) && (
 								<ThemedText style={styles.errorText}>{errors.date}</ThemedText>
 							)}
 							<IconButton
@@ -371,23 +400,23 @@ const styles = StyleSheet.create({
 		color: Colors.light.error,
 		marginTop: 5,
 	},
-	buttonFilter: {
+	button: {
 		padding: '3%',
 		borderRadius: 10,
-		marginRight: 'auto',
 		borderWidth: 1,
 		borderColor: Colors.light.primary,
-	},
-	buttonFilterActive: {
-		padding: '3%',
-		borderRadius: 10,
-		marginRight: 'auto',
-		borderWidth: 1,
 	},
 	icons: {
 		display: 'flex',
 		flexDirection: 'row',
 		marginRight: 'auto',
-		gap: 20,
-	}
+		gap: 25,
+	},
+	orderButtons: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		flex: 1,
+		gap: 10,
+	},
 });
