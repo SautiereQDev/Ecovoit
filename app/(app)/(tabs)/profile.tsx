@@ -6,7 +6,6 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import { useSession } from '@/components/context/SessionProvider';
 import { ThemedText } from '@/components';
 import { User } from '@/types/Ecovoit';
@@ -82,27 +81,76 @@ export default function UserPage() {
 					{user?.username}
 				</ThemedText>
 				<View style={styles.biographie}>
-					<ThemedText type={'header6'} style={styles.biographieText}>A propos de {user?.firstName}</ThemedText>
+					<ThemedText
+						type={'header6'}
+						style={styles.biographieText}
+					>
+						A propos de {user?.firstName}
+					</ThemedText>
 					<ThemedText style={styles.biographieText}>{user?.bio}</ThemedText>
 				</View>
 				<View style={styles.data}>
 					<View style={styles.cell}>
-						<ThemedText type={'accent'} style={{ textAlign: 'center' }}>Kilomètres parcourus</ThemedText>
-						<ThemedText type={'defaultBody'} style={{ textAlign: 'center' }}>843km</ThemedText>
+						<ThemedText
+							type={'accent'}
+							style={{ textAlign: 'center' }}
+						>
+							Kilomètres parcourus
+						</ThemedText>
+						<ThemedText
+							type={'defaultBody'}
+							style={{ textAlign: 'center' }}
+						>
+							843km
+						</ThemedText>
 					</View>
 					<View style={styles.verticalSeparator} />
 					<View style={styles.cell}>
-						<ThemedText type={'accent'} style={{ textAlign: 'center' }}>Nombre de passagers</ThemedText>
-						<ThemedText type={'defaultBody'} style={{ textAlign: 'center' }}>123</ThemedText>
+						<ThemedText
+							type={'accent'}
+							style={{ textAlign: 'center' }}
+						>
+							Nombre de passagers
+						</ThemedText>
+						<ThemedText
+							type={'defaultBody'}
+							style={{ textAlign: 'center' }}
+						>
+							123
+						</ThemedText>
 					</View>
 					<View style={styles.verticalSeparator} />
 					<View style={styles.cell}>
-						<ThemedText type={'accent'} style={{ textAlign: 'center' }}>Note moyenne</ThemedText>
-						<ThemedText type={'defaultBody'} style={{ textAlign: 'center' }}>4.56</ThemedText>
+						<ThemedText
+							type={'accent'}
+							style={{ textAlign: 'center' }}
+						>
+							Note moyenne
+						</ThemedText>
+						<ThemedText
+							type={'defaultBody'}
+							style={{ textAlign: 'center' }}
+						>
+							4.56
+						</ThemedText>
 					</View>
 				</View>
-				<CustomButton text={'Modifier'} onPress={() => {}} textProps={{type: 'defaultBody'}} backgroundColor={'accentBackground'}/>
-				<CustomButton text={'Déconnexion'} onPress={signOut} textProps={{type: 'defaultBody'}} backgroundColor={'accentBackground'}/>
+				<View style={styles.buttons}>
+					<CustomButton
+						text={'Modifier'}
+						onPress={() => {}}
+						textProps={{ type: 'defaultBody' }}
+						backgroundColor={'accentBackground'}
+						buttonStyle={styles.button}
+					/>
+					<CustomButton
+						text={'Déconnexion'}
+						onPress={signOut}
+						textProps={{ type: 'defaultBody' }}
+						backgroundColor={'accentBackground'}
+						buttonStyle={styles.button}
+					/>
+				</View>
 			</View>
 		</View>
 	);
@@ -148,7 +196,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		width: '95%',
 		marginHorizontal: 'auto',
-		marginVertical: '10%',
+		marginVertical: '15%',
 	},
 	cell: {
 		width: '30%',
@@ -158,5 +206,15 @@ const styles = StyleSheet.create({
 		width: 1,
 		backgroundColor: Colors.light.disabledBorder,
 		marginHorizontal: 10,
+	},
+	buttons:{
+		display: 'flex',
+		flexDirection: 'row',
+		margin: 'auto',
+		gap: 40,
+		marginTop: '5%',
+	},
+	button: {
+		width: '35%',
 	},
 });
