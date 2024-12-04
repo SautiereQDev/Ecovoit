@@ -8,7 +8,7 @@ import {
 import React, { ComponentProps, ReactNode } from 'react';
 import { Colors } from '@/constants/Colors';
 import {
-	FontAwesome6,
+	FontAwesome,
 	MaterialCommunityIcons,
 	Octicons,
 } from '@expo/vector-icons';
@@ -16,7 +16,7 @@ import { ThemedText } from '../texts/ThemedText';
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
 
-type IconLibraries = 'octicons' | 'fontawesome6' | 'MaterialCommunityIcons';
+type IconLibraries = 'Octicons' | 'FontAwesome' | 'MaterialCommunityIcons';
 
 interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	buttonStyle?: StyleProp<ViewStyle>;
@@ -47,15 +47,15 @@ export function IconButton({
 	                           textProps = { type: 'defaultBody', color: 'text' },
 	                           iconStyle,
 	                           iconFirst = false,
-	                           lib = 'octicons',
+	                           lib = 'Octicons',
 	                           backgroundColor = 'background',
 	                           ...restProps
                            }: Readonly<Props>): ReactNode {
 	const Icon =
-		lib === 'octicons'
+		lib === 'Octicons'
 			? Octicons
-			: lib === 'fontawesome6'
-				? FontAwesome6
+			: lib === 'FontAwesome'
+				? FontAwesome
 				: MaterialCommunityIcons;
 
 	return (

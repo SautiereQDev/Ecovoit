@@ -192,8 +192,8 @@ export const SearchPage = () => {
 								onPress={() => setShowFilters(!showFilters)}
 							/>
 							<IconButton
-								name={'filter'}
-								lib={'MaterialCommunityIcons'}
+								name={'sort-alpha-asc'}
+								lib={'FontAwesome'}
 								size={26}
 								buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
 								backgroundColor={isFilterActive ? 'primary' : 'background'}
