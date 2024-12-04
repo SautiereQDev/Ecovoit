@@ -5,6 +5,7 @@ import CustomButton from '@/components/buttons/CustomButton';
 import { imageSourceType } from '@/types';
 import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/texts/ThemedText';
+import { notify } from 'react-native-notificated';
 
 type Props = {
 	visible: boolean;
@@ -34,6 +35,7 @@ export const GetImage = ({
 		if (!result.canceled) {
 			setProfileImage(result.assets[0].uri);
 			onClose();
+			notify('success', { params: { title: 'Image de profile mise à jour' } });
 		}
 	};
 
@@ -48,6 +50,7 @@ export const GetImage = ({
 		if (!result.canceled) {
 			setProfileImage(result.assets[0].uri);
 			onClose();
+			notify('success', { params: { title: 'Image de profile mise à jour' } });
 		}
 	};
 

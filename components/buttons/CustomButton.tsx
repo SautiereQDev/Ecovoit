@@ -46,7 +46,7 @@ type Props = PressableProps & {
 export function CustomButton({
 															 buttonStyle,
 															 text,
-															 textProps = { color: "primary" },
+															 textProps = { color: "background" },
 															 backgroundColor = "primary",
 															 ...restProps
 														 }: Props): JSX.Element {
