@@ -19,6 +19,7 @@ type Props = PressableProps & {
 			| "header3"
 			| "header4"
 			| "header5"
+			| "header6"
 			| "small"
 			| "italic"
 			| "accent"

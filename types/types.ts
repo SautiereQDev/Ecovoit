@@ -39,3 +39,7 @@ export interface Filter {
 	value: number;
 	active: boolean;
 }
+
+export type imageSourceType = 'appareil photo' | 'galerie';
+
+
