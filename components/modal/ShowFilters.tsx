@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet, View, Pressable } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Filter, FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	                            visible,
-	                            onClose,
-	                            filters,
-	                            setFilters,
-                            }: Props) => {
+	visible,
+	onClose,
+	filters,
+	setFilters,
+}: Props) => {
 	const isChecked = (name: FiltreType) => {
 		const filter = filters.find((filter) => filter.name === name);
 		return filter?.active;
@@ -90,7 +90,6 @@ export const ShowFilters = ({
 							>
 								<Checkbox
 									status={isChecked(item.name) ? 'checked' : 'unchecked'}
-									onPress={() => toggleCheck(item.name)}
 									color={Colors.light.primary}
 								/>
 								<ThemedText
@@ -100,7 +99,7 @@ export const ShowFilters = ({
 									{item.name.toString() !==
 									FiltreType[FiltreType.ecart_horraire]
 										? item.name.toString().charAt(0).toUpperCase() +
-										item.name.toString().slice(1)
+											item.name.toString().slice(1)
 										: item.name.toString() === FiltreType[FiltreType.distance]
 											? 'Distance départ'
 											: 'Ecart horraire'}
