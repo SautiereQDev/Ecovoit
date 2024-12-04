@@ -65,7 +65,10 @@ const RegisterPage = () => {
 				case 'firstName':
 				case 'lastName':
 				case 'carName':
-					if (value.length < 3 || value.length > 32) {
+					if (
+						(typeof value !== 'number' && value?.length < 3) ||
+						(typeof value !== 'number' && value?.length > 32)
+					) {
 						newErrors[field] = `${field} must be between 3 and 32 characters`;
 					} else {
 						delete newErrors[field];
@@ -97,7 +100,7 @@ const RegisterPage = () => {
 					}
 					break;
 				case 'biographie':
-					if (value.length > 128) {
+					if (typeof value !== 'number' && value?.length > 128) {
 						newErrors.biographie = 'Biography must be less than 128 characters';
 					} else {
 						delete newErrors.biographie;
@@ -125,10 +128,11 @@ const RegisterPage = () => {
 			'carConsommation',
 			'carEmission',
 		].forEach((field) => {
-			if (!formData[field]) {
+			const key = field as keyof formType;
+			if (!formData[key]) {
 				newErrors[field] = `${field} is required`;
 			} else {
-				validate(field, formData[field]);
+				validate(field, formData[key]);
 			}
 		});
 		setErrors(newErrors);

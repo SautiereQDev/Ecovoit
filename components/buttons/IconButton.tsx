@@ -7,10 +7,16 @@ import {
 } from 'react-native';
 import React, { ComponentProps, ReactNode } from 'react';
 import { Colors } from '@/constants/Colors';
-import Octicons from '@expo/vector-icons/Octicons';
+import {
+	FontAwesome,
+	MaterialCommunityIcons,
+	Octicons,
+} from '@expo/vector-icons';
 import { ThemedText } from '../texts/ThemedText';
 
 type OcticonsProps = ComponentProps<typeof Octicons>;
+
+type IconLibraries = 'Octicons' | 'FontAwesome' | 'MaterialCommunityIcons';
 
 interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	buttonStyle?: StyleProp<ViewStyle>;
@@ -31,6 +37,8 @@ interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 	iconStyle?: StyleProp<TextStyle>;
 	title?: string;
 	iconFirst?: boolean;
+	lib?: IconLibraries;
+	backgroundColor?: keyof typeof Colors.light;
 }
 
 export function IconButton({
@@ -39,22 +47,42 @@ export function IconButton({
 	textProps = { type: 'defaultBody', color: 'text' },
 	iconStyle,
 	iconFirst = false,
+	lib = 'Octicons',
+	backgroundColor = 'background',
 	...restProps
 }: Readonly<Props>): ReactNode {
+	const Icon =
+		lib === 'Octicons'
+			? Octicons
+			: lib === 'FontAwesome'
+				? FontAwesome
+				: MaterialCommunityIcons;
+
+	// @ts-ignore
 	return (
 		<TouchableOpacity
-			style={[{ flexDirection: 'row', alignItems: 'center' }, buttonStyle]}
+			// @ts-ignore
+			style={[
+				{
+					flexDirection: 'row',
+					alignItems: 'center',
+					backgroundColor: Colors.light[backgroundColor],
+				},
+				buttonStyle as ViewStyle,
+			]}
 			{...restProps}
 		>
 			{iconFirst && (
-				<Octicons
+				// @ts-ignore
+				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}
 				/>
 			)}
 			{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
 			{!iconFirst && (
-				<Octicons
+				// @ts-ignore
+				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}
 				/>
