@@ -1,12 +1,12 @@
 import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import { ThemedText } from '@/components/texts/ThemedText';
-import CustomButton from '@/components/buttons/CustomButton';
+import { Checkbox, Text } from 'react-native-paper';
 import { Filter, FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
-import BouncyCheckbox from 'react-native-bouncy-checkbox/lib';
-import ThemedInput from '@/components/inputs/ThemedInput';
 import Colors from '@/constants/Colors';
+import CustomButton from '@/components/buttons/CustomButton';
+import { ThemedInput } from '@/components/inputs/ThemedInput';
+import { ThemedText } from '@/components/texts/ThemedText';
 
 type Props = {
 	visible: boolean;
@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	                            visible,
-	                            onClose,
-	                            filters,
-	                            setFilters,
-                            }: Props) => {
+	visible,
+	onClose,
+	filters,
+	setFilters,
+}: Props) => {
 	const isChecked = (name: FiltreType) => {
 		const filter = filters.find((filter) => filter.name === name);
 		return filter?.active;
@@ -36,7 +36,6 @@ export const ShowFilters = ({
 			}
 			return filter;
 		});
-		// @ts-ignore
 		setFilters(newFilters);
 	};
 
@@ -50,7 +49,7 @@ export const ShowFilters = ({
 
 	const resetFilters = () => {
 		setFilters(initialFilters);
-	}
+	};
 
 	const updateValue = (name: FiltreType, value: string) => {
 		const numericValue = Number(value);
@@ -83,40 +82,36 @@ export const ShowFilters = ({
 						Filtres
 					</ThemedText>
 					<FlatList
-						// TODO: ajouter un boutton suprimer les filtres
 						data={filters}
 						renderItem={({ item }) => (
 							<View style={styles.filter}>
-								<BouncyCheckbox
-									isChecked={isChecked(item.name)}
+								<Checkbox
+									status={isChecked(item.name) ? 'checked' : 'unchecked'}
 									onPress={() => toggleCheck(item.name)}
-									useBuiltInState={false}
-									style={styles.checkbox}
-									fillColor={Colors.light.primary}
-									textComponent={
-										<>
-											<ThemedText style={styles.filterName} color={item.active ? 'text' : 'hidden'}>
-												{item.name.toString() !==
-												FiltreType[FiltreType.ecart_horraire]
-													? item.name.toString().charAt(0).toUpperCase() +
-													item.name.toString().slice(1)
-													: item.name.toString() === FiltreType[FiltreType.distance]
-														? 'Distance départ'
-														: 'Ecart horraire'}
-											</ThemedText>
-											<ThemedInput
-												size={'small'}
-												placeholder={'valeur'}
-												style={styles.input}
-												disabled={!item.active}
-												value={item.value.toString()}
-												onChangeText={(val) => updateValue(item.name, val)}
-												keyboardType={'numeric'}
-											/>
-										</>
-									}
+									color={Colors.light.primary}
 								/>
+								<ThemedText
+									style={styles.filterName}
+									color={item.active ? 'text' : 'hidden'}
+								>
+									{item.name.toString() !==
+									FiltreType[FiltreType.ecart_horraire]
+										? item.name.toString().charAt(0).toUpperCase() +
+											item.name.toString().slice(1)
+										: item.name.toString() === FiltreType[FiltreType.distance]
+											? 'Distance départ'
+											: 'Ecart horraire'}
+								</ThemedText>
 
+								<ThemedInput
+									size={'small'}
+									placeholder={'valeur'}
+									style={styles.input}
+									disabled={!item.active}
+									value={item.value.toString()}
+									onChangeText={(val) => updateValue(item.name, val)}
+									keyboardType={'numeric'}
+								/>
 							</View>
 						)}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
@@ -160,7 +155,6 @@ const styles = StyleSheet.create({
 		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
-
 	},
 	title: {
 		textAlign: 'center',
@@ -172,11 +166,11 @@ const styles = StyleSheet.create({
 		gap: 20,
 		position: 'absolute',
 		bottom: 15,
-		right: 10
+		right: 10,
 	},
 	buttons: {
-		paddingVertical: "2%",
-		paddingHorizontal: "5%",
+		paddingVertical: '2%',
+		paddingHorizontal: '5%',
 	},
 	filters: {
 		marginTop: '7%',
@@ -186,15 +180,13 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		margin: 'auto',
+		alignItems: 'center',
 	},
 	filterName: {
-		margin: 'auto'
+		margin: 'auto',
 	},
 	input: {
-		maxWidth: '40%',
+		width: '40%',
 		marginLeft: 'auto',
 	},
-	checkbox: {
-		width: '100%'
-	}
 });

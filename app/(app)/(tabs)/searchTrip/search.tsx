@@ -181,15 +181,26 @@ export const SearchPage = () => {
 								buttonStyle={styles.resetButton}
 							/>
 						</View>
-						<IconButton
-							name={'filter'}
-							lib={'MaterialCommunityIcons'}
-							size={26}
-							buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
-							backgroundColor={isFilterActive ? 'primary' : 'background'}
-							color={isFilterActive ? Colors.light.background : Colors.light.primary}
-							onPress={() => setShowFilters(!showFilters)}
-						/>
+						<View style={styles.icons}>
+							<IconButton
+								name={'filter'}
+								lib={'MaterialCommunityIcons'}
+								size={26}
+								buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
+								backgroundColor={isFilterActive ? 'primary' : 'background'}
+								color={isFilterActive ? Colors.light.background : Colors.light.primary}
+								onPress={() => setShowFilters(!showFilters)}
+							/>
+							<IconButton
+								name={'filter'}
+								lib={'MaterialCommunityIcons'}
+								size={26}
+								buttonStyle={isFilterActive ? styles.buttonFilterActive : styles.buttonFilter}
+								backgroundColor={isFilterActive ? 'primary' : 'background'}
+								color={isFilterActive ? Colors.light.background : Colors.light.primary}
+								onPress={() => setShowFilters(!showFilters)}
+							/>
+						</View>
 						<ShowFilters
 							visible={showFilters}
 							onClose={() => setShowFilters(false)}
@@ -372,5 +383,11 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginRight: 'auto',
 		borderWidth: 1,
+	},
+	icons: {
+		display: 'flex',
+		flexDirection: 'row',
+		marginRight: 'auto',
+		gap: 20,
 	}
 });

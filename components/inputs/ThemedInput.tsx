@@ -64,7 +64,6 @@ export const ThemedInput = ({
 				cursorColor={Colors.light.inputText}
 				style={[
 					styles.input,
-					// @ts-ignore
 					theme !== 'TextArea' && styles[size],
 					isFocused && styles.focusedInput,
 					hasError && styles.errorInput,
@@ -110,6 +109,8 @@ const primary = StyleSheet.create({
 	},
 	small: {
 		height: 40,
+		paddingVertical: 5, // Réduire le padding vertical
+		paddingHorizontal: 10, // Réduire le padding horizontal
 	},
 	medium: {
 		height: 50,
