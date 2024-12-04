@@ -12,6 +12,7 @@ export default function Layout() {
 			<Stack.Screen name='date' />
 			<Stack.Screen name='time' />
 			<Stack.Screen name='seats' />
+			<Stack.Screen name='confirm' />
 		</Stack>
 	);
 }
