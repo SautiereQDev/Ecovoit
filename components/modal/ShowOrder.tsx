@@ -15,85 +15,39 @@ type Props = {
 };
 
 export const ShowOrder = ({ visible, onClose, order, setOrder }: Props) => {
-
 	const initialOrderValue = useRef(order);
 
-	/**
-	 * Checks if any order value has changed compared to its initial value.
-	 *
-	 * @returns {boolean} - Returns true if order value has changed, false otherwise.
-	 */
-	const orderChanged = (): boolean => {
-		return initialOrderValue.current !== order;
-	}
+	const orderChanged = (): boolean => initialOrderValue.current !== order;
 
-	// Affichage de la notification à la fermeture du modal si l'ordre est modifié
 	useEffect(() => {
 		if (!visible && orderChanged()) {
-			notify('success', {
-				params: {
-					title: 'Les filtres ont bien été mis à jour',
-				},
-			});
+			notify('success', { params: { title: 'Les filtres ont bien été mis à jour' } });
 		}
 	}, [visible, order]);
+
 	return (
-		<Modal
-			visible={visible}
-			onRequestClose={onClose}
-			transparent={true}
-		>
+		<Modal visible={visible} onRequestClose={onClose} transparent={true}>
 			<View style={styles.overlay}>
 				<View style={styles.container}>
-					<ThemedText
-						type={'header4'}
-						style={styles.title}
-					>
-						Ordre de tri
-					</ThemedText>
+					<ThemedText type='header4' style={styles.title}>Ordre de tri</ThemedText>
+					{Object.values(FiltreType).map((type) => (
 						<RadioButton.Item
-							label={"Emission"}
-							value={FiltreType.emission.toString()}
-							status={order === FiltreType.emission ? 'checked' : 'unchecked'}
-							onPress={() => setOrder(FiltreType.emission)}
-							position={'leading'}
+							key={type}
+							label={type as string}
+							value={type.toString()}
+							status={order === type ? 'checked' : 'unchecked'}
+							onPress={() => setOrder(type as FiltreType)}
 							style={styles.radio}
+							position='leading'
 						/>
-						<RadioButton.Item
-							label="Distance"
-							value={FiltreType.distance.toString()}
-							status={order === FiltreType.distance ? 'checked' : 'unchecked'}
-							onPress={() => setOrder(FiltreType.distance)}
-							style={styles.radio}
-							position={'leading'}
-						/>
-						<RadioButton.Item
-							label={'Consommation'}
-							value={FiltreType.consommation.toString()}
-							status={
-								order === FiltreType.consommation ? 'checked' : 'unchecked'
-							}
-							onPress={() => setOrder(FiltreType.consommation)}
-							style={styles.radio}
-							position={'leading'}
-						/>
-						<RadioButton.Item
-							label={'Ecart horaire'}
-							value={FiltreType.ecart_horraire.toString()}
-							status={
-								order === FiltreType.ecart_horraire ? 'checked' : 'unchecked'
-							}
-							onPress={() => setOrder(FiltreType.ecart_horraire)}
-							style={styles.radio}
-							position={'leading'}
-						/>
-						<CustomButton
-							onPress={onClose}
-							text={'Fermer'}
-							textProps={{ type: 'bigger', color: 'background' }}
-							buttonStyle={styles.button}
-							backgroundColor={'primary'}
-						/>
+					))}
+					<CustomButton
+						onPress={onClose}
+						text='Fermer'
+						textProps={{ type: 'bigger', color: 'background' }}
+						buttonStyle={styles.button}
+						backgroundColor='primary'
+					/>
 				</View>
 			</View>
 		</Modal>
@@ -107,7 +61,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	container: {
 		width: '90%',
@@ -121,32 +75,13 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginBottom: '5%',
 	},
-	bottomButtons: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-evenly',
-		gap: 20,
-		position: 'absolute',
-		bottom: 15,
-		right: 10,
-	},
 	button: {
 		position: 'absolute',
 		bottom: 15,
 		right: 10,
 		width: '30%',
 	},
-	filters: {
-		marginTop: '7%',
-	},
-	filter: {
-		width: '90%',
-		display: 'flex',
-		flexDirection: 'row',
-		margin: 'auto',
-		alignItems: 'center',
-	},
 	radio: {
 		marginHorizontal: '5%',
-	}
+	},
 });

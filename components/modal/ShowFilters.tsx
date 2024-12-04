@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Filter, FiltreType } from '@/types';
@@ -16,123 +16,56 @@ type Props = {
 	setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 };
 
-export const ShowFilters = ({
-	                            visible,
-	                            onClose,
-	                            filters,
-	                            setFilters,
-                            }: Props) => {
-	const isChecked = (name: FiltreType) => {
-		const filter = filters.find((filter) => filter.name === name);
-		return filter?.active;
-	};
+export const ShowFilters = ({ visible, onClose, filters, setFilters }: Props) => {
+	const initialFiltersValues = useRef(filters);
+
+	const isChecked = (name: FiltreType) => filters.find((filter) => filter.name === name)?.active;
 
 	const toggleCheck = (name: FiltreType) => {
-		const newFilters = filters.map((filter) => {
-			if (filter.name === name) {
-				return {
-					...filter,
-					active: !filter.active,
-				};
-			}
-			return filter;
-		});
-		setFilters(newFilters);
+		setFilters(filters.map((filter) => filter.name === name ? { ...filter, active: !filter.active } : filter));
 	};
 
 	const initialFilters: Filter[] = Object.keys(FiltreType)
-		.filter((key) => !isNaN(Number(key))) // Filter out numeric keys
-		.map((key) => ({
-			name: FiltreType[key as keyof typeof FiltreType],
-			value: 0,
-			active: false,
-		}));
+		.filter((key) => !isNaN(Number(key)))
+		.map((key) => ({ name: FiltreType[key as keyof typeof FiltreType], value: 0, active: false }));
 
-	const initialFiltersValues = filters;
-
-	/**
-	 * Checks if any filter's value has changed compared to its initial value.
-	 *
-	 * @returns {boolean} - Returns true if any filter's value has changed, false otherwise.
-	 */
 	const filtersChanged = (): boolean => {
-		return initialFiltersValues.some((filter) => {
-			const initialFilter = initialFilters.find(
-				(initialFilter) => initialFilter.name === filter.name
-			);
-			return initialFilter?.value !== filter.value;
+		return filters.some((filter) => {
+			const initialFilter = initialFiltersValues.current.find((initialFilter) => initialFilter.name === filter.name);
+			return initialFilter?.value !== filter.value || initialFilter?.active !== filter.active;
 		});
-	}
-
-	const resetFilters = () => {
-		setFilters(initialFilters);
 	};
+
+	const resetFilters = () => setFilters(initialFilters);
 
 	const updateValue = (name: FiltreType, value: string) => {
 		const numericValue = Number(value);
 		if (!isNaN(numericValue)) {
-			const newFilters = filters.map((filter) => {
-				if (filter.name === name) {
-					return {
-						...filter,
-						value: numericValue,
-					};
-				}
-				return filter;
-			});
-			setFilters(newFilters);
+			setFilters(filters.map((filter) => filter.name === name ? { ...filter, value: numericValue } : filter));
 		}
 	};
 
-	// Affichage de la notification à la fermeture du modal si les filtres ont été modifiés
 	useEffect(() => {
 		if (!visible && filtersChanged()) {
-			notify('success', {
-				params: {
-					title: 'Les filtres ont bien été mis à jour',
-				},
-			});
+			notify('success', { params: { title: 'Les filtres ont bien été mis à jour' } });
 		}
-	}, [visible]);
+	}, [visible, filters]);
 
 	return (
-		<Modal
-			visible={visible}
-			onRequestClose={onClose}
-			transparent={true}
-		>
+		<Modal visible={visible} onRequestClose={onClose} transparent={true}>
 			<View style={styles.overlay}>
 				<View style={styles.container}>
-					<ThemedText
-						type={'header4'}
-						style={styles.title}
-					>
-						Filtres
-					</ThemedText>
+					<ThemedText type={'header4'} style={styles.title}>Filtres</ThemedText>
 					<FlatList
 						data={filters}
 						renderItem={({ item }) => (
-							<Pressable
-								style={styles.filter}
-								onPress={() => toggleCheck(item.name)}
-							>
-								<Checkbox
-									status={isChecked(item.name) ? 'checked' : 'unchecked'}
-									color={Colors.light.primary}
-								/>
-								<ThemedText
-									style={styles.filterName}
-									color={item.active ? 'text' : 'hidden'}
-								>
-									{item.name.toString() !==
-									FiltreType[FiltreType.ecart_horraire]
-										? item.name.toString().charAt(0).toUpperCase() +
-										item.name.toString().slice(1)
-										: item.name.toString() === FiltreType[FiltreType.distance]
-											? 'Distance départ'
-											: 'Ecart horraire'}
+							<Pressable style={styles.filter} onPress={() => toggleCheck(item.name)}>
+								<Checkbox status={isChecked(item.name) ? 'checked' : 'unchecked'} color={Colors.light.primary} />
+								<ThemedText style={styles.filterName} color={item.active ? 'text' : 'hidden'}>
+									{item.name.toString() !== FiltreType[FiltreType.ecart_horraire]
+										? item.name.toString().charAt(0).toUpperCase() + item.name.toString().slice(1)
+										: item.name.toString() === FiltreType[FiltreType.distance] ? 'Distance départ' : 'Ecart horraire'}
 								</ThemedText>
-
 								<ThemedInput
 									size={'small'}
 									placeholder={'valeur'}
@@ -149,20 +82,8 @@ export const ShowFilters = ({
 						style={styles.filters}
 					/>
 					<View style={styles.bottomButtons}>
-						<CustomButton
-							onPress={resetFilters}
-							text={'Supprimer les filtres'}
-							textProps={{ type: 'bigger', color: 'background' }}
-							buttonStyle={styles.buttons}
-							backgroundColor={'resetButton'}
-						/>
-						<CustomButton
-							onPress={onClose}
-							text={'Fermer'}
-							textProps={{ type: 'bigger', color: 'background' }}
-							buttonStyle={styles.buttons}
-							backgroundColor={'primary'}
-						/>
+						<CustomButton onPress={resetFilters} text={'Supprimer les filtres'} textProps={{ type: 'bigger', color: 'background' }} buttonStyle={styles.buttons} backgroundColor={'resetButton'} />
+						<CustomButton onPress={onClose} text={'Fermer'} textProps={{ type: 'bigger', color: 'background' }} buttonStyle={styles.buttons} backgroundColor={'primary'} />
 					</View>
 				</View>
 			</View>
@@ -177,7 +98,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	container: {
 		width: '90%',
@@ -190,10 +111,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	bottomButtons: {
-		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
-		gap: 20,
 		position: 'absolute',
 		bottom: 15,
 		right: 10,
@@ -207,9 +126,7 @@ const styles = StyleSheet.create({
 	},
 	filter: {
 		width: '90%',
-		display: 'flex',
 		flexDirection: 'row',
-		margin: 'auto',
 		alignItems: 'center',
 	},
 	filterName: {

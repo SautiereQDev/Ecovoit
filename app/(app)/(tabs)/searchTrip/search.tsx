@@ -40,7 +40,7 @@ export const SearchPage = () => {
 	const [errors, setErrors] = useState<Error>({});
 
 	const initialFilters: Filter[] = Object.keys(FiltreType)
-		.filter((key) => !isNaN(Number(key))) // Filter out numeric keys
+		.filter((key) => !isNaN(Number(key)))
 		.map((key) => ({
 			name: FiltreType[key as keyof typeof FiltreType],
 			value: 0,
@@ -54,33 +54,26 @@ export const SearchPage = () => {
 	const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('asc');
 
 	const validate = (field: string, value: string | number) => {
+		const newErrors = { ...errors };
 		switch (field) {
 			case 'depart':
 			case 'destination':
 				if ((value as string).length < 3 || (value as string).length > 32) {
-					setErrors({
-						...errors,
-						[field]:
-							'Le champ de recherche doit contenir entre 3 et 32 caractères',
-					});
+					newErrors[field] =
+						'Le champ de recherche doit contenir entre 3 et 32 caractères';
 				} else {
-					const newErrors = { ...errors };
 					delete newErrors[field];
-					setErrors(newErrors);
 				}
 				break;
 			case 'date':
 				if (!validTimestamp(new Date(value as number).toISOString(), true)) {
-					setErrors({ ...errors, [field]: 'Date invalide' });
+					newErrors[field] = 'Date invalide';
 				} else {
-					const newErrors = { ...errors };
 					delete newErrors[field];
-					setErrors(newErrors);
 				}
 				break;
-			default:
-				break;
 		}
+		setErrors(newErrors);
 	};
 
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -167,8 +160,6 @@ export const SearchPage = () => {
 
 	const isFilterActive = filters.some((filter) => filter.active);
 
-	// TODO: Recupération des donnés de manière dynamique et en incluant les filtres et l'ordre de tri
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
@@ -214,7 +205,6 @@ export const SearchPage = () => {
 									onPress={() => setShowOrder(!showOrder)}
 								/>
 								<IconButton
-									// @ts-ignore
 									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
 									lib={'FontAwesome'}
 									size={30}
@@ -226,9 +216,7 @@ export const SearchPage = () => {
 											orderDirection === 'asc' ? 'desc' : 'asc'
 										);
 										notify('success', {
-											params: {
-												title: 'Ordre de tri changé',
-											},
+											params: { title: 'Ordre de tri changé' },
 										});
 									}}
 								/>
@@ -299,7 +287,6 @@ export const SearchPage = () => {
 								>
 									Date
 								</ThemedText>
-
 								<IconButton
 									name='calendar'
 									title={`${formatDate(searchData.date)}`}
@@ -309,7 +296,6 @@ export const SearchPage = () => {
 									iconFirst={true}
 								/>
 							</View>
-
 							{showDatePicker && (
 								<DateTimePicker
 									value={new Date(searchData.date)}
