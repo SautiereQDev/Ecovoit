@@ -2,6 +2,7 @@ import {
 	Pressable,
 	StyleProp,
 	StyleSheet,
+	TouchableOpacity,
 	View,
 	ViewStyle,
 } from 'react-native';
@@ -40,13 +41,13 @@ export default function CircleButton({
 				style,
 			]}
 		>
-			<Pressable onPress={onPress}>
+			<TouchableOpacity onPress={onPress}>
 				<Ionicons
 					name={iconName}
 					size={sizes.icon[size]}
 					color={colors['text-secondary']}
 				/>
-			</Pressable>
+			</TouchableOpacity>
 		</View>
 	);
 }
