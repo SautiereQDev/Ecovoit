@@ -13,7 +13,7 @@ export const colors = {
 		'background-2': '#EEEEEE',
 		'text-primary': '#212121',
 		'text-secondary': '#F5F5F5',
-		'text-muted': '#b0b0b0',
+		'text-muted': '#dfdfdf',
 		'success-1': '#A5D6A7',
 		'success-2': '#388E3C',
 		'error-1': '#FFCDD2',
