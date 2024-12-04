@@ -42,15 +42,15 @@ interface Props extends Omit<ButtonProps, 'title'>, OcticonsProps {
 }
 
 export function IconButton({
-	                           buttonStyle,
-	                           title,
-	                           textProps = { type: 'defaultBody', color: 'text' },
-	                           iconStyle,
-	                           iconFirst = false,
-	                           lib = 'Octicons',
-	                           backgroundColor = 'background',
-	                           ...restProps
-                           }: Readonly<Props>): ReactNode {
+	buttonStyle,
+	title,
+	textProps = { type: 'defaultBody', color: 'text' },
+	iconStyle,
+	iconFirst = false,
+	lib = 'Octicons',
+	backgroundColor = 'background',
+	...restProps
+}: Readonly<Props>): ReactNode {
 	const Icon =
 		lib === 'Octicons'
 			? Octicons
@@ -58,13 +58,22 @@ export function IconButton({
 				? FontAwesome
 				: MaterialCommunityIcons;
 
+	// @ts-ignore
 	return (
 		<TouchableOpacity
 			// @ts-ignore
-			style={[{ flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.light[backgroundColor] }, buttonStyle as ViewStyle]}
+			style={[
+				{
+					flexDirection: 'row',
+					alignItems: 'center',
+					backgroundColor: Colors.light[backgroundColor],
+				},
+				buttonStyle as ViewStyle,
+			]}
 			{...restProps}
 		>
 			{iconFirst && (
+				// @ts-ignore
 				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}
@@ -72,6 +81,7 @@ export function IconButton({
 			)}
 			{title && textProps && <ThemedText {...textProps}>{title}</ThemedText>}
 			{!iconFirst && (
+				// @ts-ignore
 				<Icon
 					{...restProps}
 					style={iconStyle as TextStyle}

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { FiltreType } from '@/types';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { RadioButton } from 'react-native-paper';
+import { notify } from 'react-native-notificated';
 
 type Props = {
 	visible: boolean;
@@ -14,6 +15,28 @@ type Props = {
 };
 
 export const ShowOrder = ({ visible, onClose, order, setOrder }: Props) => {
+
+	const initialOrderValue = useRef(order);
+
+	/**
+	 * Checks if any order value has changed compared to its initial value.
+	 *
+	 * @returns {boolean} - Returns true if order value has changed, false otherwise.
+	 */
+	const orderChanged = (): boolean => {
+		return initialOrderValue.current !== order;
+	}
+
+	// Affichage de la notification à la fermeture du modal si l'ordre est modifié
+	useEffect(() => {
+		if (!visible && orderChanged()) {
+			notify('success', {
+				params: {
+					title: 'Les filtres ont bien été mis à jour',
+				},
+			});
+		}
+	}, [visible, order]);
 	return (
 		<Modal
 			visible={visible}

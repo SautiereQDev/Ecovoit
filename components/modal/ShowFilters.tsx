@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Filter, FiltreType } from '@/types';
@@ -7,6 +7,7 @@ import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
 import { ThemedText } from '@/components/texts/ThemedText';
+import { notify } from 'react-native-notificated';
 
 type Props = {
 	visible: boolean;
@@ -16,11 +17,11 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	visible,
-	onClose,
-	filters,
-	setFilters,
-}: Props) => {
+	                            visible,
+	                            onClose,
+	                            filters,
+	                            setFilters,
+                            }: Props) => {
 	const isChecked = (name: FiltreType) => {
 		const filter = filters.find((filter) => filter.name === name);
 		return filter?.active;
@@ -47,6 +48,22 @@ export const ShowFilters = ({
 			active: false,
 		}));
 
+	const initialFiltersValues = filters;
+
+	/**
+	 * Checks if any filter's value has changed compared to its initial value.
+	 *
+	 * @returns {boolean} - Returns true if any filter's value has changed, false otherwise.
+	 */
+	const filtersChanged = (): boolean => {
+		return initialFiltersValues.some((filter) => {
+			const initialFilter = initialFilters.find(
+				(initialFilter) => initialFilter.name === filter.name
+			);
+			return initialFilter?.value !== filter.value;
+		});
+	}
+
 	const resetFilters = () => {
 		setFilters(initialFilters);
 	};
@@ -66,6 +83,17 @@ export const ShowFilters = ({
 			setFilters(newFilters);
 		}
 	};
+
+	// Affichage de la notification à la fermeture du modal si les filtres ont été modifiés
+	useEffect(() => {
+		if (!visible && filtersChanged()) {
+			notify('success', {
+				params: {
+					title: 'Les filtres ont bien été mis à jour',
+				},
+			});
+		}
+	}, [visible]);
 
 	return (
 		<Modal
@@ -99,7 +127,7 @@ export const ShowFilters = ({
 									{item.name.toString() !==
 									FiltreType[FiltreType.ecart_horraire]
 										? item.name.toString().charAt(0).toUpperCase() +
-											item.name.toString().slice(1)
+										item.name.toString().slice(1)
 										: item.name.toString() === FiltreType[FiltreType.distance]
 											? 'Distance départ'
 											: 'Ecart horraire'}

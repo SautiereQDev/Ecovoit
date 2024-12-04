@@ -16,6 +16,7 @@ import { Filter, FiltreType } from '@/types';
 import ShowFilters from '@/components/modal/ShowFilters';
 import { formatDate, formatDateReverse } from '@/utils/date';
 import ShowOrder from '@/components/modal/ShowOrder';
+import { notify } from 'react-native-notificated';
 
 type tripType = {
 	depart: string;
@@ -214,13 +215,22 @@ export const SearchPage = () => {
 								/>
 								<IconButton
 									// @ts-ignore
-									name={orderDirection === 'asc' ? 'arrow-down': 'arrow-up'}
+									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
 									lib={'FontAwesome'}
 									size={30}
 									buttonStyle={styles.button}
 									backgroundColor={'background'}
 									color={Colors.light.primary}
-									onPress={() => setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc')}
+									onPress={() => {
+										setOrderDirection(
+											orderDirection === 'asc' ? 'desc' : 'asc'
+										);
+										notify('success', {
+											params: {
+												title: 'Ordre de tri changé',
+											},
+										});
+									}}
 								/>
 							</View>
 						</View>
@@ -355,6 +365,7 @@ const styles = StyleSheet.create({
 		gap: 20,
 	},
 	formContainer: {
+		marginTop: '5%',
 		gap: 20,
 	},
 	destination: {
@@ -377,7 +388,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		gap: 15,
-		marginTop: 5,
+		marginTop: 10,
 		paddingVertical: 10,
 		borderRadius: 10,
 		justifyContent: 'center',
