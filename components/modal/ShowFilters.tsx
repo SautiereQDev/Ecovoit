@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
-import { Checkbox, Text } from 'react-native-paper';
+import { Modal, StyleSheet, View, Pressable } from 'react-native';
+import { Checkbox } from 'react-native-paper';
 import { Filter, FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
@@ -16,11 +16,11 @@ type Props = {
 };
 
 export const ShowFilters = ({
-	visible,
-	onClose,
-	filters,
-	setFilters,
-}: Props) => {
+	                            visible,
+	                            onClose,
+	                            filters,
+	                            setFilters,
+                            }: Props) => {
 	const isChecked = (name: FiltreType) => {
 		const filter = filters.find((filter) => filter.name === name);
 		return filter?.active;
@@ -84,7 +84,10 @@ export const ShowFilters = ({
 					<FlatList
 						data={filters}
 						renderItem={({ item }) => (
-							<View style={styles.filter}>
+							<Pressable
+								style={styles.filter}
+								onPress={() => toggleCheck(item.name)}
+							>
 								<Checkbox
 									status={isChecked(item.name) ? 'checked' : 'unchecked'}
 									onPress={() => toggleCheck(item.name)}
@@ -97,7 +100,7 @@ export const ShowFilters = ({
 									{item.name.toString() !==
 									FiltreType[FiltreType.ecart_horraire]
 										? item.name.toString().charAt(0).toUpperCase() +
-											item.name.toString().slice(1)
+										item.name.toString().slice(1)
 										: item.name.toString() === FiltreType[FiltreType.distance]
 											? 'Distance départ'
 											: 'Ecart horraire'}
@@ -112,7 +115,7 @@ export const ShowFilters = ({
 									onChangeText={(val) => updateValue(item.name, val)}
 									keyboardType={'numeric'}
 								/>
-							</View>
+							</Pressable>
 						)}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 						keyExtractor={(item) => item.name.toString()}
