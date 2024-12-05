@@ -1,7 +1,16 @@
+import is from '@sindresorhus/is';
+import date = is.date;
+
 export interface destinationSearch {
 	position: string;
 	destination: string;
 }
+
+export type searchTripFormType = {
+	depart: string;
+	destination: string;
+	date: number;
+};
 
 export interface TripCardType {
 	depart: string;
