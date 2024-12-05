@@ -1,79 +1,132 @@
-import { Point, Trip } from "@/types/Ecovoit";
 import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useReducer,
-} from "react";
+	createContext,
+	PropsWithChildren,
+	useContext,
+	useReducer,
+} from 'react';
 
 interface TripCreationContextType {
-  trip: Trip | null;
+	trip: {
+		start: string;
+		destination: string;
+		date: string;
+		time: string;
+		availableSeats: number;
+	};
+	setStart: (start: string) => void;
+	setDestination: (destination: string) => void;
+	setDate: (date: string) => void;
+	setTime: (time: string) => void;
+	setAvailableSeats: (availableSeats: number) => void;
 }
 
 const TripCreationContext = createContext<TripCreationContextType>({
-  trip: null,
+	trip: {
+		start: 'defaultStart',
+		destination: 'defaultDestination',
+		date: 'defaultDate',
+		time: 'defaultTime',
+		availableSeats: 0,
+	},
+	setStart: (start) => {},
+	setDestination: (destination) => {},
+	setDate: (date: string) => {},
+	setTime: (time: string) => {},
+	setAvailableSeats: (availableSeats: number) => {},
 });
 
 export function useTripCreation() {
-  const value = useContext(TripCreationContext);
-  if (process.env.NODE_ENV !== "production") {
-    if (!value) {
-      throw new Error(
-        "useTripCreation must be used within a TripCreationProvider"
-      );
-    }
-  }
-  return value;
-}
-
-type TripReducerActions = {
-  type: "a" | "b" | "c" | null;
-};
-
-function tripReducer(state: Trip, action: TripReducerActions): Trip {
-  switch (action.type) {
-    case "a": {
-      return {
-        ...state,
-        // TO DO
-      };
-    }
-    case "b": {
-      return {
-        ...state,
-        // TO DO
-      };
-    }
-    case "c": {
-      return {
-        ...state,
-        // TO DO
-      };
-    }
-    default:
-      throw new Error("Unknown action: " + action.type);
-  }
+	const value = useContext(TripCreationContext);
+	if (process.env.NODE_ENV !== 'production') {
+		if (!value) {
+			throw new Error(
+				'useTripCreation must be used within a TripCreationProvider'
+			);
+		}
+	}
+	return value;
 }
 
 export function TripCreationProvider({
-  children,
+	children,
 }: PropsWithChildren): JSX.Element {
-  const initialTrip: Trip = {
-    vehicle: null,
-    seats: null,
-    datetime: null,
-    points: [],
-  };
+	function reducer(state, action) {
+		switch (action.type) {
+			case 'set_start':
+				return {
+					...state,
+					start: action.start,
+				};
+			case 'set_destination':
+				return {
+					...state,
+					destination: action.destination,
+				};
+			case 'set_date':
+				return {
+					...state,
+					date: action.date,
+				};
+			case 'set_time':
+				return {
+					...state,
+					time: action.time,
+				};
+			case 'set_available_seats':
+				return {
+					...state,
+					availableSeats: action.availableSeats,
+				};
+			default:
+				throw Error('Unknown action.');
+		}
+	}
 
-  const [state, dispatch] = useReducer(tripReducer, initialTrip);
+	const [state, dispatch] = useReducer(reducer, {
+		start: 'initialStart',
+		destination: 'initialDestination',
+		date: 'initialDate',
+		time: 'initialTime',
+		availableSeats: 0,
+	});
 
-  const providedContext: TripCreationContextType = {
-    trip: state,
-  };
+	const providedContext: TripCreationContextType = {
+		trip: state,
+		setStart: (start: string) => {
+			dispatch({
+				type: 'set_start',
+				start: start,
+			});
+		},
+		setDestination: (destination: string) => {
+			dispatch({
+				type: 'set_destination',
+				destination: destination,
+			});
+		},
+		setDate: (date: string) => {
+			dispatch({
+				type: 'set_date',
+				date: date,
+			});
+		},
+		setTime: (time: string) => {
+			dispatch({
+				type: 'set_time',
+				time: time,
+			});
+		},
+		setAvailableSeats: (availableSeats: number) => {
+			dispatch({
+				type: 'set_available_seats',
+				availableSeats: availableSeats,
+			});
+		},
+	};
 
-  return (
-    <TripCreationContext.Provider value={providedContext}>
-      {children}
-    </TripCreationContext.Provider>
-  );
+	return (
+		<TripCreationContext.Provider value={providedContext}>
+			{children}
+		</TripCreationContext.Provider>
+	);
 }

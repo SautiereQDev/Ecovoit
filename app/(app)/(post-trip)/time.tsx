@@ -3,8 +3,11 @@ import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import TimePicker from '@/components/drafts/TimePicker';
+import { useTripCreation } from '@/components/context/TripCreationProvider';
 
 export default function Time() {
+	const { setTime } = useTripCreation(); // TODO
+
 	const [nextButtonVisible, setNextButtonVisible] = useState<boolean>(false);
 
 	return (
@@ -21,6 +24,7 @@ export default function Time() {
 		>
 			<TimePicker
 				onSet={(date) => {
+					setTime(String(date?.toLocaleTimeString()));
 					setNextButtonVisible(true);
 				}}
 			/>

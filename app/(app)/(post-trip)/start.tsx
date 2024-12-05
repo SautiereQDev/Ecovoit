@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import SearchBar from '@/components/drafts/SearchBar';
+import { useTripCreation } from '@/components/context/TripCreationProvider';
 const lr_cda = require('@/assets/data/lr_cda_division.json');
 const lr_districts = require('@/assets/data/lr_districts.json');
 
 export default function Start() {
-	const [nextButtonVisible, setNextButtonVisible] = useState<boolean>(false);
+	const { setStart, trip } = useTripCreation(); // CONTEXT
 
 	const data = lr_cda.map((field: any) => field.fields.nom_commune);
 	data.push(...lr_districts.map((field: any) => field.fields.cq_nom));
@@ -30,31 +31,9 @@ export default function Start() {
 				headerText='Utiliser ma position actuelle'
 				data={data}
 				onSuggestionsHeaderPress={() => {}} // TODO
-				onSearch={(value) => {}} // TODO
-				onSuggestionPress={() => {
-					setNextButtonVisible(true);
-				}}
-				onChangeText={(text) => {
-					if (text === '') {
-						setNextButtonVisible(false);
-					}
-				}}
-				onNoResult={() => {
-					setNextButtonVisible(false);
-				}}
-			/>
-
-			<CircleButton
-				iconName='arrow-forward'
-				onPress={() => {
+				onSuggestionPress={(item) => {
+					setStart(item);
 					router.navigate('/(app)/(post-trip)/destination');
-				}}
-				size='medium'
-				style={{
-					position: 'absolute',
-					bottom: 25,
-					right: 25,
-					display: nextButtonVisible ? 'flex' : 'none',
 				}}
 			/>
 		</PostTripLayout>

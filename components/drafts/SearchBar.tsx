@@ -1,36 +1,22 @@
-import {
-	FlatList,
-	KeyboardAvoidingView,
-	Platform,
-	SafeAreaView,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import CustomInputText from './CustomInputText';
 import { ThemedText } from './ThemedText';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native';
 
 export default function SearchBar({
 	data,
 	headerText,
 	headerIcon,
 	placeholder,
-	onNoResult,
-	onChangeText,
 	onSuggestionPress,
-	onSearch,
 	onSuggestionsHeaderPress,
 }: {
 	data: any;
 	headerText: string;
 	placeholder: string;
-	onNoResult: () => void;
-	onChangeText: (text: string) => void;
-	onSuggestionPress: () => void;
-	onSearch: (value: string) => void;
+	onSuggestionPress: (item: string) => void;
 	onSuggestionsHeaderPress: () => void;
 	headerIcon: keyof typeof Ionicons.glyphMap;
 }) {
@@ -53,7 +39,6 @@ export default function SearchBar({
 			setSuggestions(currentSuggestions);
 		} else {
 			setSuggestions(['Aucun résultat']);
-			onNoResult();
 		}
 
 		if (text === '') {
@@ -70,13 +55,10 @@ export default function SearchBar({
 				placeholder={placeholder}
 				onChangeText={(text) => {
 					handleOnChangeText(text);
-					onChangeText(text);
 				}}
-				onIconRightPress={() => {
-					onSearch(searchBarValue);
-				}}
+				onIconRightPress={() => {}}
 				onEndEditing={() => {
-					if (suggestions.length > 0) {
+					if (suggestions.length > 0 && suggestions[0] !== 'Aucun résultat') {
 						setSearchBarValue(suggestions[0]);
 					}
 				}}
@@ -134,15 +116,31 @@ export default function SearchBar({
 								}
 								setSearchBarValue(item);
 								setSuggestions([]);
-								onSuggestionPress();
+								onSuggestionPress(item);
 							}}
 						>
-							<ThemedText
-								style={{ width: '100%' }}
-								type='subtitle'
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+								}}
 							>
-								{item}
-							</ThemedText>
+								<ThemedText
+									style={{ width: '100%' }}
+									type='subtitle'
+								>
+									{item}
+								</ThemedText>
+								{item !== 'Aucun résultat' ? (
+									<Ionicons
+										style={{ position: 'absolute', right: 10 }}
+										name='arrow-forward-sharp'
+										size={25}
+									></Ionicons>
+								) : (
+									''
+								)}
+							</View>
 						</TouchableOpacity>
 					)}
 				/>

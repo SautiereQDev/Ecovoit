@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useSession } from '@/components/context/SessionProvider';
 import { Redirect } from 'expo-router';
+import ButtonTest from '@/components/drafts/ButtonTest';
 
 export default function Signin() {
 	const { signIn, isAuthenticated, isLoading } = useSession();
