@@ -7,45 +7,15 @@ import DateTimePicker, {
 	DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
-import { formatDate} from '@/utils/date';
+import { formatDate } from '@/utils/date';
 import { useTripSearch } from '@/components/context/SearchProvider';
-import { useRouter } from 'expo-router';
-
-type Error = {
-	[key: string]: string;
-};
 
 export const Index = () => {
-
-	const {searchData, setSearchData} = useTripSearch();
-	const router = useRouter();
+	const { searchData, setSearchData, submitSearch, errors, setErrors } =
+		useTripSearch();
 
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
-	const [errors, setErrors] = useState<Error>({});
-
-	const validate = (field: string, value: string | number) => {
-		const newErrors = { ...errors };
-		switch (field) {
-			case 'depart':
-			case 'destination':
-				if ((value as string).length < 3 || (value as string).length > 32) {
-					newErrors[field] =
-						'Le champ de recherche doit contenir entre 3 et 32 caractères';
-				} else {
-					delete newErrors[field];
-				}
-				break;
-			case 'date':
-				if (!validTimestamp(new Date(value as number).toISOString(), true)) {
-					newErrors[field] = 'Date invalide';
-				} else {
-					delete newErrors[field];
-				}
-				break;
-		}
-		setErrors(newErrors);
-	};
 
 	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
 		if (Platform.OS === 'android') {
@@ -62,7 +32,6 @@ export const Index = () => {
 						...searchData,
 						date: selectedDate?.getTime() ?? searchData.date,
 					});
-					validate('date', selectedDate?.getTime() ?? searchData.date);
 					setShowDatePicker(false);
 					setMode('date');
 				}
@@ -75,23 +44,7 @@ export const Index = () => {
 				...searchData,
 				date: selectedDate?.getTime() ?? searchData.date,
 			});
-			validate('date', selectedDate?.getTime() ?? searchData.date);
 			setShowDatePicker(false);
-		}
-	};
-
-	const handleSubmit = () => {
-		if (
-			Object.keys(errors).length === 0 &&
-			searchData.depart &&
-			searchData.destination
-		) {
-			router.push('/searchTrip/search');
-			console.log(searchData);
-		} else {
-			validate('depart', searchData.depart);
-			validate('destination', searchData.destination);
-			validate('date', searchData.date);
 		}
 	};
 
@@ -106,7 +59,6 @@ export const Index = () => {
 						value={searchData.depart}
 						onChangeText={(val) => {
 							setSearchData({ ...searchData, depart: val });
-							validate('depart', val);
 						}}
 						hasError={!!errors.depart}
 						errorMessage={errors.depart}
@@ -118,7 +70,6 @@ export const Index = () => {
 						value={searchData.destination}
 						onChangeText={(val) => {
 							setSearchData({ ...searchData, destination: val });
-							validate('destination', val);
 						}}
 						hasError={!!errors.destination}
 						errorMessage={errors.destination}
@@ -159,7 +110,7 @@ export const Index = () => {
 						color={Colors.light.primary}
 						buttonStyle={styles.submitButton}
 						textProps={{ type: 'header5', color: 'background' }}
-						onPress={handleSubmit}
+						onPress={submitSearch}
 						iconStyle={{ color: Colors.light.background }}
 					/>
 				</View>

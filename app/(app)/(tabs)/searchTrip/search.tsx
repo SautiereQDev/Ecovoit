@@ -6,52 +6,20 @@ import ShowOrder from '@/components/modal/ShowOrder';
 import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Filter, FiltreType, SearchTripCardType } from '@/types';
+import { SearchTripCardType } from '@/types';
 import { useTripSearch } from '@/components/context/SearchProvider';
-import { formatDateReverse } from '@/utils/date';
 
 export const Search = () => {
-	const { searchData, resetSearch } = useTripSearch();
+	const {
+		searchData,
+		resetSearch,
+		isFilterActive,
+		reverseOrder,
+		orderDirection,
+	} = useTripSearch();
 
-	const initialFilters: Filter[] = Object.keys(FiltreType)
-		.filter((key) => !isNaN(Number(key)))
-		.map((key) => ({
-			name: FiltreType[key as keyof typeof FiltreType],
-			value: 0,
-			active: false,
-		}));
-
-	const [filters, setFilters] = useState<Filter[]>(initialFilters);
 	const [showFilters, setShowFilters] = useState<boolean>(false);
-	const [order, setOrder] = useState<FiltreType>(FiltreType.emission);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
-	const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('asc');
-
-	const isFilterActive = filters.some((filter) => filter.active);
-
-	const data: SearchTripCardType[] = [
-		{
-			depart: searchData.depart,
-			destination: searchData.destination,
-			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
-			distance: 500,
-		},
-		{
-			depart: searchData.depart,
-			destination: searchData.destination,
-			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
-			distance: 500,
-		},
-		{
-			depart: searchData.depart,
-			destination: searchData.destination,
-			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
-			distance: 500,
-		},
-	];
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -102,7 +70,7 @@ export const Search = () => {
 								backgroundColor={'background'}
 								color={Colors.light.primary}
 								onPress={() => {
-									setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
+									reverseOrder();
 									notify('success', {
 										params: { title: 'Ordre de tri changé' },
 									});
@@ -113,18 +81,14 @@ export const Search = () => {
 					<ShowFilters
 						visible={showFilters}
 						onClose={() => setShowFilters(false)}
-						filters={filters}
-						setFilters={setFilters}
 					/>
 					<ShowOrder
 						visible={showOrder}
-						order={order}
-						setOrder={setOrder}
 						onClose={() => setShowOrder(false)}
 					/>
 					<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
 					<FlatList
-						data={data}
+						data={searchData as unknown as SearchTripCardType[]}
 						renderItem={({ item }) => (
 							<SearchTripCard
 								data={{
