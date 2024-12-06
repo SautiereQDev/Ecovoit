@@ -1,6 +1,3 @@
-import is from '@sindresorhus/is';
-import date = is.date;
-
 export interface destinationSearch {
 	position: string;
 	destination: string;
@@ -37,10 +34,10 @@ export interface SearchTripCardType {
 
 //Trip Search
 export enum FiltreType {
-	'consommation',
-	'distance',
-	'emission',
-	'ecart_horraire',
+	CONSOMMATION = 'consommation',
+	DISTANCE = 'Distance',
+	EMISSION = 'Emission',
+	ECART_HORRAIRE = 'Ecart horraire',
 }
 
 export interface Filter {

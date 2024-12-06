@@ -1,8 +1,10 @@
 import React, {
 	createContext,
 	ReactNode,
+	useCallback,
 	useContext,
 	useEffect,
+	useMemo,
 	useState,
 } from 'react';
 import { useRouter } from 'expo-router'; // Importer useRouter pour la navigation
@@ -32,7 +34,8 @@ interface SearchContextType {
 	updateOrder: (order: FiltreType) => void;
 	toggleFilter: (name: FiltreType) => void;
 	updateFilterValue: (name: FiltreType, value: string) => void;
-	filtersChanged : () => boolean;
+	filtersChanged: () => boolean;
+	results: SearchTripCardType[];
 }
 
 const SearchContext = createContext<SearchContextType | null>(null);
@@ -51,20 +54,26 @@ type inputError = {
 	[key: string]: string;
 };
 
+type Filtre = {
+	name: FiltreType;
+	value: number;
+	active: boolean;
+};
+
 export const SearchProvider = ({ children }: SearchProviderProps) => {
 	const router = useRouter();
 
-	const initialFilters: Filter[] = Object.keys(FiltreType)
-		.filter((key) => !isNaN(Number(key)))
-		.map((key) => ({
-			name: FiltreType[key as keyof typeof FiltreType],
-			value: 0,
-			active: false,
-		}));
+	const initialFilters: Filtre[] = Object.values(FiltreType).map((type) => ({
+		name: type,
+		active: false,
+		value: 0,
+	}));
 
-	const [searchData, setSearchData] = useState<searchTripFormType>(initialData);
+	const [searchFormData, setSearchFormData] =
+		useState<searchTripFormType>(initialData);
+	const [results, setResults] = useState<SearchTripCardType[]>([]);
 	const [filters, setFilters] = useState<Filter[]>(initialFilters);
-	const [order, setOrder] = useState<FiltreType>(FiltreType.emission);
+	const [order, setOrder] = useState<FiltreType>(FiltreType.EMISSION);
 	const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('asc');
 	const [errors, setErrors] = useState<inputError>({});
 	const [formIsSubmitted, setFormIsSubmitted] = useState<boolean>(false);
@@ -92,20 +101,21 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 		setErrors(newErrors);
 	};
 
-	const submitSearch = () => {
+	const submitSearch = useCallback(() => {
 		if (
 			Object.keys(errors).length === 0 &&
-			searchData.depart &&
-			searchData.destination
+			searchFormData.depart &&
+			searchFormData.destination
 		) {
 			router.push('/searchTrip/search');
-			console.log(searchData);
+			console.log(searchFormData);
+			setResults(data);
 		} else {
-			validate('depart', searchData.depart);
-			validate('destination', searchData.destination);
-			validate('date', searchData.date);
+			validate('depart', searchFormData.depart);
+			validate('destination', searchFormData.destination);
+			validate('date', searchFormData.date);
 		}
-	};
+	}, [errors, searchFormData, router, searchFormData, validate]);
 
 	useEffect(() => {
 		if (formIsSubmitted) {
@@ -116,29 +126,31 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 
 	const data: SearchTripCardType[] = [
 		{
-			depart: searchData.depart,
-			destination: searchData.destination,
+			depart: searchFormData.depart,
+			destination: searchFormData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
+			date: formatDateReverse(searchFormData.date),
 			distance: 500,
 		},
 		{
-			depart: searchData.depart,
-			destination: searchData.destination,
+			depart: searchFormData.depart,
+			destination: searchFormData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
+			date: formatDateReverse(searchFormData.date),
 			distance: 500,
 		},
 		{
-			depart: searchData.depart,
-			destination: searchData.destination,
+			depart: searchFormData.depart,
+			destination: searchFormData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchData.date),
+			date: formatDateReverse(searchFormData.date),
 			distance: 500,
 		},
 	];
 
 	//  FILTRES
+
+	// TODO: convertir les fonction en reduceurs
 
 	const resetFilters = () => setFilters(initialFilters);
 
@@ -199,30 +211,53 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 	const resetSearch = () => {
 		// @ts-ignore
 		router.push('/searchTrip/');
-		setSearchData(initialData);
+		setSearchFormData(initialData);
 	};
 
 	return (
 		<SearchContext.Provider
-			value={{
-				searchData,
-				setSearchData,
-				resetSearch,
-				submitSearch,
-				errors,
-				setErrors,
-				filters,
-				updateFilters,
-				resetFilters,
-				isFilterActive,
-				reverseOrder,
-				orderDirection,
-				order,
-				updateOrder,
-				toggleFilter,
-				updateFilterValue,
-				filtersChanged,
-			}}
+			value={useMemo(
+				() => ({
+					searchData: searchFormData,
+					setSearchData: setSearchFormData,
+					resetSearch,
+					submitSearch,
+					errors,
+					setErrors,
+					filters,
+					updateFilters,
+					resetFilters,
+					isFilterActive,
+					reverseOrder,
+					orderDirection,
+					order,
+					updateOrder,
+					toggleFilter,
+					updateFilterValue,
+					filtersChanged,
+					results,
+				}),
+				[
+					searchFormData,
+					setSearchFormData,
+					resetSearch,
+					submitSearch,
+					errors,
+					setErrors,
+					filters,
+					updateFilters,
+					resetFilters,
+					isFilterActive,
+					reverseOrder,
+					orderDirection,
+					order,
+					updateOrder,
+					toggleFilter,
+					updateFilterValue,
+					filtersChanged,
+					results,
+				]
+			)}
 		>
 			{children}
 		</SearchContext.Provider>

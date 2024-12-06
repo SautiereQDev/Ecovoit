@@ -6,16 +6,16 @@ import ShowOrder from '@/components/modal/ShowOrder';
 import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SearchTripCardType } from '@/types';
 import { useTripSearch } from '@/components/context/SearchProvider';
 
 export const Search = () => {
 	const {
-		searchData,
+		results,
 		resetSearch,
 		isFilterActive,
 		reverseOrder,
 		orderDirection,
+		searchData,
 	} = useTripSearch();
 
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -23,86 +23,90 @@ export const Search = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView style={styles.content}>
-				<View style={styles.header}>
-					<View style={styles.searchBar}>
-						<View style={styles.destination}>
-							<ThemedText color='text'>
-								{searchData.depart} {' -> '} {searchData.destination}
-							</ThemedText>
-						</View>
-						<IconButton
-							name='x'
-							color={Colors.light.resetButton}
-							onPress={resetSearch}
-							size={30}
-							buttonStyle={styles.resetButton}
-						/>
-					</View>
-					<View style={styles.icons}>
-						<IconButton
-							name={'filter'}
-							lib={'MaterialCommunityIcons'}
-							size={26}
-							buttonStyle={styles.button}
-							backgroundColor={isFilterActive ? 'primary' : 'background'}
-							color={
-								isFilterActive ? Colors.light.background : Colors.light.primary
-							}
-							onPress={() => setShowFilters(!showFilters)}
-						/>
-						<View style={styles.orderButtons}>
+			<KeyboardAvoidingView>
+				<View style={styles.content}>
+					<View style={styles.header}>
+						<View style={styles.searchBar}>
+							<View style={styles.destination}>
+								<ThemedText color='text'>
+									{searchData.depart} {' -> '} {searchData.destination}
+								</ThemedText>
+							</View>
 							<IconButton
-								// @ts-ignore
-								name={'sort-alpha-asc'}
-								lib={'FontAwesome'}
+								name='x'
+								color={Colors.light.resetButton}
+								onPress={resetSearch}
 								size={30}
-								buttonStyle={styles.button}
-								backgroundColor={'background'}
-								color={Colors.light.primary}
-								onPress={() => setShowOrder(!showOrder)}
-							/>
-							<IconButton
-								name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
-								lib={'FontAwesome'}
-								size={30}
-								buttonStyle={styles.button}
-								backgroundColor={'background'}
-								color={Colors.light.primary}
-								onPress={() => {
-									reverseOrder();
-									notify('success', {
-										params: { title: 'Ordre de tri changé' },
-									});
-								}}
+								buttonStyle={styles.resetButton}
 							/>
 						</View>
-					</View>
-					<ShowFilters
-						visible={showFilters}
-						onClose={() => setShowFilters(false)}
-					/>
-					<ShowOrder
-						visible={showOrder}
-						onClose={() => setShowOrder(false)}
-					/>
-					<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
-					<FlatList
-						data={searchData as unknown as SearchTripCardType[]}
-						renderItem={({ item }) => (
-							<SearchTripCard
-								data={{
-									depart: item.depart,
-									destination: item.destination,
-									nom: item.nom,
-									date: item.date,
-									distance: item.distance,
-								}}
+						<View style={styles.icons}>
+							<IconButton
+								name={'filter'}
+								lib={'MaterialCommunityIcons'}
+								size={26}
+								buttonStyle={styles.button}
+								backgroundColor={isFilterActive ? 'primary' : 'background'}
+								color={
+									isFilterActive
+										? Colors.light.background
+										: Colors.light.primary
+								}
+								onPress={() => setShowFilters(!showFilters)}
 							/>
-						)}
-						keyExtractor={(_, index) => index.toString()}
-						ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
-					/>
+							<View style={styles.orderButtons}>
+								<IconButton
+									// @ts-ignore
+									name={'sort-alpha-asc'}
+									lib={'FontAwesome'}
+									size={30}
+									buttonStyle={styles.button}
+									backgroundColor={'background'}
+									color={Colors.light.primary}
+									onPress={() => setShowOrder(!showOrder)}
+								/>
+								<IconButton
+									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
+									lib={'FontAwesome'}
+									size={30}
+									buttonStyle={styles.button}
+									backgroundColor={'background'}
+									color={Colors.light.primary}
+									onPress={() => {
+										reverseOrder();
+										notify('success', {
+											params: { title: 'Ordre de tri changé' },
+										});
+									}}
+								/>
+							</View>
+						</View>
+						<ShowFilters
+							visible={showFilters}
+							onClose={() => setShowFilters(false)}
+						/>
+						<ShowOrder
+							visible={showOrder}
+							onClose={() => setShowOrder(false)}
+						/>
+						<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
+						<FlatList
+							data={results}
+							renderItem={({ item }) => (
+								<SearchTripCard
+									data={{
+										depart: item.depart,
+										destination: item.destination,
+										nom: item.nom,
+										date: item.date,
+										distance: item.distance,
+									}}
+								/>
+							)}
+							keyExtractor={(_, index) => index.toString()}
+							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
+						/>
+					</View>
 				</View>
 			</KeyboardAvoidingView>
 		</SafeAreaView>

@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
 	KeyboardAvoidingView,
 	Modal,
 	Pressable,
 	StyleSheet,
 	View,
+	FlatList,
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { FiltreType } from '@/types';
-import { FlatList } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
@@ -29,7 +28,6 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 		filtersChanged,
 		resetFilters,
 	} = useTripSearch();
-	const initialFiltersValues = useRef(filters);
 
 	useEffect(() => {
 		if (!visible && filtersChanged()) {
@@ -37,19 +35,19 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 				params: { title: 'Les filtres ont bien été mis à jour' },
 			});
 		}
-	}, [visible, filters]);
+	}, [visible, filters, filtersChanged]);
 
 	return (
 		<KeyboardAvoidingView>
 			<Modal
 				visible={visible}
 				onRequestClose={onClose}
-				transparent={true}
+				transparent
 			>
 				<View style={styles.overlay}>
 					<View style={styles.container}>
 						<ThemedText
-							type={'header4'}
+							type='header4'
 							style={styles.title}
 						>
 							Filtres
@@ -69,22 +67,16 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 										style={styles.filterName}
 										color={item.active ? 'text' : 'hidden'}
 									>
-										{item.name.toString() !==
-										FiltreType[FiltreType.ecart_horraire]
-											? item.name.toString().charAt(0).toUpperCase() +
-												item.name.toString().slice(1)
-											: item.name.toString() === FiltreType[FiltreType.distance]
-												? 'Distance départ'
-												: 'Ecart horraire'}
+										{item.name}
 									</ThemedText>
 									<ThemedInput
-										size={'small'}
-										placeholder={'valeur'}
+										size='small'
+										placeholder='valeur'
 										style={styles.input}
 										disabled={!item.active}
 										value={item.value.toString()}
 										onChangeText={(val) => updateFilterValue(item.name, val)}
-										keyboardType={'numeric'}
+										keyboardType='numeric'
 									/>
 								</Pressable>
 							)}
@@ -95,17 +87,17 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 						<View style={styles.bottomButtons}>
 							<CustomButton
 								onPress={resetFilters}
-								text={'Supprimer les filtres'}
+								text='Supprimer les filtres'
 								textProps={{ type: 'bigger', color: 'background' }}
 								buttonStyle={styles.buttons}
-								backgroundColor={'resetButton'}
+								backgroundColor='resetButton'
 							/>
 							<CustomButton
 								onPress={onClose}
-								text={'Fermer'}
+								text='Fermer'
 								textProps={{ type: 'bigger', color: 'background' }}
 								buttonStyle={styles.buttons}
-								backgroundColor={'primary'}
+								backgroundColor='primary'
 							/>
 						</View>
 					</View>
@@ -125,6 +117,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	container: {
+		paddingHorizontal: "5%",
 		width: '90%',
 		height: '50%',
 		paddingTop: '3%',
@@ -138,6 +131,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		position: 'absolute',
+		gap: 15,
 		bottom: 15,
 		right: 10,
 	},

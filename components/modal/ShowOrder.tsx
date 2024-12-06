@@ -17,30 +17,17 @@ export const ShowOrder = ({ visible, onClose }: Props) => {
 	const { order, updateOrder } = useTripSearch();
 	const initialOrderValue = useRef(order);
 
-	const orderChanged = (): boolean => initialOrderValue.current !== order;
-
 	useEffect(() => {
-		if (!visible && orderChanged()) {
-			notify('success', {
-				params: { title: 'Les filtres ont bien été mis à jour' },
-			});
+		if (!visible && initialOrderValue.current !== order) {
+			notify('success', { params: { title: 'Les filtres ont bien été mis à jour' } });
 		}
-	}, [visible, order, orderChanged]);
+	}, [visible, order]);
 
 	return (
-		<Modal
-			visible={visible}
-			onRequestClose={onClose}
-			transparent={true}
-		>
+		<Modal visible={visible} onRequestClose={onClose} transparent>
 			<View style={styles.overlay}>
 				<View style={styles.container}>
-					<ThemedText
-						type='header4'
-						style={styles.title}
-					>
-						Ordre de tri
-					</ThemedText>
+					<ThemedText type="header4" style={styles.title}>Ordre de tri</ThemedText>
 					{Object.values(FiltreType).map((type) => (
 						<RadioButton.Item
 							key={type.toString()}
@@ -49,15 +36,15 @@ export const ShowOrder = ({ visible, onClose }: Props) => {
 							status={order === type ? 'checked' : 'unchecked'}
 							onPress={() => updateOrder(type as FiltreType)}
 							style={styles.radio}
-							position='leading'
+							position="leading"
 						/>
 					))}
 					<CustomButton
 						onPress={onClose}
-						text='Fermer'
+						text="Fermer"
 						textProps={{ type: 'bigger', color: 'background' }}
 						buttonStyle={styles.button}
-						backgroundColor='primary'
+						backgroundColor="primary"
 					/>
 				</View>
 			</View>
@@ -80,7 +67,7 @@ const styles = StyleSheet.create({
 		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
-		display: 'flex',
+		paddingHorizontal: '10%',
 	},
 	title: {
 		textAlign: 'center',

@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import {
+	Platform,
+	StyleSheet,
+	View,
+	KeyboardAvoidingView,
+} from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, ThemedInput, ThemedText } from '@/components';
@@ -50,7 +55,7 @@ export const Index = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.content}>
+			<KeyboardAvoidingView style={styles.content}>
 				<ThemedText type='header4'>Rechercher votre trajet 🔎</ThemedText>
 				<View style={styles.formContainer}>
 					<ThemedInput
@@ -63,6 +68,8 @@ export const Index = () => {
 						hasError={!!errors.depart}
 						errorMessage={errors.depart}
 						size='medium'
+						editable={true}
+						autoFocus={true}
 					/>
 					<ThemedInput
 						label='Destination'
@@ -74,6 +81,8 @@ export const Index = () => {
 						hasError={!!errors.destination}
 						errorMessage={errors.destination}
 						size='medium'
+						editable={true}
+						autoFocus={true}
 					/>
 					<View>
 						<ThemedText
@@ -114,7 +123,7 @@ export const Index = () => {
 						iconStyle={{ color: Colors.light.background }}
 					/>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 };
@@ -123,6 +132,7 @@ export default Index;
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: Colors.light.background,
 	},
 	content: {
@@ -131,48 +141,9 @@ const styles = StyleSheet.create({
 		width: '90%',
 		marginHorizontal: 'auto',
 	},
-	header: {
-		display: 'flex',
-		flexDirection: 'column',
-		gap: 25,
-	},
-	searchBar: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		gap: 20,
-	},
 	formContainer: {
 		marginTop: '5%',
 		gap: 20,
-	},
-	destination: {
-		borderWidth: 1.5,
-		borderColor: Colors.light.inputText,
-		padding: 10,
-		borderRadius: 10,
-	},
-	resetButton: {
-		borderWidth: 2,
-		borderColor: Colors.light.resetButton,
-		borderRadius: 99999,
-		alignItems: 'center',
-		display: 'flex',
-		justifyContent: 'center',
-		height: 40,
-		width: 40,
-	},
-	submitButton: {
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 15,
-		marginTop: 10,
-		paddingVertical: 10,
-		borderRadius: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: Colors.light.primary,
 	},
 	dateButton: {
 		display: 'flex',
@@ -190,23 +161,15 @@ const styles = StyleSheet.create({
 		color: Colors.light.error,
 		marginTop: 5,
 	},
-	button: {
-		padding: '3%',
+	submitButton: {
+		display: 'flex',
+		flexDirection: 'row',
+		gap: 15,
+		marginTop: 10,
+		paddingVertical: 10,
 		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: Colors.light.primary,
-	},
-	icons: {
-		display: 'flex',
-		flexDirection: 'row',
-		marginRight: 'auto',
-		gap: 25,
-	},
-	orderButtons: {
-		display: 'flex',
-		flexDirection: 'row',
+		justifyContent: 'center',
 		alignItems: 'center',
-		flex: 1,
-		gap: 10,
+		backgroundColor: Colors.light.primary,
 	},
 });
