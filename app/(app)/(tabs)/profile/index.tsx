@@ -13,13 +13,14 @@ import GetImage from '@/components/modal/GetImage';
 import { imageSourceType } from '@/types';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
+import { useRouter } from 'expo-router';
 
-export default function UserPage() {
+export default function Profile() {
 	const initialUser: User = {
 		id: 1,
 		username: 'John Doe',
 		email: 'johndoe@gmail.com',
-		bio: "I'm a cool guy",
+		bio: "I'm a cool guy, I like to drive and meet new people. I'm always on time and I have a clean car.",
 		firstName: 'John',
 		lastName: 'Doe',
 		rank: 'member',
@@ -34,6 +35,7 @@ export default function UserPage() {
 	const [imgSource, setImgSource] = useState<imageSourceType>('galerie');
 
 	const { signOut, isLoading } = useSession();
+	const router = useRouter();
 
 	if (isLoading) {
 		return (
@@ -138,7 +140,7 @@ export default function UserPage() {
 				<View style={styles.buttons}>
 					<CustomButton
 						text={'Modifier'}
-						onPress={() => {}}
+						onPress={() => router.push('/profile/edit')}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
 						buttonStyle={styles.button}
@@ -207,7 +209,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light.disabledBorder,
 		marginHorizontal: 10,
 	},
-	buttons:{
+	buttons: {
 		display: 'flex',
 		flexDirection: 'row',
 		margin: 'auto',
