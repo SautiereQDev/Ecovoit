@@ -7,72 +7,29 @@ import {
 	View,
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { Filter, FiltreType } from '@/types';
+import { FiltreType } from '@/types';
 import { FlatList } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
+import { useTripSearch } from '@/components/context/SearchProvider';
 
 type Props = {
 	visible: boolean;
 	onClose?: () => void;
-	filters: Filter[];
-	setFilters: React.Dispatch<React.SetStateAction<Filter[]>>;
 };
 
-export const ShowFilters = ({
-	visible,
-	onClose,
-	filters,
-	setFilters,
-}: Props) => {
+export const ShowFilters = ({ visible, onClose }: Props) => {
+	const {
+		filters,
+		toggleFilter,
+		updateFilterValue,
+		filtersChanged,
+		resetFilters,
+	} = useTripSearch();
 	const initialFiltersValues = useRef(filters);
-
-	const isChecked = (name: FiltreType) =>
-		filters.find((filter) => filter.name === name)?.active;
-
-	const toggleCheck = (name: FiltreType) => {
-		setFilters(
-			filters.map((filter) =>
-				filter.name === name ? { ...filter, active: !filter.active } : filter
-			)
-		);
-	};
-
-	const initialFilters: Filter[] = Object.keys(FiltreType)
-		.filter((key) => !isNaN(Number(key)))
-		.map((key) => ({
-			name: FiltreType[key as keyof typeof FiltreType],
-			value: 0,
-			active: false,
-		}));
-
-	const filtersChanged = (): boolean => {
-		return filters.some((filter) => {
-			const initialFilter = initialFiltersValues.current.find(
-				(initialFilter) => initialFilter.name === filter.name
-			);
-			return (
-				initialFilter?.value !== filter.value ||
-				initialFilter?.active !== filter.active
-			);
-		});
-	};
-
-	const resetFilters = () => setFilters(initialFilters);
-
-	const updateValue = (name: FiltreType, value: string) => {
-		const numericValue = Number(value);
-		if (!isNaN(numericValue)) {
-			setFilters(
-				filters.map((filter) =>
-					filter.name === name ? { ...filter, value: numericValue } : filter
-				)
-			);
-		}
-	};
 
 	useEffect(() => {
 		if (!visible && filtersChanged()) {
@@ -102,10 +59,10 @@ export const ShowFilters = ({
 							renderItem={({ item }) => (
 								<Pressable
 									style={styles.filter}
-									onPress={() => toggleCheck(item.name)}
+									onPress={() => toggleFilter(item.name)}
 								>
 									<Checkbox
-										status={isChecked(item.name) ? 'checked' : 'unchecked'}
+										status={item.active ? 'checked' : 'unchecked'}
 										color={Colors.light.primary}
 									/>
 									<ThemedText
@@ -126,7 +83,7 @@ export const ShowFilters = ({
 										style={styles.input}
 										disabled={!item.active}
 										value={item.value.toString()}
-										onChangeText={(val) => updateValue(item.name, val)}
+										onChangeText={(val) => updateFilterValue(item.name, val)}
 										keyboardType={'numeric'}
 									/>
 								</Pressable>
