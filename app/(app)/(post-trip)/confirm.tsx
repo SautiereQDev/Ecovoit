@@ -8,6 +8,7 @@ import { View } from 'react-native';
 
 export default function Confirm() {
 	const { trip } = useTripCreation();
+
 	return (
 		<PostTripLayout
 			title='Prêt à partir ?'
@@ -35,9 +36,7 @@ export default function Confirm() {
 				</ThemedText>
 				<ThemedText type='subtitle'>Date : {trip.date}</ThemedText>
 				<ThemedText type='subtitle'>Heure : {trip.time}</ThemedText>
-				<ThemedText type='subtitle'>
-					Passagers : {trip.availableSeats}
-				</ThemedText>
+				<ThemedText type='subtitle'>Passagers : {trip.initialSeats}</ThemedText>
 				<CircleButton
 					iconName='car'
 					onPress={() => {

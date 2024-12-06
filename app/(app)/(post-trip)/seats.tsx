@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 
 export default function Seats() {
-	const { setAvailableSeats } = useTripCreation(); // TODO
+	const { setInitialSeats } = useTripCreation(); // TODO
 
 	const colors = useThemeColor();
 	const [seats, setSeats] = useState<number>(1);
@@ -38,7 +38,7 @@ export default function Seats() {
 			<CircleButton
 				iconName='arrow-forward'
 				onPress={() => {
-					setAvailableSeats(seats);
+					setInitialSeats(seats);
 					router.navigate('/(app)/(post-trip)/confirm');
 				}}
 				size='medium'

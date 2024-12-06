@@ -1,3 +1,4 @@
+import { User } from '@/types/Ecovoit';
 import {
 	createContext,
 	PropsWithChildren,
@@ -5,19 +6,35 @@ import {
 	useReducer,
 } from 'react';
 
+// {
+//   "vehicle": "Foo Bar Car",
+//   "seats": 7, // Nombre de place initial
+//   "datetime": 1729843200,
+//   "points": [
+//     {
+//       "type": "start",
+//       "locationName": "Les Minimes"
+//     },
+//     {
+//       "type": "end",
+//       "locationName": "La Préfecture - Verdun - Saintes Claires"
+//     }
+//   ]
+// }
+
 interface TripCreationContextType {
 	trip: {
 		start: string;
 		destination: string;
 		date: string;
 		time: string;
-		availableSeats: number;
+		initialSeats: number;
 	};
 	setStart: (start: string) => void;
 	setDestination: (destination: string) => void;
 	setDate: (date: string) => void;
 	setTime: (time: string) => void;
-	setAvailableSeats: (availableSeats: number) => void;
+	setInitialSeats: (initialSeats: number) => void;
 }
 
 const TripCreationContext = createContext<TripCreationContextType>({
@@ -26,13 +43,13 @@ const TripCreationContext = createContext<TripCreationContextType>({
 		destination: 'defaultDestination',
 		date: 'defaultDate',
 		time: 'defaultTime',
-		availableSeats: 0,
+		initialSeats: 0,
 	},
 	setStart: (start) => {},
 	setDestination: (destination) => {},
 	setDate: (date: string) => {},
 	setTime: (time: string) => {},
-	setAvailableSeats: (availableSeats: number) => {},
+	setInitialSeats: (initialSeats: number) => {},
 });
 
 export function useTripCreation() {
@@ -55,27 +72,27 @@ export function TripCreationProvider({
 			case 'set_start':
 				return {
 					...state,
-					start: action.start,
+					start: action.payload,
 				};
 			case 'set_destination':
 				return {
 					...state,
-					destination: action.destination,
+					destination: action.payload,
 				};
 			case 'set_date':
 				return {
 					...state,
-					date: action.date,
+					date: action.payload,
 				};
 			case 'set_time':
 				return {
 					...state,
-					time: action.time,
+					time: action.payload,
 				};
 			case 'set_available_seats':
 				return {
 					...state,
-					availableSeats: action.availableSeats,
+					initialSeats: action.payload,
 				};
 			default:
 				throw Error('Unknown action.');
@@ -87,7 +104,7 @@ export function TripCreationProvider({
 		destination: 'initialDestination',
 		date: 'initialDate',
 		time: 'initialTime',
-		availableSeats: 0,
+		initialSeats: 0,
 	});
 
 	const providedContext: TripCreationContextType = {
@@ -95,31 +112,31 @@ export function TripCreationProvider({
 		setStart: (start: string) => {
 			dispatch({
 				type: 'set_start',
-				start: start,
+				payload: start,
 			});
 		},
 		setDestination: (destination: string) => {
 			dispatch({
 				type: 'set_destination',
-				destination: destination,
+				payload: destination,
 			});
 		},
 		setDate: (date: string) => {
 			dispatch({
 				type: 'set_date',
-				date: date,
+				payload: date,
 			});
 		},
 		setTime: (time: string) => {
 			dispatch({
 				type: 'set_time',
-				time: time,
+				payload: time,
 			});
 		},
-		setAvailableSeats: (availableSeats: number) => {
+		setInitialSeats: (initialSeats: number) => {
 			dispatch({
-				type: 'set_available_seats',
-				availableSeats: availableSeats,
+				type: 'set_initial_seats',
+				payload: initialSeats,
 			});
 		},
 	};
