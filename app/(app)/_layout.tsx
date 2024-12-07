@@ -1,4 +1,4 @@
-import { useSession } from '@/components/context/SessionProvider';
+import { useSession } from '@/context/SessionProvider';
 import { Redirect, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNotifications } from 'react-native-notificated';

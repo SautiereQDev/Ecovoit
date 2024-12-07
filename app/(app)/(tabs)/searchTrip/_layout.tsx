@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { SearchProvider } from '@/components/context/SearchProvider';
+import { SearchProvider } from '@/context/SearchProvider';
 
 export default function SearchTripLayout() {
 	return (

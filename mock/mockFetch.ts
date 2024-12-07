@@ -1,4 +1,4 @@
-import { UserType } from "@/components/context/SessionProvider";
+import { UserType } from "@/context/SessionProvider";
 
 type MockFetchType = "SIGN_IN" | "SIGN_UP";
 

@@ -5,7 +5,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useSession } from '@/components/context/SessionProvider';
+import { useSession } from '@/context/SessionProvider';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 

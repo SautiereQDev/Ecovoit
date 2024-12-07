@@ -1,4 +1,4 @@
-import { useLocation } from "@/components/context/LocationProvider";
+import { useLocation } from "@/context/LocationProvider";
 import MyMap from "@/components/map/MyMap";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet, View, Text } from "react-native";

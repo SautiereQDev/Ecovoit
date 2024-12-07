@@ -2,28 +2,23 @@ import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
-import { imageSourceType } from '@/types';
 import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
+import { useProfile } from '@/context/ProfileProvider';
 
 type Props = {
 	visible: boolean;
-	setImgSource: React.Dispatch<React.SetStateAction<imageSourceType>>;
-	imgSource: imageSourceType;
-	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
-	profileImage: React.SetStateAction<string | null>;
 	onClose: () => void;
 };
 
 export const GetImage = ({
 	visible,
 	onClose,
-	imgSource,
-	setImgSource,
-	profileImage,
-	setProfileImage,
 }: Props) => {
+
+	const { setProfileImage } = useProfile();
+
 	const pickImageFromGalerie = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ['images'],

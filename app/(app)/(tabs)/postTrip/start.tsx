@@ -1,5 +1,5 @@
-import { useLocation } from "@/components/context/LocationProvider";
-import { useTripCreation } from "@/components/context/TripCreationProvider";
+import { useLocation } from "@/context/LocationProvider";
+import { useTripCreation } from "@/context/TripCreationProvider";
 import MyMap from "@/components/map/MyMap";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet, View, Text, Modal } from "react-native";

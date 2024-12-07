@@ -6,7 +6,7 @@ import ShowOrder from '@/components/modal/ShowOrder';
 import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTripSearch } from '@/components/context/SearchProvider';
+import { useTripSearch } from '@/context/SearchProvider';
 
 export const Search = () => {
 	const {

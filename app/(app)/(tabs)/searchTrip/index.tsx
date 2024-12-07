@@ -13,7 +13,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
 import { formatDate } from '@/utils/date';
-import { useTripSearch } from '@/components/context/SearchProvider';
+import { useTripSearch } from '@/context/SearchProvider';
 
 export const Index = () => {
 	const { searchData, setSearchData, submitSearch, errors, setErrors } =

@@ -48,4 +48,8 @@ export interface Filter {
 
 export type imageSourceType = 'appareil photo' | 'galerie';
 
+export type userParams = {
+	theme: 'light' | 'dark';
+}
+
 

@@ -13,7 +13,7 @@ import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/components/context/SearchProvider';
+import { useTripSearch } from '@/context/SearchProvider';
 
 type Props = {
 	visible: boolean;

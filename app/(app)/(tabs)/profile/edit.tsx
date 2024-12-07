@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -9,56 +9,25 @@ import {
 } from 'react-native';
 import { ThemedText } from '@/components/texts/ThemedText';
 import CustomButton from '@/components/buttons/CustomButton';
-import { User } from '@/types/Ecovoit';
 import Colors from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import { useNotifications } from 'react-native-notificated';
+import { useProfile } from '@/context/ProfileProvider';
 
 export default function EditProfile() {
 	const router = useRouter();
 	const { notify } = useNotifications();
+	const {user, setUser} = useProfile();
 
-	// TODO : Utiliser des donnés dynamiques
-	const [userData, setUserData] = useState<User>({
-		id: 1,
-		username: 'John Doe',
-		email: 'johndoe@gmail.com',
-		bio: "I'm a cool guy, I like to drive and meet new people. I'm always on time and I have a clean car.",
-		firstName: 'John',
-		lastName: 'Doe',
-		rank: 'member',
-		verified: true,
-		vehicles: [],
-		tripsAsDriver: [],
-		tripsAsPassenger: [],
-	});
+	const handleSave = () => {
+		router.back();
 
-
-	const handleSave = async () => {
-		try {
-			// Implement your update logic here
-			await setUserData(userData);
-
-			// Show success notification
-			notify('success', {
-				params: {
-					title: 'Profil mis à jour',
-					description: 'Vos informations ont été sauvegardées avec succès.',
-				},
-			});
-
-			// Navigate back to profile
-			router.back();
-		} catch (error) {
-			// Show error notification
-			notify('error', {
-				params: {
-					title: 'Erreur',
-					description:
-						'Une erreur est survenue lors de la mise à jour du profil.',
-				},
-			});
-		}
+		notify('success', {
+			params: {
+				title: 'Profil mis à jour',
+				description: 'Vos informations ont été sauvegardées avec succès.',
+			},
+		});
 	};
 
 	return (
@@ -78,9 +47,10 @@ export default function EditProfile() {
 					<ThemedText type={'defaultBody'}>Nom d'utilisateur</ThemedText>
 					<TextInput
 						style={styles.input}
-						value={userData.username}
+						// @ts-ignore
+						value={user.username}
 						onChangeText={(text) =>
-							setUserData({ ...userData, username: text })
+							setUser({ ...user, username: text })
 						}
 						placeholder="Nom d'utilisateur"
 					/>
@@ -90,9 +60,10 @@ export default function EditProfile() {
 					<ThemedText type={'defaultBody'}>Prénom</ThemedText>
 					<TextInput
 						style={styles.input}
-						value={userData.firstName}
+						// @ts-ignore
+						value={user.firstName}
 						onChangeText={(text) =>
-							setUserData({ ...userData, firstName: text })
+							setUser({ ...user, firstName: text })
 						}
 						placeholder='Prénom'
 					/>
@@ -102,9 +73,10 @@ export default function EditProfile() {
 					<ThemedText type={'defaultBody'}>Nom</ThemedText>
 					<TextInput
 						style={styles.input}
-						value={userData.lastName}
+						// @ts-ignore
+						value={user.lastName}
 						onChangeText={(text) =>
-							setUserData({ ...userData, lastName: text })
+							setUser({ ...user, lastName: text })
 						}
 						placeholder='Nom'
 					/>
@@ -114,8 +86,11 @@ export default function EditProfile() {
 					<ThemedText type={'defaultBody'}>Email</ThemedText>
 					<TextInput
 						style={styles.input}
-						value={userData.email}
-						onChangeText={(text) => setUserData({ ...userData, email: text })}
+						// @ts-ignore
+						value={user.email}
+						onChangeText={(text) =>
+							setUser({ ...user, email: text })
+						}
 						placeholder='Email'
 						keyboardType='email-address'
 					/>
@@ -125,8 +100,11 @@ export default function EditProfile() {
 					<ThemedText type={'defaultBody'}>Biographie</ThemedText>
 					<TextInput
 						style={[styles.input, styles.multilineInput]}
-						value={userData.bio}
-						onChangeText={(text) => setUserData({ ...userData, bio: text })}
+						// @ts-ignore
+						value={user.bio}
+						onChangeText={(text) =>
+							setUser({ ...user, bio: text })
+						}
 						placeholder='Parlez-nous de vous'
 						multiline
 						numberOfLines={4}

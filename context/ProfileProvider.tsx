@@ -1,9 +1,11 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { User } from '@/types/Ecovoit';
 
 interface ProfileContextType {
-	profileData: User;
-	setProfileData: React.Dispatch<React.SetStateAction<User>>;
+	user: User;
+	setUser: React.Dispatch<React.SetStateAction<User>>;
+	profileImage: string | null;
+	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -12,7 +14,7 @@ interface ProfileProviderProps {
 	children: ReactNode;
 }
 
-// TODO : utiliser des données dynamiques
+// TODO : à remplacer par des données dynamiques
 const initialData = {
 	id: 1,
 	username: 'John Doe',
@@ -27,11 +29,14 @@ const initialData = {
 	tripsAsPassenger: [],
 };
 
-export const SearchProvider = ({ children }: ProfileProviderProps) => {
-	const [profileData, setProfileData] = useState<User>(initialData);
+export const ProfileProvider = ({ children }: ProfileProviderProps) => {
+	const [user, setUser] = useState<User>(initialData);
+	const [profileImage, setProfileImage] = useState<string | null>(null);
+
+	const contextValue = useMemo(() => ({ user, setUser, profileImage, setProfileImage }), [user, profileImage]);
 
 	return (
-		<ProfileContext.Provider value={{ profileData, setProfileData }}>
+		<ProfileContext.Provider value={contextValue}>
 			{children}
 		</ProfileContext.Provider>
 	);
