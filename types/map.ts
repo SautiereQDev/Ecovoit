@@ -11,18 +11,15 @@ export interface Location {
 	latitude: number;
 }
 
-export interface Point extends Location {
+export interface OSRMpoint {
+	hint: string;
+	distance: number;
 	id?: number;
 	trip?: number; //Id du trip correspondant
 	type?: PointType;
 	waitingTime?: number;
 	previous?: number;
 	next?: number;
-}
-
-export interface OSRMpoint extends Point {
-	hint: string;
-	distance: number;
 }
 
 export interface Route {

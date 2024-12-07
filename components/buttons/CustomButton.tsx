@@ -19,6 +19,7 @@ type Props = PressableProps & {
 			| "header3"
 			| "header4"
 			| "header5"
+			| "header6"
 			| "small"
 			| "italic"
 			| "accent"
@@ -45,7 +46,7 @@ type Props = PressableProps & {
 export function CustomButton({
 															 buttonStyle,
 															 text,
-															 textProps = { color: "primary" },
+															 textProps = { color: "background" },
 															 backgroundColor = "primary",
 															 ...restProps
 														 }: Props): JSX.Element {

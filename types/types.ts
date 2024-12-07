@@ -3,6 +3,12 @@ export interface destinationSearch {
 	destination: string;
 }
 
+export type searchTripFormType = {
+	depart: string;
+	destination: string;
+	date: number;
+};
+
 export interface TripCardType {
 	depart: string;
 	destination: string;
@@ -28,10 +34,10 @@ export interface SearchTripCardType {
 
 //Trip Search
 export enum FiltreType {
-	'consommation',
-	'distance',
-	'emission',
-	'ecart_horraire',
+	CONSOMMATION = 'consommation',
+	DISTANCE = 'Distance',
+	EMISSION = 'Emission',
+	ECART_HORRAIRE = 'Ecart horraire',
 }
 
 export interface Filter {
@@ -39,3 +45,11 @@ export interface Filter {
 	value: number;
 	active: boolean;
 }
+
+export type imageSourceType = 'appareil photo' | 'galerie';
+
+export type userParams = {
+	theme: 'light' | 'dark';
+}
+
+

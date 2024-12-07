@@ -23,7 +23,7 @@ export default function TabsLayout() {
 						case 'postTrip':
 							iconName = focused ? 'add-circle' : 'add-circle-outline';
 							break;
-						case 'user':
+						case 'profile':
 							iconName = focused ? 'person' : 'person-outline';
 							break;
 						case 'tests':
@@ -66,7 +66,7 @@ export default function TabsLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='user'
+				name='profile'
 				options={{
 					title: 'Profil',
 					tabBarHideOnKeyboard: true,

@@ -24,6 +24,7 @@ export const Colors = {
 		error: '#ff0000',
 		disabledBackground,
 		disabledBorder,
+		accentBackground: '#dedede',
 	},
 	dark: {
 		hidden: '#DCDCDC',
@@ -40,6 +41,7 @@ export const Colors = {
 		error: '#ff0000',
 		disabledBackground,
 		disabledBorder,
+		accentBackground: '#515151',
 	},
 };
 
