@@ -115,7 +115,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			validate('destination', searchFormData.destination);
 			validate('date', searchFormData.date);
 		}
-	}, [errors, searchFormData, router, data, validate]);
+	}, [errors, searchFormData, router, validate]);
 
 	useEffect(() => {
 		if (formIsSubmitted) {
