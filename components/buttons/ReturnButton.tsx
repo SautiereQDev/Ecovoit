@@ -10,7 +10,8 @@ export const ReturnButton = ({ handleBack }: ReturnButtonProps) => {
 	return (
 		<CustomButton
 			text='Retour'
-			textProps={{ color: 'background' }}
+			textProps={{ type: 'defaultBody' }}
+			backgroundColor={'accentBackground'}
 			onPress={
 				handleBack ??
 				(() => {
@@ -28,6 +29,5 @@ export default ReturnButton;
 const styles = {
 	buttonPrevious: {
 		width: '35%',
-		marginBottom: 20,
 	},
 };
