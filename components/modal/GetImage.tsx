@@ -5,19 +5,18 @@ import CustomButton from '@/components/buttons/CustomButton';
 import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
-import { useProfile } from '@/context/ProfileProvider';
 
 type Props = {
 	visible: boolean;
 	onClose: () => void;
+	setImage: React.Dispatch<string | null > | ((image: string) => void);
 };
 
 export const GetImage = ({
 	visible,
 	onClose,
+	setImage,
 }: Props) => {
-
-	const { setProfileImage } = useProfile();
 
 	const pickImageFromGalerie = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -28,9 +27,9 @@ export const GetImage = ({
 		});
 
 		if (!result.canceled) {
-			setProfileImage(result.assets[0].uri);
+			setImage(result.assets[0].uri);
 			onClose();
-			notify('success', { params: { title: 'Image de profile mise à jour' } });
+			notify('success', { params: { title: 'Image uploadé' } });
 		}
 	};
 
@@ -43,9 +42,9 @@ export const GetImage = ({
 		});
 
 		if (!result.canceled) {
-			setProfileImage(result.assets[0].uri);
+			setImage(result.assets[0].uri);
 			onClose();
-			notify('success', { params: { title: 'Image de profile mise à jour' } });
+			notify('success', { params: { title: 'Image uploadé' } });
 		}
 	};
 

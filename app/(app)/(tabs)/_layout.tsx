@@ -1,12 +1,10 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { SearchProvider } from '@/context/SearchProvider';
 
 export default function TabsLayout() {
 	type IoniconNames = keyof typeof Ionicons.glyphMap;
 
 	return (
-		<SearchProvider>
 			<Tabs
 				screenOptions={({ route }) => ({
 					headerShown: false,
@@ -74,6 +72,5 @@ export default function TabsLayout() {
 				/>
 				<Tabs.Screen name='tests' />
 			</Tabs>
-		</SearchProvider>
 	);
 }

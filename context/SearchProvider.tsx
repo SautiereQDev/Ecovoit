@@ -7,7 +7,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { useRouter } from 'expo-router'; // Importer useRouter pour la navigation
+import { useRouter } from 'expo-router';
 import {
 	Filter,
 	FiltreType,
@@ -78,7 +78,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 	const [errors, setErrors] = useState<inputError>({});
 	const [formIsSubmitted, setFormIsSubmitted] = useState<boolean>(false);
 
-	const validate = (field: string, value: string | number) => {
+	const validate = useCallback((field: string, value: string | number) => {
 		const newErrors = { ...errors };
 		switch (field) {
 			case 'depart':
@@ -99,7 +99,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 				break;
 		}
 		setErrors(newErrors);
-	};
+	}, [errors]);
 
 	const submitSearch = useCallback(() => {
 		if (
@@ -115,7 +115,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			validate('destination', searchFormData.destination);
 			validate('date', searchFormData.date);
 		}
-	}, [errors, searchFormData, router, searchFormData, validate]);
+	}, [errors, searchFormData, router, validate]);
 
 	useEffect(() => {
 		if (formIsSubmitted) {
@@ -148,43 +148,39 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 		},
 	];
 
-	//  FILTRES
+	const resetFilters = useCallback(() => setFilters(initialFilters), [initialFilters]);
 
-	// TODO: convertir les fonction en reduceurs
-
-	const resetFilters = () => setFilters(initialFilters);
-
-	const updateFilters = (name: FiltreType, value: string) => {
+	const updateFilters = useCallback((name: FiltreType, value: string) => {
 		const numericValue = Number(value);
 		if (!isNaN(numericValue)) {
-			setFilters(
+			setFilters((filters) =>
 				filters.map((filter) =>
 					filter.name === name ? { ...filter, value: numericValue } : filter
 				)
 			);
 		}
-	};
+	}, []);
 
-	const toggleFilter = (name: FiltreType) => {
-		setFilters(
+	const toggleFilter = useCallback((name: FiltreType) => {
+		setFilters((filters) =>
 			filters.map((filter) =>
 				filter.name === name ? { ...filter, active: !filter.active } : filter
 			)
 		);
-	};
+	}, []);
 
-	const updateFilterValue = (name: FiltreType, value: string) => {
+	const updateFilterValue = useCallback((name: FiltreType, value: string) => {
 		const numericValue = Number(value);
 		if (!isNaN(numericValue)) {
-			setFilters(
+			setFilters((filters) =>
 				filters.map((filter) =>
 					filter.name === name ? { ...filter, value: numericValue } : filter
 				)
 			);
 		}
-	};
+	}, []);
 
-	const filtersChanged = (): boolean => {
+	const filtersChanged = useCallback((): boolean => {
 		return filters.some((filter) => {
 			const initialFilter = initialFilters.find(
 				(initialFilter) => initialFilter.name === filter.name
@@ -194,71 +190,69 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 				initialFilter?.active !== filter.active
 			);
 		});
-	};
+	}, [filters, initialFilters]);
 
-	const isFilterActive = filters.some((filter) => filter.active);
+	const isFilterActive = useMemo(
+		() => filters.some((filter) => filter.active),
+		[filters]
+	);
 
-	// ORDER
+	const reverseOrder = useCallback(() => {
+		setOrderDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
+	}, []);
 
-	const reverseOrder = () => {
-		setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
-	};
-
-	const updateOrder = (order: FiltreType) => {
+	const updateOrder = useCallback((order: FiltreType) => {
 		setOrder(order);
-	};
+	}, []);
 
-	const resetSearch = () => {
-		// @ts-ignore
-		router.push('/searchTrip/');
+	const resetSearch = useCallback(() => {
+		router.push('/(app)/(tabs)/searchTrip');
 		setSearchFormData(initialData);
-	};
+	}, [router]);
+
+	const contextValue = useMemo(
+		() => ({
+			searchData: searchFormData,
+			setSearchData: setSearchFormData,
+			resetSearch,
+			submitSearch,
+			errors,
+			setErrors,
+			filters,
+			updateFilters,
+			resetFilters,
+			isFilterActive,
+			reverseOrder,
+			orderDirection,
+			order,
+			updateOrder,
+			toggleFilter,
+			updateFilterValue,
+			filtersChanged,
+			results,
+		}),
+		[
+			searchFormData,
+			resetSearch,
+			submitSearch,
+			errors,
+			filters,
+			updateFilters,
+			resetFilters,
+			isFilterActive,
+			reverseOrder,
+			orderDirection,
+			order,
+			updateOrder,
+			toggleFilter,
+			updateFilterValue,
+			filtersChanged,
+			results,
+		]
+	);
 
 	return (
-		<SearchContext.Provider
-			value={useMemo(
-				() => ({
-					searchData: searchFormData,
-					setSearchData: setSearchFormData,
-					resetSearch,
-					submitSearch,
-					errors,
-					setErrors,
-					filters,
-					updateFilters,
-					resetFilters,
-					isFilterActive,
-					reverseOrder,
-					orderDirection,
-					order,
-					updateOrder,
-					toggleFilter,
-					updateFilterValue,
-					filtersChanged,
-					results,
-				}),
-				[
-					searchFormData,
-					setSearchFormData,
-					resetSearch,
-					submitSearch,
-					errors,
-					setErrors,
-					filters,
-					updateFilters,
-					resetFilters,
-					isFilterActive,
-					reverseOrder,
-					orderDirection,
-					order,
-					updateOrder,
-					toggleFilter,
-					updateFilterValue,
-					filtersChanged,
-					results,
-				]
-			)}
-		>
+		<SearchContext.Provider value={contextValue}>
 			{children}
 		</SearchContext.Provider>
 	);

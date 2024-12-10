@@ -6,7 +6,7 @@ import {
 	ViewStyle,
 } from "react-native";
 import React from "react";
-import { ThemedText } from "../texts/ThemedText";
+import { ThemedText } from "@/components/texts/ThemedText";
 import { Colors } from "@/constants/Colors";
 
 type Props = PressableProps & {
@@ -60,7 +60,7 @@ export function CustomButton({
 			{...restProps}
 		>
 			<ThemedText
-				type={textProps?.type ?? "accent"}
+				type={textProps?.type ?? "bigger"}
 				color={textProps?.color}
 				style={styles.text}
 			>
