@@ -22,7 +22,7 @@ const initialData = {
 	bio: "I'm a cool guy, I like to drive and meet new people. I'm always on time and I have a clean car.",
 	firstName: 'John',
 	lastName: 'Doe',
-	rank: 'member',
+	rank: 'member' as const,
 	verified: true,
 	vehicles: [],
 	tripsAsDriver: [],
