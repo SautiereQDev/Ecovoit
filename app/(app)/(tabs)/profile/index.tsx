@@ -18,7 +18,7 @@ export default function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { signOut, isLoading } = useSession();
-	const {user, profileImage} = useProfile();
+	const {user, profileImage, setProfileImage} = useProfile();
 
 	const router = useRouter();
 
@@ -46,6 +46,7 @@ export default function Profile() {
 				<GetImage
 					visible={showModal}
 					onClose={() => setShowModal(false)}
+					setImage={setProfileImage}
 				/>
 				<Pressable onPress={() => setShowModal(true)}>
 					<Image
@@ -153,8 +154,6 @@ const styles = StyleSheet.create({
 		aspectRatio: 1,
 		alignSelf: 'center',
 		marginTop: '8%',
-		borderWidth: 2,
-		borderColor: Colors.light.disabledBorder,
 	},
 	username: {
 		textAlign: 'center',
