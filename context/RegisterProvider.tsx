@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
 import is from '@sindresorhus/is';
 import undefined = is.undefined;
@@ -75,7 +75,7 @@ const VALIDATION_RULES: {
 	biographie: (value: string) =>
 		value.length <= 128
 			? null
-			: 'La biographie ne doit pas dépasser 128 caractères',
+			: 'La biographie ne doit pas dépasser 128 caractères'
 };
 
 const PAGE_FIELDS: Record<PageNumber, (keyof FormType)[]> = {
@@ -110,7 +110,7 @@ export function RegisterProvider({
 		return !error;
 	};
 
-	const validatePage = (page: PageNumber): boolean => {
+	const validatePage = useCallback((page: PageNumber): boolean => {
 		const fieldsToValidate = PAGE_FIELDS[page];
 		let isValid = true;
 		const newErrors: ValidationErrors = {};
@@ -128,17 +128,17 @@ export function RegisterProvider({
 
 		setErrors(newErrors);
 		return isValid;
-	};
+	}, [data]);
 
 	const clearErrors = () => setErrors({});
 
-	const submit = () => {
-		const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
-		if (isValid) {
-			console.log('Form submitted:', data);
-			router.push('/');
-		}
-	};
+	const submit = useCallback(() => {
+	const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
+	if (isValid) {
+		console.log('Form submitted:', data);
+		router.push('/');
+	}
+}, [data, validatePage]);
 
 	const resetData = () => {
 		setData(initialData);

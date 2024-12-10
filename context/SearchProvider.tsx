@@ -115,7 +115,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			validate('destination', searchFormData.destination);
 			validate('date', searchFormData.date);
 		}
-	}, [errors, searchFormData, router, validate]);
+	}, [errors, searchFormData, router, data, validate]);
 
 	useEffect(() => {
 		if (formIsSubmitted) {
@@ -148,7 +148,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 		},
 	];
 
-	const resetFilters = useCallback(() => setFilters(initialFilters), []);
+	const resetFilters = useCallback(() => setFilters(initialFilters), [initialFilters]);
 
 	const updateFilters = useCallback((name: FiltreType, value: string) => {
 		const numericValue = Number(value);
