@@ -60,7 +60,7 @@ export function CustomButton({
 			{...restProps}
 		>
 			<ThemedText
-				type={textProps?.type ?? "accent"}
+				type={textProps?.type ?? "bigger"}
 				color={textProps?.color}
 				style={styles.text}
 			>
