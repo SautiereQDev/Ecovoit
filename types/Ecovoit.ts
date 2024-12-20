@@ -1,11 +1,11 @@
 export type User = {
 	id: number;
-	firstName: string | null;
-	lastName: string | null;
-	username: string | null;
-	email: string | null;
-	bio: string | null;
-	rank: "member" | "moderator" | "admin";
+	firstName: string;
+	lastName?: string;
+	username: string;
+	email: string;
+	bio?: string;
+	rank: 'member' | 'moderator' | 'admin';
 	verified: boolean;
 	vehicles: Vehicle[];
 	tripsAsDriver: Trip[];
