@@ -13,12 +13,14 @@ import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { useRouter } from 'expo-router';
 import { useProfile } from '@/context/ProfileProvider';
+import ProfileCompletion from '@/components/ProfileCompletion';
 
 export default function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { signOut, isLoading } = useSession();
-	const {user, profileImage, setProfileImage} = useProfile();
+	const { user, profileImage, setProfileImage, checkMissingFields } =
+		useProfile();
 
 	const router = useRouter();
 
@@ -33,6 +35,8 @@ export default function Profile() {
 			</View>
 		);
 	}
+
+	console.log('user', user);
 
 	return (
 		<View style={styles.container}>
@@ -64,15 +68,19 @@ export default function Profile() {
 				>
 					{user?.username}
 				</ThemedText>
-				<View style={styles.biographie}>
-					<ThemedText
-						type={'header6'}
-						style={styles.biographieText}
-					>
-						A propos de {user?.firstName}
-					</ThemedText>
-					<ThemedText style={styles.biographieText}>{user?.bio}</ThemedText>
-				</View>
+				{user?.bio ? (
+					<View style={styles.biographie}>
+						<ThemedText
+							type={'header6'}
+							style={styles.biographieText}
+						>
+							A propos de {user?.firstName}
+						</ThemedText>
+						<ThemedText style={styles.biographieText}>{user?.bio}</ThemedText>
+					</View>
+				) : (
+					<ProfileCompletion missingFields={checkMissingFields} />
+				)}
 				<View style={styles.data}>
 					<View style={styles.cell}>
 						<ThemedText
