@@ -1,4 +1,11 @@
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import React, {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
 import { User } from '@/types/Ecovoit';
 
 interface ProfileContextType {
@@ -6,6 +13,8 @@ interface ProfileContextType {
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	profileImage: string | null;
 	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
+	defaultFields: string[];
+	checkMissingFields: () => void;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -14,15 +23,14 @@ interface ProfileProviderProps {
 	children: ReactNode;
 }
 
-// TODO : à remplacer par des données dynamiques
-const initialData = {
+const initialData: User = {
 	id: 1,
 	username: 'John Doe',
 	email: 'johndoe@gmail.com',
-	bio: "I'm a cool guy, I like to drive and meet new people. I'm always on time and I have a clean car.",
 	firstName: 'John',
-	lastName: 'Doe',
-	rank: 'member' as const,
+	lastName: undefined,
+	rank: 'member',
+	bio: undefined,
 	verified: true,
 	vehicles: [],
 	tripsAsDriver: [],
@@ -33,7 +41,29 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 	const [user, setUser] = useState<User>(initialData);
 	const [profileImage, setProfileImage] = useState<string | null>(null);
 
-	const contextValue = useMemo(() => ({ user, setUser, profileImage, setProfileImage }), [user, profileImage]);
+	const checkMissingFields = useCallback(() => {
+		const missingFields: string[] = [];
+		const fieldsToCheck = ['firstName', 'lastName', 'username', 'email', 'bio'];
+
+		fieldsToCheck.forEach((field) => {
+			if (user[field as keyof User] === undefined) {
+				missingFields.push(field);
+			}
+		});
+
+		return missingFields;
+	}, [user]);
+
+	const contextValue = useMemo(
+		() => ({
+			user,
+			setUser,
+			profileImage,
+			setProfileImage,
+			checkMissingFields,
+		}),
+		[user, profileImage, checkMissingFields]
+	);
 
 	return (
 		<ProfileContext.Provider value={contextValue}>

@@ -7,7 +7,7 @@ export type User = {
 	bio?: string;
 	rank: 'member' | 'moderator' | 'admin';
 	verified: boolean;
-	vehicles: Vehicle[];
+	vehicles: [Vehicle?, Vehicle?, Vehicle?, Vehicle?];
 	tripsAsDriver: Trip[];
 	tripsAsPassenger: Trip[];
 };
