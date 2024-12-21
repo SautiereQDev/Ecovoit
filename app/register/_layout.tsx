@@ -11,10 +11,10 @@ export default function ProfileLayout() {
 				}}
 			>
 				<Stack.Screen name='index' />
-				<Stack.Screen name='Confirmation' />
-				<Stack.Screen name='InfosPerso' />
-				<Stack.Screen name='Vehicle' />
-				<Stack.Screen name='PictureBio' />
+				<Stack.Screen name='confirmation' />
+				<Stack.Screen name='infosPerso' />
+				<Stack.Screen name='vehicle' />
+				<Stack.Screen name='pictureBio' />
 			</Stack>
 		</RegisterProvider>
 	);

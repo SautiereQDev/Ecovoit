@@ -11,7 +11,7 @@ export const Index = () => {
 
 	const handleNext = () => {
 		if (validatePage(1)) {
-			router.push('/register/page2');
+			router.push('/register/infosPerso');
 		}
 	};
 
