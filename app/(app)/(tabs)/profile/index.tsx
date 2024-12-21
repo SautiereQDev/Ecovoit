@@ -68,7 +68,7 @@ export default function Profile() {
 				>
 					{user?.username}
 				</ThemedText>
-				{user?.bio ? (
+				{checkMissingFields().length === 1 ? (
 					<View style={styles.biographie}>
 						<ThemedText
 							type={'header6'}
@@ -79,7 +79,10 @@ export default function Profile() {
 						<ThemedText style={styles.biographieText}>{user?.bio}</ThemedText>
 					</View>
 				) : (
-					<ProfileCompletion missingFields={checkMissingFields} />
+					<ProfileCompletion
+						missingFields={checkMissingFields}
+						style={styles.missingFields}
+					/>
 				)}
 				<View style={styles.data}>
 					<View style={styles.cell}>
@@ -151,6 +154,8 @@ export default function Profile() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		width: '90%',
+		margin: 'auto',
 	},
 	title: {
 		textAlign: 'center',
@@ -172,7 +177,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		backgroundColor: Colors.light.accentBackground,
 		marginVertical: '5%',
-		marginHorizontal: '5%',
 		paddingVertical: '3%',
 		borderRadius: 10,
 		gap: 5,
@@ -180,16 +184,18 @@ const styles = StyleSheet.create({
 	biographieText: {
 		textAlign: 'center',
 	},
+	missingFields: {
+		marginTop: '5%',
+	},
 	data: {
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
-		width: '95%',
 		marginHorizontal: 'auto',
 		marginVertical: '15%',
 	},
 	cell: {
-		width: '30%',
+		flex: 1,
 		marginHorizontal: 'auto',
 	},
 	verticalSeparator: {
