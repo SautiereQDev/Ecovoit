@@ -1,19 +1,20 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import { ThemedText } from '@/components/texts';
+import { fontType, ThemedText } from '@/components/texts';
 import Colors from '@/constants/Colors';
 
 /**
  * Propriétés du composant CircularProgress.
  */
 interface CircularProgressProps {
-	size: number; // Taille du cercle
-	strokeWidth: number; // Largeur du trait du cercle
+	size?: number; // Taille du cercle
+	strokeWidth?: number; // Largeur du trait du cercle
 	progress: number; // Progression en pourcentage (0-100)
-	color: string; // Couleur du cercle de progression
-	backgroundColor: string; // Couleur de fond du cercle
+	color?: string; // Couleur du cercle de progression
+	backgroundColor?: string; // Couleur de fond du cercle
 	textColor?: keyof typeof Colors.light; // Couleur du texte
+	textType?: keyof typeof fontType; // Type de texte
 }
 
 /**
@@ -22,28 +23,26 @@ interface CircularProgressProps {
  * @returns {ReactNode} Le composant de barre de progression circulaire.
  */
 export const CircularProgress: React.FC<CircularProgressProps> = ({
-	size,
-	strokeWidth,
+	size = 50,
+	strokeWidth = 8,
 	progress,
-	color,
-	backgroundColor,
-	textColor,
+	color = Colors.light.primary,
+	backgroundColor = 'background',
+	textColor = 'text',
+	textType = 'accent',
 }: CircularProgressProps): ReactNode => {
 	const radius = (size - strokeWidth) / 2;
 	const circumference = 2 * Math.PI * radius;
 	const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-	return (
-		<View style={{ width: size, height: size }}>
+	'background'View style={{ size, height: size }}>
 			<Svg
 				width={size}
-				height={size}
-			>
+				height={'text'			>
 				<Circle
 					stroke={backgroundColor}
 					fill='none'
-					cx={size / 2}
-					cy={size / 2}
+					cx={size / 'accent'cy={size / 2}
 					r={radius}
 					strokeWidth={strokeWidth}
 				/>
@@ -61,13 +60,13 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 			</Svg>
 			<View style={styles.textContainer}>
 				<ThemedText
-					style={styles.text}
 					color={textColor}
+					type={textType}
 				>{`${progress}%`}</ThemedText>
 			</View>
 		</View>
-	);
-};
+	)
+}
 
 export default CircularProgress;
 
@@ -83,9 +82,5 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	text: {
-		fontSize: 18,
-		fontWeight: 'bold',
 	},
 });
