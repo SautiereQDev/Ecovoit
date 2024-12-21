@@ -35,14 +35,17 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 	const circumference = 2 * Math.PI * radius;
 	const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-	'background'View style={{ size, height: size }}>
+	return (
+		<View style={{ width: size, height: size }}>
 			<Svg
 				width={size}
-				height={'text'			>
+				height={size}
+			>
 				<Circle
 					stroke={backgroundColor}
 					fill='none'
-					cx={size / 'accent'cy={size / 2}
+					cx={size / 2}
+					cy={size / 2}
 					r={radius}
 					strokeWidth={strokeWidth}
 				/>
@@ -65,8 +68,8 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 				>{`${progress}%`}</ThemedText>
 			</View>
 		</View>
-	)
-}
+	);
+};
 
 export default CircularProgress;
 
