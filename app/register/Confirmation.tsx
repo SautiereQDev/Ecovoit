@@ -8,11 +8,11 @@ import ReturnButton from '@/components/buttons/ReturnButton';
 
 const RegisterPage3 = () => {
 	const nextStep = () => {
-		router.push('/register/page4');
+		router.push('/register/Vehicle');
 	};
 
 	const skip = () => {
-		router.push('/register/page5');
+		router.push('/register/PictureBio');
 	};
 
 	return (

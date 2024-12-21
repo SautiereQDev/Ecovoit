@@ -12,7 +12,7 @@ const RegisterPage4 = () => {
 
 	const handleNext = () => {
 		if (validatePage(4)) {
-			router.push('/register/page5');
+			router.push('/register/PictureBio');
 		}
 	};
 
