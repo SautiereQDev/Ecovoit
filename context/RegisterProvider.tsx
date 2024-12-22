@@ -32,6 +32,14 @@ export interface FormType {
 	profilePicture: string | null;
 }
 
+export const OPTIONAL_FIELDS = {
+	lastName: 'Nom de famille',
+	biographie: 'Biographie',
+	vehicles: 'Véhicule',
+} as const;
+
+export type OptionalField = keyof typeof OPTIONAL_FIELDS;
+
 export type ValidationErrors = {
 	[K in keyof FormType]?: K extends 'vehicles'
 		? {

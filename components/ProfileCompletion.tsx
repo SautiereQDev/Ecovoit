@@ -1,87 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { router } from 'expo-router';
 import { ThemedText } from '@/components/texts';
 import { CircularProgress } from '@/components/CircularProgress';
-import Colors from '@/constants/Colors';
-import { router } from 'expo-router';
 import { CustomButton } from '@/components/buttons';
+import Colors from '@/constants/Colors';
+import { useProfileCompletion } from '@/hooks/useProfileCompletion';
+import { OptionalField } from '@/context/RegisterProvider';
 
 interface ProfileCompletionProps {
 	style?: object;
-	missingFields: () => string[];
 }
 
-const ProfileCompletion = ({
-	style,
-	missingFields,
-}: ProfileCompletionProps) => {
-	const fields = missingFields();
+// TODO: Regler le bug visual avec les deux bouttons completer
 
-	if (fields.length === 0) {
-		throw new Error("Aucun champ manquant n'a été trouvé.");
-	}
+export const ProfileCompletion = ({ style }: ProfileCompletionProps) => {
+	const { getMissingFields, getCompletionPercentage } = useProfileCompletion();
 
-	const [progression, setProgression] = useState<number>(100);
+	const missingFields = getMissingFields();
+	const completionPercentage = getCompletionPercentage(missingFields);
 
-	useEffect(() => {
-		setProgression(100 - fields.length * 10); // chaque champ manquant enlève 10%
-	}, [fields]);
-
-	const handleComplete = (): void => {
-		if (fields.length > 0) {
-			// @ts-ignore
-			router.push('/profile/completing/');
-		}
+	const handleCompleting = (field: OptionalField) => {
+		router.push('/profile/completing');
 	};
 
 	return (
-		<View style={[style, styles.container]}>
+		<View style={[styles.container, style]}>
 			<ThemedText
-				color={'background'}
-				type={'header4'}
+				color='background'
+				type='header4'
 			>
 				Complétez votre profil
 			</ThemedText>
-			{fields.length > 1 ? (
-				<ThemedText color={'background'}>
-					Il vous reste {fields.length} champs à compléter.
-				</ThemedText>
-			) : (
-				<ThemedText color={'background'}>
-					Il vous reste {fields.length} champ à compléter.
-				</ThemedText>
-			)}
-			<View style={styles.progress}>
-				<View style={styles.progressContainer}>
-					<ThemedText
-						color={'background'}
-						style={styles.text}
-						type={'header5'}
-					>
-						{fields[0] !== 'vehicle'
-							? 'Complétez votre ' + fields[0]
-							: 'Ajoutez un véhicule'}
-					</ThemedText>
-					<CustomButton
-						buttonStyle={styles.completeButton}
-						onPress={handleComplete}
-						text={'Compléter'}
-					/>
-				</View>
+			<ThemedText color='background'>
+				{missingFields.length > 1
+					? `Il vous reste ${missingFields.length} champs à compléter.`
+					: 'Il vous reste 1 champ à compléter.'}
+			</ThemedText>
+			<View style={styles.footer}>
+				<CustomButton
+					text='Compléter'
+					onPress={() => handleCompleting(missingFields[0])}
+					size='smaller'
+					buttonStyle={styles.completeButton}
+				/>
 				<CircularProgress
 					size={80}
-					progress={progression}
-					textColor={'background'}
-					color={Colors.light.secondary}
+					progress={completionPercentage}
+					textColor='background'
+					color={Colors.light.primary}
 					backgroundColor={Colors.light.background}
-					textType={'accent'}
 				/>
 			</View>
 		</View>
 	);
 };
-
-export default ProfileCompletion;
 
 const styles = StyleSheet.create({
 	container: {
@@ -103,7 +76,14 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	completeButton: {
-		marginTop: '3%',
-		width: '65%',
+		width: '40%',
+		marginVertical: 'auto',
+	},
+	footer: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		marginTop: '5%',
 	},
 });

@@ -16,8 +16,7 @@ export const useProfileCompletion = () => {
 
 	const getCompletionPercentage = (missingFields: OptionalField[]): number => {
 		const totalFields = Object.keys(OPTIONAL_FIELDS).length;
-		const completedFields = totalFields - missingFields.length;
-		return (completedFields / totalFields) * 100;
+		return ((totalFields - missingFields.length) / totalFields) * 40 + 60; // 60% is the minimum completion percentage
 	};
 
 	const getFieldRoute = (field: OptionalField): string => {

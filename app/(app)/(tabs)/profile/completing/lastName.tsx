@@ -14,13 +14,11 @@ const LastName = () => {
 
 	const handleSubmit = (): void => {
 		validateField('lastName', data.lastName);
-		if (Object.values(errors).every((error) => error === null)) {
-			// Check if all errors are null
-			router.push('/profile/completing/');
+		if (!errors.lastName) {
+			// @ts-ignore
+			router.push('/profile/completing');
 		}
 	};
-
-	console.log('data', data);
 
 	return (
 		<View style={globalStyle.content}>

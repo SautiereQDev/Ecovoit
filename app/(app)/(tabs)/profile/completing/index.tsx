@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import { router } from 'expo-router';
 import { useRegister } from '@/context/RegisterProvider';
+import { CustomButton, ThemedText } from '@/components';
 
 export const handleBack = (): void => router.push('/profile');
 
@@ -13,6 +14,11 @@ export const handleBack = (): void => router.push('/profile');
  */
 export function Index(): React.ReactNode {
 	const { data } = useRegister();
+
+	console.log('data', data);
+
+	// TODO: Régler le problème des données qui ne sont pas sauvegardés.
+	// TODO: ajouter un boutton "passer" pour permettre à l'utilisateur de passer à l'étape suivante sans completer le champs.
 
 	useEffect(() => {
 		if (data.lastName === undefined) {
@@ -27,13 +33,31 @@ export function Index(): React.ReactNode {
 	// Si aucun champ n'est manquant, affiche un message de félicitations.
 	return (
 		<View style={globalStyle.container}>
-			<Text style={globalStyle.title}>Complétez votre profil</Text>
-			<Text style={globalStyle.paragraph}>
+			<ThemedText
+				style={globalStyle.title}
+				type={'header3'}
+			>
+				Completion du profil
+			</ThemedText>
+			<ThemedText
+				style={globalStyle.paragraph}
+				type={'header4'}
+			>
 				Votre profil est complet, félicitations !
-			</Text>
+			</ThemedText>
 			<View style={globalStyle.buttons}>
 				<View style={globalStyle.askButton}>
-					<Text style={globalStyle.buttonHomeText}>Retour à l'accueil</Text>
+					<ThemedText style={globalStyle.buttonHomeText}>
+						Retour à l'accueil
+					</ThemedText>
+					<CustomButton
+						text={"Retour à l'accueil"}
+						onPress={() => {
+							router.push('/profile'); //permet de reinitialiser la stack de navigation de l'onglet profile
+							router.push('/');
+						}}
+						buttonStyle={globalStyle.buttonHome}
+					/>
 				</View>
 			</View>
 		</View>

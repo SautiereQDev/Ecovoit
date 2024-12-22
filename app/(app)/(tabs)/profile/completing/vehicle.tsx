@@ -1,31 +1,37 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useRegister } from '@/context/RegisterProvider';
 import { globalStyle, handleBack } from './index';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { CustomButton } from '@/components';
+import { router } from 'expo-router';
 
 const Vehicle = () => {
-	const { data, setData, errors, validatePage, validateField } = useRegister();
+	const { setData, errors, validateField } = useRegister();
 
-	const handleSubmit = (): void => {};
+	const handleSubmit = (): void => {
+		if (!errors.vehicles) {
+			// @ts-ignore
+			router.push('/profile/completing/');
+		}
+	};
 
 	return (
 		<SafeAreaView style={globalStyle.container}>
-			<ReturnButton handleBack={handleBack} />
-			<CreateVehicle
-				errors={errors}
-				data={data}
-				setData={setData}
-				handleNext={handleSubmit}
-				validateField={validateField}
-			/>
-			<CustomButton
-				text={'Valider'}
-				onPress={handleSubmit}
-				buttonStyle={globalStyle.buttonNext}
-			/>
+			<View style={globalStyle.content}>
+				<ReturnButton handleBack={handleBack} />
+				<CreateVehicle
+					errors={errors}
+					setData={setData}
+					validateField={validateField}
+				/>
+				<CustomButton
+					text={'Valider'}
+					onPress={handleSubmit}
+					buttonStyle={globalStyle.buttonNext}
+				/>
+			</View>
 		</SafeAreaView>
 	);
 };

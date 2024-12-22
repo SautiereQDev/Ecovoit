@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { User } from '@/types/Ecovoit';
 
 /**
@@ -9,7 +9,6 @@ interface ProfileContextType {
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	profileImage: string | null;
 	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
-	checkMissingFields: () => string[];
 }
 
 /**
@@ -44,34 +43,13 @@ const initialData: User = {
 /**
  * Composant fournisseur de contexte pour le profil utilisateur.
  * @param {ProfileProviderProps} props - Les propriétés du composant.
- * @returns {JSX.Element} Le composant fournisseur de contexte.
+ * @returns {ReactNode} Le composant fournisseur de contexte.
  */
-export const ProfileProvider = ({ children }: ProfileProviderProps): JSX.Element => {
+export const ProfileProvider = ({
+	children,
+}: ProfileProviderProps): ReactNode => {
 	const [user, setUser] = useState<User>(initialData);
 	const [profileImage, setProfileImage] = useState<string | null>(null);
-
-	/**
-	 * Vérifie les champs manquants dans le profil utilisateur.
-	 * @returns {string[]} Liste des champs manquants.
-	 */
-	const checkMissingFields = useCallback(() => {
-		const missingFields: string[] = [];
-		const fieldsToCheck = ['lastName', 'vehicle', 'bio'];
-
-		fieldsToCheck.forEach((field) => {
-			const value = user[field as keyof User];
-			if (
-				value === undefined ||
-				value === '' ||
-				value === null ||
-				(Array.isArray(value) && value.length === 0)
-			) {
-				missingFields.push(field);
-			}
-		});
-
-		return missingFields;
-	}, [user]);
 
 	/**
 	 * Valeur du contexte du profil utilisateur.
@@ -82,14 +60,13 @@ export const ProfileProvider = ({ children }: ProfileProviderProps): JSX.Element
 			setUser,
 			profileImage,
 			setProfileImage,
-			checkMissingFields,
 		}),
-		[user, profileImage, checkMissingFields]
+		[user, profileImage]
 	);
 
 	return (
 		<ProfileContext.Provider value={contextValue}>
-			{children}
+			,{children}
 		</ProfileContext.Provider>
 	);
 };
