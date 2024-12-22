@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/texts';
 import { CircularProgress } from '@/components/CircularProgress';
 import Colors from '@/constants/Colors';
+import { router } from 'expo-router';
 import { CustomButton } from '@/components/buttons';
 
 interface ProfileCompletionProps {
@@ -23,14 +24,21 @@ const ProfileCompletion = ({
 	const [progression, setProgression] = useState<number>(100);
 
 	useEffect(() => {
-		setProgression(100 - fields.length * 20); // chaque champs manquants enlève 20%
+		setProgression(100 - fields.length * 10); // chaque champ manquant enlève 10%
 	}, [fields]);
+
+	const handleComplete = (): void => {
+		if (fields.length > 0) {
+			// @ts-ignore
+			router.push('/profile/completing/');
+		}
+	};
 
 	return (
 		<View style={[style, styles.container]}>
 			<ThemedText
 				color={'background'}
-				type={'header5'}
+				type={'header4'}
 			>
 				Complétez votre profil
 			</ThemedText>
@@ -48,18 +56,25 @@ const ProfileCompletion = ({
 					<ThemedText
 						color={'background'}
 						style={styles.text}
+						type={'header5'}
 					>
-						Complétez la {fields[0]}.
+						{fields[0] !== 'vehicle'
+							? 'Complétez votre ' + fields[0]
+							: 'Ajoutez un véhicule'}
 					</ThemedText>
-					<CustomButton text={'Compléter'} />
+					<CustomButton
+						buttonStyle={styles.completeButton}
+						onPress={handleComplete}
+						text={'Compléter'}
+					/>
 				</View>
 				<CircularProgress
-					size={100}
-					strokeWidth={10}
+					size={80}
 					progress={progression}
-					textColor={'text'}
+					textColor={'background'}
 					color={Colors.light.secondary}
 					backgroundColor={Colors.light.background}
+					textType={'accent'}
 				/>
 			</View>
 		</View>
@@ -72,19 +87,23 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'green',
 		borderRadius: 15,
-		padding: '3%',
+		padding: '5%',
 	},
 	progressContainer: {
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'space-between',
+		justifyContent: 'space-evenly',
 	},
 	progress: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center',
+		marginTop: '5%',
 	},
 	text: {
 		marginRight: 10,
+	},
+	completeButton: {
+		marginTop: '3%',
+		width: '65%',
 	},
 });
