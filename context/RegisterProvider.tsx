@@ -1,51 +1,63 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
-import is from '@sindresorhus/is';
-import undefined = is.undefined;
+
+export type FieldValue = string | PageNumber | Vehicle[];
+type PageNumber = 1 | 2 | 3 | 4 | 5;
 
 interface RegisterContextType {
 	data: FormType;
 	setData: React.Dispatch<React.SetStateAction<FormType>>;
 	errors: ValidationErrors;
 	validatePage: (page: PageNumber) => boolean;
-	validateField: (
-		field: keyof FormType,
-		value: string | number | undefined
-	) => void;
+	validateField: (field: keyof FormType, value: FieldValue) => void;
 	submit: () => void;
 	clearErrors: () => void;
 	resetData: () => void;
 }
 
-type PageNumber = 1 | 2 | 3 | 4 | 5;
-
-type ValidationErrors = { [key in keyof FormType]?: string };
+export interface Vehicle {
+	carName: string;
+	carConsommation: number;
+	carEmission: number;
+}
 
 export interface FormType {
 	firstName: string;
-	lastName?: string;
+	lastName: string | null;
 	username: string;
 	email: string;
 	password: string;
-	carName?: string;
-	carConsommation?: number;
-	carEmission?: number;
-	biographie: string;
+	vehicles: Vehicle[];
+	biographie: string | null;
 	profilePicture: string | null;
 }
 
+export type ValidationErrors = {
+	[K in keyof FormType]?: K extends 'vehicles'
+		? {
+				carName?: string;
+				carConsommation?: string;
+				carEmission?: string;
+			}[]
+		: string;
+};
 const initialData: FormType = {
-	firstName: '',
-	lastName: '',
-	username: '',
-	email: '',
-	password: '',
-	carName: '',
-	carConsommation: 0,
-	carEmission: 0,
-	biographie: '',
+	firstName: 'John',
+	lastName: null,
+	username: 'JoJo',
+	email: 'johndoe@gmail.com',
+	password: 'Jjoj@123dsd',
+	vehicles: [],
+	biographie: null,
 	profilePicture: null,
 };
+
+export interface CreateVehicleProps {
+	data: FormType;
+	setData: React.Dispatch<React.SetStateAction<FormType>>;
+	errors: ValidationErrors;
+	validateField: (field: keyof FormType, value: FieldValue) => void;
+}
 
 const VALIDATION_RULES: {
 	[key in keyof FormType]: (value: any) => string | null;
@@ -66,12 +78,8 @@ const VALIDATION_RULES: {
 	firstName: (value: string) =>
 		value.length > 0 ? null : 'Le prénom est requis',
 	lastName: () => null,
-	carName: (value: string) =>
-		value.length > 0 ? null : 'Le nom du véhicule est requis',
-	carConsommation: (value: number) =>
-		value > 0 ? null : 'La consommation doit être supérieure à 0',
-	carEmission: (value: number) =>
-		value > 0 ? null : 'Les émissions doivent être supérieures à 0',
+	vehicles: (value: Vehicle[]) =>
+		value.length > 0 ? null : 'Au moins un véhicule est requis',
 	biographie: (value: string) =>
 		value.length <= 128
 			? null
@@ -82,7 +90,7 @@ const PAGE_FIELDS: Record<PageNumber, (keyof FormType)[]> = {
 	1: ['username', 'email', 'password'],
 	2: ['firstName', 'lastName'],
 	3: [],
-	4: ['carName', 'carConsommation', 'carEmission'],
+	4: ['vehicles'],
 	5: ['biographie'],
 };
 
@@ -96,18 +104,16 @@ export function RegisterProvider({
 
 	const validateField = (
 		field: keyof FormType,
-		value: string | number | undefined
+		value: string | number | Vehicle[]
 	) => {
 		const rule = VALIDATION_RULES[field];
 		if (!rule) return;
 
-		const error = rule(value as string);
+		const error = rule(value);
 		setErrors((prev) => ({
 			...prev,
 			[field]: error,
 		}));
-
-		return !error;
 	};
 
 	const validatePage = useCallback(
@@ -123,7 +129,11 @@ export function RegisterProvider({
 				const error = rule(data[field] as string);
 				if (error) {
 					isValid = false;
-					newErrors[field] = error;
+					if (field === 'vehicles') {
+						newErrors[field] = [];
+					} else {
+						newErrors[field] = error;
+					}
 				}
 			});
 

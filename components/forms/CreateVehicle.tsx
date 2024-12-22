@@ -1,79 +1,104 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import React from 'react';
-import ReturnButton from '@/components/buttons/ReturnButton';
+import { StyleSheet, View } from 'react-native';
 import { ThemedInput, ThemedText } from '@/components';
-import { FormType } from '@/context/RegisterProvider';
+import React, { useState } from 'react';
+import { CreateVehicleProps, Vehicle } from '@/context/RegisterProvider';
 
-interface CreateVehicleProps {
-	errors: { [key in keyof FormType]?: string };
-	style?: ViewStyle;
-	data: FormType;
-	setData: React.Dispatch<React.SetStateAction<FormType>>;
-	handleNext: () => void;
-	validateField: (
-		field: keyof FormType,
-		value: string | number | undefined
-	) => void;
-}
+const vehicleValidation: Record<
+	keyof Vehicle,
+	(value: string | number) => string | null
+> = {
+	carName: (value: string | number) =>
+		String(value).length >= 2
+			? null
+			: 'Le nom du véhicule doit contenir au moins 2 caractères',
+	carConsommation: (value: string | number) =>
+		Number(value) > 0 && Number(value) < 50
+			? null
+			: 'La consommation doit être entre 0 et 50 L/100km',
+	carEmission: (value: string | number) =>
+		Number(value) > 0 && Number(value) < 500
+			? null
+			: 'Les émissions doivent être entre 0 et 500 g/km',
+};
 
-const CreateVehicle = ({
+export const CreateVehicle = ({
 	errors,
 	data,
 	setData,
-	handleNext,
 	validateField,
 }: Readonly<CreateVehicleProps>) => {
+	const [vehicle, setVehicle] = useState<Vehicle>({
+		carName: '',
+		carConsommation: 0,
+		carEmission: 0,
+	});
+
+	const handleVehicleChange = (
+		field: keyof Vehicle,
+		value: string | number
+	) => {
+		const updatedVehicle = { ...vehicle, [field]: value };
+		setVehicle(updatedVehicle);
+
+		// Valider le champ
+		const error = vehicleValidation[field]?.(value);
+		if (error) {
+			validateField('vehicles', [updatedVehicle]);
+		}
+
+		// Mettre à jour les véhicules dans le state global
+		setData((prev) => ({
+			...prev,
+			vehicles: [updatedVehicle],
+		}));
+	};
+
 	return (
 		<View style={styles.content}>
-			<ReturnButton />
 			<ThemedText
 				type={'header2'}
 				style={styles.title}
 			>
-				Informations véhicule
+				Informations du véhicule
 			</ThemedText>
 
-			<ThemedInput
-				placeholder='Nom du véhicule'
-				value={data.carName}
-				onChangeText={(value) => {
-					validateField('carName', value);
-					setData((prev) => ({ ...prev, carName: value }));
-				}}
-				hasError={!!errors.carName}
-				errorMessage={errors.carName}
-				label={'Nom du véhicule'}
-			/>
-
-			<ThemedInput
-				placeholder='Consommation (L/100km)'
-				value={data.carConsommation?.toString()}
-				onChangeText={(value) => {
-					validateField('carConsommation', Number(value));
-					setData((prev) => ({ ...prev, carConsommation: Number(value) }));
-				}}
-				keyboardType='numeric'
-				hasError={!!errors.carConsommation}
-				errorMessage={errors.carConsommation}
-				label={'Consommation'}
-			/>
-
-			<ThemedInput
-				placeholder='Émissions CO2 (g/km)'
-				value={data.carEmission?.toString()}
-				onChangeText={(value) => {
-					validateField('carEmission', Number(value));
-					setData((prev) => ({ ...prev, carEmission: Number(value) }));
-				}}
-				keyboardType='numeric'
-				hasError={!!errors.carEmission}
-				errorMessage={errors.carEmission}
-				label={'Émissions CO2'}
-			/>
+			<View style={styles.form}>
+				<ThemedInput
+					placeholder='Nom du véhicule'
+					value={vehicle.carName}
+					onChangeText={(value) => handleVehicleChange('carName', value)}
+					hasError={!!errors.vehicles?.[0]?.carName}
+					errorMessage={errors.vehicles?.[0]?.carName}
+					label={'Nom du véhicule'}
+				/>
+				<ThemedInput
+					placeholder='Consommation (L/100km)'
+					value={vehicle.carConsommation?.toString()}
+					onChangeText={(value) =>
+						handleVehicleChange('carConsommation', parseFloat(value) || 0)
+					}
+					keyboardType='numeric'
+					hasError={!!errors.vehicles?.[0]?.carConsommation}
+					errorMessage={errors.vehicles?.[0]?.carConsommation}
+					label={'Consommation'}
+				/>
+				-
+				<ThemedInput
+					placeholder='Émissions CO2 (g/km)'
+					value={vehicle.carEmission?.toString()}
+					onChangeText={(value) =>
+						handleVehicleChange('carEmission', parseFloat(value) || 0)
+					}
+					keyboardType='numeric'
+					hasError={!!errors.vehicles?.[0]?.carEmission}
+					errorMessage={errors.vehicles?.[0]?.carEmission}
+					label={'Émissions CO2'}
+				/>
+			</View>
 		</View>
 	);
 };
-export default CreateVehicle;
+
 const styles = StyleSheet.create({
 	content: {
 		marginHorizontal: 'auto',
@@ -81,10 +106,12 @@ const styles = StyleSheet.create({
 		width: '80%',
 		gap: 30,
 	},
-	title: { textAlign: 'center' },
-	buttonNext: {
-		marginLeft: 'auto',
-		paddingHorizontal: '8%',
-		paddingVertical: '2.5%',
+	title: {
+		textAlign: 'center',
+	},
+	form: {
+		gap: 20,
 	},
 });
+
+export default CreateVehicle;
