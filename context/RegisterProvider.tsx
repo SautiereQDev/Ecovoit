@@ -53,7 +53,6 @@ const initialData: FormType = {
 };
 
 export interface CreateVehicleProps {
-	data: FormType;
 	setData: React.Dispatch<React.SetStateAction<FormType>>;
 	errors: ValidationErrors;
 	validateField: (field: keyof FormType, value: FieldValue) => void;

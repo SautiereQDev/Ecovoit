@@ -23,7 +23,6 @@ const vehicleValidation: Record<
 
 export const CreateVehicle = ({
 	errors,
-	data,
 	setData,
 	validateField,
 }: Readonly<CreateVehicleProps>) => {
@@ -82,7 +81,6 @@ export const CreateVehicle = ({
 					errorMessage={errors.vehicles?.[0]?.carConsommation}
 					label={'Consommation'}
 				/>
-				-
 				<ThemedInput
 					placeholder='Émissions CO2 (g/km)'
 					value={vehicle.carEmission?.toString()}
@@ -103,7 +101,6 @@ const styles = StyleSheet.create({
 	content: {
 		marginHorizontal: 'auto',
 		marginTop: '10%',
-		width: '80%',
 		gap: 30,
 	},
 	title: {

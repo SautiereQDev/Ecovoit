@@ -22,7 +22,6 @@ export const RegisterPage4 = () => {
 				<ReturnButton />
 				<CreateVehicle
 					errors={errors}
-					data={data}
 					setData={setData}
 					validateField={validateField}
 				/>
