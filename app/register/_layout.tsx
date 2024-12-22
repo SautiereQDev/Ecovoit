@@ -5,17 +5,17 @@ import { RegisterProvider } from '@/context/RegisterProvider';
 export default function ProfileLayout() {
 	return (
 		<RegisterProvider>
-				<Stack
-					screenOptions={{
-						headerShown: false,
-					}}
-				>
-					<Stack.Screen name='index'/>
-					<Stack.Screen name='page2' />
-					<Stack.Screen name='page3' />
-					<Stack.Screen name='page4' />
-					<Stack.Screen name='page5' />
-				</Stack>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
+				<Stack.Screen name='index' />
+				<Stack.Screen name='confirmation' />
+				<Stack.Screen name='infosPerso' />
+				<Stack.Screen name='vehicle' />
+				<Stack.Screen name='pictureBio' />
+			</Stack>
 		</RegisterProvider>
 	);
 }

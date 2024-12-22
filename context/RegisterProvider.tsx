@@ -1,50 +1,69 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
-import is from '@sindresorhus/is';
-import undefined = is.undefined;
+
+export type FieldValue = string | PageNumber | Vehicle[] | undefined;
+type PageNumber = 1 | 2 | 3 | 4 | 5;
 
 interface RegisterContextType {
 	data: FormType;
 	setData: React.Dispatch<React.SetStateAction<FormType>>;
 	errors: ValidationErrors;
 	validatePage: (page: PageNumber) => boolean;
-	validateField: (
-		field: keyof FormType,
-		value: string | number | undefined
-	) => void;
+	validateField: (field: keyof FormType, value: FieldValue) => void;
 	submit: () => void;
 	clearErrors: () => void;
 	resetData: () => void;
 }
 
-type PageNumber = 1 | 2 | 3 | 4 | 5;
+export interface Vehicle {
+	carName: string;
+	carConsommation: number;
+	carEmission: number;
+}
 
-type ValidationErrors = { [key in keyof FormType]?: string };
-
-interface FormType {
+export interface FormType {
 	firstName: string;
 	lastName?: string;
 	username: string;
 	email: string;
 	password: string;
-	carName?: string;
-	carConsommation?: number;
-	carEmission?: number;
-	biographie: string;
+	vehicles: Vehicle[];
+	biographie?: string;
 	profilePicture: string | null;
 }
 
+export const OPTIONAL_FIELDS = {
+	lastName: 'Nom de famille',
+	biographie: 'Biographie',
+	vehicles: 'Véhicule',
+} as const;
+
+export type OptionalField = keyof typeof OPTIONAL_FIELDS;
+
+export type ValidationErrors = {
+	[K in keyof FormType]?: K extends 'vehicles'
+		? {
+				carName?: string;
+				carConsommation?: string;
+				carEmission?: string;
+			}[]
+		: string;
+};
 const initialData: FormType = {
-	firstName: '',
-	lastName: '',
-	username: '',
-	email: '',
-	password: '',
-	carName: '',
-	carConsommation: 0,
-	carEmission: 0,
-	biographie: '',
+	firstName: 'John',
+	lastName: undefined,
+	username: 'JoJo',
+	email: 'johndoe@gmail.com',
+	password: 'Jjoj@123dsd',
+	vehicles: [],
+	biographie: undefined,
 	profilePicture: null,
+};
+
+export interface CreateVehicleProps {
+	setData: React.Dispatch<React.SetStateAction<FormType>>;
+	errors: ValidationErrors;
+	validateField: (field: keyof FormType, value: FieldValue) => void;
 }
 
 const VALIDATION_RULES: {
@@ -66,23 +85,19 @@ const VALIDATION_RULES: {
 	firstName: (value: string) =>
 		value.length > 0 ? null : 'Le prénom est requis',
 	lastName: () => null,
-	carName: (value: string) =>
-		value.length > 0 ? null : 'Le nom du véhicule est requis',
-	carConsommation: (value: number) =>
-		value > 0 ? null : 'La consommation doit être supérieure à 0',
-	carEmission: (value: number) =>
-		value > 0 ? null : 'Les émissions doivent être supérieures à 0',
+	vehicles: (value: Vehicle[]) =>
+		value.length > 0 ? null : 'Au moins un véhicule est requis',
 	biographie: (value: string) =>
 		value.length <= 128
 			? null
-			: 'La biographie ne doit pas dépasser 128 caractères'
+			: 'La biographie ne doit pas dépasser 128 caractères',
 };
 
 const PAGE_FIELDS: Record<PageNumber, (keyof FormType)[]> = {
 	1: ['username', 'email', 'password'],
 	2: ['firstName', 'lastName'],
 	3: [],
-	4: ['carName', 'carConsommation', 'carEmission'],
+	4: ['vehicles'],
 	5: ['biographie'],
 };
 
@@ -94,56 +109,58 @@ export function RegisterProvider({
 	const [data, setData] = useState<FormType>(initialData);
 	const [errors, setErrors] = useState<ValidationErrors>({});
 
-	const validateField = (
-		field: keyof FormType,
-		value: string | number | undefined
-	) => {
+	const validateField = (field: keyof FormType, value: FieldValue) => {
 		const rule = VALIDATION_RULES[field];
 		if (!rule) return;
 
-		const error = rule(value as string);
+		const error = rule(value);
 		setErrors((prev) => ({
 			...prev,
 			[field]: error,
 		}));
-
-		return !error;
 	};
 
-	const validatePage = useCallback((page: PageNumber): boolean => {
-		const fieldsToValidate = PAGE_FIELDS[page];
-		let isValid = true;
-		const newErrors: ValidationErrors = {};
+	const validatePage = useCallback(
+		(page: PageNumber): boolean => {
+			const fieldsToValidate = PAGE_FIELDS[page];
+			let isValid = true;
+			const newErrors: ValidationErrors = {};
 
-		fieldsToValidate.forEach((field) => {
-			const rule = VALIDATION_RULES[field];
-			if (!rule) return;
+			fieldsToValidate.forEach((field) => {
+				const rule = VALIDATION_RULES[field];
+				if (!rule) return;
 
-			const error = rule(data[field] as string);
-			if (error) {
-				isValid = false;
-				newErrors[field] = error;
-			}
-		});
+				const error = rule(data[field] as string);
+				if (error) {
+					isValid = false;
+					if (field === 'vehicles') {
+						newErrors[field] = [];
+					} else {
+						newErrors[field] = error;
+					}
+				}
+			});
 
-		setErrors(newErrors);
-		return isValid;
-	}, [data]);
+			setErrors(newErrors);
+			return isValid;
+		},
+		[data]
+	);
 
 	const clearErrors = () => setErrors({});
 
 	const submit = useCallback(() => {
-	const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
-	if (isValid) {
-		console.log('Form submitted:', data);
-		router.push('/');
-	}
-}, [data, validatePage]);
+		const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
+		if (isValid) {
+			console.log('Form submitted:', data);
+			router.push('/');
+		}
+	}, [data, validatePage]);
 
 	const resetData = () => {
 		setData(initialData);
 		setErrors({});
-	}
+	};
 
 	const value = useMemo(
 		() => ({

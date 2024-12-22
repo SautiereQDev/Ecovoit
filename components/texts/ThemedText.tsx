@@ -9,7 +9,7 @@ import { fonts } from '@/constants/Fonts';
 export type ThemedTextProps = TextProps & {
 	lightColor?: string;
 	darkColor?: string;
-	type?: keyof typeof styles;
+	type?: keyof typeof fontType;
 	color?: keyof typeof Colors.light;
 };
 
@@ -47,14 +47,14 @@ export function ThemedText({
 	return (
 		<Text
 			style={
-				[{ color: textColor }, styles[type], style] as unknown as TextStyle
+				[{ color: textColor }, fontType[type], style] as unknown as TextStyle
 			}
 			{...rest}
 		/>
 	);
 }
 
-const styles = StyleSheet.create({
+export const fontType = StyleSheet.create({
 	defaultBody: fonts.defaultBody,
 	bigger: fonts.bigger,
 	// @ts-ignore

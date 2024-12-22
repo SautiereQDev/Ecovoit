@@ -7,14 +7,13 @@ import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
 
 const RegisterPage3 = () => {
-
 	const nextStep = () => {
-		router.push('./page4');
+		router.push('/register/vehicle');
 	};
 
 	const skip = () => {
-		router.push('./page5');
-	}
+		router.push('/register/pictureBio');
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>

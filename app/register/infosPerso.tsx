@@ -12,7 +12,7 @@ const RegisterPage2 = () => {
 
 	const handleNext = () => {
 		if (validatePage(2)) {
-			router.push('./page3');
+			router.push('/register/confirmation');
 		}
 	};
 
