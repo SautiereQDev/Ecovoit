@@ -9,15 +9,10 @@ import { notify } from 'react-native-notificated';
 type Props = {
 	visible: boolean;
 	onClose: () => void;
-	setImage: React.Dispatch<string | null > | ((image: string) => void);
+	setImage: React.Dispatch<string | null> | ((image: string) => void);
 };
 
-export const GetImage = ({
-	visible,
-	onClose,
-	setImage,
-}: Props) => {
-
+export const GetImage = ({ visible, onClose, setImage }: Props) => {
 	const pickImageFromGalerie = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ['images'],
@@ -56,22 +51,33 @@ export const GetImage = ({
 		>
 			<View style={styles.overlay}>
 				<View style={styles.container}>
-					<ThemedText type={'header4'} style={styles.title}>Source de l'image de profile</ThemedText>
+					<ThemedText
+						type={'header4'}
+						style={styles.title}
+					>
+						Source de l'image de profile
+					</ThemedText>
 					<View style={styles.buttons}>
 						<CustomButton
 							text={'Depuis la galerie'}
 							onPress={pickImageFromGalerie}
-							textProps={{type: 'bigger', color: 'background'}}
+							textProps={{ type: 'bigger', color: 'background' }}
 							buttonStyle={styles.button}
 						/>
 						<CustomButton
 							text={"Ouvrir l'appareil photo"}
 							onPress={pickImageFromCamera}
-							textProps={{type: 'bigger', color: 'background'}}
+							textProps={{ type: 'bigger', color: 'background' }}
 							buttonStyle={styles.button}
 						/>
 					</View>
-					<CustomButton onPress={onClose} text={'Fermer'} textProps={{ type: 'bigger', color: 'background' }} buttonStyle={styles.exitButton} backgroundColor={'secondary'} />
+					<CustomButton
+						onPress={onClose}
+						text={'Fermer'}
+						textProps={{ type: 'bigger', color: 'background' }}
+						buttonStyle={styles.exitButton}
+						backgroundColor={'secondary'}
+					/>
 				</View>
 			</View>
 		</Modal>
@@ -96,9 +102,9 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		textAlign: 'center',
-		marginHorizontal: '5%'
+		marginHorizontal: '5%',
 	},
-	buttons:{
+	buttons: {
 		display: 'flex',
 		justifyContent: 'space-around',
 		marginVertical: 'auto',
@@ -111,8 +117,9 @@ const styles = StyleSheet.create({
 	},
 	exitButton: {
 		position: 'absolute',
-		paddingHorizontal: "3%",
+		paddingHorizontal: '3%',
 		bottom: 10,
 		right: 10,
-	}
+		width: '30%',
+	},
 });
