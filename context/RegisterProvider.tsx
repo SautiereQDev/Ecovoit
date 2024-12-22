@@ -21,7 +21,7 @@ type PageNumber = 1 | 2 | 3 | 4 | 5;
 
 type ValidationErrors = { [key in keyof FormType]?: string };
 
-interface FormType {
+export interface FormType {
 	firstName: string;
 	lastName?: string;
 	username: string;
@@ -45,7 +45,7 @@ const initialData: FormType = {
 	carEmission: 0,
 	biographie: '',
 	profilePicture: null,
-}
+};
 
 const VALIDATION_RULES: {
 	[key in keyof FormType]: (value: any) => string | null;
@@ -75,7 +75,7 @@ const VALIDATION_RULES: {
 	biographie: (value: string) =>
 		value.length <= 128
 			? null
-			: 'La biographie ne doit pas dépasser 128 caractères'
+			: 'La biographie ne doit pas dépasser 128 caractères',
 };
 
 const PAGE_FIELDS: Record<PageNumber, (keyof FormType)[]> = {
@@ -110,40 +110,43 @@ export function RegisterProvider({
 		return !error;
 	};
 
-	const validatePage = useCallback((page: PageNumber): boolean => {
-		const fieldsToValidate = PAGE_FIELDS[page];
-		let isValid = true;
-		const newErrors: ValidationErrors = {};
+	const validatePage = useCallback(
+		(page: PageNumber): boolean => {
+			const fieldsToValidate = PAGE_FIELDS[page];
+			let isValid = true;
+			const newErrors: ValidationErrors = {};
 
-		fieldsToValidate.forEach((field) => {
-			const rule = VALIDATION_RULES[field];
-			if (!rule) return;
+			fieldsToValidate.forEach((field) => {
+				const rule = VALIDATION_RULES[field];
+				if (!rule) return;
 
-			const error = rule(data[field] as string);
-			if (error) {
-				isValid = false;
-				newErrors[field] = error;
-			}
-		});
+				const error = rule(data[field] as string);
+				if (error) {
+					isValid = false;
+					newErrors[field] = error;
+				}
+			});
 
-		setErrors(newErrors);
-		return isValid;
-	}, [data]);
+			setErrors(newErrors);
+			return isValid;
+		},
+		[data]
+	);
 
 	const clearErrors = () => setErrors({});
 
 	const submit = useCallback(() => {
-	const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
-	if (isValid) {
-		console.log('Form submitted:', data);
-		router.push('/');
-	}
-}, [data, validatePage]);
+		const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
+		if (isValid) {
+			console.log('Form submitted:', data);
+			router.push('/');
+		}
+	}, [data, validatePage]);
 
 	const resetData = () => {
 		setData(initialData);
 		setErrors({});
-	}
+	};
 
 	const value = useMemo(
 		() => ({

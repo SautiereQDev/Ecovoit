@@ -46,64 +46,53 @@ const initialData: User = {
  * @param {ProfileProviderProps} props - Les propriétés du composant.
  * @returns {JSX.Element} Le composant fournisseur de contexte.
  */
-export const ProfileProvider = ({
-	                                children,
-                                }: ProfileProviderProps): JSX.Element => {
-																	const [user, setUser] =
-																		useState<User>(initialData);
-																	const [profileImage, setProfileImage] =
-																		useState<string | null>(null);
+export const ProfileProvider = ({ children }: ProfileProviderProps): JSX.Element => {
+	const [user, setUser] = useState<User>(initialData);
+	const [profileImage, setProfileImage] = useState<string | null>(null);
 
-																	/**
-																	 * Vérifie les champs manquants dans le profil utilisateur.
-																	 * @returns {string[]} Liste des champs manquants.
-																	 */
-																	const checkMissingFields = useCallback(() => {
-																		const missingFields: string[] = [];
-																		const fieldsToCheck = [
-																			'lastName',
-																			'car',
-																			'bio',
-																		];
+	/**
+	 * Vérifie les champs manquants dans le profil utilisateur.
+	 * @returns {string[]} Liste des champs manquants.
+	 */
+	const checkMissingFields = useCallback(() => {
+		const missingFields: string[] = [];
+		const fieldsToCheck = ['lastName', 'vehicle', 'bio'];
 
-																		fieldsToCheck.forEach((field) => {
-																			const value = user[field as keyof User];
-																			if (
-																				value === undefined ||
-																				value === '' ||
-																				value === null ||
-																				(Array.isArray(value) &&
-																					value.length === 0)
-																			) {
-																				missingFields.push(field);
-																			}
-																		});
+		fieldsToCheck.forEach((field) => {
+			const value = user[field as keyof User];
+			if (
+				value === undefined ||
+				value === '' ||
+				value === null ||
+				(Array.isArray(value) && value.length === 0)
+			) {
+				missingFields.push(field);
+			}
+		});
 
-																		return missingFields;
-																	}, [user]);
+		return missingFields;
+	}, [user]);
 
-																	/**
-																	 * Valeur du contexte du profil utilisateur.
-																	 */
-																	const contextValue = useMemo(
-																		() => ({
-																			user,
-																			setUser,
-																			profileImage,
-																			setProfileImage,
-																			checkMissingFields,
-																		}),
-																		[user, profileImage, checkMissingFields]
-																	);
+	/**
+	 * Valeur du contexte du profil utilisateur.
+	 */
+	const contextValue = useMemo(
+		() => ({
+			user,
+			setUser,
+			profileImage,
+			setProfileImage,
+			checkMissingFields,
+		}),
+		[user, profileImage, checkMissingFields]
+	);
 
-																	return (
-																		<ProfileContext.Provider
-																			value={contextValue}
-																		>
-																			{children}
-																		</ProfileContext.Provider>
-																	);
-																};
+	return (
+		<ProfileContext.Provider value={contextValue}>
+			{children}
+		</ProfileContext.Provider>
+	);
+};
 
 /**
  * Hook pour utiliser le contexte du profil utilisateur.
