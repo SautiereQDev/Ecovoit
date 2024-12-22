@@ -12,8 +12,6 @@ interface ProfileCompletionProps {
 	style?: object;
 }
 
-// TODO: Regler le bug visual avec les deux bouttons completer
-
 export const ProfileCompletion = ({ style }: ProfileCompletionProps) => {
 	const { getMissingFields, getCompletionPercentage } = useProfileCompletion();
 

@@ -15,11 +15,6 @@ export const handleBack = (): void => router.push('/profile');
 export function Index(): React.ReactNode {
 	const { data } = useRegister();
 
-	console.log('data', data);
-
-	// TODO: Régler le problème des données qui ne sont pas sauvegardés.
-	// TODO: ajouter un boutton "passer" pour permettre à l'utilisateur de passer à l'étape suivante sans completer le champs.
-
 	useEffect(() => {
 		if (data.lastName === undefined) {
 			router.push('/profile/completing/lastName');
@@ -99,6 +94,11 @@ export const globalStyle = StyleSheet.create({
 		backgroundColor: Colors.light.secondary,
 	},
 	buttonHomeText: { color: Colors.light.background, textAlign: 'center' },
-	buttons: { display: 'flex', flexDirection: 'row', gap: 30, margin: 'auto' },
+	buttons: {
+		display: 'flex',
+		flexDirection: 'row',
+		gap: 20,
+		marginLeft: 'auto',
+	},
 	askButton: { width: '40%' },
 });
