@@ -78,7 +78,9 @@ export default function Profile() {
 					>
 						A propos de {user?.firstName}
 					</ThemedText>
-					<ThemedText style={styles.biographieText}>{user?.bio}</ThemedText>
+					<ThemedText style={styles.biographieText}>
+						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
+					</ThemedText>
 				</View>
 				{missingFields.length > 0 && <ProfileCompletion />}
 				<View style={styles.data}>
