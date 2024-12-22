@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useRegister } from '@/context/RegisterProvider';
 import { styles } from './index';
@@ -18,20 +18,22 @@ export const RegisterPage4 = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ReturnButton />
-			<CreateVehicle
-				errors={errors}
-				data={data}
-				setData={setData}
-				validateField={validateField}
-			/>
-			<CustomButton
-				text={'Suivant'}
-				textProps={{ color: 'background' }}
-				backgroundColor={'primary'}
-				onPress={handleNext}
-				buttonStyle={styles.buttonNext}
-			/>
+			<View style={styles.content}>
+				<ReturnButton />
+				<CreateVehicle
+					errors={errors}
+					data={data}
+					setData={setData}
+					validateField={validateField}
+				/>
+				<CustomButton
+					text='Suivant'
+					textProps={{ color: 'background' }}
+					backgroundColor={'primary'}
+					onPress={handleNext}
+					buttonStyle={styles.buttonNext}
+				/>
+			</View>
 		</SafeAreaView>
 	);
 };

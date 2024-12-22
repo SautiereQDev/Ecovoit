@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
 
-export type FieldValue = string | PageNumber | Vehicle[];
+export type FieldValue = string | PageNumber | Vehicle[] | undefined;
 type PageNumber = 1 | 2 | 3 | 4 | 5;
 
 interface RegisterContextType {
@@ -23,12 +23,12 @@ export interface Vehicle {
 
 export interface FormType {
 	firstName: string;
-	lastName: string | null;
+	lastName?: string;
 	username: string;
 	email: string;
 	password: string;
 	vehicles: Vehicle[];
-	biographie: string | null;
+	biographie?: string;
 	profilePicture: string | null;
 }
 
@@ -43,12 +43,12 @@ export type ValidationErrors = {
 };
 const initialData: FormType = {
 	firstName: 'John',
-	lastName: null,
+	lastName: undefined,
 	username: 'JoJo',
 	email: 'johndoe@gmail.com',
 	password: 'Jjoj@123dsd',
 	vehicles: [],
-	biographie: null,
+	biographie: undefined,
 	profilePicture: null,
 };
 
@@ -102,10 +102,7 @@ export function RegisterProvider({
 	const [data, setData] = useState<FormType>(initialData);
 	const [errors, setErrors] = useState<ValidationErrors>({});
 
-	const validateField = (
-		field: keyof FormType,
-		value: string | number | Vehicle[]
-	) => {
+	const validateField = (field: keyof FormType, value: FieldValue) => {
 		const rule = VALIDATION_RULES[field];
 		if (!rule) return;
 
