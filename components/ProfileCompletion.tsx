@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { ThemedText } from '@/components/texts';
-import { CircularProgress } from '@/components/CircularProgress';
+import { CircularProgress } from '@/components/UI/CircularProgress';
 import { CustomButton } from '@/components/buttons';
 import Colors from '@/constants/Colors';
 import { useProfileCompletion } from '@/hooks/useProfileCompletion';
@@ -46,8 +46,8 @@ export const ProfileCompletion = ({ style }: ProfileCompletionProps) => {
 					size={80}
 					progress={completionPercentage}
 					textColor='background'
-					color={Colors.light.primary}
-					backgroundColor={Colors.light.background}
+					color={Colors.light.background}
+					backgroundColor={Colors.light.primary}
 				/>
 			</View>
 		</View>
