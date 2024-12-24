@@ -10,6 +10,7 @@ export type User = {
 	vehicles: [Vehicle?, Vehicle?, Vehicle?, Vehicle?];
 	tripsAsDriver: Trip[];
 	tripsAsPassenger: Trip[];
+	profilePicture: string | null;
 };
 
 export type Vehicle = {
