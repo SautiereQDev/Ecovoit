@@ -3,7 +3,7 @@ import { ThemedText, TripCard } from '@/components';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NewTripType, TripCardType } from '@/types';
+import { TripCardType } from '@/types';
 import { Link } from 'expo-router';
 
 export default function Index() {
@@ -37,16 +37,6 @@ export default function Index() {
 			date: '12/12/2024',
 		},
 	]);
-	const [formData, setFormData] = useState<NewTripType>({
-		username: '',
-		depart: '',
-		destination: '',
-		date: new Date().toDateString(),
-	});
-
-	const handleSubmit = () => {
-		// 		rediriger vers la page de recherche en mode isSearched = true avec les informations de la recherce transmise a la page de recherche
-	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -92,24 +82,23 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light.background,
 	},
 	title: {
-		marginBottom: 15,
+		marginBottom: "3%",
 		textAlign: 'center',
 	},
 	content: {
 		display: 'flex',
 		gap: 10,
-		marginTop: 5,
-		width: '90%',
+		marginTop: "2%",
+		maxWidth: '85%',
 		marginHorizontal: 'auto',
 	},
 	secondaryTitle: {
-		marginTop: 15,
-		marginBottom: 25,
+		marginVertical: "5%",
 	},
 	searchButton: {
 		backgroundColor: Colors.light.primary,
-		paddingVertical: 12,
-		width: '90%',
+		paddingVertical: "3%",
+		maxWidth: '90%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
 	},
