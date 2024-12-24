@@ -38,6 +38,8 @@ export function Biographie() {
 			<CustomButton
 				text={'Valider'}
 				onPress={handleSubmit}
+				buttonStyle={globalStyle.buttonNext}
+				size={"smaller"}
 			/>
 		</View>
 	);

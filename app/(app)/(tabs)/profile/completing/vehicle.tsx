@@ -18,21 +18,19 @@ const Vehicle = () => {
 	};
 
 	return (
-		<SafeAreaView style={globalStyle.container}>
-			<View style={globalStyle.content}>
-				<ReturnButton handleBack={handleBack} />
-				<CreateVehicle
-					errors={errors}
-					setData={setData}
-					validateField={validateField}
-				/>
-				<CustomButton
-					text={'Valider'}
-					onPress={handleSubmit}
-					buttonStyle={globalStyle.buttonNext}
-				/>
-			</View>
-		</SafeAreaView>
+		<View style={globalStyle.content}>
+			<ReturnButton handleBack={handleBack} />
+			<CreateVehicle
+				errors={errors}
+				setData={setData}
+				validateField={validateField}
+			/>
+			<CustomButton
+				text={'Valider'}
+				onPress={handleSubmit}
+				buttonStyle={globalStyle.buttonNext}
+			/>
+		</View>
 	);
 };
 

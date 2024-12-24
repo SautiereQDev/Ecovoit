@@ -22,12 +22,17 @@ export function Index(): React.ReactNode {
 			router.push('/profile/completing/biographie');
 		} else if (data.vehicles.length === 0) {
 			router.push('/profile/completing/vehicle');
+		} else if (
+			data.profilePicture === null ||
+			data.profilePicture === undefined
+		) {
+			router.push('/profile/completing/profilePicture');
 		}
 	}, [data]);
 
 	// Si aucun champ n'est manquant, affiche un message de félicitations.
 	return (
-		<View style={globalStyle.container}>
+		<View style={globalStyle.content}>
 			<ThemedText
 				style={globalStyle.title}
 				type={'header3'}
@@ -40,21 +45,14 @@ export function Index(): React.ReactNode {
 			>
 				Votre profil est complet, félicitations !
 			</ThemedText>
-			<View style={globalStyle.buttons}>
-				<View style={globalStyle.askButton}>
-					<ThemedText style={globalStyle.buttonHomeText}>
-						Retour à l'accueil
-					</ThemedText>
-					<CustomButton
-						text={"Retour à l'accueil"}
-						onPress={() => {
-							router.push('/profile'); //permet de reinitialiser la stack de navigation de l'onglet profile
-							router.push('/');
-						}}
-						buttonStyle={globalStyle.buttonHome}
-					/>
-				</View>
-			</View>
+			<CustomButton
+				text={"Retour à l'accueil"}
+				onPress={() => {
+					router.push('/profile'); //permet de reinitialiser la stack de navigation de l'onglet profile
+					router.push('/');
+				}}
+				buttonStyle={globalStyle.buttonHome}
+			/>
 		</View>
 	);
 }
@@ -65,9 +63,13 @@ export default Index;
  * Styles pour le composant Index.
  */
 export const globalStyle = StyleSheet.create({
-	container: { flex: 1, backgroundColor: '#fff' },
+	container: {
+		flex: 1,
+		backgroundColor: '#fff',
+		alignItems: 'center',
+	},
 	content: {
-		marginHorizontal: 'auto',
+		margin: 'auto',
 		marginTop: '10%',
 		width: '80%',
 		gap: 30,
@@ -89,9 +91,11 @@ export const globalStyle = StyleSheet.create({
 	buttonHome: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 6,
+		paddingVertical: 7,
 		borderRadius: 10,
 		backgroundColor: Colors.light.secondary,
+		width: '60%',
+		marginHorizontal: 'auto',
 	},
 	buttonHomeText: { color: Colors.light.background, textAlign: 'center' },
 	buttons: {
@@ -100,5 +104,4 @@ export const globalStyle = StyleSheet.create({
 		gap: 20,
 		marginLeft: 'auto',
 	},
-	askButton: { width: '40%' },
 });
