@@ -1,31 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { Image, Modal, StyleSheet, View, ViewStyle } from 'react-native';
 import CustomButton from '@/components/buttons/CustomButton';
 import GetImage from '@/components/modal/GetImage';
 
+/**
+ * Props for the ImagePickerButton component.
+ */
 interface ImagePickerButtonProps {
+	/** The URL of the image to display. */
 	image: string | null | undefined;
+	/** Function to set the image URL. */
 	setImage:
 		| React.Dispatch<React.SetStateAction<string | null>>
 		| ((image: string) => void);
+	/** Optional style for the container view. */
 	style?: ViewStyle;
 }
 
+/**
+ *
+ * @param image {string | null | undefined} The URL of the image to display.
+ * @param setImage {React.Dispatch<React.SetStateAction<string | null>> | ((image: string) => void)} Function to set the image URL.
+ * @param style {ViewStyle} Optional style for the container view.
+ * @returns {ReactNode} The ImagePickerButton component.
+ */
 export const ImagePickerButton = ({
 	image,
 	setImage,
 	style,
-}: ImagePickerButtonProps) => {
+}: ImagePickerButtonProps): ReactNode => {
 	const [modalVisible, setModalVisible] = useState(false);
 
+	/**
+	 * Opens the modal to add an image.
+	 */
 	const addImage = () => {
 		setModalVisible(true);
 	};
 
+	/**
+	 * Removes the currently selected image.
+	 */
 	const removeImage = () => {
 		setImage('');
-	}
+	};
 
+	/**
+	 * Closes the modal.
+	 */
 	const handleClose = () => {
 		setModalVisible(false);
 	};
