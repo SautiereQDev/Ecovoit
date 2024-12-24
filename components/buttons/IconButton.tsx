@@ -51,12 +51,7 @@ export function IconButton({
 	backgroundColor = 'background',
 	...restProps
 }: Readonly<Props>): ReactNode {
-	const Icon =
-		lib === 'Octicons'
-			? Octicons
-			: lib === 'FontAwesome'
-				? FontAwesome
-				: MaterialCommunityIcons;
+	const Icon = { Octicons, FontAwesome, MaterialCommunityIcons }[lib];
 
 	// @ts-ignore
 	return (

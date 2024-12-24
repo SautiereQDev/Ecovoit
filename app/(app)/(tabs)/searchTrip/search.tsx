@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTripSearch } from '@/context/SearchProvider';
+import { searchStyle } from './index';
 
 export const Search = () => {
 	const {
@@ -22,9 +23,9 @@ export const Search = () => {
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView style={searchStyle.container}>
 			<KeyboardAvoidingView>
-				<View style={styles.content}>
+				<View style={searchStyle.content}>
 					<View style={styles.header}>
 						<View style={styles.searchBar}>
 							<View style={styles.destination}>
@@ -116,15 +117,6 @@ export const Search = () => {
 export default Search;
 
 const styles = StyleSheet.create({
-	container: {
-		backgroundColor: Colors.light.background,
-	},
-	content: {
-		marginTop: 10,
-		flex: 0,
-		width: '90%',
-		marginHorizontal: 'auto',
-	},
 	header: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -140,7 +132,7 @@ const styles = StyleSheet.create({
 	destination: {
 		borderWidth: 1.5,
 		borderColor: Colors.light.inputText,
-		padding: 10,
+		padding: "2%",
 		borderRadius: 10,
 	},
 	resetButton: {

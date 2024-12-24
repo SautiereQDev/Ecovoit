@@ -6,7 +6,7 @@ import { Colors } from "@/constants/Colors";
 import { TripInfoLabel, TripLabel } from "../labels";
 import { RouteMap } from "../map";
 import { ThemedText } from "../texts";
-import { Stars } from "../Stars";
+import { Stars } from "../UI/Stars";
 
 interface TripData {
 	date?: string;
