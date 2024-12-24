@@ -21,6 +21,10 @@ export default function CompletingLayout() {
 					name='lastName'
 					options={{ headerShown: false }}
 				/>
+				<Stack.Screen
+					name='profilePicture'
+					options={{ headerShown: false }}
+				/>
 			</Stack>
 		</RegisterProvider>
 	);
