@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
+import { CustomButton, ThemedText } from '@/components';
 import {
 	globalStyle,
 	handleBack,
