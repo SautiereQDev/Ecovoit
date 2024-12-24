@@ -39,6 +39,7 @@ const LastName = () => {
 				text={'Valider'}
 				onPress={handleSubmit}
 				buttonStyle={globalStyle.buttonNext}
+				size={'smaller'}
 			/>
 		</View>
 	);

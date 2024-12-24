@@ -1,5 +1,6 @@
 import { useProfile } from '@/context/ProfileProvider';
 import { OPTIONAL_FIELDS, OptionalField } from '@/context/RegisterProvider';
+import { User } from '@/types/Ecovoit';
 
 export const useProfileCompletion = () => {
 	const { user } = useProfile();
@@ -9,6 +10,7 @@ export const useProfileCompletion = () => {
 
 		if (!user?.lastName) missingFields.push('lastName');
 		if (!user?.bio) missingFields.push('biographie');
+		if (!user?.profilePicture) missingFields.push('biographie');
 		if (!user?.vehicles?.length) missingFields.push('vehicles');
 
 		return missingFields;

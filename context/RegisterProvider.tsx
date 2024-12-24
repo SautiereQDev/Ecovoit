@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
 
-export type FieldValue = string | PageNumber | Vehicle[] | undefined;
+export type FieldValue = string | PageNumber | Vehicle[] | undefined | null;
 type PageNumber = 1 | 2 | 3 | 4 | 5;
 
 interface RegisterContextType {
@@ -36,6 +36,8 @@ export const OPTIONAL_FIELDS = {
 	lastName: 'Nom de famille',
 	biographie: 'Biographie',
 	vehicles: 'Véhicule',
+	profilePicture: 'Photo de profil',
+
 } as const;
 
 export type OptionalField = keyof typeof OPTIONAL_FIELDS;
