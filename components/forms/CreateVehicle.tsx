@@ -22,10 +22,10 @@ const vehicleValidation: Record<
 };
 
 export const CreateVehicle = ({
-	errors,
-	setData,
-	validateField,
-}: Readonly<CreateVehicleProps>) => {
+																errors,
+																setData,
+																validateField,
+															}: Readonly<CreateVehicleProps>) => {
 	const [vehicle, setVehicle] = useState<Vehicle>({
 		carName: '',
 		carConsommation: 0,
@@ -48,7 +48,7 @@ export const CreateVehicle = ({
 		// Mettre à jour les véhicules dans le state global
 		setData((prev) => ({
 			...prev,
-			vehicles: [updatedVehicle],
+			vehicles: [...(prev.vehicles || []), updatedVehicle],
 		}));
 	};
 
