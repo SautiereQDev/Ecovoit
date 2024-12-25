@@ -8,7 +8,7 @@ import React, {
 import { User, Vehicle } from '@/types/Ecovoit';
 
 /**
- * Type représentant le contexte du profil utilisateur.
+ * Type representing the user profile context.
  */
 interface ProfileContextType {
 	user: User;
@@ -16,24 +16,24 @@ interface ProfileContextType {
 	profileImage: string | null;
 	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
 	addVehicle: (vehicle: Vehicle) => void;
-	modifyVehicle: (vehicle: Vehicle, label: string) => void;
-	deleteVehicle: (label: string) => void;
+	modifyVehicle: (vehicle: Vehicle, index: number) => void;
+	deleteVehicle: (index: number) => void;
 }
 
 /**
- * Contexte pour le profil utilisateur.
+ * Context for the user profile.
  */
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 /**
- * Propriétés du composant ProfileProvider.
+ * Properties for the ProfileProvider component.
  */
 interface ProfileProviderProps {
 	children: ReactNode;
 }
 
 /**
- * Données initiales de l'utilisateur.
+ * Initial user data.
  */
 const initialData: User = {
 	profilePicture: null,
@@ -51,43 +51,81 @@ const initialData: User = {
 };
 
 /**
- * Composant fournisseur de contexte pour le profil utilisateur.
- * @param {ProfileProviderProps} props - Les propriétés du composant.
- * @returns {ReactNode} Le composant fournisseur de contexte.
+ * Context provider component for the user profile.
+ * @param {ProfileProviderProps} props - The properties of the component.
+ * @returns {ReactNode} The context provider component.
  */
 export const ProfileProvider = ({
-	children,
-}: ProfileProviderProps): ReactNode => {
+																	children,
+																}: ProfileProviderProps): ReactNode => {
 	const [user, setUser] = useState<User>(initialData);
 	const [profileImage, setProfileImage] = useState<string | null>(null);
 
+	/**
+	 * Adds a vehicle to the user's profile.
+	 * @param {Vehicle} vehicle - The vehicle to add.
+	 */
 	const addVehicle = (vehicle: Vehicle) => {
-		if (user.vehicles.length > 4) {
-			setUser((prevUser) => ({
+		setUser((prevUser: User) => {
+			if (prevUser.vehicles.length >= 4) {
+				return prevUser; // Do not add more than 4 vehicles
+			}
+			const newVehicles = [...prevUser.vehicles, vehicle].slice(0, 4);
+			return {
 				...prevUser,
-				vehicles: [...prevUser.vehicles, vehicle],
-			}));
-		}
-	};
-
-	const modifyVehicle = (vehicle: Vehicle, index: number) => {
-		setUser((prevUser) => {
-			const vehicles = [...prevUser.vehicles];
-			vehicles[index] = vehicle;
-			return { ...prevUser, vehicles };
-		});
-	};
-
-	const deleteVehicle = (index: number) => {
-		setUser((prevUser) => {
-			const vehicles = [...prevUser.vehicles];
-			vehicles.splice(index, 1);
-			return { ...prevUser, vehicles };
+				vehicles: newVehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
 		});
 	};
 
 	/**
-	 * Valeur du contexte du profil utilisateur.
+	 * Modifies a vehicle in the user's profile.
+	 * @param {Vehicle} vehicle - The vehicle to modify.
+	 * @param {number} index - The index of the vehicle to modify.
+	 */
+	const modifyVehicle = (vehicle: Vehicle, index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles[index] = vehicle;
+			return {
+				...prevUser,
+				vehicles: vehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
+		});
+	};
+
+	/**
+	 * Deletes a vehicle from the user's profile.
+	 * @param {number} index - The index of the vehicle to delete.
+	 */
+	const deleteVehicle = (index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles.splice(index, 1);
+			return {
+				...prevUser,
+				vehicles: vehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
+		});
+	};
+
+	/**
+	 * Value of the user profile context.
 	 */
 	const contextValue = useMemo(
 		() => ({
@@ -110,9 +148,9 @@ export const ProfileProvider = ({
 };
 
 /**
- * Hook pour utiliser le contexte du profil utilisateur.
- * @returns {ProfileContextType} Le contexte du profil utilisateur.
- * @throws {Error} Si le hook est utilisé en dehors d'un ProfileProvider.
+ * Hook to use the user profile context.
+ * @returns {ProfileContextType} The user profile context.
+ * @throws {Error} If the hook is used outside of a ProfileProvider.
  */
 export const useProfile = (): ProfileContextType => {
 	const context = useContext(ProfileContext);
