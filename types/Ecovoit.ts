@@ -15,9 +15,9 @@ export type User = {
 
 export type Vehicle = {
 	owner?: Readonly<string>;
-	label?: string;
-	consumption?: number;
-	emission?: number;
+	label: string;
+	consumption: number;
+	emission: number;
 };
 
 export type Point = {

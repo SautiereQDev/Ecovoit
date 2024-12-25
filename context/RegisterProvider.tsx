@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
 import { StyleProp, ViewStyle } from 'react-native';
+import { Vehicle } from '@/types';
 
 export type FieldValue = string | PageNumber | Vehicle[] | undefined | null;
 type PageNumber = 1 | 2 | 3 | 4 | 5;
@@ -14,12 +15,6 @@ interface RegisterContextType {
 	submit: () => void;
 	clearErrors: () => void;
 	resetData: () => void;
-}
-
-export interface Vehicle {
-	carName: string;
-	carConsommation: number;
-	carEmission: number;
 }
 
 export interface FormType {
@@ -38,7 +33,6 @@ export const OPTIONAL_FIELDS = {
 	biographie: 'Biographie',
 	vehicles: 'Véhicule',
 	profilePicture: 'Photo de profil',
-
 } as const;
 
 export type OptionalField = keyof typeof OPTIONAL_FIELDS;
@@ -70,6 +64,7 @@ export interface CreateVehicleProps {
 	handleSubmit: (vehicle: Vehicle) => void;
 	buttonStyle?: StyleProp<ViewStyle>;
 	buttonText?: string;
+	initialData?: Vehicle;
 }
 
 const VALIDATION_RULES: {

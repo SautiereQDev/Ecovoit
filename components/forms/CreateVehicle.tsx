@@ -1,21 +1,22 @@
 import { StyleSheet, View } from 'react-native';
 import { CustomButton, ThemedInput } from '@/components';
 import React, { ReactNode, useState } from 'react';
-import { CreateVehicleProps, Vehicle } from '@/context/RegisterProvider';
+import { CreateVehicleProps } from '@/context/RegisterProvider';
+import { Vehicle } from '@/types';
 
 /**
  * Validation rules for vehicle fields.
  */
 const vehicleValidation = {
-	carName: (value: string): string | null =>
+	label: (value: string): string | null =>
 		value.length >= 2
 			? null
 			: 'Le nom du véhicule doit contenir au moins 2 caractères',
-	carConsommation: (value: number): string | null =>
+	consumption: (value: number): string | null =>
 		value > 0 && value < 50
 			? null
 			: 'La consommation doit être entre 0 et 50 L/100km',
-	carEmission: (value: number): string | null =>
+	emission: (value: number): string | null =>
 		value > 0 && value < 500
 			? null
 			: 'Les émissions doivent être entre 0 et 500 g/km',
@@ -33,11 +34,12 @@ export const CreateVehicle = ({
 	handleSubmit,
 	buttonStyle,
 	buttonText = 'Enregistrer',
+	initialData,
 }: CreateVehicleProps): ReactNode => {
 	const [vehicle, setVehicle] = useState<Vehicle>({
-		carName: '',
-		carConsommation: 0,
-		carEmission: 0,
+		label: '',
+		consumption: 0,
+		emission: 0,
 	});
 
 	/**
@@ -63,17 +65,17 @@ export const CreateVehicle = ({
 			<View style={styles.form}>
 				<ThemedInput
 					placeholder='Nom du véhicule'
-					value={vehicle.carName}
-					onChangeText={(value) => handleVehicleChange('carName', value)}
+					value={vehicle.label ?? initialData?.label}
+					onChangeText={(value) => handleVehicleChange('label', value)}
 					hasError={!!errors.vehicles?.[0]?.carName}
 					errorMessage={errors.vehicles?.[0]?.carName}
 					label='Nom du véhicule'
 				/>
 				<ThemedInput
 					placeholder='Consommation (L/100km)'
-					value={vehicle.carConsommation.toString()}
+					value={vehicle.consumption.toString() ?? initialData?.consumption}
 					onChangeText={(value) =>
-						handleVehicleChange('carConsommation', parseFloat(value) || 0)
+						handleVehicleChange('consumption', parseFloat(value) || 0)
 					}
 					keyboardType='numeric'
 					hasError={!!errors.vehicles?.[0]?.carConsommation}
@@ -82,9 +84,9 @@ export const CreateVehicle = ({
 				/>
 				<ThemedInput
 					placeholder='Émissions CO2 (g/km)'
-					value={vehicle.carEmission.toString()}
+					value={vehicle.emission.toString() ?? initialData?.emission}
 					onChangeText={(value) =>
-						handleVehicleChange('carEmission', parseFloat(value) || 0)
+						handleVehicleChange('emission', parseFloat(value) || 0)
 					}
 					keyboardType='numeric'
 					hasError={!!errors.vehicles?.[0]?.carEmission}
