@@ -69,6 +69,7 @@ export interface CreateVehicleProps {
 	validateField: (field: keyof FormType, value: FieldValue) => void;
 	handleSubmit: (vehicle: Vehicle) => void;
 	buttonStyle?: StyleProp<ViewStyle>;
+	buttonText?: string;
 }
 
 const VALIDATION_RULES: {

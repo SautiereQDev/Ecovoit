@@ -1,17 +1,18 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
-import { useRegister } from '@/context/RegisterProvider';
+import { Vehicle, useRegister } from '@/context/RegisterProvider';
 import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
-import { CustomButton, ThemedText } from '@/components';
+import { ThemedText } from '@/components';
 
 export const RegisterPage4 = () => {
 	const { errors, data, setData, validateField, validatePage } = useRegister();
 
-	const handleNext = () => {
+	const handleNext = (vehicle: Vehicle) => {
 		if (validatePage(4)) {
+			setData({ ...data, vehicles: [vehicle] });
 			router.push('/register/pictureBio');
 		}
 	};
@@ -26,17 +27,13 @@ export const RegisterPage4 = () => {
 				>
 					Informations du véhicule
 				</ThemedText>
+				 {/*@ts-ignore */}
 				<CreateVehicle
 					errors={errors}
-					setData={setData}
 					validateField={validateField}
-				/>
-				<CustomButton
-					text='Suivant'
-					textProps={{ color: 'background' }}
-					backgroundColor={'primary'}
-					onPress={handleNext}
+					handleSubmit={handleNext}
 					buttonStyle={styles.buttonNext}
+					buttonText={'Suivant'}
 				/>
 			</View>
 		</SafeAreaView>

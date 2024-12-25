@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import { Vehicle, useRegister } from '@/context/RegisterProvider';
 import { globalStyle, handleBack } from './index';
 import CreateVehicle from '@/components/forms/CreateVehicle';
@@ -25,9 +25,7 @@ const CompletingVehicle = () => {
 				errors={errors}
 				setData={setData}
 				validateField={validateField}
-				handleSubmit={function (vehicle: Vehicle): void {
-
-				}}
+				handleSubmit={function (vehicle: Vehicle): void {}}
 			/>
 			<CustomButton
 				text={'Valider'}
