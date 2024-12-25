@@ -1,5 +1,11 @@
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
-import { User } from '@/types/Ecovoit';
+import React, {
+	createContext,
+	ReactNode,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
+import { User, Vehicle } from '@/types/Ecovoit';
 
 /**
  * Type représentant le contexte du profil utilisateur.
@@ -9,6 +15,9 @@ interface ProfileContextType {
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	profileImage: string | null;
 	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
+	addVehicle: (vehicle: Vehicle) => void;
+	modifyVehicle: (vehicle: Vehicle, label: string) => void;
+	deleteVehicle: (label: string) => void;
 }
 
 /**
@@ -27,6 +36,7 @@ interface ProfileProviderProps {
  * Données initiales de l'utilisateur.
  */
 const initialData: User = {
+	profilePicture: null,
 	id: 1,
 	username: 'John Doe',
 	email: 'johndoe@gmail.com',
@@ -51,6 +61,31 @@ export const ProfileProvider = ({
 	const [user, setUser] = useState<User>(initialData);
 	const [profileImage, setProfileImage] = useState<string | null>(null);
 
+	const addVehicle = (vehicle: Vehicle) => {
+		if (user.vehicles.length > 4) {
+			setUser((prevUser) => ({
+				...prevUser,
+				vehicles: [...prevUser.vehicles, vehicle],
+			}));
+		}
+	};
+
+	const modifyVehicle = (vehicle: Vehicle, index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles[index] = vehicle;
+			return { ...prevUser, vehicles };
+		});
+	};
+
+	const deleteVehicle = (index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles.splice(index, 1);
+			return { ...prevUser, vehicles };
+		});
+	};
+
 	/**
 	 * Valeur du contexte du profil utilisateur.
 	 */
@@ -60,8 +95,11 @@ export const ProfileProvider = ({
 			setUser,
 			profileImage,
 			setProfileImage,
+			addVehicle,
+			modifyVehicle,
+			deleteVehicle,
 		}),
-		[user, profileImage]
+		[user, profileImage, addVehicle]
 	);
 
 	return (
