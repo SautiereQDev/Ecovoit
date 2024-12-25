@@ -11,6 +11,12 @@ const AddVehicle = () => {
 	const { addVehicle } = useProfile();
 	const { errors, validateField } = useRegister();
 
+	const handleAddVehicle = (vehicle: Vehicle) => {
+		// @ts-ignore
+		addVehicle(vehicle);
+		router.back();
+	};
+
 	return (
 		<View style={globalStyle.container}>
 			<ThemedText type={'header3'}>Ajouter un vehicle</ThemedText>
@@ -18,11 +24,9 @@ const AddVehicle = () => {
 			<CreateVehicle
 				errors={errors}
 				validateField={validateField}
-				handleSubmit={(vehicle) => {
-					// @ts-ignore
-					addVehicle(vehicle);
-					router.back();
-				}}
+				handleSubmit={handleAddVehicle}
+				buttonText={'Ajouter'}
+				buttonStyle={globalStyle.button}
 			/>
 		</View>
 	);
