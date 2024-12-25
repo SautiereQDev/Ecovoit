@@ -32,6 +32,7 @@ export const CreateVehicle = ({
 	validateField,
 	handleSubmit,
 	buttonStyle,
+	buttonText = 'Enregistrer',
 }: CreateVehicleProps): ReactNode => {
 	const [vehicle, setVehicle] = useState<Vehicle>({
 		carName: '',
@@ -92,7 +93,7 @@ export const CreateVehicle = ({
 				/>
 			</View>
 			<CustomButton
-				text='Submit'
+				text={buttonText}
 				onPress={() => handleSubmit(vehicle)}
 				buttonStyle={buttonStyle}
 			/>
