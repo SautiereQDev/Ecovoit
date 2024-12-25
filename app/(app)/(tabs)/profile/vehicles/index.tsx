@@ -1,0 +1,111 @@
+import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { ThemedText } from '@/components';
+import { globalStyle } from '../index';
+import { Vehicle } from '@/types';
+import VehicleCard from '@/components/cards/VehicleCard';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { useProfile } from '@/context/ProfileProvider';
+import { router } from 'expo-router';
+
+const Index = () => {
+	const { modifyVehicle, deleteVehicle } = useProfile();
+
+	const showMenu = () => {
+		return;
+	};
+
+	const newVehicle = () => {
+		router.push('/profile/vehicles/add');
+	};
+
+	const [voitures, setVoitures] = useState<Vehicle[]>([
+		{
+			owner: '123e4567-e89b-12d3-a456-426614174000',
+			label: 'Peugeot 208',
+			consumption: 5.6,
+			emission: 120,
+		},
+		{
+			owner: '123e4567-e89b-12d3-a456-426614174000',
+			label: 'Renault Clio',
+			consumption: 6.2,
+			emission: 130,
+		},
+		// {
+		// 	owner: '123e4567-e89b-12d3-a456-426614174000',
+		// 	label: 'Citroën C3',
+		// 	consumption: 5.8,
+		// 	emission: 125,
+		// },
+		{
+			owner: '123e4567-e89b-12d3-a456-426614174000',
+			label: 'Volkswagen Polo',
+			consumption: 5.9,
+			emission: 127,
+		},
+	]);
+
+	return (
+		<SafeAreaView style={globalStyle.container}>
+			<ThemedText
+				type={'header4'}
+				style={styles.title}
+			>
+				Mes voitures
+			</ThemedText>
+			<View style={styles.carsContainer}>
+				{voitures.map((voiture: Vehicle) => (
+					// affiche la modal pour modifier ou supprimer le véhicule quand on appuie longtemps sur la cards
+					<Pressable onLongPress={showMenu}>
+						<VehicleCard
+							key={voiture.label}
+							vehicle={voiture}
+							style={styles.cars}
+						/>
+					</Pressable>
+				))}
+			</View>
+			<Pressable onLongPress={newVehicle}>
+				{voitures.length < 4 && (
+					<View style={styles.addButton}>
+						<ThemedText type={'accent'}>Ajouter un véhicule</ThemedText>
+						<FontAwesome6
+							name='add'
+							size={24}
+							color='black'
+							style={styles.addIcon}
+						/>
+					</View>
+				)}
+			</Pressable>
+		</SafeAreaView>
+	);
+};
+export default Index;
+
+const styles = StyleSheet.create({
+	title: {
+		textAlign: 'center',
+	},
+	carsContainer: {
+		marginTop: '10%',
+	},
+	cars: {
+		marginRight: 'auto',
+		minWidth: '55%',
+		marginTop: '5%',
+	},
+	addButton: {
+		borderWidth: 1,
+		borderRadius: 10,
+		padding: 10,
+		maxWidth: '55%',
+		height: '34%',
+		marginTop: '5%',
+	},
+	addIcon: {
+		textAlign: 'center',
+		marginVertical: 'auto',
+	},
+});
