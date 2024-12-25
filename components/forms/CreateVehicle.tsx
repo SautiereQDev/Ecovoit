@@ -54,13 +54,6 @@ export const CreateVehicle = ({
 
 	return (
 		<View style={styles.content}>
-			<ThemedText
-				type={'header2'}
-				style={styles.title}
-			>
-				Informations du véhicule
-			</ThemedText>
-
 			<View style={styles.form}>
 				<ThemedInput
 					placeholder='Nom du véhicule'

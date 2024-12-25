@@ -4,7 +4,7 @@ import { useRegister } from '@/context/RegisterProvider';
 import { globalStyle, handleBack } from './index';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { CustomButton } from '@/components';
+import { CustomButton, ThemedText } from '@/components';
 import { router } from 'expo-router';
 
 const Vehicle = () => {
@@ -20,6 +20,7 @@ const Vehicle = () => {
 	return (
 		<View style={globalStyle.content}>
 			<ReturnButton handleBack={handleBack} />
+			<ThemedText type={'header2'}>Modification du véhicule</ThemedText>
 			<CreateVehicle
 				errors={errors}
 				setData={setData}

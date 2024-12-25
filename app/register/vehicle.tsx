@@ -5,7 +5,7 @@ import { useRegister } from '@/context/RegisterProvider';
 import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
-import { CustomButton } from '@/components';
+import { CustomButton, ThemedText } from '@/components';
 
 export const RegisterPage4 = () => {
 	const { errors, data, setData, validateField, validatePage } = useRegister();
@@ -20,6 +20,12 @@ export const RegisterPage4 = () => {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
 				<ReturnButton />
+				<ThemedText
+					type={'header2'}
+					style={styles.title}
+				>
+					Informations du véhicule
+				</ThemedText>
 				<CreateVehicle
 					errors={errors}
 					setData={setData}
