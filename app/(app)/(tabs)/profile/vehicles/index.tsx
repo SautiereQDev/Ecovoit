@@ -5,12 +5,9 @@ import { globalStyle } from '../index';
 import { Vehicle } from '@/types';
 import VehicleCard from '@/components/cards/VehicleCard';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { useProfile } from '@/context/ProfileProvider';
 import { router } from 'expo-router';
 
 const Index = () => {
-	const { modifyVehicle, deleteVehicle } = useProfile();
-
 	const showMenu = () => {
 		return;
 	};
@@ -66,7 +63,7 @@ const Index = () => {
 					</Pressable>
 				))}
 			</View>
-			<Pressable onLongPress={newVehicle}>
+			<Pressable onPress={newVehicle}>
 				{voitures.length < 4 && (
 					<View style={styles.addButton}>
 						<ThemedText type={'accent'}>Ajouter un véhicule</ThemedText>

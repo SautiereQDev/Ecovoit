@@ -1,10 +1,10 @@
 import React from 'react';
 import { Stack } from 'expo-router';
-import { ProfileProvider } from '@/context/ProfileProvider';
+import { RegisterProvider } from '@/context/RegisterProvider';
 
 export default function ProfileLayout() {
 	return (
-		<ProfileProvider>
+		<RegisterProvider>
 			<Stack
 				screenOptions={{
 					headerShown: false,
@@ -14,6 +14,6 @@ export default function ProfileLayout() {
 				<Stack.Screen name='add' />
 				<Stack.Screen name='edit' />
 			</Stack>
-		</ProfileProvider>
+		</RegisterProvider>
 	);
 }

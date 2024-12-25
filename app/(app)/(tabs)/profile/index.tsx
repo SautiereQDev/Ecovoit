@@ -90,7 +90,7 @@ export default function Profile() {
 					size={24}
 					color={Colors.light.text}
 					buttonStyle={globalStyle.carButton}
-					onPress={() => router.push('/profile/cars')}
+					onPress={() => router.push('/profile/vehicles')}
 				/>
 				<View style={globalStyle.data}>
 					<View style={globalStyle.cell}>
@@ -163,7 +163,7 @@ export const globalStyle = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: '7.5%',
-		backgroundColor: Colors.light.background
+		backgroundColor: Colors.light.background,
 	},
 	title: {
 		textAlign: 'center',
@@ -201,7 +201,7 @@ export const globalStyle = StyleSheet.create({
 		justifyContent: 'space-evenly',
 		marginHorizontal: 'auto',
 		marginTop: '10%',
-		marginBottom: "10%",
+		marginBottom: '10%',
 	},
 	cell: {
 		flex: 1,
@@ -230,6 +230,6 @@ export const globalStyle = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 10,
 		borderColor: Colors.light.disabledBorder,
-		padding: "3%"
-	}
+		padding: '3%',
+	},
 });

@@ -8,7 +8,7 @@ import { CustomButton, ThemedText } from '@/components';
 export const handleBack = (): void => router.push('/profile');
 
 /**
- * Composant principal de la page d'index.
+ * Composant principal de la page d'vehicles.
  * Vérifie les champs manquants du profil et redirige l'utilisateur en conséquence.
  * @returns {ReactNode} Le composant JSX à rendre.
  */

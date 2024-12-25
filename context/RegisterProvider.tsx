@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { router } from 'expo-router';
+import { StyleProp, ViewStyle } from 'react-native';
 
 export type FieldValue = string | PageNumber | Vehicle[] | undefined | null;
 type PageNumber = 1 | 2 | 3 | 4 | 5;
@@ -66,6 +67,8 @@ export interface CreateVehicleProps {
 	setData: React.Dispatch<React.SetStateAction<FormType>>;
 	errors: ValidationErrors;
 	validateField: (field: keyof FormType, value: FieldValue) => void;
+	handleSubmit: (vehicle: Vehicle) => void;
+	buttonStyle?: StyleProp<ViewStyle>;
 }
 
 const VALIDATION_RULES: {
