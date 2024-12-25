@@ -162,8 +162,8 @@ export default function Profile() {
 export const globalStyle = StyleSheet.create({
 	container: {
 		flex: 1,
-		width: '85%',
-		margin: 'auto',
+		padding: '7.5%',
+		backgroundColor: Colors.light.background
 	},
 	title: {
 		textAlign: 'center',

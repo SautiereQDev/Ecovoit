@@ -107,7 +107,6 @@ export default function EditProfile() {
 						}
 						placeholder='Parlez-nous de vous'
 						multiline
-						numberOfLines={4}
 					/>
 				</View>
 
