@@ -1,4 +1,4 @@
-import { StyleSheet, Text, type TextProps, TextStyle } from 'react-native';
+import { StyleSheet, Text, TextStyle } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useFonts } from 'expo-font';
 import { Colors } from '@/constants/Colors';
@@ -6,11 +6,12 @@ import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { fonts } from '@/constants/Fonts';
 
-export type ThemedTextProps = TextProps & {
+export type ThemedTextProps = {
 	lightColor?: string;
 	darkColor?: string;
 	type?: keyof typeof fontType;
 	color?: keyof typeof Colors.light;
+	style?: any;
 };
 
 export function ThemedText({
