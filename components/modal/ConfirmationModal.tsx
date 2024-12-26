@@ -1,4 +1,4 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, View, StyleSheet } from 'react-native';
 import React from 'react';
 import { CustomButton, ThemedText } from '@/components';
 import Colors from '@/constants/Colors';

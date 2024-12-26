@@ -1,6 +1,7 @@
 import React, {
 	createContext,
 	ReactNode,
+	useCallback,
 	useContext,
 	useMemo,
 	useState,
@@ -65,7 +66,7 @@ export const ProfileProvider = ({
 	 * Adds a vehicle to the user's profile.
 	 * @param {Vehicle} vehicle - The vehicle to add.
 	 */
-	const addVehicle = (vehicle: Vehicle) => {
+	const addVehicle = useCallback((vehicle: Vehicle) => {
 		setUser((prevUser: User) => {
 			if (prevUser.vehicles.length >= 4) {
 				return prevUser; // Do not add more than 4 vehicles
@@ -81,7 +82,7 @@ export const ProfileProvider = ({
 				],
 			};
 		});
-	};
+	}, []);
 
 	/**
 	 * Modifies a vehicle in the user's profile.
