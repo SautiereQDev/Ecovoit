@@ -2,10 +2,12 @@ import { View } from 'react-native';
 import React from 'react';
 import { ThemedText } from '@/components';
 import CreateVehicle from '@/components/forms/CreateVehicle';
-import { useRegister, Vehicle } from '@/context/RegisterProvider';
+import { useRegister } from '@/context/RegisterProvider';
 import { globalStyle } from '@/app/(app)/(tabs)/profile';
 import { useProfile } from '@/context/ProfileProvider';
 import { router } from 'expo-router';
+import ReturnButton from '@/components/buttons/ReturnButton';
+import { Vehicle } from '@/types';
 
 const AddVehicle = () => {
 	const { addVehicle } = useProfile();
@@ -19,7 +21,14 @@ const AddVehicle = () => {
 
 	return (
 		<View style={globalStyle.container}>
-			<ThemedText type={'header3'}>Ajouter un vehicle</ThemedText>
+			<ReturnButton />
+			{/*/@ts-ignore */}
+			<ThemedText
+				type={'header3'}
+				style={styles.title}
+			>
+				Ajouter un vehicle
+			</ThemedText>
 			{/* @ts-ignore */}
 			<CreateVehicle
 				errors={errors}
@@ -32,3 +41,10 @@ const AddVehicle = () => {
 	);
 };
 export default AddVehicle;
+
+const styles = {
+	title: {
+		margiTop: '10%',
+		textAlign: 'center',
+	},
+};

@@ -7,8 +7,9 @@ import { useRegister } from '@/context/RegisterProvider';
 import { Vehicle } from '@/types';
 import { router } from 'expo-router';
 import { globalStyle } from '@/app/(app)/(tabs)/profile';
+import ReturnButton from '@/components/buttons/ReturnButton';
 
-const Edit = () => {
+const Label = () => {
 	const { modifyVehicle } = useProfile();
 	const { errors, validateField } = useRegister();
 
@@ -24,8 +25,11 @@ const Edit = () => {
 		emission: 120,
 	};
 
+	// Via l'api :
+	// Utilisation du paramètre [label] pour récupérer les données initiales du véhicule à modifier
 	return (
-		<View>
+		<View style={globalStyle.container}>
+			<ReturnButton/>
 			<ThemedText type={'header3'}>Modifier un vehicule</ThemedText>
 			{/* @ts-ignore*/}
 			<CreateVehicle
@@ -40,4 +44,4 @@ const Edit = () => {
 		</View>
 	);
 };
-export default Edit;
+export default Label;
