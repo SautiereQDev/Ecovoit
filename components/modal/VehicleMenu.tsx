@@ -23,6 +23,7 @@ const VehicleMenu = ({
 
 	const onCloseConfirmation = () => {
 		setConfirmationVisible(false);
+		onClose();
 	};
 
 	return (
@@ -46,7 +47,7 @@ const VehicleMenu = ({
 					</Link>
 					<View style={styles.horizontalSeparator} />
 					{/* Affiche une modal de confirmation et lancer la fonction deleteVehicle en cas de confirmation*/}
-					<Pressable>
+					<Pressable onPress={() => setConfirmationVisible(true)}>
 						<ThemedText>Supprimer</ThemedText>
 					</Pressable>
 					<ConfirmationMenu

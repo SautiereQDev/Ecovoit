@@ -56,8 +56,8 @@ const initialData: User = {
  * @returns {ReactNode} The context provider component.
  */
 export const ProfileProvider = ({
-																	children,
-																}: ProfileProviderProps): ReactNode => {
+	children,
+}: ProfileProviderProps): ReactNode => {
 	const [user, setUser] = useState<User>(initialData);
 	const [profileImage, setProfileImage] = useState<string | null>(null);
 
