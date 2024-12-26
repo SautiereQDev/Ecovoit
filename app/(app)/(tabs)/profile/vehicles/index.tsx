@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { ThemedText } from '@/components';
 import { globalStyle } from '../index';
@@ -6,15 +6,20 @@ import { Vehicle } from '@/types';
 import VehicleCard from '@/components/cards/VehicleCard';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import VehicleMenu from '@/components/modal/VehicleMenu';
+import ReturnButton from '@/components/buttons/ReturnButton';
 
 const Index = () => {
-	const showMenu = () => {
-		return;
-	};
-
 	const newVehicle = () => {
 		router.push('/profile/vehicles/add');
 	};
+
+	const [menuVisibility, setMenuVisibility] = useState<boolean>(false);
+	const [menuPosition, setMenuPosition] = useState<{ x: number; y: number }>({
+		x: 0,
+		y: 0,
+	});
+	const [selectedVehicleLabel, setSelectedVehicleLabel] = useState<string>('');
 
 	const [voitures, setVoitures] = useState<Vehicle[]>([
 		{
@@ -29,12 +34,6 @@ const Index = () => {
 			consumption: 6.2,
 			emission: 130,
 		},
-		// {
-		// 	owner: '123e4567-e89b-12d3-a456-426614174000',
-		// 	label: 'Citroën C3',
-		// 	consumption: 5.8,
-		// 	emission: 125,
-		// },
 		{
 			owner: '123e4567-e89b-12d3-a456-426614174000',
 			label: 'Volkswagen Polo',
@@ -43,25 +42,40 @@ const Index = () => {
 		},
 	]);
 
+	const handleLongPress = (event: any, label: string) => {
+		const { pageX, pageY } = event.nativeEvent;
+		setMenuPosition({ x: pageX, y: pageY });
+		setSelectedVehicleLabel(label);
+		setMenuVisibility(true);
+	};
+
 	return (
 		<SafeAreaView style={globalStyle.container}>
+			<ReturnButton/>
 			<ThemedText
-				type={'header4'}
+				type={'header3'}
 				style={styles.title}
 			>
 				Mes voitures
 			</ThemedText>
 			<View style={styles.carsContainer}>
 				{voitures.map((voiture: Vehicle) => (
-					// affiche la modal pour modifier ou supprimer le véhicule quand on appuie longtemps sur la cards
-					<Pressable onLongPress={showMenu}>
+					<Pressable
+						onLongPress={(event) => handleLongPress(event, voiture.label)}
+						key={voiture.label}
+					>
 						<VehicleCard
-							key={voiture.label}
 							vehicle={voiture}
 							style={styles.cars}
 						/>
 					</Pressable>
 				))}
+				<VehicleMenu
+					visible={menuVisibility}
+					onClose={() => setMenuVisibility(false)}
+					position={menuPosition}
+					label={selectedVehicleLabel}
+				/>
 			</View>
 			<Pressable onPress={newVehicle}>
 				{voitures.length < 4 && (
@@ -83,6 +97,7 @@ export default Index;
 
 const styles = StyleSheet.create({
 	title: {
+		marginTop: '5%',
 		textAlign: 'center',
 	},
 	carsContainer: {
