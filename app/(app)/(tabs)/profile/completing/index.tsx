@@ -8,7 +8,7 @@ import { CustomButton, ThemedText } from '@/components';
 export const handleBack = (): void => router.push('/profile');
 
 /**
- * Composant principal de la page d'index.
+ * Composant principal de la page d'vehicles.
  * Vérifie les champs manquants du profil et redirige l'utilisateur en conséquence.
  * @returns {ReactNode} Le composant JSX à rendre.
  */
@@ -65,19 +65,19 @@ export default Index;
 export const globalStyle = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
+		backgroundColor: Colors.light.background,
 		alignItems: 'center',
 	},
 	content: {
 		margin: 'auto',
 		marginTop: '10%',
-		width: '80%',
+		padding: '7.5%',
 		gap: 30,
+		backgroundColor: Colors.light.background,
 	},
 	confirmationPage: {
 		marginHorizontal: 'auto',
 		marginTop: '10%',
-		width: '80%',
 		gap: 30,
 	},
 	confirmationPageHeader: { textAlign: 'center', marginTop: '30%' },
@@ -86,7 +86,7 @@ export const globalStyle = StyleSheet.create({
 	title: { textAlign: 'center' },
 	buttonNext: {
 		marginLeft: 'auto',
-		width: '35%',
+		paddingHorizontal: '5%',
 	},
 	buttonHome: {
 		alignItems: 'center',

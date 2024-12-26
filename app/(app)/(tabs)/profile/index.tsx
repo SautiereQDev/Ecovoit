@@ -7,7 +7,7 @@ import {
 	View,
 } from 'react-native';
 import { useSession } from '@/context/SessionProvider';
-import { ThemedText } from '@/components';
+import { IconButton, ThemedText } from '@/components';
 import GetImage from '@/components/modal/GetImage';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
@@ -42,10 +42,10 @@ export default function Profile() {
 	console.log('user', user);
 
 	return (
-		<View style={styles.container}>
+		<View style={globalStyle.container}>
 			<ThemedText
 				type={'header3'}
-				style={styles.title}
+				style={globalStyle.title}
 			>
 				Votre profile
 			</ThemedText>
@@ -62,29 +62,38 @@ export default function Profile() {
 								? { uri: profileImage }
 								: require('@/assets/images/user-picture.jpg')
 						}
-						style={styles.profilePicture}
+						style={globalStyle.profilePicture}
 					/>
 				</Pressable>
 				<ThemedText
 					type={'header6'}
-					style={styles.username}
+					style={globalStyle.username}
 				>
 					{user?.username}
 				</ThemedText>
-				<View style={styles.biographie}>
+				<View style={globalStyle.biographie}>
 					<ThemedText
 						type={'header6'}
-						style={styles.biographieText}
+						style={globalStyle.biographieText}
 					>
 						A propos de {user?.firstName}
 					</ThemedText>
-					<ThemedText style={styles.biographieText}>
+					<ThemedText style={globalStyle.biographieText}>
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
 				{missingFields.length > 0 && <ProfileCompletion />}
-				<View style={styles.data}>
-					<View style={styles.cell}>
+				<IconButton
+					lib='FontAwesome'
+					// @ts-ignore
+					name='car'
+					size={24}
+					color={Colors.light.text}
+					buttonStyle={globalStyle.carButton}
+					onPress={() => router.push('/profile/vehicles')}
+				/>
+				<View style={globalStyle.data}>
+					<View style={globalStyle.cell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -98,8 +107,8 @@ export default function Profile() {
 							843km
 						</ThemedText>
 					</View>
-					<View style={styles.verticalSeparator} />
-					<View style={styles.cell}>
+					<View style={globalStyle.verticalSeparator} />
+					<View style={globalStyle.cell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -113,8 +122,8 @@ export default function Profile() {
 							123
 						</ThemedText>
 					</View>
-					<View style={styles.verticalSeparator} />
-					<View style={styles.cell}>
+					<View style={globalStyle.verticalSeparator} />
+					<View style={globalStyle.cell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -129,20 +138,20 @@ export default function Profile() {
 						</ThemedText>
 					</View>
 				</View>
-				<View style={styles.buttons}>
+				<View style={globalStyle.buttons}>
 					<CustomButton
 						text={'Modifier'}
 						onPress={() => router.push('/profile/edit')}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
-						buttonStyle={styles.button}
+						buttonStyle={globalStyle.button}
 					/>
 					<CustomButton
 						text={'Déconnexion'}
 						onPress={signOut}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
-						buttonStyle={styles.button}
+						buttonStyle={globalStyle.button}
 					/>
 				</View>
 			</View>
@@ -150,11 +159,11 @@ export default function Profile() {
 	);
 }
 
-const styles = StyleSheet.create({
+export const globalStyle = StyleSheet.create({
 	container: {
 		flex: 1,
-		width: '90%',
-		margin: 'auto',
+		padding: '7.5%',
+		backgroundColor: Colors.light.background,
 	},
 	title: {
 		textAlign: 'center',
@@ -191,7 +200,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		marginHorizontal: 'auto',
-		marginVertical: '15%',
+		marginTop: '10%',
+		marginBottom: '10%',
 	},
 	cell: {
 		flex: 1,
@@ -210,6 +220,16 @@ const styles = StyleSheet.create({
 		marginTop: '5%',
 	},
 	button: {
-		width: '35%',
+		width: 'auto',
+		paddingHorizontal: '10%',
+	},
+	carButton: {
+		alignSelf: 'flex-start',
+		marginTop: '10%',
+		marginLeft: '5%',
+		borderWidth: 1,
+		borderRadius: 10,
+		borderColor: Colors.light.disabledBorder,
+		padding: '3%',
 	},
 });

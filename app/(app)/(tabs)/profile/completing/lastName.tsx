@@ -21,27 +21,30 @@ const LastName = () => {
 	};
 
 	return (
-		<View style={globalStyle.content}>
-			<ReturnButton handleBack={handleBack} />
-			<ThemedText type={'header4'}>Complétez votre nom de famille</ThemedText>
-			<ThemedInput
-				placeholder='Entrez votre nom de famille'
-				value={data.lastName}
-				onChangeText={(value) => {
-					validateField('lastName', value);
-					setData((prev) => ({ ...prev, lastName: value }));
-				}}
-				hasError={!!errors.lastName}
-				errorMessage={errors.lastName}
-				label={'Nom de famille'}
-			/>
-			<CustomButton
-				text={'Valider'}
-				onPress={handleSubmit}
-				buttonStyle={globalStyle.buttonNext}
-				size={'smaller'}
-			/>
+		<View style={globalStyle.container}>
+			<View style={globalStyle.content}>
+				<ReturnButton handleBack={handleBack} />
+				<ThemedText type={'header4'}>Complétez votre nom de famille</ThemedText>
+				<ThemedInput
+					placeholder='Entrez votre nom de famille'
+					value={data.lastName}
+					onChangeText={(value) => {
+						validateField('lastName', value);
+						setData((prev) => ({ ...prev, lastName: value }));
+					}}
+					hasError={!!errors.lastName}
+					errorMessage={errors.lastName}
+					label={'Nom de famille'}
+				/>
+				<CustomButton
+					text={'Valider'}
+					onPress={handleSubmit}
+					buttonStyle={globalStyle.buttonNext}
+					size={'smaller'}
+				/>
+			</View>
 		</View>
+
 	);
 };
 export default LastName;

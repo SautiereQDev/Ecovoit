@@ -1,13 +1,13 @@
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
-import { useRegister } from '@/context/RegisterProvider';
+import { View } from 'react-native';
+import { Vehicle, useRegister } from '@/context/RegisterProvider';
 import { globalStyle, handleBack } from './index';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { CustomButton } from '@/components';
+import { CustomButton, ThemedText } from '@/components';
 import { router } from 'expo-router';
 
-const Vehicle = () => {
+const CompletingVehicle = () => {
 	const { setData, errors, validateField } = useRegister();
 
 	const handleSubmit = (): void => {
@@ -20,10 +20,12 @@ const Vehicle = () => {
 	return (
 		<View style={globalStyle.content}>
 			<ReturnButton handleBack={handleBack} />
+			<ThemedText type={'header2'}>Modification du véhicule</ThemedText>
 			<CreateVehicle
 				errors={errors}
 				setData={setData}
 				validateField={validateField}
+				handleSubmit={function (vehicle: Vehicle): void {}}
 			/>
 			<CustomButton
 				text={'Valider'}
@@ -34,4 +36,4 @@ const Vehicle = () => {
 	);
 };
 
-export default Vehicle;
+export default CompletingVehicle;

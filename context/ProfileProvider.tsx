@@ -1,32 +1,43 @@
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
-import { User } from '@/types/Ecovoit';
+import React, {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
+import { User, Vehicle } from '@/types/Ecovoit';
 
 /**
- * Type représentant le contexte du profil utilisateur.
+ * Type representing the user profile context.
  */
 interface ProfileContextType {
 	user: User;
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	profileImage: string | null;
 	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
+	addVehicle: (vehicle: Vehicle) => void;
+	modifyVehicle: (vehicle: Vehicle, index: number) => void;
+	deleteVehicle: (index: number) => void;
 }
 
 /**
- * Contexte pour le profil utilisateur.
+ * Context for the user profile.
  */
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 /**
- * Propriétés du composant ProfileProvider.
+ * Properties for the ProfileProvider component.
  */
 interface ProfileProviderProps {
 	children: ReactNode;
 }
 
 /**
- * Données initiales de l'utilisateur.
+ * Initial user data.
  */
 const initialData: User = {
+	profilePicture: null,
 	id: 1,
 	username: 'John Doe',
 	email: 'johndoe@gmail.com',
@@ -41,9 +52,9 @@ const initialData: User = {
 };
 
 /**
- * Composant fournisseur de contexte pour le profil utilisateur.
- * @param {ProfileProviderProps} props - Les propriétés du composant.
- * @returns {ReactNode} Le composant fournisseur de contexte.
+ * Context provider component for the user profile.
+ * @param {ProfileProviderProps} props - The properties of the component.
+ * @returns {ReactNode} The context provider component.
  */
 export const ProfileProvider = ({
 	children,
@@ -52,7 +63,70 @@ export const ProfileProvider = ({
 	const [profileImage, setProfileImage] = useState<string | null>(null);
 
 	/**
-	 * Valeur du contexte du profil utilisateur.
+	 * Adds a vehicle to the user's profile.
+	 * @param {Vehicle} vehicle - The vehicle to add.
+	 */
+	const addVehicle = useCallback((vehicle: Vehicle) => {
+		setUser((prevUser: User) => {
+			if (prevUser.vehicles.length >= 4) {
+				return prevUser; // Do not add more than 4 vehicles
+			}
+			const newVehicles = [...prevUser.vehicles, vehicle].slice(0, 4);
+			return {
+				...prevUser,
+				vehicles: newVehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
+		});
+	}, []);
+
+	/**
+	 * Modifies a vehicle in the user's profile.
+	 * @param {Vehicle} vehicle - The vehicle to modify.
+	 * @param {number} index - The index of the vehicle to modify.
+	 */
+	const modifyVehicle = (vehicle: Vehicle, index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles[index] = vehicle;
+			return {
+				...prevUser,
+				vehicles: vehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
+		});
+	};
+
+	/**
+	 * Deletes a vehicle from the user's profile.
+	 * @param {number} index - The index of the vehicle to delete.
+	 */
+	const deleteVehicle = (index: number) => {
+		setUser((prevUser) => {
+			const vehicles = [...prevUser.vehicles];
+			vehicles.splice(index, 1);
+			return {
+				...prevUser,
+				vehicles: vehicles as [
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+					(Vehicle | undefined)?,
+				],
+			};
+		});
+	};
+
+	/**
+	 * Value of the user profile context.
 	 */
 	const contextValue = useMemo(
 		() => ({
@@ -60,8 +134,11 @@ export const ProfileProvider = ({
 			setUser,
 			profileImage,
 			setProfileImage,
+			addVehicle,
+			modifyVehicle,
+			deleteVehicle,
 		}),
-		[user, profileImage]
+		[user, profileImage, addVehicle]
 	);
 
 	return (
@@ -72,9 +149,9 @@ export const ProfileProvider = ({
 };
 
 /**
- * Hook pour utiliser le contexte du profil utilisateur.
- * @returns {ProfileContextType} Le contexte du profil utilisateur.
- * @throws {Error} Si le hook est utilisé en dehors d'un ProfileProvider.
+ * Hook to use the user profile context.
+ * @returns {ProfileContextType} The user profile context.
+ * @throws {Error} If the hook is used outside of a ProfileProvider.
  */
 export const useProfile = (): ProfileContextType => {
 	const context = useContext(ProfileContext);

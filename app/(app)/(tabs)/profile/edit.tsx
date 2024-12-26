@@ -107,7 +107,6 @@ export default function EditProfile() {
 						}
 						placeholder='Parlez-nous de vous'
 						multiline
-						numberOfLines={4}
 					/>
 				</View>
 
@@ -135,23 +134,25 @@ export default function EditProfile() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		maxWidth: '85%',
+		marginHorizontal: 'auto',
 	},
 	scrollContainer: {
 		flexGrow: 1,
-		padding: 16,
+		padding: "3%",
 	},
 	title: {
 		textAlign: 'center',
-		marginBottom: 20,
+		marginVertical: "10%",
 	},
 	formGroup: {
-		marginBottom: 15,
+		marginBottom: "5%",
 	},
 	input: {
 		borderWidth: 1,
 		borderColor: Colors.light.disabledBorder,
 		borderRadius: 8,
-		padding: 10,
+		padding: "3%",
 		backgroundColor: Colors.light.background,
 	},
 	multilineInput: {
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
 	buttonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 20,
+		marginTop: "5%",
 	},
 	button: {
 		width: '45%',

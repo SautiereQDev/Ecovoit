@@ -14,14 +14,14 @@ export type User = {
 };
 
 export type Vehicle = {
-	owner: number;
-	label: string | null;
-	consumption: number | null;
-	emission: number | null;
+	owner?: Readonly<string>;
+	label: string;
+	consumption: number;
+	emission: number;
 };
 
 export type Point = {
-	type: "start" | "end" | "checkpoint";
+	type: 'start' | 'end' | 'checkpoint';
 	locationName: string;
 	previous: number | null;
 	next: number | null;

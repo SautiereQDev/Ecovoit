@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-	Platform,
-	StyleSheet,
-	View,
-	KeyboardAvoidingView,
-} from 'react-native';
+import { Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, ThemedInput, ThemedText } from '@/components';
@@ -54,10 +49,10 @@ export const Index = () => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView style={styles.content}>
+		<SafeAreaView style={searchStyle.container}>
+			<KeyboardAvoidingView style={searchStyle.content}>
 				<ThemedText type='header4'>Rechercher votre trajet 🔎</ThemedText>
-				<View style={styles.formContainer}>
+				<View style={searchStyle.formContainer}>
 					<ThemedInput
 						label='Départ'
 						placeholder='Départ'
@@ -95,7 +90,7 @@ export const Index = () => {
 							name='calendar'
 							title={`${formatDate(searchData.date)}`}
 							onPress={() => setShowDatePicker(true)}
-							style={styles.dateButton}
+							style={searchStyle.dateButton}
 							size={20}
 							iconFirst={true}
 						/>
@@ -110,14 +105,14 @@ export const Index = () => {
 						/>
 					)}
 					{Boolean(errors.date) && (
-						<ThemedText style={styles.errorText}>{errors.date}</ThemedText>
+						<ThemedText style={searchStyle.errorText}>{errors.date}</ThemedText>
 					)}
 					<IconButton
 						name='search'
 						title='Rechercher'
 						size={24}
 						color={Colors.light.primary}
-						buttonStyle={styles.submitButton}
+						buttonStyle={searchStyle.submitButton}
 						textProps={{ type: 'header5', color: 'background' }}
 						onPress={submitSearch}
 						iconStyle={{ color: Colors.light.background }}
@@ -130,15 +125,15 @@ export const Index = () => {
 
 export default Index;
 
-const styles = StyleSheet.create({
+export const searchStyle = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: Colors.light.background,
 	},
 	content: {
-		marginTop: 10,
+		marginTop: '2%',
 		flex: 0,
-		width: '90%',
+		width: '80%',
 		marginHorizontal: 'auto',
 	},
 	formContainer: {
@@ -148,8 +143,8 @@ const styles = StyleSheet.create({
 	dateButton: {
 		display: 'flex',
 		flexDirection: 'row',
-		paddingVertical: 10,
-		paddingHorizontal: 15,
+		paddingVertical: '2%',
+		paddingHorizontal: '3%',
 		borderRadius: 10,
 		borderWidth: 1.5,
 		gap: 10,
@@ -159,14 +154,14 @@ const styles = StyleSheet.create({
 	},
 	errorText: {
 		color: Colors.light.error,
-		marginTop: 5,
+		marginTop: '1%',
 	},
 	submitButton: {
 		display: 'flex',
 		flexDirection: 'row',
 		gap: 15,
-		marginTop: 10,
-		paddingVertical: 10,
+		marginTop: '2%',
+		paddingVertical: '2%',
 		borderRadius: 10,
 		justifyContent: 'center',
 		alignItems: 'center',
