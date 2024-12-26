@@ -12,7 +12,7 @@ export default function ProfileLayout() {
 			>
 				<Stack.Screen name='index' />
 				<Stack.Screen name='add' />
-				<Stack.Screen name='edit' />
+				<Stack.Screen name='edit/[label]' />
 			</Stack>
 		</RegisterProvider>
 	);
