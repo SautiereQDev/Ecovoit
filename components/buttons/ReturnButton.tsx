@@ -20,6 +20,7 @@ export const ReturnButton = ({ handleBack }: ReturnButtonProps) => {
 			}
 			// @ts-ignore
 			buttonStyle={styles.buttonPrevious}
+			size={'smaller'}
 		/>
 	);
 };
@@ -28,6 +29,7 @@ export default ReturnButton;
 
 const styles = {
 	buttonPrevious: {
-		width: '35%',
+		width: '25%',
+		marginBottom: "5%"
 	},
 };
