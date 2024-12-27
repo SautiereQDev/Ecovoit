@@ -8,6 +8,8 @@ import { useProfile } from '@/context/ProfileProvider';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { Vehicle } from '@/types';
+import { vehiclesStyles } from '@/styles/vehicles';
+
 
 const AddVehicle = () => {
 	const { addVehicle } = useProfile();
@@ -20,7 +22,7 @@ const AddVehicle = () => {
 	};
 
 	return (
-		<View style={globalStyle.container}>
+		<View style={vehiclesStyles.container}>
 			<ReturnButton />
 			{/*/@ts-ignore */}
 			<ThemedText
@@ -35,7 +37,7 @@ const AddVehicle = () => {
 				validateField={validateField}
 				handleSubmit={handleAddVehicle}
 				buttonText={'Ajouter'}
-				buttonStyle={globalStyle.button}
+				buttonStyle={vehiclesStyles.button}
 			/>
 		</View>
 	);

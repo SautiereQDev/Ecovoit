@@ -6,8 +6,8 @@ import { useProfile } from '@/context/ProfileProvider';
 import { useRegister } from '@/context/RegisterProvider';
 import { Vehicle } from '@/types';
 import { router } from 'expo-router';
-import { globalStyle } from '@/app/(app)/(tabs)/profile';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { vehiclesStyles } from '@/styles/vehicles';
 
 const Label = () => {
 	const { modifyVehicle } = useProfile();
@@ -28,7 +28,7 @@ const Label = () => {
 	// Via l'api :
 	// Utilisation du paramètre [label] pour récupérer les données initiales du véhicule à modifier
 	return (
-		<View style={globalStyle.container}>
+		<View style={vehiclesStyles.container}>
 			<ReturnButton/>
 			<ThemedText type={'header3'}>Modifier un vehicule</ThemedText>
 			{/* @ts-ignore*/}
@@ -38,7 +38,7 @@ const Label = () => {
 				// @ts-ignore
 				handleSubmit={handleEditVehicle}
 				buttonText={'Modifier'}
-				buttonStyle={globalStyle.button}
+				buttonStyle={vehiclesStyles.button}
 				initialData={initialData}
 			/>
 		</View>

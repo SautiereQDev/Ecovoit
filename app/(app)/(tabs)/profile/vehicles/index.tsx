@@ -1,13 +1,14 @@
-import { Modal, Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { ThemedText } from '@/components';
-import { globalStyle } from '../index';
 import { Vehicle } from '@/types';
 import VehicleCard from '@/components/cards/VehicleCard';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import VehicleMenu from '@/components/modal/VehicleMenu';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { vehiclesStyles } from '@/styles/vehicles';
+
 
 const Index = () => {
 	const newVehicle = () => {
@@ -50,15 +51,15 @@ const Index = () => {
 	};
 
 	return (
-		<SafeAreaView style={globalStyle.container}>
+		<SafeAreaView style={vehiclesStyles.container}>
 			<ReturnButton/>
 			<ThemedText
 				type={'header3'}
-				style={styles.title}
+				style={styles.profileStylestitle}
 			>
 				Mes voitures
 			</ThemedText>
-			<View style={styles.carsContainer}>
+			<View style={styles.profileStylescarsContainer}>
 				{voitures.map((voiture: Vehicle) => (
 					<Pressable
 						onLongPress={(event) => handleLongPress(event, voiture.label)}
@@ -66,7 +67,7 @@ const Index = () => {
 					>
 						<VehicleCard
 							vehicle={voiture}
-							style={styles.cars}
+							style={styles.profileStylescars}
 						/>
 					</Pressable>
 				))}
@@ -79,13 +80,13 @@ const Index = () => {
 			</View>
 			<Pressable onPress={newVehicle}>
 				{voitures.length < 4 && (
-					<View style={styles.addButton}>
+					<View style={styles.profileStylesaddButton}>
 						<ThemedText type={'accent'}>Ajouter un véhicule</ThemedText>
 						<FontAwesome6
 							name='add'
 							size={24}
 							color='black'
-							style={styles.addIcon}
+							style={styles.profileStylesaddIcon}
 						/>
 					</View>
 				)}

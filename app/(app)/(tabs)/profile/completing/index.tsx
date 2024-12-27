@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Colors from '@/constants/Colors';
+import { View } from 'react-native';
 import { router } from 'expo-router';
 import { useRegister } from '@/context/RegisterProvider';
 import { CustomButton, ThemedText } from '@/components';
+import { profileStyles } from '@/styles/profile';
 
 export const handleBack = (): void => router.push('/profile');
 
@@ -32,15 +32,15 @@ export function Index(): React.ReactNode {
 
 	// Si aucun champ n'est manquant, affiche un message de félicitations.
 	return (
-		<View style={globalStyle.content}>
+		<View style={profileStyles.content}>
 			<ThemedText
-				style={globalStyle.title}
+				style={profileStyles.title}
 				type={'header3'}
 			>
 				Completion du profil
 			</ThemedText>
 			<ThemedText
-				style={globalStyle.paragraph}
+				style={profileStyles.paragraph}
 				type={'header4'}
 			>
 				Votre profil est complet, félicitations !
@@ -51,57 +51,10 @@ export function Index(): React.ReactNode {
 					router.push('/profile'); //permet de reinitialiser la stack de navigation de l'onglet profile
 					router.push('/');
 				}}
-				buttonStyle={globalStyle.buttonHome}
+				buttonStyle={profileStyles.buttonHome}
 			/>
 		</View>
 	);
 }
 
 export default Index;
-
-/**
- * Styles pour le composant Index.
- */
-export const globalStyle = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colors.light.background,
-		alignItems: 'center',
-	},
-	content: {
-		margin: 'auto',
-		marginTop: '10%',
-		padding: '7.5%',
-		gap: 30,
-		backgroundColor: Colors.light.background,
-	},
-	confirmationPage: {
-		marginHorizontal: 'auto',
-		marginTop: '10%',
-		gap: 30,
-	},
-	confirmationPageHeader: { textAlign: 'center', marginTop: '30%' },
-	header: { marginBottom: 5, display: 'flex', gap: 12 },
-	paragraph: { textAlign: 'center' },
-	title: { textAlign: 'center' },
-	buttonNext: {
-		marginLeft: 'auto',
-		paddingHorizontal: '5%',
-	},
-	buttonHome: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingVertical: 7,
-		borderRadius: 10,
-		backgroundColor: Colors.light.secondary,
-		width: '60%',
-		marginHorizontal: 'auto',
-	},
-	buttonHomeText: { color: Colors.light.background, textAlign: 'center' },
-	buttons: {
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 20,
-		marginLeft: 'auto',
-	},
-});

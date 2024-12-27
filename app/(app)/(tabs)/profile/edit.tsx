@@ -3,16 +3,15 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ScrollView,
-	StyleSheet,
 	TextInput,
 	View,
 } from 'react-native';
 import { ThemedText } from '@/components/texts/ThemedText';
 import CustomButton from '@/components/buttons/CustomButton';
-import Colors from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import { useNotifications } from 'react-native-notificated';
 import { useProfile } from '@/context/ProfileProvider';
+import { profileStyles } from '@/styles/profile';
 
 export default function EditProfile() {
 	const router = useRouter();
@@ -32,21 +31,21 @@ export default function EditProfile() {
 
 	return (
 		<KeyboardAvoidingView
-			style={styles.container}
+			style={profileStyles.container}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 		>
-			<ScrollView contentContainerStyle={styles.scrollContainer}>
+			<ScrollView contentContainerStyle={profileStyles.scrollContainer}>
 				<ThemedText
 					type={'header4'}
-					style={styles.title}
+					style={profileStyles.title}
 				>
 					Modifier votre profil
 				</ThemedText>
 
-				<View style={styles.formGroup}>
+				<View style={profileStyles.formGroup}>
 					<ThemedText type={'defaultBody'}>Nom d'utilisateur</ThemedText>
 					<TextInput
-						style={styles.input}
+						style={profileStyles.input}
 						// @ts-ignore
 						value={user.username}
 						onChangeText={(text) =>
@@ -56,10 +55,10 @@ export default function EditProfile() {
 					/>
 				</View>
 
-				<View style={styles.formGroup}>
+				<View style={profileStyles.formGroup}>
 					<ThemedText type={'defaultBody'}>Prénom</ThemedText>
 					<TextInput
-						style={styles.input}
+						style={profileStyles.input}
 						// @ts-ignore
 						value={user.firstName}
 						onChangeText={(text) =>
@@ -69,10 +68,10 @@ export default function EditProfile() {
 					/>
 				</View>
 
-				<View style={styles.formGroup}>
+				<View style={profileStyles.formGroup}>
 					<ThemedText type={'defaultBody'}>Nom</ThemedText>
 					<TextInput
-						style={styles.input}
+						style={profileStyles.input}
 						// @ts-ignore
 						value={user.lastName}
 						onChangeText={(text) =>
@@ -82,10 +81,10 @@ export default function EditProfile() {
 					/>
 				</View>
 
-				<View style={styles.formGroup}>
+				<View style={profileStyles.formGroup}>
 					<ThemedText type={'defaultBody'}>Email</ThemedText>
 					<TextInput
-						style={styles.input}
+						style={profileStyles.input}
 						// @ts-ignore
 						value={user.email}
 						onChangeText={(text) =>
@@ -96,10 +95,10 @@ export default function EditProfile() {
 					/>
 				</View>
 
-				<View style={styles.formGroup}>
+				<View style={profileStyles.formGroup}>
 					<ThemedText type={'defaultBody'}>Biographie</ThemedText>
 					<TextInput
-						style={[styles.input, styles.multilineInput]}
+						style={[profileStyles.input, profileStyles.multilineInput]}
 						// @ts-ignore
 						value={user.bio}
 						onChangeText={(text) =>
@@ -110,61 +109,23 @@ export default function EditProfile() {
 					/>
 				</View>
 
-				<View style={styles.buttonContainer}>
+				<View style={profileStyles.buttonContainer}>
 					<CustomButton
 						text={'Enregistrer'}
 						onPress={handleSave}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
-						buttonStyle={styles.button}
+						buttonStyle={profileStyles.button}
 					/>
 					<CustomButton
 						text={'Annuler'}
 						onPress={() => router.back()}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'disabledBackground'}
-						buttonStyle={styles.button}
+						buttonStyle={profileStyles.button}
 					/>
 				</View>
 			</ScrollView>
 		</KeyboardAvoidingView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		maxWidth: '85%',
-		marginHorizontal: 'auto',
-	},
-	scrollContainer: {
-		flexGrow: 1,
-		padding: "3%",
-	},
-	title: {
-		textAlign: 'center',
-		marginVertical: "10%",
-	},
-	formGroup: {
-		marginBottom: "5%",
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: Colors.light.disabledBorder,
-		borderRadius: 8,
-		padding: "3%",
-		backgroundColor: Colors.light.background,
-	},
-	multilineInput: {
-		height: 100,
-		textAlignVertical: 'top',
-	},
-	buttonContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginTop: "5%",
-	},
-	button: {
-		width: '45%',
-	},
-});

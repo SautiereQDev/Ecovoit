@@ -3,8 +3,8 @@ import {
 	ActivityIndicator,
 	Image,
 	Pressable,
-	StyleSheet,
 	View,
+	ScrollView,
 } from 'react-native';
 import { useSession } from '@/context/SessionProvider';
 import { IconButton, ThemedText } from '@/components';
@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { useProfile } from '@/context/ProfileProvider';
 import { ProfileCompletion } from '@/components/ProfileCompletion';
 import { useProfileCompletion } from '@/hooks/useProfileCompletion';
+import { profileStyles } from '@/styles/profile';
 
 export default function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -39,13 +40,11 @@ export default function Profile() {
 		);
 	}
 
-	console.log('user', user);
-
 	return (
-		<View style={globalStyle.container}>
+		<ScrollView style={profileStyles.container}>
 			<ThemedText
 				type={'header3'}
-				style={globalStyle.title}
+				style={profileStyles.title}
 			>
 				Votre profile
 			</ThemedText>
@@ -62,23 +61,23 @@ export default function Profile() {
 								? { uri: profileImage }
 								: require('@/assets/images/user-picture.jpg')
 						}
-						style={globalStyle.profilePicture}
+						style={profileStyles.profilePicture}
 					/>
 				</Pressable>
 				<ThemedText
 					type={'header6'}
-					style={globalStyle.username}
+					style={profileStyles.username}
 				>
 					{user?.username}
 				</ThemedText>
-				<View style={globalStyle.biographie}>
+				<View style={profileStyles.biography}>
 					<ThemedText
 						type={'header6'}
-						style={globalStyle.biographieText}
+						style={profileStyles.biographyText}
 					>
 						A propos de {user?.firstName}
 					</ThemedText>
-					<ThemedText style={globalStyle.biographieText}>
+					<ThemedText style={profileStyles.biographyText}>
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
@@ -89,11 +88,11 @@ export default function Profile() {
 					name='car'
 					size={24}
 					color={Colors.light.text}
-					buttonStyle={globalStyle.carButton}
+					buttonStyle={profileStyles.carButton}
 					onPress={() => router.push('/profile/vehicles')}
 				/>
-				<View style={globalStyle.data}>
-					<View style={globalStyle.cell}>
+				<View style={profileStyles.stats}>
+					<View style={profileStyles.statCell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -107,8 +106,8 @@ export default function Profile() {
 							843km
 						</ThemedText>
 					</View>
-					<View style={globalStyle.verticalSeparator} />
-					<View style={globalStyle.cell}>
+					<View style={profileStyles.separator} />
+					<View style={profileStyles.statCell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -122,8 +121,8 @@ export default function Profile() {
 							123
 						</ThemedText>
 					</View>
-					<View style={globalStyle.verticalSeparator} />
-					<View style={globalStyle.cell}>
+					<View style={profileStyles.separator} />
+					<View style={profileStyles.statCell}>
 						<ThemedText
 							type={'accent'}
 							style={{ textAlign: 'center' }}
@@ -138,98 +137,23 @@ export default function Profile() {
 						</ThemedText>
 					</View>
 				</View>
-				<View style={globalStyle.buttons}>
+				<View style={profileStyles.buttonContainer}>
 					<CustomButton
 						text={'Modifier'}
 						onPress={() => router.push('/profile/edit')}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
-						buttonStyle={globalStyle.button}
+						buttonStyle={profileStyles.button}
 					/>
 					<CustomButton
 						text={'Déconnexion'}
 						onPress={signOut}
 						textProps={{ type: 'defaultBody' }}
 						backgroundColor={'accentBackground'}
-						buttonStyle={globalStyle.button}
+						buttonStyle={profileStyles.button}
 					/>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 }
-
-export const globalStyle = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: '7.5%',
-		backgroundColor: Colors.light.background,
-	},
-	title: {
-		textAlign: 'center',
-		marginTop: '5%',
-	},
-	profilePicture: {
-		borderRadius: 9999,
-		height: 100,
-		aspectRatio: 1,
-		alignSelf: 'center',
-		marginTop: '8%',
-	},
-	username: {
-		textAlign: 'center',
-		marginTop: '2%',
-	},
-	biographie: {
-		display: 'flex',
-		flexDirection: 'column',
-		backgroundColor: Colors.light.accentBackground,
-		marginVertical: '5%',
-		paddingVertical: '3%',
-		borderRadius: 10,
-		gap: 5,
-	},
-	biographieText: {
-		textAlign: 'center',
-	},
-	missingFields: {
-		marginTop: '5%',
-	},
-	data: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-evenly',
-		marginHorizontal: 'auto',
-		marginTop: '10%',
-		marginBottom: '10%',
-	},
-	cell: {
-		flex: 1,
-		marginHorizontal: 'auto',
-	},
-	verticalSeparator: {
-		width: 1,
-		backgroundColor: Colors.light.disabledBorder,
-		marginHorizontal: 10,
-	},
-	buttons: {
-		display: 'flex',
-		flexDirection: 'row',
-		margin: 'auto',
-		gap: 40,
-		marginTop: '5%',
-	},
-	button: {
-		width: 'auto',
-		paddingHorizontal: '10%',
-	},
-	carButton: {
-		alignSelf: 'flex-start',
-		marginTop: '10%',
-		marginLeft: '5%',
-		borderWidth: 1,
-		borderRadius: 10,
-		borderColor: Colors.light.disabledBorder,
-		padding: '3%',
-	},
-});
