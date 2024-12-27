@@ -2,7 +2,7 @@ import { StyleSheet, Text, TextStyle } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useFonts } from 'expo-font';
 import { Colors } from '@/constants/Colors';
-import { useEffect } from 'react';
+import { Children, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { fonts } from '@/constants/Fonts';
 
@@ -12,18 +12,21 @@ export type ThemedTextProps = {
 	type?: keyof typeof fontType;
 	color?: keyof typeof Colors.light;
 	style?: any;
+	children: any;
 };
 
 export function ThemedText({
 	style,
 	lightColor,
 	darkColor,
+	children,
 	type = 'defaultBody',
 	color = 'text',
 	...rest
 }: ThemedTextProps) {
 	const textColor = useThemeColor(
 		{ light: lightColor, dark: darkColor },
+		// @ts-ignore
 		color
 	);
 
@@ -51,7 +54,7 @@ export function ThemedText({
 				[{ color: textColor }, fontType[type], style] as unknown as TextStyle
 			}
 			{...rest}
-		/>
+		>{children}</Text>
 	);
 }
 
