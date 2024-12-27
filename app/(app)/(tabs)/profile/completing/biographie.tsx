@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import ReturnButton from '@/components/buttons/ReturnButton';
@@ -6,6 +6,7 @@ import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
 import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
 import { vehiclesStyles } from '@/styles/vehicles';
+import {profileStyles} from '@/styles/profile';
 
 export function Biographie() {
 	const { validateField, errors, data, setData } = useRegister();
@@ -20,9 +21,14 @@ export function Biographie() {
 
 	return (
 		<View style={vehiclesStyles.container}>
+			<ReturnButton handleBack={handleBack} />
 			<View style={vehiclesStyles.content}>
-				<ReturnButton handleBack={handleBack} />
-				<ThemedText type={'header3'}>Biographie</ThemedText>
+				<ThemedText
+					type={'header2'}
+					style={vehiclesStyles.title}
+				>
+					Biographie
+				</ThemedText>
 				<ThemedInput
 					placeholder='Decrire vous en quelques mots'
 					value={data.biographie}
@@ -33,7 +39,6 @@ export function Biographie() {
 					hasError={!!errors.biographie}
 					errorMessage={errors.biographie}
 					label={'Biographie'}
-					style={styles.input}
 					multiline={true}
 					numberOfLines={4}
 				/>
@@ -49,10 +54,3 @@ export function Biographie() {
 }
 
 export default Biographie;
-
-const styles = StyleSheet.create({
-	input: {
-		height: 200,
-		textAlignVertical: 'top',
-	},
-});

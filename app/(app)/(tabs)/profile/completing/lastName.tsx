@@ -20,8 +20,8 @@ const LastName = () => {
 
 	return (
 		<View style={vehiclesStyles.container}>
+			<ReturnButton handleBack={handleBack} />
 			<View style={vehiclesStyles.content}>
-				<ReturnButton handleBack={handleBack} />
 				<ThemedText type={'header4'}>Complétez votre nom de famille</ThemedText>
 				<ThemedInput
 					placeholder='Entrez votre nom de famille'

@@ -89,7 +89,7 @@ const VALIDATION_RULES: {
 	vehicles: (value: Vehicle[]) =>
 		value.length > 0 ? null : 'Au moins un véhicule est requis',
 	biographie: (value: string) =>
-		value.length <= 128
+		value?.length <= 128
 			? null
 			: 'La biographie ne doit pas dépasser 128 caractères',
 };

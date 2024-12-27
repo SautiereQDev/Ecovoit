@@ -19,12 +19,15 @@ export const vehiclesStyles = StyleSheet.create({
 	title: {
 		marginTop: '5%',
 		textAlign: 'center',
-		fontSize: 24,
 	},
 	button: {
 		width: 'auto',
 		paddingHorizontal: '10%',
 		marginTop: '5%',
+	},
+
+	buttonNext: {
+		paddingHorizontal: '5%',
 	},
 
 	// Liste des véhicules
