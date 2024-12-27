@@ -2,12 +2,10 @@ import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import {
-	globalStyle,
-	handleBack,
-} from '@/app/(app)/(tabs)/profile/completing/index';
+import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
 import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
+import { vehiclesStyles } from '@/styles/vehicles';
 
 export function Biographie() {
 	const { validateField, errors, data, setData } = useRegister();
@@ -21,8 +19,8 @@ export function Biographie() {
 	};
 
 	return (
-		<View style={globalStyle.container}>
-			<View style={globalStyle.content}>
+		<View style={vehiclesStyles.container}>
+			<View style={vehiclesStyles.content}>
 				<ReturnButton handleBack={handleBack} />
 				<ThemedText type={'header3'}>Biographie</ThemedText>
 				<ThemedInput
@@ -42,7 +40,7 @@ export function Biographie() {
 				<CustomButton
 					text={'Valider'}
 					onPress={handleSubmit}
-					buttonStyle={globalStyle.buttonNext}
+					buttonStyle={vehiclesStyles.buttonNext}
 					size={'smaller'}
 				/>
 			</View>

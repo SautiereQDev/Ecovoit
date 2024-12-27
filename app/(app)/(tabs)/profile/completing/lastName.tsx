@@ -1,13 +1,11 @@
 import { View } from 'react-native';
 import React from 'react';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
-import {
-	globalStyle,
-	handleBack,
-} from '@/app/(app)/(tabs)/profile/completing/index';
+import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
+import { vehiclesStyles } from '@/styles/vehicles';
 
 const LastName = () => {
 	const { validateField, errors, data, setData } = useRegister();
@@ -21,8 +19,8 @@ const LastName = () => {
 	};
 
 	return (
-		<View style={globalStyle.container}>
-			<View style={globalStyle.content}>
+		<View style={vehiclesStyles.container}>
+			<View style={vehiclesStyles.content}>
 				<ReturnButton handleBack={handleBack} />
 				<ThemedText type={'header4'}>Complétez votre nom de famille</ThemedText>
 				<ThemedInput
@@ -39,12 +37,11 @@ const LastName = () => {
 				<CustomButton
 					text={'Valider'}
 					onPress={handleSubmit}
-					buttonStyle={globalStyle.buttonNext}
+					buttonStyle={vehiclesStyles.buttonNext}
 					size={'smaller'}
 				/>
 			</View>
 		</View>
-
 	);
 };
 export default LastName;

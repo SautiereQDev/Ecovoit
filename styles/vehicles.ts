@@ -1,3 +1,4 @@
+// styles/vehicles.ts
 import { StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
 
@@ -8,9 +9,17 @@ export const vehiclesStyles = StyleSheet.create({
 		backgroundColor: Colors.light.background,
 		padding: '5%',
 	},
+	content: {
+		flex: 1,
+		margin: 'auto',
+		marginTop: '10%',
+		padding: '7.5%',
+		gap: 30,
+	},
 	title: {
 		marginTop: '5%',
 		textAlign: 'center',
+		fontSize: 24,
 	},
 	button: {
 		width: 'auto',
@@ -18,7 +27,7 @@ export const vehiclesStyles = StyleSheet.create({
 		marginTop: '5%',
 	},
 
-	// Styles pour la liste des véhicules (index.tsx)
+	// Liste des véhicules
 	carsContainer: {
 		marginTop: '10%',
 		gap: 20,
@@ -26,6 +35,11 @@ export const vehiclesStyles = StyleSheet.create({
 	carCard: {
 		marginRight: 'auto',
 		minWidth: '55%',
+		backgroundColor: 'white',
+		padding: 10,
+		borderRadius: 10,
+		borderWidth: 1,
+		display: 'flex',
 	},
 	addButton: {
 		borderWidth: 1,
@@ -41,7 +55,7 @@ export const vehiclesStyles = StyleSheet.create({
 		marginVertical: 'auto',
 	},
 
-	// Styles pour le formulaire de création/édition
+	// Formulaire
 	form: {
 		gap: 20,
 		marginTop: '5%',
@@ -49,8 +63,15 @@ export const vehiclesStyles = StyleSheet.create({
 	formField: {
 		marginBottom: 15,
 	},
+	input: {
+		borderWidth: 1,
+		borderColor: Colors.light.disabledBorder,
+		borderRadius: 8,
+		padding: 10,
+		backgroundColor: Colors.light.background,
+	},
 
-	// Styles pour le menu contextuel
+	// Menu contextuel
 	menuOverlay: {
 		flex: 1,
 		backgroundColor: 'rgba(0, 0, 0, 0.2)',
