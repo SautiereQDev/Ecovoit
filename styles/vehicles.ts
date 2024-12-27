@@ -11,7 +11,6 @@ export const vehiclesStyles = StyleSheet.create({
 	title: {
 		marginTop: '5%',
 		textAlign: 'center',
-		fontSize: 24,
 	},
 	button: {
 		width: 'auto',

@@ -18,6 +18,7 @@ export const profileStyles = StyleSheet.create({
 	title: {
 		textAlign: 'center',
 		marginTop: '5%',
+		marginBottom: '7.5%',
 	},
 	button: {
 		width: 'auto',
@@ -30,7 +31,6 @@ export const profileStyles = StyleSheet.create({
 		height: 100,
 		aspectRatio: 1,
 		alignSelf: 'center',
-		marginTop: '8%',
 	},
 	username: {
 		textAlign: 'center',
@@ -55,7 +55,7 @@ export const profileStyles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		marginHorizontal: 'auto',
-		marginVertical: '10%',
+		marginBottom: '5%',
 	},
 	statCell: {
 		flex: 1,

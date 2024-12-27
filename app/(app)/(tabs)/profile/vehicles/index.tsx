@@ -55,11 +55,11 @@ const Index = () => {
 			<ReturnButton/>
 			<ThemedText
 				type={'header3'}
-				style={styles.profileStylestitle}
+				style={vehiclesStyles.title}
 			>
 				Mes voitures
 			</ThemedText>
-			<View style={styles.profileStylescarsContainer}>
+			<View style={vehiclesStyles.carsContainer}>
 				{voitures.map((voiture: Vehicle) => (
 					<Pressable
 						onLongPress={(event) => handleLongPress(event, voiture.label)}
@@ -67,7 +67,7 @@ const Index = () => {
 					>
 						<VehicleCard
 							vehicle={voiture}
-							style={styles.profileStylescars}
+							style={vehiclesStyles.carCard}
 						/>
 					</Pressable>
 				))}
@@ -80,13 +80,13 @@ const Index = () => {
 			</View>
 			<Pressable onPress={newVehicle}>
 				{voitures.length < 4 && (
-					<View style={styles.profileStylesaddButton}>
+					<View style={vehiclesStyles.addButton}>
 						<ThemedText type={'accent'}>Ajouter un véhicule</ThemedText>
 						<FontAwesome6
 							name='add'
 							size={24}
 							color='black'
-							style={styles.profileStylesaddIcon}
+							style={vehiclesStyles.addIcon}
 						/>
 					</View>
 				)}
