@@ -2,12 +2,12 @@ import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useRegister } from '@/context';
-import { Vehicle } from '@/types'; // Assuming Vehicle is defined in a separate types file
-import { styles } from './index';
+import { Vehicle } from '@/types';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import { ThemedText } from '@/components';
 import { notify } from 'react-native-notificated';
+import { registerStyles as styles } from '@/styles';
 
 export const RegisterPage4 = () => {
 	const {
@@ -41,7 +41,6 @@ export const RegisterPage4 = () => {
 				>
 					Informations du véhicule
 				</ThemedText>
-				{/*@ts-ignore */}
 				<CreateVehicle
 					errors={errors}
 					validateField={validateField}

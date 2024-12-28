@@ -4,9 +4,9 @@ import { CustomButton, ThemedInput } from '@/components';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { router } from 'expo-router';
 import { useRegister } from '@/context/RegisterProvider';
-import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { notify } from 'react-native-notificated';
+import { registerStyles as styles } from '@/styles';
 
 const RegisterPage2 = () => {
 	const {

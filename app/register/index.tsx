@@ -1,26 +1,31 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Colors } from '@/constants';
+import { SafeAreaView, View } from 'react-native';
 import { useRegister } from '@/context';
 import { router } from 'expo-router';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import React from 'react';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { notify } from 'react-native-notificated';
+import { registerStyles as styles } from '@/styles';
 
 export const Index = () => {
-	const { form: data, updateField: setData, errors, validatePage, validateField } = useRegister();
+	const {
+		form: data,
+		updateField: setData,
+		errors,
+		validatePage,
+		validateField,
+	} = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(1)) {
 			router.push('/register/infosPerso');
-		}
-		else {
-			notify("error", {
+		} else {
+			notify('error', {
 				params: {
-					title: "Erreur",
-					description: "Veuillez remplir tous les champs correctement"
-				}
-			})
+					title: 'Erreur',
+					description: 'Veuillez remplir tous les champs correctement',
+				},
+			});
 		}
 	};
 
@@ -86,39 +91,3 @@ export const Index = () => {
 };
 
 export default Index;
-
-export const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: '#fff' },
-	content: {
-		marginHorizontal: 'auto',
-		marginTop: '10%',
-		width: '80%',
-		gap: 30,
-	},
-	confirmationPage: {
-		marginHorizontal: 'auto',
-		marginTop: '10%',
-		width: '80%',
-		gap: 30,
-	},
-	confirmationPageHeader: { textAlign: 'center', marginTop: '30%' },
-	header: { marginBottom: 5, display: 'flex', gap: 12 },
-	paragraph: { textAlign: 'center' },
-	title: { textAlign: 'center' },
-	formulaire: { display: 'flex', gap: 20 },
-	buttonNext: {
-		marginLeft: 'auto',
-		paddingHorizontal: '8%',
-		paddingVertical: '2.5%',
-	},
-	buttonHome: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingVertical: 6,
-		borderRadius: 10,
-		backgroundColor: Colors.light.secondary,
-	},
-	buttonHomeText: { color: Colors.light.background, textAlign: 'center' },
-	buttons: { display: 'flex', flexDirection: 'row', gap: 30, margin: 'auto' },
-	askButton: { width: '40%' },
-});

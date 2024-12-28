@@ -2,9 +2,9 @@ import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { CustomButton } from '@/components';
 import { ThemedText } from '@/components/texts/ThemedText';
-import { styles } from './index';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { registerStyles as styles } from '@/styles';
 
 const RegisterPage3 = () => {
 	const nextStep = () => {

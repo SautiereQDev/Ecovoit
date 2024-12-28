@@ -1,17 +1,22 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import { ImagePickerButton } from '@/components/buttons/ImagePickerButton';
 import { useRegister } from '@/context/RegisterProvider';
-import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { registerStyles as styles } from '@/styles';
 
 export const RegisterPage5 = () => {
-	const { form: data, updateField: setData, errors, validateField, submitForm: submit } = useRegister();
+	const {
+		form: data,
+		updateField: setData,
+		errors,
+		validateField,
+		submitForm: submit,
+	} = useRegister();
 
 	const updateImage = (image: string | null) => {
 		setData('profilePicture', image);
-
 	};
 
 	return (
@@ -25,20 +30,19 @@ export const RegisterPage5 = () => {
 					Complétez votre profil
 				</ThemedText>
 				<View>
-					<ThemedText style={customStyle.optionalText}>
+					<ThemedText style={styles.optionalText}>
 						Photo de profil (optionnel)
 					</ThemedText>
 					<ImagePickerButton
 						image={data.profilePicture}
 						setImage={updateImage}
-						style={customStyle.imagePicker}
+						style={styles.imagePicker}
 					/>
 				</View>
 				<View>
-					<ThemedText style={customStyle.optionalText}>
+					<ThemedText style={styles.optionalText}>
 						Biographie (optionnel)
 					</ThemedText>
-					{/*TODO: Arriver à metttre le biographie sur plusieurs lignes*/}
 					<ThemedInput
 						placeholder='Biographie'
 						value={data.biographie}
@@ -51,7 +55,7 @@ export const RegisterPage5 = () => {
 						label={'Biographie'}
 						multiline
 						numberOfLines={4}
-						style={customStyle.biographieInput}
+						style={styles.biographieInput}
 					/>
 				</View>
 				<CustomButton
@@ -59,7 +63,7 @@ export const RegisterPage5 = () => {
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
 					onPress={submit}
-					buttonStyle={customStyle.button}
+					buttonStyle={styles.button}
 				/>
 			</View>
 		</SafeAreaView>
@@ -67,37 +71,3 @@ export const RegisterPage5 = () => {
 };
 
 export default RegisterPage5;
-
-const customStyle = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-	},
-	content: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	title: {
-		marginBottom: 20,
-		textAlign: 'center',
-	},
-	imagePicker: {
-		marginTop: '5%',
-		marginBottom: '3%',
-	},
-	optionalText: {
-		marginBottom: '3%',
-		fontStyle: 'italic',
-		color: 'gray',
-	},
-	button: {
-		paddingHorizontal: '5%',
-		paddingVertical: '2%',
-		marginLeft: 'auto',
-		width: '40%',
-	},
-	biographieInput: {
-		paddingHorizontal: 10,
-		textAlignVertical: 'top',
-	},
-});
