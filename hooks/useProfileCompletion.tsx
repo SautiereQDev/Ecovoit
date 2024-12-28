@@ -1,6 +1,5 @@
 import { useProfile } from '@/context/ProfileProvider';
-import { OPTIONAL_FIELDS, OptionalField } from '@/context/RegisterProvider';
-import { User } from '@/types/Ecovoit';
+import { OPTIONAL_FIELDS, OptionalField } from '@/utils/validation';
 
 export const useProfileCompletion = () => {
 	const { user } = useProfile();
