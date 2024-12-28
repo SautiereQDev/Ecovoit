@@ -1,3 +1,4 @@
+// context/SearchProvider.tsx
 import React, {
 	createContext,
 	ReactNode,
@@ -5,37 +6,30 @@ import React, {
 	useContext,
 	useEffect,
 	useMemo,
-	useState,
+	useReducer,
 } from 'react';
 import { useRouter } from 'expo-router';
+import { FiltreType, SearchTripCardType } from '@/types';
 import {
-	Filter,
-	FiltreType,
-	SearchTripCardType,
-	searchTripFormType,
-} from '@/types';
+	initialSearchState,
+	SearchAction,
+	searchReducer,
+} from '@/reducers/searchReducer';
 import { formatDateReverse } from '@/utils/date';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
 
 interface SearchContextType {
-	searchData: searchTripFormType;
-	setSearchData: React.Dispatch<React.SetStateAction<searchTripFormType>>;
+	state: typeof initialSearchState;
+	dispatch: React.Dispatch<SearchAction>;
 	resetSearch: () => void;
 	submitSearch: () => void;
-	errors: inputError;
-	setErrors: React.Dispatch<React.SetStateAction<inputError>>;
-	filters: Filter[];
 	updateFilters: (name: FiltreType, value: string) => void;
 	resetFilters: () => void;
-	isFilterActive: boolean;
 	reverseOrder: () => void;
-	orderDirection: 'asc' | 'desc';
-	order: FiltreType;
 	updateOrder: (order: FiltreType) => void;
 	toggleFilter: (name: FiltreType) => void;
 	updateFilterValue: (name: FiltreType, value: string) => void;
 	filtersChanged: () => boolean;
-	results: SearchTripCardType[];
 }
 
 const SearchContext = createContext<SearchContextType | null>(null);
@@ -44,145 +38,133 @@ interface SearchProviderProps {
 	children: ReactNode;
 }
 
-const initialData = {
-	depart: '',
-	destination: '',
-	date: new Date().getTime(),
-};
-
-type inputError = {
-	[key: string]: string;
-};
-
-type Filtre = {
-	name: FiltreType;
-	value: number;
-	active: boolean;
-};
-
 export const SearchProvider = ({ children }: SearchProviderProps) => {
 	const router = useRouter();
+	const [state, dispatch] = useReducer(searchReducer, initialSearchState);
 
-	const initialFilters: Filtre[] = Object.values(FiltreType).map((type) => ({
-		name: type,
-		active: false,
-		value: 0,
-	}));
-
-	const [searchFormData, setSearchFormData] =
-		useState<searchTripFormType>(initialData);
-	const [results, setResults] = useState<SearchTripCardType[]>([]);
-	const [filters, setFilters] = useState<Filter[]>(initialFilters);
-	const [order, setOrder] = useState<FiltreType>(FiltreType.EMISSION);
-	const [orderDirection, setOrderDirection] = useState<'asc' | 'desc'>('asc');
-	const [errors, setErrors] = useState<inputError>({});
-	const [formIsSubmitted, setFormIsSubmitted] = useState<boolean>(false);
-
-	const validate = useCallback((field: string, value: string | number) => {
-		const newErrors = { ...errors };
-		switch (field) {
-			case 'depart':
-			case 'destination':
-				if ((value as string).length < 3 || (value as string).length > 32) {
-					newErrors[field] =
-						'Le champ de recherche doit contenir entre 3 et 32 caractères';
-				} else {
-					delete newErrors[field];
-				}
-				break;
-			case 'date':
-				if (!validTimestamp(new Date(value as number).toISOString(), true)) {
-					newErrors[field] = 'Date invalide';
-				} else {
-					delete newErrors[field];
-				}
-				break;
-		}
-		setErrors(newErrors);
-	}, [errors]);
+	const validate = useCallback(
+		(field: string, value: string | number) => {
+			const newErrors = { ...state.errors };
+			switch (field) {
+				case 'depart':
+				case 'destination':
+					if ((value as string).length < 3 || (value as string).length > 32) {
+						newErrors[field] =
+							'Le champ de recherche doit contenir entre 3 et 32 caractères';
+					} else {
+						delete newErrors[field];
+					}
+					break;
+				case 'date':
+					if (!validTimestamp(new Date(value as number).toISOString(), true)) {
+						newErrors[field] = 'Date invalide';
+					} else {
+						delete newErrors[field];
+					}
+					break;
+			}
+			dispatch({ type: 'SET_ERRORS', payload: newErrors });
+		},
+		[state.errors]
+	);
 
 	const submitSearch = useCallback(() => {
 		if (
-			Object.keys(errors).length === 0 &&
-			searchFormData.depart &&
-			searchFormData.destination
+			Object.keys(state.errors).length === 0 &&
+			state.searchData.depart &&
+			state.searchData.destination
 		) {
 			router.push('/searchTrip/search');
-			console.log(searchFormData);
-			setResults(data);
+			console.log(state.searchData);
+			dispatch({ type: 'SET_RESULTS', payload: data });
 		} else {
-			validate('depart', searchFormData.depart);
-			validate('destination', searchFormData.destination);
-			validate('date', searchFormData.date);
+			validate('depart', state.searchData.depart);
+			validate('destination', state.searchData.destination);
+			validate('date', state.searchData.date);
 		}
-	}, [errors, searchFormData, router, validate]);
+	}, [state.errors, state.searchData, router, validate]);
 
 	useEffect(() => {
-		if (formIsSubmitted) {
+		if (state.formIsSubmitted) {
 			submitSearch();
-			setFormIsSubmitted(false);
+			dispatch({ type: 'SET_FORM_IS_SUBMITTED', payload: false });
 		}
-	}, [formIsSubmitted, submitSearch]);
+	}, [state.formIsSubmitted, submitSearch]);
 
 	const data: SearchTripCardType[] = [
 		{
-			depart: searchFormData.depart,
-			destination: searchFormData.destination,
+			depart: state.searchData.depart,
+			destination: state.searchData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchFormData.date),
+			date: formatDateReverse(state.searchData.date),
 			distance: 500,
 		},
 		{
-			depart: searchFormData.depart,
-			destination: searchFormData.destination,
+			depart: state.searchData.depart,
+			destination: state.searchData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchFormData.date),
+			date: formatDateReverse(state.searchData.date),
 			distance: 500,
 		},
 		{
-			depart: searchFormData.depart,
-			destination: searchFormData.destination,
+			depart: state.searchData.depart,
+			destination: state.searchData.destination,
 			nom: 'Thomas',
-			date: formatDateReverse(searchFormData.date),
+			date: formatDateReverse(state.searchData.date),
 			distance: 500,
 		},
 	];
 
-	const resetFilters = useCallback(() => setFilters(initialFilters), [initialFilters]);
+	const resetFilters = useCallback(
+		() => dispatch({ type: 'RESET_FILTERS' }),
+		[]
+	);
 
-	const updateFilters = useCallback((name: FiltreType, value: string) => {
-		const numericValue = Number(value);
-		if (!isNaN(numericValue)) {
-			setFilters((filters) =>
-				filters.map((filter) =>
-					filter.name === name ? { ...filter, value: numericValue } : filter
-				)
-			);
-		}
-	}, []);
+	const updateFilters = useCallback(
+		(name: FiltreType, value: string) => {
+			const numericValue = Number(value);
+			if (!isNaN(numericValue)) {
+				dispatch({
+					type: 'SET_FILTERS',
+					payload: state.filters.map((filter) =>
+						filter.name === name ? { ...filter, value: numericValue } : filter
+					),
+				});
+			}
+		},
+		[state.filters]
+	);
 
-	const toggleFilter = useCallback((name: FiltreType) => {
-		setFilters((filters) =>
-			filters.map((filter) =>
-				filter.name === name ? { ...filter, active: !filter.active } : filter
-			)
-		);
-	}, []);
+	const toggleFilter = useCallback(
+		(name: FiltreType) => {
+			dispatch({
+				type: 'SET_FILTERS',
+				payload: state.filters.map((filter) =>
+					filter.name === name ? { ...filter, active: !filter.active } : filter
+				),
+			});
+		},
+		[state.filters]
+	);
 
-	const updateFilterValue = useCallback((name: FiltreType, value: string) => {
-		const numericValue = Number(value);
-		if (!isNaN(numericValue)) {
-			setFilters((filters) =>
-				filters.map((filter) =>
-					filter.name === name ? { ...filter, value: numericValue } : filter
-				)
-			);
-		}
-	}, []);
+	const updateFilterValue = useCallback(
+		(name: FiltreType, value: string) => {
+			const numericValue = Number(value);
+			if (!isNaN(numericValue)) {
+				dispatch({
+					type: 'SET_FILTERS',
+					payload: state.filters.map((filter) =>
+						filter.name === name ? { ...filter, value: numericValue } : filter
+					),
+				});
+			}
+		},
+		[state.filters]
+	);
 
 	const filtersChanged = useCallback((): boolean => {
-		return filters.some((filter) => {
-			const initialFilter = initialFilters.find(
+		return state.filters.some((filter) => {
+			const initialFilter = initialSearchState.filters.find(
 				(initialFilter) => initialFilter.name === filter.name
 			);
 			return (
@@ -190,64 +172,56 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 				initialFilter?.active !== filter.active
 			);
 		});
-	}, [filters, initialFilters]);
+	}, [state.filters]);
 
 	const isFilterActive = useMemo(
-		() => filters.some((filter) => filter.active),
-		[filters]
+		() => state.filters.some((filter) => filter.active),
+		[state.filters]
 	);
 
 	const reverseOrder = useCallback(() => {
-		setOrderDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
-	}, []);
+		dispatch({
+			type: 'SET_ORDER_DIRECTION',
+			payload: state.orderDirection === 'asc' ? 'desc' : 'asc',
+		});
+	}, [state.orderDirection]);
 
 	const updateOrder = useCallback((order: FiltreType) => {
-		setOrder(order);
+		dispatch({ type: 'SET_ORDER', payload: order });
 	}, []);
 
 	const resetSearch = useCallback(() => {
 		router.push('/(app)/(tabs)/searchTrip');
-		setSearchFormData(initialData);
+		dispatch({ type: 'RESET_SEARCH' });
 	}, [router]);
 
 	const contextValue = useMemo(
 		() => ({
-			searchData: searchFormData,
-			setSearchData: setSearchFormData,
+			state,
+			dispatch,
 			resetSearch,
 			submitSearch,
-			errors,
-			setErrors,
-			filters,
 			updateFilters,
 			resetFilters,
 			isFilterActive,
 			reverseOrder,
-			orderDirection,
-			order,
 			updateOrder,
 			toggleFilter,
 			updateFilterValue,
 			filtersChanged,
-			results,
 		}),
 		[
-			searchFormData,
+			state,
 			resetSearch,
 			submitSearch,
-			errors,
-			filters,
 			updateFilters,
 			resetFilters,
 			isFilterActive,
 			reverseOrder,
-			orderDirection,
-			order,
 			updateOrder,
 			toggleFilter,
 			updateFilterValue,
 			filtersChanged,
-			results,
 		]
 	);
 
@@ -261,7 +235,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 export const useTripSearch = (): SearchContextType => {
 	const context = useContext(SearchContext);
 	if (context === null) {
-		throw new Error('useSearchData must be used within a SearchProvider');
+		throw new Error('useTripSearch must be used within a SearchProvider');
 	}
 	return context;
 };

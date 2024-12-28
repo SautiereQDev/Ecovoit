@@ -10,17 +10,25 @@ import { useTripSearch } from '@/context/SearchProvider';
 import { searchTripStyles } from '@/styles/searchTrip';
 
 export const Search = () => {
-	const {
-		results,
-		resetSearch,
-		isFilterActive,
-		reverseOrder,
-		orderDirection,
-		searchData,
-	} = useTripSearch();
+	const { state, dispatch } = useTripSearch();
+	const { results, searchData, orderDirection, filters } = state;
 
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
+
+	const resetSearch = () => {
+		dispatch({ type: 'RESET_SEARCH' });
+	};
+
+	const reverseOrder = () => {
+		dispatch({
+			type: 'SET_ORDER_DIRECTION',
+			payload: orderDirection === 'asc' ? 'desc' : 'asc',
+		});
+		notify('success', { params: { title: 'Ordre de tri changé' } });
+	};
+
+	const isFilterActive = filters.some((filter) => filter.active);
 
 	return (
 		<SafeAreaView style={searchTripStyles.container}>
@@ -38,7 +46,7 @@ export const Search = () => {
 								color={Colors.light.resetButton}
 								onPress={resetSearch}
 								size={30}
-								buttonstyle={searchTripStyles.resetButton}
+								buttonStyle={searchTripStyles.resetButton}
 							/>
 						</View>
 						<View style={searchTripStyles.icons}>
@@ -46,7 +54,7 @@ export const Search = () => {
 								name={'filter'}
 								lib={'MaterialCommunityIcons'}
 								size={26}
-								buttonstyle={searchTripStyles.button}
+								buttonStyle={searchTripStyles.button}
 								backgroundColor={isFilterActive ? 'primary' : 'background'}
 								color={
 									isFilterActive
@@ -61,7 +69,7 @@ export const Search = () => {
 									name={'sort-alpha-asc'}
 									lib={'FontAwesome'}
 									size={30}
-									buttonstyle={searchTripStyles.button}
+									buttonStyle={searchTripStyles.button}
 									backgroundColor={'background'}
 									color={Colors.light.primary}
 									onPress={() => setShowOrder(!showOrder)}
@@ -70,15 +78,10 @@ export const Search = () => {
 									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
 									lib={'FontAwesome'}
 									size={30}
-									buttonstyle={searchTripStyles.button}
+									buttonStyle={searchTripStyles.button}
 									backgroundColor={'background'}
 									color={Colors.light.primary}
-									onPress={() => {
-										reverseOrder();
-										notify('success', {
-											params: { title: 'Ordre de tri changé' },
-										});
-									}}
+									onPress={reverseOrder}
 								/>
 							</View>
 						</View>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, View, KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, ThemedInput, ThemedText } from '@/components';
@@ -9,11 +9,11 @@ import DateTimePicker, {
 import validTimestamp from 'ajv/lib/runtime/timestamp';
 import { formatDate } from '@/utils/date';
 import { useTripSearch } from '@/context/SearchProvider';
-import {searchTripStyles} from '@/styles/searchTrip';
+import { searchTripStyles } from '@/styles/searchTrip';
 
 export const Index = () => {
-	const { searchData, setSearchData, submitSearch, errors, setErrors } =
-		useTripSearch();
+	const { state, dispatch } = useTripSearch();
+	const { searchData, errors } = state;
 
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
@@ -26,12 +26,15 @@ export const Index = () => {
 					return;
 				} else if (mode === 'time') {
 					if (!validTimestamp(selectedDate?.toISOString() || '', true)) {
-						setErrors({ ...errors, date: 'Date invalide' });
+						dispatch({
+							type: 'SET_ERRORS',
+							payload: { ...errors, date: 'Date invalide' },
+						});
 						return;
 					}
-					setSearchData({
-						...searchData,
-						date: selectedDate?.getTime() ?? searchData.date,
+					dispatch({
+						type: 'SET_SEARCH_DATA',
+						payload: { date: selectedDate?.getTime() ?? searchData.date },
 					});
 					setShowDatePicker(false);
 					setMode('date');
@@ -41,12 +44,20 @@ export const Index = () => {
 				setMode('date');
 			}
 		} else {
-			setSearchData({
-				...searchData,
-				date: selectedDate?.getTime() ?? searchData.date,
+			dispatch({
+				type: 'SET_SEARCH_DATA',
+				payload: { date: selectedDate?.getTime() ?? searchData.date },
 			});
 			setShowDatePicker(false);
 		}
+	};
+
+	const handleInputChange = (field: keyof typeof searchData, value: string) => {
+		dispatch({ type: 'SET_SEARCH_DATA', payload: { [field]: value } });
+	};
+
+	const handleSubmit = () => {
+		dispatch({ type: 'SET_FORM_IS_SUBMITTED', payload: true });
 	};
 
 	return (
@@ -58,9 +69,7 @@ export const Index = () => {
 						label='Départ'
 						placeholder='Départ'
 						value={searchData.depart}
-						onChangeText={(val) => {
-							setSearchData({ ...searchData, depart: val });
-						}}
+						onChangeText={(val) => handleInputChange('depart', val)}
 						hasError={!!errors.depart}
 						errorMessage={errors.depart}
 						size='medium'
@@ -71,9 +80,7 @@ export const Index = () => {
 						label='Destination'
 						placeholder='Destination'
 						value={searchData.destination}
-						onChangeText={(val) => {
-							setSearchData({ ...searchData, destination: val });
-						}}
+						onChangeText={(val) => handleInputChange('destination', val)}
 						hasError={!!errors.destination}
 						errorMessage={errors.destination}
 						size='medium'
@@ -106,7 +113,9 @@ export const Index = () => {
 						/>
 					)}
 					{Boolean(errors.date) && (
-						<ThemedText style={searchTripStyles.errorText}>{errors.date}</ThemedText>
+						<ThemedText style={searchTripStyles.errorText}>
+							{errors.date}
+						</ThemedText>
 					)}
 					<IconButton
 						name='search'
@@ -115,7 +124,7 @@ export const Index = () => {
 						color={Colors.light.primary}
 						buttonStyle={searchTripStyles.submitButton}
 						textProps={{ type: 'header5', color: 'background' }}
-						onPress={submitSearch}
+						onPress={handleSubmit}
 						iconStyle={{ color: Colors.light.background }}
 					/>
 				</View>
