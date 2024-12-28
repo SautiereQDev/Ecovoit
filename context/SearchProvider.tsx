@@ -16,6 +16,7 @@ import {
 } from '@/reducers/searchReducer';
 import { formatDateReverse } from '@/utils/date';
 import validTimestamp from 'ajv/lib/runtime/timestamp';
+import { notify } from 'react-native-notificated';
 
 interface SearchContextType {
 	state: typeof initialSearchState;
@@ -199,6 +200,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			type: 'SET_ORDER_DIRECTION',
 			payload: state.orderDirection === 'asc' ? 'desc' : 'asc',
 		});
+		notify('success', { params: { title: 'Ordre de tri changé' } });
 	}, [state.orderDirection]);
 
 	const updateOrder = useCallback((order: FiltreType) => {
@@ -208,6 +210,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 	const resetSearch = useCallback(() => {
 		router.push('/(app)/(tabs)/searchTrip');
 		dispatch({ type: 'RESET_SEARCH' });
+		notify('success', { params: { title: 'Recherche réinitialisée' } });
 	}, [router]);
 
 	const contextValue = useMemo(

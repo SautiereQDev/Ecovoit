@@ -1,6 +1,5 @@
 import { FlatList, KeyboardAvoidingView, View } from 'react-native';
 import { IconButton, SearchTripCard, ThemedText } from '@/components';
-import { notify } from 'react-native-notificated';
 import ShowFilters from '@/components/modal/ShowFilters';
 import ShowOrder from '@/components/modal/ShowOrder';
 import React, { useState } from 'react';
@@ -10,23 +9,11 @@ import { useTripSearch } from '@/context/SearchProvider';
 import { searchTripStyles } from '@/styles/searchTrip';
 
 export const Search = () => {
-	const { state, dispatch } = useTripSearch();
-	const { results, searchData, orderDirection, filters } = state;
+	const { state, resetSearch, reverseOrder } = useTripSearch();
+	const { results, searchData, filters } = state;
 
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
-
-	const resetSearch = () => {
-		dispatch({ type: 'RESET_SEARCH' });
-	};
-
-	const reverseOrder = () => {
-		dispatch({
-			type: 'SET_ORDER_DIRECTION',
-			payload: orderDirection === 'asc' ? 'desc' : 'asc',
-		});
-		notify('success', { params: { title: 'Ordre de tri changé' } });
-	};
 
 	const isFilterActive = filters.some((filter) => filter.active);
 
@@ -66,22 +53,19 @@ export const Search = () => {
 							<View style={searchTripStyles.orderButtons}>
 								<IconButton
 									// @ts-ignore
-									name={'sort-alpha-asc'}
-									lib={'FontAwesome'}
-									size={30}
+									name={'sort'}
+									lib={'MaterialCommunityIcons'}
+									size={26}
 									buttonStyle={searchTripStyles.button}
-									backgroundColor={'background'}
-									color={Colors.light.primary}
-									onPress={() => setShowOrder(!showOrder)}
+									onPress={reverseOrder}
 								/>
 								<IconButton
-									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
-									lib={'FontAwesome'}
-									size={30}
+									// @ts-ignore
+									name={'sort'}
+									lib={'MaterialCommunityIcons'}
+									size={26}
 									buttonStyle={searchTripStyles.button}
-									backgroundColor={'background'}
-									color={Colors.light.primary}
-									onPress={reverseOrder}
+									onPress={() => setShowOrder(!showOrder)}
 								/>
 							</View>
 						</View>
@@ -96,17 +80,7 @@ export const Search = () => {
 						<ThemedText type='header3'>Trajets correspondants 🔗</ThemedText>
 						<FlatList
 							data={results}
-							renderItem={({ item }) => (
-								<SearchTripCard
-									data={{
-										depart: item.depart,
-										destination: item.destination,
-										nom: item.nom,
-										date: item.date,
-										distance: item.distance,
-									}}
-								/>
-							)}
+							renderItem={({ item }) => <SearchTripCard data={item} />}
 							keyExtractor={(_, index) => index.toString()}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 						/>
