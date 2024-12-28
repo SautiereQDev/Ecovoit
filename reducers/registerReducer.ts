@@ -1,15 +1,27 @@
-import {
-	RegisterState,
-	RegisterAction,
-	initialRegisterState,
-	FormType,
-} from '@/types/register';
+import { RegisterState, RegisterAction, FormType } from '@/types/register';
+
+export const initialRegisterState: RegisterState = {
+	form: {
+		firstName: 'Quentin',
+		lastName: undefined,
+		username: 'Momopa',
+		email: 'quentin.sautiere@etudiant.univ-lr.fr',
+		password: 'Qsd!azddv34fgf',
+		vehicles: [],
+		biographie: undefined,
+		profilePicture: null,
+	},
+	errors: {},
+	currentPage: 1,
+	isSubmitting: false,
+	isValid: false,
+};
 
 // Actions plus spécifiques
 const updateFormField = (
 	state: RegisterState,
 	field: keyof FormType,
-	value: any
+	value: any,
 ): RegisterState => ({
 	...state,
 	form: {
@@ -21,7 +33,7 @@ const updateFormField = (
 const validateFormField = (
 	state: RegisterState,
 	field: keyof FormType,
-	error: string | null
+	error: string | null,
 ): RegisterState => ({
 	...state,
 	errors: error
@@ -39,7 +51,7 @@ const setCurrentPage = (state: RegisterState, page: number): RegisterState => ({
 
 export function registerReducer(
 	state: RegisterState,
-	action: RegisterAction
+	action: RegisterAction,
 ): RegisterState {
 	switch (action.type) {
 		case 'UPDATE_FIELD':
@@ -66,7 +78,7 @@ export function registerReducer(
 				form: {
 					...state.form,
 					vehicles: state.form.vehicles.map((v, i) =>
-						i === action.index ? action.vehicle : v
+						i === action.index ? action.vehicle : v,
 					),
 				},
 			};
