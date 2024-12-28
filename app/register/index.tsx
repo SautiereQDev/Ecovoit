@@ -1,17 +1,26 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import Colors from '@/constants/Colors';
-import { useRegister } from '@/context/RegisterProvider';
+import { Colors } from '@/constants';
+import { useRegister } from '@/context';
 import { router } from 'expo-router';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import React from 'react';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { notify } from 'react-native-notificated';
 
 export const Index = () => {
-	const { data, setData, errors, validatePage, validateField } = useRegister();
+	const { form: data, updateField: setData, errors, validatePage, validateField } = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(1)) {
 			router.push('/register/infosPerso');
+		}
+		else {
+			notify("error", {
+				params: {
+					title: "Erreur",
+					description: "Veuillez remplir tous les champs correctement"
+				}
+			})
 		}
 	};
 
@@ -30,7 +39,7 @@ export const Index = () => {
 					placeholder="Nom d'utilisateur"
 					value={data.username}
 					onChangeText={(value) => {
-						setData((prev) => ({ ...prev, username: value }));
+						setData('username', value);
 						validateField('username', value);
 					}}
 					hasError={!!errors.username}
@@ -42,7 +51,7 @@ export const Index = () => {
 					placeholder='Adresse mail'
 					value={data.email}
 					onChangeText={(value) => {
-						setData((prev) => ({ ...prev, email: value }));
+						setData('email', value);
 						validateField('email', value);
 					}}
 					hasError={!!errors.email}
@@ -55,7 +64,7 @@ export const Index = () => {
 					placeholder='Mot de passe'
 					value={data.password}
 					onChangeText={(value) => {
-						setData((prev) => ({ ...prev, password: value }));
+						setData('password', value);
 						validateField('password', value);
 					}}
 					hasError={!!errors.password}

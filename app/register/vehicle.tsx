@@ -1,19 +1,33 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Vehicle, useRegister } from '@/context/RegisterProvider';
+import { useRegister } from '@/context';
+import { Vehicle } from '@/types'; // Assuming Vehicle is defined in a separate types file
 import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import { ThemedText } from '@/components';
+import { notify } from 'react-native-notificated';
 
 export const RegisterPage4 = () => {
-	const { errors, data, setData, validateField, validatePage } = useRegister();
+	const {
+		errors,
+		updateField: setData,
+		validateField,
+		validatePage,
+	} = useRegister();
 
 	const handleNext = (vehicle: Vehicle) => {
 		if (validatePage(4)) {
-			setData({ ...data, vehicles: [vehicle] });
+			setData('vehicles', [vehicle]);
 			router.push('/register/pictureBio');
+		} else {
+			notify('error', {
+				params: {
+					title: 'Erreur',
+					description: 'Veuillez remplir tous les champs correctement',
+				},
+			});
 		}
 	};
 
@@ -27,7 +41,7 @@ export const RegisterPage4 = () => {
 				>
 					Informations du véhicule
 				</ThemedText>
-				 {/*@ts-ignore */}
+				{/*@ts-ignore */}
 				<CreateVehicle
 					errors={errors}
 					validateField={validateField}

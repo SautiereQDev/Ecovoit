@@ -6,13 +6,27 @@ import { router } from 'expo-router';
 import { useRegister } from '@/context/RegisterProvider';
 import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import { notify } from 'react-native-notificated';
 
 const RegisterPage2 = () => {
-	const { data, setData, errors, validatePage, validateField } = useRegister();
+	const {
+		form: data,
+		updateField: setData,
+		errors,
+		validatePage,
+		validateField,
+	} = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(2)) {
 			router.push('/register/confirmation');
+		} else {
+			notify('error', {
+				params: {
+					title: 'Erreur',
+					description: 'Veuillez remplir tous les champs correctement',
+				},
+			});
 		}
 	};
 
@@ -31,7 +45,7 @@ const RegisterPage2 = () => {
 					placeholder='Prénom'
 					value={data.firstName}
 					onChangeText={(value) => {
-						setData((prev) => ({ ...prev, firstName: value }));
+						setData('firstName', value);
 						validateField('firstName', value);
 					}}
 					hasError={!!errors.firstName}
@@ -43,8 +57,8 @@ const RegisterPage2 = () => {
 					placeholder='Nom'
 					value={data.lastName}
 					onChangeText={(value) => {
-						setData((prev) => ({ ...prev, lastName: value }));
-						validateField('firstName', value);
+						setData('lastName', value);
+						validateField('lastName', value);
 					}}
 					hasError={!!errors.lastName}
 					errorMessage={errors.lastName}

@@ -7,10 +7,11 @@ import { styles } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 
 export const RegisterPage5 = () => {
-	const { data, setData, errors, validateField, submit } = useRegister();
+	const { form: data, updateField: setData, errors, validateField, submitForm: submit } = useRegister();
 
 	const updateImage = (image: string | null) => {
-		setData((prev) => ({ ...prev, profilePicture: image }));
+		setData('profilePicture', image);
+
 	};
 
 	return (
@@ -42,7 +43,7 @@ export const RegisterPage5 = () => {
 						placeholder='Biographie'
 						value={data.biographie}
 						onChangeText={(value) => {
-							setData((prev) => ({ ...prev, biographie: value }));
+							setData('biographie', value);
 							validateField('biographie', value);
 						}}
 						hasError={!!errors.biographie}
