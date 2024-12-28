@@ -9,6 +9,8 @@ export default function RootLayout() {
 		strict: false,
 	});
 
+	// TODO:  Creer une stack pour connexion et inscription accessible uniquement si l'utilisateur n'est pas connecté
+
 	return (
 		<SessionProvider>
 			<LocationProvider>

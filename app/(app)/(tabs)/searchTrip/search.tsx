@@ -1,4 +1,4 @@
-import { FlatList, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, View } from 'react-native';
 import { IconButton, SearchTripCard, ThemedText } from '@/components';
 import { notify } from 'react-native-notificated';
 import ShowFilters from '@/components/modal/ShowFilters';
@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTripSearch } from '@/context/SearchProvider';
-import { searchStyle } from './index';
+import { searchTripStyles } from '@/styles/searchTrip';
 
 export const Search = () => {
 	const {
@@ -23,12 +23,12 @@ export const Search = () => {
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 
 	return (
-		<SafeAreaView style={searchStyle.container}>
+		<SafeAreaView style={searchTripStyles.container}>
 			<KeyboardAvoidingView>
-				<View style={searchStyle.content}>
-					<View style={styles.header}>
-						<View style={styles.searchBar}>
-							<View style={styles.destination}>
+				<View style={searchTripStyles.content}>
+					<View style={searchTripStyles.header}>
+						<View style={searchTripStyles.searchBar}>
+							<View style={searchTripStyles.destination}>
 								<ThemedText color='text'>
 									{searchData.depart} {' -> '} {searchData.destination}
 								</ThemedText>
@@ -38,15 +38,15 @@ export const Search = () => {
 								color={Colors.light.resetButton}
 								onPress={resetSearch}
 								size={30}
-								buttonStyle={styles.resetButton}
+								buttonstyle={searchTripStyles.resetButton}
 							/>
 						</View>
-						<View style={styles.icons}>
+						<View style={searchTripStyles.icons}>
 							<IconButton
 								name={'filter'}
 								lib={'MaterialCommunityIcons'}
 								size={26}
-								buttonStyle={styles.button}
+								buttonstyle={searchTripStyles.button}
 								backgroundColor={isFilterActive ? 'primary' : 'background'}
 								color={
 									isFilterActive
@@ -55,13 +55,13 @@ export const Search = () => {
 								}
 								onPress={() => setShowFilters(!showFilters)}
 							/>
-							<View style={styles.orderButtons}>
+							<View style={searchTripStyles.orderButtons}>
 								<IconButton
 									// @ts-ignore
 									name={'sort-alpha-asc'}
 									lib={'FontAwesome'}
 									size={30}
-									buttonStyle={styles.button}
+									buttonstyle={searchTripStyles.button}
 									backgroundColor={'background'}
 									color={Colors.light.primary}
 									onPress={() => setShowOrder(!showOrder)}
@@ -70,7 +70,7 @@ export const Search = () => {
 									name={orderDirection === 'asc' ? 'arrow-down' : 'arrow-up'}
 									lib={'FontAwesome'}
 									size={30}
-									buttonStyle={styles.button}
+									buttonstyle={searchTripStyles.button}
 									backgroundColor={'background'}
 									color={Colors.light.primary}
 									onPress={() => {
@@ -90,7 +90,7 @@ export const Search = () => {
 							visible={showOrder}
 							onClose={() => setShowOrder(false)}
 						/>
-						<ThemedText type='header4'>Trajets correspondants 🔗</ThemedText>
+						<ThemedText type='header3'>Trajets correspondants 🔗</ThemedText>
 						<FlatList
 							data={results}
 							renderItem={({ item }) => (
@@ -115,53 +115,3 @@ export const Search = () => {
 };
 
 export default Search;
-
-const styles = StyleSheet.create({
-	header: {
-		display: 'flex',
-		flexDirection: 'column',
-		gap: 25,
-	},
-	searchBar: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		gap: 20,
-	},
-	destination: {
-		borderWidth: 1.5,
-		borderColor: Colors.light.inputText,
-		padding: "2%",
-		borderRadius: 10,
-	},
-	resetButton: {
-		borderWidth: 2,
-		borderColor: Colors.light.resetButton,
-		borderRadius: 99999,
-		alignItems: 'center',
-		display: 'flex',
-		justifyContent: 'center',
-		height: 40,
-		width: 40,
-	},
-	button: {
-		padding: '3%',
-		borderRadius: 10,
-		borderWidth: 1,
-		borderColor: Colors.light.primary,
-	},
-	icons: {
-		display: 'flex',
-		flexDirection: 'row',
-		marginRight: 'auto',
-		gap: 25,
-	},
-	orderButtons: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		flex: 1,
-		gap: 10,
-	},
-});

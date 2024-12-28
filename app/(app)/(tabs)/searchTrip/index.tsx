@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { Platform, View, KeyboardAvoidingView } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, ThemedInput, ThemedText } from '@/components';
@@ -9,6 +9,7 @@ import DateTimePicker, {
 import validTimestamp from 'ajv/lib/runtime/timestamp';
 import { formatDate } from '@/utils/date';
 import { useTripSearch } from '@/context/SearchProvider';
+import {searchTripStyles} from '@/styles/searchTrip';
 
 export const Index = () => {
 	const { searchData, setSearchData, submitSearch, errors, setErrors } =
@@ -49,10 +50,10 @@ export const Index = () => {
 	};
 
 	return (
-		<SafeAreaView style={searchStyle.container}>
-			<KeyboardAvoidingView style={searchStyle.content}>
-				<ThemedText type='header4'>Rechercher votre trajet 🔎</ThemedText>
-				<View style={searchStyle.formContainer}>
+		<SafeAreaView style={searchTripStyles.container}>
+			<KeyboardAvoidingView style={searchTripStyles.content}>
+				<ThemedText type='header3'>Rechercher votre trajet 🔎</ThemedText>
+				<View style={searchTripStyles.formContainer}>
 					<ThemedInput
 						label='Départ'
 						placeholder='Départ'
@@ -90,7 +91,7 @@ export const Index = () => {
 							name='calendar'
 							title={`${formatDate(searchData.date)}`}
 							onPress={() => setShowDatePicker(true)}
-							style={searchStyle.dateButton}
+							style={searchTripStyles.dateButton}
 							size={20}
 							iconFirst={true}
 						/>
@@ -105,14 +106,14 @@ export const Index = () => {
 						/>
 					)}
 					{Boolean(errors.date) && (
-						<ThemedText style={searchStyle.errorText}>{errors.date}</ThemedText>
+						<ThemedText style={searchTripStyles.errorText}>{errors.date}</ThemedText>
 					)}
 					<IconButton
 						name='search'
 						title='Rechercher'
 						size={24}
 						color={Colors.light.primary}
-						buttonStyle={searchStyle.submitButton}
+						buttonStyle={searchTripStyles.submitButton}
 						textProps={{ type: 'header5', color: 'background' }}
 						onPress={submitSearch}
 						iconStyle={{ color: Colors.light.background }}
@@ -124,47 +125,3 @@ export const Index = () => {
 };
 
 export default Index;
-
-export const searchStyle = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colors.light.background,
-	},
-	content: {
-		marginTop: '2%',
-		flex: 0,
-		width: '80%',
-		marginHorizontal: 'auto',
-	},
-	formContainer: {
-		marginTop: '5%',
-		gap: 20,
-	},
-	dateButton: {
-		display: 'flex',
-		flexDirection: 'row',
-		paddingVertical: '2%',
-		paddingHorizontal: '3%',
-		borderRadius: 10,
-		borderWidth: 1.5,
-		gap: 10,
-		width: '100%',
-		backgroundColor: Colors.light.background,
-		borderColor: Colors.light.inputText,
-	},
-	errorText: {
-		color: Colors.light.error,
-		marginTop: '1%',
-	},
-	submitButton: {
-		display: 'flex',
-		flexDirection: 'row',
-		gap: 15,
-		marginTop: '2%',
-		paddingVertical: '2%',
-		borderRadius: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: Colors.light.primary,
-	},
-});

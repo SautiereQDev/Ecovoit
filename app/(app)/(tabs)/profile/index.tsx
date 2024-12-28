@@ -81,6 +81,7 @@ export default function Profile() {
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
+				// TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois
 				{missingFields.length > 0 && <ProfileCompletion />}
 				<IconButton
 					lib='FontAwesome'
