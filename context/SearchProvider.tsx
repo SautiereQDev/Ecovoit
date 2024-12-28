@@ -73,16 +73,16 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 		[state.errors]
 	);
 
-	const handleInputChange = (
-		field: keyof typeof initialSearchState.searchData,
-		value: string
-	) => {
-		dispatch({ type: 'SET_SEARCH_DATA', payload: { [field]: value } });
-	};
+	const handleInputChange = useCallback(
+		(field: keyof typeof initialSearchState.searchData, value: string) => {
+			dispatch({ type: 'SET_SEARCH_DATA', payload: { [field]: value } });
+		},
+		[]
+	);
 
-	const handleSubmit = () => {
+	const handleSubmit = useCallback(() => {
 		dispatch({ type: 'SET_FORM_IS_SUBMITTED', payload: true });
-	};
+	}, []);
 
 	const submitSearch = useCallback(() => {
 		if (
