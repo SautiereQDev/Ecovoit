@@ -1,6 +1,4 @@
-import { FormType, Vehicle, FieldValue } from '@/types';
-
-export type OptionalField = 'lastName' | 'biographie' | 'profilePicture';
+import { Vehicle, FieldValue, FormType } from '@/types';
 
 export type ValidationErrors = {
 	[K in keyof FormType]?: K extends 'vehicles'
@@ -12,7 +10,9 @@ export type ValidationErrors = {
 		: string;
 };
 
-export const VALIDATION_RULES = {
+export const VALIDATION_RULES: {
+	[key: string]: (value: any) => string | null;
+} = {
 	username: (value: string) =>
 		value.length >= 3 ? null : 'Le pseudo doit contenir au moins 3 caractères',
 
@@ -31,20 +31,24 @@ export const VALIDATION_RULES = {
 
 	lastName: () => null,
 
-	vehicles: (value: Vehicle[]) =>
-		value.length > 0 ? null : 'Au moins un véhicule est requis',
+	vehicles: (value: Vehicle[]) => null,
 
 	biographie: (value: string) =>
 		value?.length <= 128
 			? null
 			: 'La biographie ne doit pas dépasser 128 caractères',
+
+	profilePicture: () => null, // Added validation rule for profilePicture
 };
 
 export const validateField = (
 	field: keyof FormType,
 	value: FieldValue
 ): string | null => {
-	const rule = VALIDATION_RULES[field];
+	const rule = VALIDATION_RULES[field as string];
+	if (field === 'biographie' && (value === undefined || value === null)) {
+		return null; // No error if biographie is undefined or null
+	}
 	return rule ? rule(value) : null;
 };
 
@@ -54,4 +58,17 @@ export const PAGE_FIELDS: Record<number, (keyof FormType)[]> = {
 	3: [],
 	4: ['vehicles'],
 	5: ['biographie'],
+};
+
+export type OptionalField =
+	| 'lastName'
+	| 'biographie'
+	| 'profilePicture'
+	| 'vehicles';
+
+export const OPTIONAL_FIELDS: Record<OptionalField, string> = {
+	lastName: 'Nom',
+	biographie: 'Biographie',
+	profilePicture: 'Photo de profil',
+	vehicles: 'Véhicules',
 };
