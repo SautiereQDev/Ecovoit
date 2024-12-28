@@ -8,10 +8,11 @@ import { Vehicle } from '@/types';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { vehiclesStyles } from '@/styles/vehicles';
+import { validateField } from '@/utils/validation';
 
 const Label = () => {
 	const { modifyVehicle } = useProfile();
-	const { errors, validateField } = useRegister();
+	const { errors } = useRegister();
 
 	const handleEditVehicle = (vehicle: Vehicle) => {
 		// @ts-ignore
