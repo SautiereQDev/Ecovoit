@@ -5,14 +5,16 @@ import {
 	initialRegisterState,
 } from '@/reducers/registerReducer';
 import { FormType, PageNumber } from '@/types/register';
-import { validateField, validatePageFields } from '@/utils/validation';
+import { validateField } from '@/utils/validation';
+import { FieldValue, ValidationErrors } from '@/types';
 
 interface RegisterContextType {
 	form: FormType;
-	errors: Record<string, string>;
+	errors: ValidationErrors; // Update this line
 	isValid: boolean;
 	currentPage: number;
 	updateField: (field: keyof FormType, value: any) => void;
+	validateField: (field: keyof FormType, value: any) => void;
 	validatePage: (page: PageNumber) => boolean;
 	submitForm: () => void;
 	resetForm: () => void;
@@ -23,7 +25,9 @@ const RegisterContext = createContext<RegisterContextType | undefined>(
 	undefined
 );
 
-export function RegisterProvider({ children }: { children: React.ReactNode }) {
+export function RegisterProvider({
+	children,
+}: Readonly<{ children: React.ReactNode }>) {
 	const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
 
 	// Actions mémorisées
@@ -35,19 +39,33 @@ export function RegisterProvider({ children }: { children: React.ReactNode }) {
 				dispatch({ type: 'VALIDATE_FIELD', field, error });
 			},
 
+			validateField: (field: keyof FormType, value: any) => {
+				const error = validateField(field, value);
+				dispatch({ type: 'VALIDATE_FIELD', field, error });
+			},
+
 			validatePage: (page: PageNumber) => {
-				const isValid = validatePageFields(page, state.form);
+				const fieldsToValidate = Object.keys(state.form) as (keyof FormType)[];
+				const isValid = fieldsToValidate.every((field) => {
+					const error = validateField(field, state.form[field] as FieldValue);
+					dispatch({ type: 'VALIDATE_FIELD', field, error });
+					return !error;
+				});
 				if (isValid) {
 					dispatch({ type: 'SET_PAGE', page: page + 1 });
+					// @ts-ignore
 					router.push(`/register/step${page + 1}`);
 				}
 				return isValid;
 			},
 
 			submitForm: () => {
-				const isValid = [1, 2, 3, 4].every((page) =>
-					validatePageFields(page as PageNumber, state.form)
-				);
+				const fieldsToValidate = Object.keys(state.form) as (keyof FormType)[];
+				const isValid = fieldsToValidate.every((field) => {
+					const error = validateField(field, state.form[field] as FieldValue);
+					dispatch({ type: 'VALIDATE_FIELD', field, error });
+					return !error;
+				});
 				if (isValid) {
 					dispatch({ type: 'SUBMIT_FORM' });
 					// Logique d'envoi du formulaire
