@@ -1,7 +1,7 @@
-import { Vehicle, FieldValue, FormType } from '@/types';
+import { FieldValue, PartialUser, Vehicle } from '@/types';
 
 export type ValidationErrors = {
-	[K in keyof FormType]?: K extends 'vehicles'
+	[K in keyof PartialUser]?: K extends 'vehicles'
 		? {
 				carName?: string;
 				carConsommation?: string;
@@ -29,7 +29,7 @@ export const VALIDATION_RULES: {
 	firstName: (value: string) =>
 		value.length > 0 ? null : 'Le prénom est requis',
 
-	lastName: () => null,
+	lastName: (value: string) => null,
 
 	vehicles: (value: Vehicle[]) => null,
 
@@ -42,7 +42,7 @@ export const VALIDATION_RULES: {
 };
 
 export const validateField = (
-	field: keyof FormType,
+	field: keyof PartialUser,
 	value: FieldValue
 ): string | null => {
 	const rule = VALIDATION_RULES[field as string];
@@ -52,7 +52,7 @@ export const validateField = (
 	return rule ? rule(value) : null;
 };
 
-export const PAGE_FIELDS: Record<number, (keyof FormType)[]> = {
+export const PAGE_FIELDS: Record<number, (keyof PartialUser)[]> = {
 	1: ['username', 'email', 'password'],
 	2: ['firstName', 'lastName'],
 	3: [],

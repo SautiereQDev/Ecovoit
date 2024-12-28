@@ -1,24 +1,20 @@
-import React, {
-	createContext,
-	ReactNode,
-	useCallback,
-	useContext,
-	useMemo,
-	useState,
-} from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useMemo, useReducer, useState } from 'react';
 import { User, Vehicle } from '@/types/Ecovoit';
+import { initialProfileState, profileReducer } from '@/reducers';
 
 /**
  * Type representing the user profile context.
  */
 interface ProfileContextType {
 	user: User;
-	setUser: React.Dispatch<React.SetStateAction<User>>;
-	profileImage: string | null;
-	setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
+	setProfileImage: (payload: string | null) => void;
 	addVehicle: (vehicle: Vehicle) => void;
 	modifyVehicle: (vehicle: Vehicle, index: number) => void;
 	deleteVehicle: (index: number) => void;
+	setErrors: (errors: object) => void;
+	clearErrors: () => void;
+	modifyRank: (rank: 'member' | 'moderator' | 'admin') => void;
+	setVerified: () => void;
 }
 
 /**
@@ -41,10 +37,11 @@ const initialData: User = {
 	id: 1,
 	username: 'John Doe',
 	email: 'johndoe@gmail.com',
+	password: '',
 	firstName: 'John',
 	lastName: undefined,
 	rank: 'member',
-	bio: undefined,
+	biographie: undefined,
 	verified: true,
 	vehicles: [],
 	tripsAsDriver: [],
@@ -60,28 +57,23 @@ export const ProfileProvider = ({
 	children,
 }: ProfileProviderProps): ReactNode => {
 	const [user, setUser] = useState<User>(initialData);
-	const [profileImage, setProfileImage] = useState<string | null>(null);
+
+	const [state, dispatch] = useReducer(profileReducer, initialProfileState);
+
+	const modifyUser = useCallback((payload: User) => {
+		dispatch({ type: 'MODIFY_USER', payload });
+	}, []);
+
+	const setProfileImage = useCallback((payload: string | null) => {
+		dispatch({ type: 'SET_PROFILE_IMAGE', payload });
+	}, []);
 
 	/**
 	 * Adds a vehicle to the user's profile.
 	 * @param {Vehicle} vehicle - The vehicle to add.
 	 */
 	const addVehicle = useCallback((vehicle: Vehicle) => {
-		setUser((prevUser: User) => {
-			if (prevUser.vehicles.length >= 4) {
-				return prevUser; // Do not add more than 4 vehicles
-			}
-			const newVehicles = [...prevUser.vehicles, vehicle].slice(0, 4);
-			return {
-				...prevUser,
-				vehicles: newVehicles as [
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-				],
-			};
-		});
+		dispatch({ type: 'ADD_VEHICLE', vehicle });
 	}, []);
 
 	/**
@@ -90,19 +82,7 @@ export const ProfileProvider = ({
 	 * @param {number} index - The index of the vehicle to modify.
 	 */
 	const modifyVehicle = (vehicle: Vehicle, index: number) => {
-		setUser((prevUser) => {
-			const vehicles = [...prevUser.vehicles];
-			vehicles[index] = vehicle;
-			return {
-				...prevUser,
-				vehicles: vehicles as [
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-				],
-			};
-		});
+		dispatch({ type: 'MODIFY_VEHICLE', vehicle, index });
 	};
 
 	/**
@@ -110,20 +90,24 @@ export const ProfileProvider = ({
 	 * @param {number} index - The index of the vehicle to delete.
 	 */
 	const deleteVehicle = (index: number) => {
-		setUser((prevUser) => {
-			const vehicles = [...prevUser.vehicles];
-			vehicles.splice(index, 1);
-			return {
-				...prevUser,
-				vehicles: vehicles as [
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-					(Vehicle | undefined)?,
-				],
-			};
-		});
+		dispatch({ type: 'DELETE_VEHICLE', index });
 	};
+
+	const setErrors = useCallback((errors: object) => {
+		dispatch({ type: 'SET_ERRORS', errors });
+	}, []);
+
+	const clearErrors = useCallback(() => {
+		dispatch({ type: 'CLEAR_ERRORS' });
+	}, []);
+
+	const modifyRank = useCallback((rank: 'member' | 'moderator' | 'admin') => {
+		dispatch({ type: 'MODIFY_RANK', rank });
+	}, []);
+
+	const setVerified = useCallback(() => {
+		dispatch({ type: 'SET_VERIFIED' });
+	}, []);
 
 	/**
 	 * Value of the user profile context.
@@ -131,14 +115,24 @@ export const ProfileProvider = ({
 	const contextValue = useMemo(
 		() => ({
 			user,
-			setUser,
-			profileImage,
 			setProfileImage,
 			addVehicle,
 			modifyVehicle,
 			deleteVehicle,
+			setErrors,
+			clearErrors,
+			modifyRank,
+			setVerified,
 		}),
-		[user, profileImage, addVehicle]
+		[
+			user,
+			setProfileImage,
+			addVehicle,
+			setErrors,
+			clearErrors,
+			modifyRank,
+			setVerified,
+		]
 	);
 
 	return (

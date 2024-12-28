@@ -1,20 +1,20 @@
-import React, { createContext, useReducer, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useReducer } from 'react';
 import { router } from 'expo-router';
 import {
-	registerReducer,
 	initialRegisterState,
+	registerReducer,
 } from '@/reducers/registerReducer';
-import { FormType, PageNumber } from '@/types/register';
+import { PageNumber, PartialUser } from '@/types/register';
 import { validateField } from '@/utils/validation';
 import { FieldValue, ValidationErrors } from '@/types';
 
 interface RegisterContextType {
-	form: FormType;
+	form: PartialUser;
 	errors: ValidationErrors; // Update this line
 	isValid: boolean;
 	currentPage: number;
-	updateField: (field: keyof FormType, value: any) => void;
-	validateField: (field: keyof FormType, value: any) => void;
+	updateField: (field: keyof PartialUser, value: any) => void;
+	validateField: (field: keyof PartialUser, value: any) => void;
 	validatePage: (page: PageNumber) => boolean;
 	submitForm: () => void;
 	resetForm: () => void;
@@ -33,19 +33,21 @@ export function RegisterProvider({
 	// Actions mémorisées
 	const actions = useMemo(
 		() => ({
-			updateField: (field: keyof FormType, value: any) => {
+			updateField: (field: keyof PartialUser, value: any) => {
 				dispatch({ type: 'UPDATE_FIELD', field, value });
 				const error = validateField(field, value);
 				dispatch({ type: 'VALIDATE_FIELD', field, error });
 			},
 
-			validateField: (field: keyof FormType, value: any) => {
+			validateField: (field: keyof PartialUser, value: any) => {
 				const error = validateField(field, value);
 				dispatch({ type: 'VALIDATE_FIELD', field, error });
 			},
 
 			validatePage: (page: PageNumber) => {
-				const fieldsToValidate = Object.keys(state.form) as (keyof FormType)[];
+				const fieldsToValidate = Object.keys(
+					state.form
+				) as (keyof PartialUser)[];
 				const isValid = fieldsToValidate.every((field) => {
 					const error = validateField(field, state.form[field] as FieldValue);
 					dispatch({ type: 'VALIDATE_FIELD', field, error });
@@ -60,7 +62,9 @@ export function RegisterProvider({
 			},
 
 			submitForm: () => {
-				const fieldsToValidate = Object.keys(state.form) as (keyof FormType)[];
+				const fieldsToValidate = Object.keys(
+					state.form
+				) as (keyof PartialUser)[];
 				const isValid = fieldsToValidate.every((field) => {
 					const error = validateField(field, state.form[field] as FieldValue);
 					dispatch({ type: 'VALIDATE_FIELD', field, error });

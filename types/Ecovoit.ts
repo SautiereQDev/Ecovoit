@@ -3,8 +3,9 @@ export type User = {
 	firstName: string;
 	lastName?: string;
 	username: string;
+	password: string;
 	email: string;
-	bio?: string;
+	biographie?: string;
 	rank: 'member' | 'moderator' | 'admin';
 	verified: boolean;
 	vehicles: [Vehicle?, Vehicle?, Vehicle?, Vehicle?];

@@ -1,4 +1,4 @@
-import { RegisterState, RegisterAction, FormType } from '@/types/register';
+import { PartialUser, RegisterAction, RegisterState } from '@/types/register';
 
 export const initialRegisterState: RegisterState = {
 	form: {
@@ -20,8 +20,8 @@ export const initialRegisterState: RegisterState = {
 // Actions plus spécifiques
 const updateFormField = (
 	state: RegisterState,
-	field: keyof FormType,
-	value: any,
+	field: keyof PartialUser,
+	value: any
 ): RegisterState => ({
 	...state,
 	form: {
@@ -32,8 +32,8 @@ const updateFormField = (
 
 const validateFormField = (
 	state: RegisterState,
-	field: keyof FormType,
-	error: string | null,
+	field: keyof PartialUser,
+	error: string | null
 ): RegisterState => ({
 	...state,
 	errors: error
@@ -51,7 +51,7 @@ const setCurrentPage = (state: RegisterState, page: number): RegisterState => ({
 
 export function registerReducer(
 	state: RegisterState,
-	action: RegisterAction,
+	action: RegisterAction
 ): RegisterState {
 	switch (action.type) {
 		case 'UPDATE_FIELD':
@@ -78,7 +78,7 @@ export function registerReducer(
 				form: {
 					...state.form,
 					vehicles: state.form.vehicles.map((v, i) =>
-						i === action.index ? action.vehicle : v,
+						i === action.index ? action.vehicle : v
 					),
 				},
 			};
