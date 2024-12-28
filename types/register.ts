@@ -1,4 +1,4 @@
-import { FormType, ValidationErrors, Vehicle } from '@/types';
+import { ValidationErrors, Vehicle } from '@/types';
 
 // Types d'actions plus détaillés
 export type RegisterAction =
@@ -21,23 +21,6 @@ export interface RegisterState {
 	isValid: boolean;
 }
 
-// État initial
-export const initialRegisterState: RegisterState = {
-	form: {
-		firstName: '',
-		lastName: undefined,
-		username: '',
-		email: '',
-		password: '',
-		vehicles: [],
-		biographie: undefined,
-		profilePicture: null,
-	},
-	errors: {},
-	currentPage: 1,
-	isSubmitting: false,
-	isValid: false,
-};
 
 // Actions creators typés
 export const registerActions = {
@@ -89,3 +72,16 @@ export const registerActions = {
 		type: 'CLEAR_ERRORS',
 	}),
 };
+
+export type PageNumber = 1 | 2 | 3 | 4 | 5;
+
+export interface FormType {
+	firstName: string;
+	lastName?: string;
+	username: string;
+	email: string;
+	password: string;
+	vehicles: Vehicle[];
+	biographie?: string;
+	profilePicture: string | null;
+}

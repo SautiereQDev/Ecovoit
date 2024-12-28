@@ -12,7 +12,7 @@ export type searchTripFormType = {
 export interface TripCardType {
 	depart: string;
 	destination: string;
-	status: "current" | "completed" | "canceled";
+	status: 'current' | 'completed' | 'canceled';
 	nom: string;
 	date: string;
 }
@@ -50,6 +50,8 @@ export type imageSourceType = 'appareil photo' | 'galerie';
 
 export type userParams = {
 	theme: 'light' | 'dark';
-}
+};
 
+export type ValidationErrors = Record<string, string | undefined>;
 
+export type FieldValue = string | number | boolean | null | undefined;
