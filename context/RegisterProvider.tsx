@@ -1,180 +1,77 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, { createContext, useReducer, useContext, useMemo } from 'react';
 import { router } from 'expo-router';
-import { StyleProp, ViewStyle } from 'react-native';
-import { Vehicle } from '@/types';
-
-export type FieldValue = string | PageNumber | Vehicle[] | undefined | null;
-type PageNumber = 1 | 2 | 3 | 4 | 5;
+import {
+	registerReducer,
+	initialRegisterState,
+} from '@/reducers/registerReducer';
+import { FormType, PageNumber } from '@/types/register';
+import { validateField, validatePageFields } from '@/utils/validation';
 
 interface RegisterContextType {
-	data: FormType;
-	setData: React.Dispatch<React.SetStateAction<FormType>>;
-	errors: ValidationErrors;
+	form: FormType;
+	errors: Record<string, string>;
+	isValid: boolean;
+	currentPage: number;
+	updateField: (field: keyof FormType, value: any) => void;
 	validatePage: (page: PageNumber) => boolean;
-	validateField: (field: keyof FormType, value: FieldValue) => void;
-	submit: () => void;
+	submitForm: () => void;
+	resetForm: () => void;
 	clearErrors: () => void;
-	resetData: () => void;
 }
 
-export interface FormType {
-	firstName: string;
-	lastName?: string;
-	username: string;
-	email: string;
-	password: string;
-	vehicles: Vehicle[];
-	biographie?: string;
-	profilePicture: string | null;
-}
+const RegisterContext = createContext<RegisterContextType | undefined>(
+	undefined
+);
 
-export const OPTIONAL_FIELDS = {
-	lastName: 'Nom de famille',
-	biographie: 'Biographie',
-	vehicles: 'Véhicule',
-	profilePicture: 'Photo de profil',
-} as const;
+export function RegisterProvider({ children }: { children: React.ReactNode }) {
+	const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
 
-export type OptionalField = keyof typeof OPTIONAL_FIELDS;
+	// Actions mémorisées
+	const actions = useMemo(
+		() => ({
+			updateField: (field: keyof FormType, value: any) => {
+				dispatch({ type: 'UPDATE_FIELD', field, value });
+				const error = validateField(field, value);
+				dispatch({ type: 'VALIDATE_FIELD', field, error });
+			},
 
-export type ValidationErrors = {
-	[K in keyof FormType]?: K extends 'vehicles'
-		? {
-				carName?: string;
-				carConsommation?: string;
-				carEmission?: string;
-			}[]
-		: string;
-};
-const initialData: FormType = {
-	firstName: 'John',
-	lastName: undefined,
-	username: 'JoJo',
-	email: 'johndoe@gmail.com',
-	password: 'Jjoj@123dsd',
-	vehicles: [],
-	biographie: undefined,
-	profilePicture: null,
-};
-
-export interface CreateVehicleProps {
-	setData: React.Dispatch<React.SetStateAction<FormType>>;
-	errors: ValidationErrors;
-	validateField: (field: keyof FormType, value: FieldValue) => void;
-	handleSubmit: (vehicle: Vehicle) => void;
-	buttonStyle?: StyleProp<ViewStyle>;
-	buttonText?: string;
-	initialData?: Vehicle;
-}
-
-const VALIDATION_RULES: {
-	[key in keyof FormType]: (value: any) => string | null;
-} = {
-	profilePicture(value: any): string | null {
-		return null;
-	},
-	username: (value: string) =>
-		value.length >= 3 ? null : 'Le pseudo doit contenir au moins 3 caractères',
-	email: (value: string) =>
-		/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Email invalide',
-	password: (value: string) =>
-		value.length >= 8 &&
-		/[A-Z]/.test(value) &&
-		/[!@#$%^&*(),.?":{}|<>]/.test(value)
-			? null
-			: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule et un symbole',
-	firstName: (value: string) =>
-		value.length > 0 ? null : 'Le prénom est requis',
-	lastName: () => null,
-	vehicles: (value: Vehicle[]) =>
-		value.length > 0 ? null : 'Au moins un véhicule est requis',
-	biographie: (value: string) =>
-		value?.length <= 128
-			? null
-			: 'La biographie ne doit pas dépasser 128 caractères',
-};
-
-const PAGE_FIELDS: Record<PageNumber, (keyof FormType)[]> = {
-	1: ['username', 'email', 'password'],
-	2: ['firstName', 'lastName'],
-	3: [],
-	4: ['vehicles'],
-	5: ['biographie'],
-};
-
-const RegisterContext = createContext<RegisterContextType | null>(null);
-
-export function RegisterProvider({
-	children,
-}: Readonly<{ children: React.ReactNode }>) {
-	const [data, setData] = useState<FormType>(initialData);
-	const [errors, setErrors] = useState<ValidationErrors>({});
-
-	const validateField = (field: keyof FormType, value: FieldValue) => {
-		const rule = VALIDATION_RULES[field];
-		if (!rule) return;
-
-		const error = rule(value);
-		setErrors((prev) => ({
-			...prev,
-			[field]: error,
-		}));
-	};
-
-	const validatePage = useCallback(
-		(page: PageNumber): boolean => {
-			const fieldsToValidate = PAGE_FIELDS[page];
-			let isValid = true;
-			const newErrors: ValidationErrors = {};
-
-			fieldsToValidate.forEach((field) => {
-				const rule = VALIDATION_RULES[field];
-				if (!rule) return;
-
-				const error = rule(data[field] as string);
-				if (error) {
-					isValid = false;
-					if (field === 'vehicles') {
-						newErrors[field] = [];
-					} else {
-						newErrors[field] = error;
-					}
+			validatePage: (page: PageNumber) => {
+				const isValid = validatePageFields(page, state.form);
+				if (isValid) {
+					dispatch({ type: 'SET_PAGE', page: page + 1 });
+					router.push(`/register/step${page + 1}`);
 				}
-			});
+				return isValid;
+			},
 
-			setErrors(newErrors);
-			return isValid;
-		},
-		[data]
+			submitForm: () => {
+				const isValid = [1, 2, 3, 4].every((page) =>
+					validatePageFields(page as PageNumber, state.form)
+				);
+				if (isValid) {
+					dispatch({ type: 'SUBMIT_FORM' });
+					// Logique d'envoi du formulaire
+					console.log('Form submitted:', state.form);
+					router.push('/');
+				}
+			},
+
+			resetForm: () => dispatch({ type: 'RESET_FORM' }),
+
+			clearErrors: () => dispatch({ type: 'CLEAR_ERRORS' }),
+		}),
+		[state.form]
 	);
-
-	const clearErrors = () => setErrors({});
-
-	const submit = useCallback(() => {
-		const isValid = [1, 2, 4].every((page) => validatePage(page as PageNumber));
-		if (isValid) {
-			console.log('Form submitted:', data);
-			router.push('/');
-		}
-	}, [data, validatePage]);
-
-	const resetData = () => {
-		setData(initialData);
-		setErrors({});
-	};
 
 	const value = useMemo(
 		() => ({
-			data,
-			setData,
-			errors,
-			validatePage,
-			validateField,
-			submit,
-			clearErrors,
-			resetData,
+			form: state.form,
+			errors: state.errors,
+			isValid: state.isValid,
+			currentPage: state.currentPage,
+			...actions,
 		}),
-		[data, errors, submit, validatePage]
+		[state, actions]
 	);
 
 	return (
@@ -184,10 +81,12 @@ export function RegisterProvider({
 	);
 }
 
-export const useRegister = () => {
-	const context = React.useContext(RegisterContext);
+export function useRegister() {
+	const context = useContext(RegisterContext);
+
 	if (!context) {
 		throw new Error('useRegister must be used within a RegisterProvider');
 	}
+
 	return context;
-};
+}
