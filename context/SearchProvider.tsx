@@ -1,4 +1,3 @@
-// context/SearchProvider.tsx
 import React, {
 	createContext,
 	ReactNode,
@@ -30,6 +29,11 @@ interface SearchContextType {
 	toggleFilter: (name: FiltreType) => void;
 	updateFilterValue: (name: FiltreType, value: string) => void;
 	filtersChanged: () => boolean;
+	handleInputChange: (
+		field: keyof typeof initialSearchState.searchData,
+		value: string
+	) => void;
+	handleSubmit: () => void;
 }
 
 const SearchContext = createContext<SearchContextType | null>(null);
@@ -67,6 +71,17 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 		},
 		[state.errors]
 	);
+
+	const handleInputChange = (
+		field: keyof typeof initialSearchState.searchData,
+		value: string
+	) => {
+		dispatch({ type: 'SET_SEARCH_DATA', payload: { [field]: value } });
+	};
+
+	const handleSubmit = () => {
+		dispatch({ type: 'SET_FORM_IS_SUBMITTED', payload: true });
+	};
 
 	const submitSearch = useCallback(() => {
 		if (
@@ -209,6 +224,8 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			toggleFilter,
 			updateFilterValue,
 			filtersChanged,
+			handleInputChange,
+			handleSubmit,
 		}),
 		[
 			state,
@@ -222,6 +239,8 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 			toggleFilter,
 			updateFilterValue,
 			filtersChanged,
+			handleInputChange,
+			handleSubmit,
 		]
 	);
 

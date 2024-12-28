@@ -12,8 +12,10 @@ import { useTripSearch } from '@/context/SearchProvider';
 import { searchTripStyles } from '@/styles/searchTrip';
 
 export const Index = () => {
-	const { state, dispatch } = useTripSearch();
+	const { state, handleInputChange, handleSubmit } = useTripSearch();
 	const { searchData, errors } = state;
+
+	const { dispatch } = useTripSearch();
 
 	const [showDatePicker, setShowDatePicker] = useState(false);
 	const [mode, setMode] = useState<'date' | 'time'>('date');
@@ -50,14 +52,6 @@ export const Index = () => {
 			});
 			setShowDatePicker(false);
 		}
-	};
-
-	const handleInputChange = (field: keyof typeof searchData, value: string) => {
-		dispatch({ type: 'SET_SEARCH_DATA', payload: { [field]: value } });
-	};
-
-	const handleSubmit = () => {
-		dispatch({ type: 'SET_FORM_IS_SUBMITTED', payload: true });
 	};
 
 	return (
