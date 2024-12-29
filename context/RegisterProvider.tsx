@@ -1,114 +1,78 @@
-import React, { createContext, useContext, useMemo, useReducer } from 'react';
-import { router } from 'expo-router';
-import {
-	initialRegisterState,
-	registerReducer,
-} from '@/reducers/registerReducer';
-import { PageNumber, PartialUser } from '@/types/register';
-import { validateField } from '@/utils/validation';
-import { FieldValue, ValidationErrors } from '@/types';
+import React, {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
+import { useSharedState } from '@/hooks/useSharedState';
+import { userService } from '@/services/sharedServices';
+import { PageNumber, PartialUser, ValidationErrors } from '@/types';
+import { useRegisterValidation } from '@/hooks';
 
 interface RegisterContextType {
-	form: PartialUser;
-	errors: ValidationErrors; // Update this line
-	isValid: boolean;
-	currentPage: number;
+	state: PartialUser;
 	updateField: (field: keyof PartialUser, value: any) => void;
-	validateField: (field: keyof PartialUser, value: any) => void;
+	errors: ValidationErrors;
 	validatePage: (page: PageNumber) => boolean;
 	submitForm: () => void;
-	resetForm: () => void;
-	clearErrors: () => void;
 }
 
 const RegisterContext = createContext<RegisterContextType | undefined>(
 	undefined
 );
 
-export function RegisterProvider({
-	children,
-}: Readonly<{ children: React.ReactNode }>) {
-	const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
+interface RegisterProviderProps {
+	children: ReactNode;
+}
 
-	// Actions mémorisées
-	const actions = useMemo(
-		() => ({
-			updateField: (field: keyof PartialUser, value: any) => {
-				dispatch({ type: 'UPDATE_FIELD', field, value });
-				const error = validateField(field, value);
-				dispatch({ type: 'VALIDATE_FIELD', field, error });
-			},
+export const RegisterProvider = ({ children }: RegisterProviderProps) => {
+	const { state, updateState } = useSharedState(userService);
+	const { validateField, validatePage } = useRegisterValidation();
+	const [errors, setErrors] = useState<ValidationErrors>({});
 
-			validateField: (field: keyof PartialUser, value: any) => {
-				const error = validateField(field, value);
-				dispatch({ type: 'VALIDATE_FIELD', field, error });
-			},
-
-			validatePage: (page: PageNumber) => {
-				const fieldsToValidate = Object.keys(
-					state.form
-				) as (keyof PartialUser)[];
-				const isValid = fieldsToValidate.every((field) => {
-					const error = validateField(field, state.form[field] as FieldValue);
-					dispatch({ type: 'VALIDATE_FIELD', field, error });
-					return !error;
-				});
-				if (isValid) {
-					dispatch({ type: 'SET_PAGE', page: page + 1 });
-					// @ts-ignore
-					router.push(`/register/step${page + 1}`);
-				}
-				return isValid;
-			},
-
-			submitForm: () => {
-				const fieldsToValidate = Object.keys(
-					state.form
-				) as (keyof PartialUser)[];
-				const isValid = fieldsToValidate.every((field) => {
-					const error = validateField(field, state.form[field] as FieldValue);
-					dispatch({ type: 'VALIDATE_FIELD', field, error });
-					return !error;
-				});
-				if (isValid) {
-					dispatch({ type: 'SUBMIT_FORM' });
-					// Logique d'envoi du formulaire
-					console.log('Form submitted:', state.form);
-					router.push('/');
-				}
-			},
-
-			resetForm: () => dispatch({ type: 'RESET_FORM' }),
-
-			clearErrors: () => dispatch({ type: 'CLEAR_ERRORS' }),
-		}),
-		[state.form]
+	const updateField = useCallback(
+		(field: keyof PartialUser, value: any) => {
+			const error = validateField(field, value) ?? undefined;
+			setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+			updateState({ [field]: value }).catch((error: any) => {
+				console.error('Error updating field:', error);
+			});
+		},
+		[updateState, validateField]
 	);
 
-	const value = useMemo(
+	const submitForm = useCallback(async () => {
+		try {
+			await userService.updateState(state);
+		} catch (error) {
+			console.error('Error submitting form:', error);
+		}
+	}, [state]);
+
+	const contextValue: RegisterContextType = useMemo(
 		() => ({
-			form: state.form,
-			errors: state.errors,
-			isValid: state.isValid,
-			currentPage: state.currentPage,
-			...actions,
+			state,
+			updateField,
+			errors,
+			validatePage: (page: PageNumber) => validatePage(page, state),
+			submitForm,
 		}),
-		[state, actions]
+		[state, updateField, errors, validatePage, submitForm]
 	);
 
 	return (
-		<RegisterContext.Provider value={value}>
+		<RegisterContext.Provider value={contextValue}>
 			{children}
 		</RegisterContext.Provider>
 	);
-}
+};
 
-export function useRegister() {
+export const useRegister = () => {
 	const context = useContext(RegisterContext);
-
 	if (!context) {
 		throw new Error('useRegister must be used within a RegisterProvider');
 	}
-
 	return context;
-}
+};
