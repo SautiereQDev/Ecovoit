@@ -41,7 +41,7 @@ const initialData: User = {
 	firstName: 'John',
 	lastName: undefined,
 	rank: 'member',
-	biographie: undefined,
+	bio: undefined,
 	verified: true,
 	vehicles: [],
 	tripsAsDriver: [],
