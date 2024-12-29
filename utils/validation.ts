@@ -1,4 +1,4 @@
-import { FieldValue, PartialUser, Vehicle } from '@/types';
+import { FieldValue, PageNumber, PartialUser, Vehicle } from '@/types';
 
 /**
  * Type representing validation errors for each field in PartialUser.
@@ -101,6 +101,19 @@ export const validateField = (
 		return null; // No error if biographie is undefined or null
 	}
 	return rule ? rule(value) : null;
+};
+
+/**
+ * Validates all fields on a specific page of the registration form.
+ * @param {PageNumber} page - The page number to validate.
+ * @param {PartialUser} form - The current form data.
+ * @returns {boolean} - True if all fields on the page are valid, false otherwise.
+ */
+export const validatePage = (page: PageNumber, form: PartialUser): boolean => {
+	const fieldsToValidate = PAGE_FIELDS[page];
+	return fieldsToValidate.every(
+		(field) => !validateField(field, form[field] as FieldValue),
+	);
 };
 
 /**
