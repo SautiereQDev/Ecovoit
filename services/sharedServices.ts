@@ -1,14 +1,23 @@
 import { StateService } from './StateService';
-import { User, Vehicle } from '@/types';
+import { User } from '@/types';
 
-const initialUserState: User = {} as User;
+const initialUserState: User = {
+	id: 0,
+	rank: 'member',
+	tripsAsDriver: [],
+	tripsAsPassenger: [],
+	verified: false,
+	username: '',
+	email: '',
+	password: '',
+	firstName: '',
+	lastName: '',
+	profilePicture: null,
+	bio: '',
+	vehicles: [],
+};
 
 export const userService = new StateService<User>(
 	initialUserState,
 	'https://api-ev-qq.pimous.dev/users/me'
-);
-
-export const vehicleService = new StateService<Vehicle[]>(
-	[],
-	'https://api-ev-qq.pimous.dev/users/me/vehicles'
 );
