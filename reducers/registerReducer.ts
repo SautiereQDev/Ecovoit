@@ -12,7 +12,7 @@ export const initialRegisterState: RegisterState = {
 		email: 'quentin.sautiere@etudiant.univ-lr.fr',
 		password: 'Qsd!azddv34fgf',
 		vehicles: [],
-		biographie: undefined,
+		bio: undefined,
 		profilePicture: null,
 	},
 	errors: {},
