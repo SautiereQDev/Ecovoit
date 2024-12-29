@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	ActivityIndicator,
 	Image,
 	Pressable,
-	View,
 	ScrollView,
+	View,
 } from 'react-native';
 import { useSession } from '@/context/SessionProvider';
 import { IconButton, ThemedText } from '@/components';
@@ -16,17 +16,31 @@ import { useProfile } from '@/context/ProfileProvider';
 import { ProfileCompletion } from '@/components/ProfileCompletion';
 import { useProfileCompletion } from '@/hooks/useProfileCompletion';
 import { profileStyles } from '@/styles/profile';
+import { axiosInstance } from '@/app/_layout';
 
-export default function Profile() {
+export function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { signOut, isLoading } = useSession();
-	const { user, profileImage, setProfileImage } = useProfile();
+	const { user, setProfileImage } = useProfile();
 
 	const { getMissingFields } = useProfileCompletion();
 	const missingFields = getMissingFields();
 
 	const router = useRouter();
+
+	useEffect(() => {
+		axiosInstance
+			.get('https://api-ev-qq.pimous.dev/users/me', {
+				headers: { Authorization: '5877943231555567616' },
+			})
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}, []);
 
 	if (isLoading) {
 		return (
@@ -57,8 +71,8 @@ export default function Profile() {
 				<Pressable onPress={() => setShowModal(true)}>
 					<Image
 						source={
-							profileImage
-								? { uri: profileImage }
+							user.profilePicture
+								? { uri: user.profilePicture }
 								: require('@/assets/images/user-picture.jpg')
 						}
 						style={profileStyles.profilePicture}
@@ -81,7 +95,7 @@ export default function Profile() {
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
-				// TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois
+				{/*TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois*/}
 				{missingFields.length > 0 && <ProfileCompletion />}
 				<IconButton
 					lib='FontAwesome'
@@ -158,3 +172,5 @@ export default function Profile() {
 		</ScrollView>
 	);
 }
+
+export default Profile;
