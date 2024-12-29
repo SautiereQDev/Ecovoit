@@ -137,7 +137,12 @@ export interface PartialUser {
 	username: string;
 	email: string;
 	password: string;
-	vehicles: Vehicle[];
+	vehicles: [
+		(Vehicle | undefined)?,
+		(Vehicle | undefined)?,
+		(Vehicle | undefined)?,
+		(Vehicle | undefined)?,
+	];
 	bio?: string;
 	profilePicture: string | null;
 }
