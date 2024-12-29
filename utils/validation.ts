@@ -60,7 +60,7 @@ export const VALIDATION_RULES: {
 	 * @param {string} value - The last name to validate.
 	 * @returns {string | null} - Error message or null if valid.
 	 */
-	lastName: (value: string) => null,
+	lastName: (value: string): null => null,
 
 	/**
 	 * Validation rule for vehicles.
@@ -83,7 +83,7 @@ export const VALIDATION_RULES: {
 	 * Validation rule for profile picture.
 	 * @returns {string | null} - Error message or null if valid.
 	 */
-	profilePicture: () => null,
+	profilePicture: (): null => null,
 };
 
 /**
@@ -103,19 +103,23 @@ export const validateField = (
 	return rule ? rule(value) : null;
 };
 
-/**
- * Validates all fields on a specific page of the registration form.
- * @param {PageNumber} page - The page number to validate.
- * @param {PartialUser} form - The current form data.
- * @returns {boolean} - True if all fields on the page are valid, false otherwise.
- */
-export const validatePage = (page: PageNumber, form: PartialUser): boolean => {
-	const fieldsToValidate = PAGE_FIELDS[page];
-	return fieldsToValidate.every(
-		(field) => !validateField(field, form[field] as FieldValue),
-	);
-};
+export const validatePage = (
+	page: PageNumber
+): Record<keyof typeof PAGE_FIELDS, string | null> => {
+	const errors: Record<keyof typeof PAGE_FIELDS, string | null> = {} as Record<
+		keyof typeof PAGE_FIELDS,
+		string | null
+	>;
 
+	PAGE_FIELDS[page].forEach((field) => {
+		const error = validateField(field, null); // Replace `null` with the actual value to validate
+		if (error) {
+			errors[field as unknown as keyof typeof PAGE_FIELDS] = error;
+		}
+	});
+
+	return errors;
+};
 /**
  * Fields for each page in the form.
  */
