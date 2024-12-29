@@ -1,5 +1,9 @@
 import { PartialUser, RegisterAction, RegisterState } from '@/types/register';
 
+/**
+ * The initial state for the register form.
+ * @type {RegisterState}
+ */
 export const initialRegisterState: RegisterState = {
 	form: {
 		firstName: 'Quentin',
@@ -17,7 +21,13 @@ export const initialRegisterState: RegisterState = {
 	isValid: false,
 };
 
-// Actions plus spécifiques
+/**
+ * Updates a specific field in the form.
+ * @param {RegisterState} state - The current state of the register form.
+ * @param {keyof PartialUser} field - The field to update.
+ * @param {any} value - The value to set for the field.
+ * @returns {RegisterState} The new state of the register form.
+ */
 const updateFormField = (
 	state: RegisterState,
 	field: keyof PartialUser,
@@ -30,6 +40,13 @@ const updateFormField = (
 	},
 });
 
+/**
+ * Validates a specific field in the form.
+ * @param {RegisterState} state - The current state of the register form.
+ * @param {keyof PartialUser} field - The field to validate.
+ * @param {string | null} error - The validation error message, or null if valid.
+ * @returns {RegisterState} The new state of the register form.
+ */
 const validateFormField = (
 	state: RegisterState,
 	field: keyof PartialUser,
@@ -42,13 +59,25 @@ const validateFormField = (
 	isValid: !error && Object.keys(state.errors).length === 0,
 });
 
+/**
+ * Sets the current page of the form.
+ * @param {RegisterState} state - The current state of the register form.
+ * @param {number} page - The page number to set.
+ * @returns {RegisterState} The new state of the register form.
+ */
 const setCurrentPage = (state: RegisterState, page: number): RegisterState => ({
 	...state,
 	currentPage: page,
-	// Reset les erreurs lors du changement de page
+	// Reset errors when changing page
 	errors: {},
 });
 
+/**
+ * Reducer function to manage the state of the register form.
+ * @param {RegisterState} state - The current state of the register form.
+ * @param {RegisterAction} action - The action to perform on the state.
+ * @returns {RegisterState} The new state of the register form.
+ */
 export function registerReducer(
 	state: RegisterState,
 	action: RegisterAction

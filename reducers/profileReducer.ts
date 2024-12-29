@@ -1,6 +1,10 @@
 import { ProfileAction, ProfileState } from '@/types/profile';
 import { Vehicle } from '@/types';
 
+/**
+ * The initial state for the profile.
+ * @type {ProfileState}
+ */
 export const initialProfileState: ProfileState = {
 	completed: false,
 	id: 0,
@@ -20,6 +24,12 @@ export const initialProfileState: ProfileState = {
 	isValid: false,
 };
 
+/**
+ * Reducer function to manage the state of the profile.
+ * @param {ProfileState} state - The current state of the profile.
+ * @param {ProfileAction} action - The action to perform on the state.
+ * @returns {ProfileState} The new state of the profile.
+ */
 export function profileReducer(
 	state: ProfileState,
 	action: ProfileAction
@@ -87,6 +97,7 @@ export function profileReducer(
 
 		case 'SET_VERIFIED':
 			return { ...state, verified: true };
+
 		default:
 			return state;
 	}

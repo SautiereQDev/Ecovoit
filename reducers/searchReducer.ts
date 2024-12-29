@@ -1,20 +1,28 @@
-import {
-	Filter,
-	FiltreType,
-	SearchTripCardType,
-	searchTripFormType,
-} from '@/types';
+import { Filter, FiltreType, SearchTripCardType, searchTripFormType } from '@/types';
 
+/**
+ * Type representing the state of the search functionality.
+ */
 export type SearchState = {
+	/** The search data entered by the user. */
 	searchData: searchTripFormType;
+	/** The results of the search. */
 	results: SearchTripCardType[];
+	/** The filters applied to the search results. */
 	filters: Filter[];
+	/** The order in which the search results are sorted. */
 	order: FiltreType;
+	/** The direction in which the search results are sorted. */
 	orderDirection: 'asc' | 'desc';
+	/** The errors encountered during the search. */
 	errors: Record<string, string>;
+	/** Indicates if the form has been submitted. */
 	formIsSubmitted: boolean;
 };
 
+/**
+ * The initial state of the search functionality.
+ */
 export const initialSearchState: SearchState = {
 	searchData: {
 		depart: '',
@@ -33,6 +41,9 @@ export const initialSearchState: SearchState = {
 	formIsSubmitted: false,
 };
 
+/**
+ * Type representing the possible actions for the search reducer.
+ */
 export type SearchAction =
 	| { type: 'SET_SEARCH_DATA'; payload: Partial<searchTripFormType> }
 	| { type: 'SET_RESULTS'; payload: SearchTripCardType[] }
@@ -44,6 +55,12 @@ export type SearchAction =
 	| { type: 'RESET_SEARCH' }
 	| { type: 'RESET_FILTERS' };
 
+/**
+ * Reducer function to manage the state of the search functionality.
+ * @param {SearchState} state - The current state of the search.
+ * @param {SearchAction} action - The action to perform on the state.
+ * @returns {SearchState} The new state of the search.
+ */
 export function searchReducer(
 	state: SearchState,
 	action: SearchAction
