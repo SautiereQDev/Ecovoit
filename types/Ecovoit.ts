@@ -5,7 +5,7 @@ export type User = {
 	username: string;
 	password: string;
 	email: string;
-	biographie?: string;
+	bio?: string;
 	rank: 'member' | 'moderator' | 'admin';
 	verified: boolean;
 	vehicles: [Vehicle?, Vehicle?, Vehicle?, Vehicle?];
