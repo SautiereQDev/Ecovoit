@@ -7,15 +7,10 @@ import { useRegister } from '@/context/RegisterProvider';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
+import { validateField, validatePage } from '@/utils';
 
 const RegisterPage2 = () => {
-	const {
-		form: data,
-		updateField: setData,
-		errors,
-		validatePage,
-		validateField,
-	} = useRegister();
+	const { state, updateField, errors } = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(2)) {
@@ -43,9 +38,9 @@ const RegisterPage2 = () => {
 
 				<ThemedInput
 					placeholder='Prénom'
-					value={data.firstName}
+					value={state.firstName}
 					onChangeText={(value) => {
-						setData('firstName', value);
+						updateField('firstName', value);
 						validateField('firstName', value);
 					}}
 					hasError={!!errors.firstName}
@@ -55,9 +50,9 @@ const RegisterPage2 = () => {
 
 				<ThemedInput
 					placeholder='Nom'
-					value={data.lastName}
+					value={state.lastName}
 					onChangeText={(value) => {
-						setData('lastName', value);
+						updateField('lastName', value);
 						validateField('lastName', value);
 					}}
 					hasError={!!errors.lastName}

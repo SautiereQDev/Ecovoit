@@ -5,18 +5,13 @@ import { ImagePickerButton } from '@/components/buttons/ImagePickerButton';
 import { useRegister } from '@/context/RegisterProvider';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { registerStyles as styles } from '@/styles';
+import { validateField } from '@/utils';
 
 export const RegisterPage5 = () => {
-	const {
-		form: data,
-		updateField: setData,
-		errors,
-		validateField,
-		submitForm: submit,
-	} = useRegister();
+	const { state, updateField, errors, submitForm } = useRegister();
 
 	const updateImage = (image: string | null) => {
-		setData('profilePicture', image);
+		updateField('profilePicture', image);
 	};
 
 	return (
@@ -34,7 +29,7 @@ export const RegisterPage5 = () => {
 						Photo de profil (optionnel)
 					</ThemedText>
 					<ImagePickerButton
-						image={data.profilePicture}
+						image={state.profilePicture}
 						setImage={updateImage}
 						style={styles.imagePicker}
 					/>
@@ -45,10 +40,10 @@ export const RegisterPage5 = () => {
 					</ThemedText>
 					<ThemedInput
 						placeholder='Biographie'
-						value={data.biographie}
+						value={state.bio}
 						onChangeText={(value) => {
-							setData('biographie', value);
-							validateField('biographie', value);
+							updateField('bio', value);
+							validateField('bio', value);
 						}}
 						hasError={!!errors.biographie}
 						errorMessage={errors.biographie}
@@ -62,8 +57,8 @@ export const RegisterPage5 = () => {
 					text='Terminer'
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
-					onPress={submit}
-					buttonStyle={styles.button}
+					onPress={submitForm}
+					buttonStyle={styles.buttons}
 				/>
 			</View>
 		</SafeAreaView>

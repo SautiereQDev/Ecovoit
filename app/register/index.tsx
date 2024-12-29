@@ -1,5 +1,5 @@
 import { SafeAreaView, View } from 'react-native';
-import { useRegister } from '@/context';
+import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import React from 'react';
@@ -8,13 +8,7 @@ import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
 
 export const Index = () => {
-	const {
-		form: data,
-		updateField: setData,
-		errors,
-		validatePage,
-		validateField,
-	} = useRegister();
+	const { state, updateField, errors, validatePage } = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(1)) {
@@ -42,11 +36,8 @@ export const Index = () => {
 
 				<ThemedInput
 					placeholder="Nom d'utilisateur"
-					value={data.username}
-					onChangeText={(value) => {
-						setData('username', value);
-						validateField('username', value);
-					}}
+					value={state.username}
+					onChangeText={(value) => updateField('username', value)}
 					hasError={!!errors.username}
 					errorMessage={errors.username}
 					label={"Nom d'utilisateur"}
@@ -54,11 +45,8 @@ export const Index = () => {
 
 				<ThemedInput
 					placeholder='Adresse mail'
-					value={data.email}
-					onChangeText={(value) => {
-						setData('email', value);
-						validateField('email', value);
-					}}
+					value={state.email}
+					onChangeText={(value) => updateField('email', value)}
 					hasError={!!errors.email}
 					errorMessage={errors.email}
 					label={'Adresse mail'}
@@ -67,11 +55,8 @@ export const Index = () => {
 
 				<ThemedInput
 					placeholder='Mot de passe'
-					value={data.password}
-					onChangeText={(value) => {
-						setData('password', value);
-						validateField('password', value);
-					}}
+					value={state.password}
+					onChangeText={(value) => updateField('password', value)}
 					hasError={!!errors.password}
 					errorMessage={errors.password}
 					label={'Mot de passe'}
