@@ -19,71 +19,35 @@ export type ValidationErrors = {
 export const VALIDATION_RULES: {
 	[key: string]: (value: any) => string | null;
 } = {
-	/**
-	 * Validation rule for username.
-	 * @param {string} value - The username to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
 	username: (value: string): string | null =>
-		value.length >= 3 ? null : 'Le pseudo doit contenir au moins 3 caractères',
+		value && value.length >= 3
+			? null
+			: 'Le pseudo doit contenir au moins 3 caractères',
 
-	/**
-	 * Validation rule for email.
-	 * @param {string} value - The email to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
 	email: (value: string): string | null =>
-		/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Email invalide',
+		value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : 'Email invalide',
 
-	/**
-	 * Validation rule for password.
-	 * @param {string} value - The password to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
 	password: (value: string): string | null =>
+		value &&
 		value.length >= 8 &&
 		/[A-Z]/.test(value) &&
 		/[!@#$%^&*(),.?":{}|<>]/.test(value)
 			? null
 			: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule et un symbole',
 
-	/**
-	 * Validation rule for first name.
-	 * @param {string} value - The first name to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
 	firstName: (value: string): string | null =>
-		value.length > 0 ? null : 'Le prénom est requis',
+		value && value.length > 0 ? null : 'Le prénom est requis',
 
-	/**
-	 * Validation rule for last name.
-	 * @param {string} value - The last name to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
-	lastName: (value: string): null => null,
+	lastName: (value?: string): null => null,
 
-	/**
-	 * Validation rule for vehicles.
-	 * @param {Vehicle[]} value - The vehicles to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
-	vehicles: (value: Vehicle[]): string | null => null,
+	vehicles: (value?: Vehicle[]): string | null => null,
 
-	/**
-	 * Validation rule for biography.
-	 * @param {string} value - The biography to validate.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
 	bio: (value: string): string | null =>
-		value?.length <= 128
+		value && value.length <= 128
 			? null
 			: 'La biographie ne doit pas dépasser 128 caractères',
 
-	/**
-	 * Validation rule for profile picture.
-	 * @returns {string | null} - Error message or null if valid.
-	 */
-	profilePicture: (): null => null,
+	profilePicture: (value?: string | null): null => null,
 };
 
 /**
