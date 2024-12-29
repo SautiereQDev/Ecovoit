@@ -2,47 +2,52 @@ import { BehaviorSubject } from 'rxjs';
 import { axiosInstance } from '@/app/_layout';
 
 export class StateService<T> {
-	private state: BehaviorSubject<T>;
-	private apiEndpoint: string;
+	private readonly state: BehaviorSubject<T>;
+	private readonly apiEndpoint: string;
 
 	constructor(initialState: T, endpoint: string) {
 		this.state = new BehaviorSubject<T>(initialState);
 		this.apiEndpoint = endpoint;
 	}
 
-	// Obtenir l'état actuel
 	getState(): T {
 		return this.state.getValue();
 	}
 
-	// S'abonner aux changements
 	subscribe(callback: (state: T) => void) {
 		return this.state.subscribe(callback);
 	}
 
-	// Mettre à jour l'état et synchroniser avec l'API
 	async updateState(newState: Partial<T>): Promise<void> {
-		try {
-			// Appel API
-			const response = await axiosInstance.patch(this.apiEndpoint, newState);
+		this.state.next({
+			...this.state.getValue(),
+			...newState,
+		});
+	}
 
-			// Mise à jour locale si succès
+	async postToAPI(data: T): Promise<void> {
+		try {
+			const response = await axiosInstance.post(this.apiEndpoint, data, {
+				headers: {
+					Authorization: `5877943231555567616`,
+				},
+			});
 			if (response.status === 200) {
-				this.state.next({
-					...this.state.getValue(),
-					...newState,
-				});
+				this.state.next(response.data as T);
 			}
 		} catch (error) {
-			console.error('Error updating state:', error);
+			console.error('Error posting state:', error);
 			throw error;
 		}
 	}
 
-	// Charger les données depuis l'API
 	async fetchFromAPI(): Promise<void> {
 		try {
-			const response = await axiosInstance.get(this.apiEndpoint);
+			const response = await axiosInstance.get(this.apiEndpoint, {
+				headers: {
+					Authorization: `5877943231555567616`,
+				},
+			});
 			if (response.status === 200) {
 				this.state.next(response.data as T);
 			}
