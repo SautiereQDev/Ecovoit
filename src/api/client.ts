@@ -35,7 +35,7 @@ export const apiGet = <T>(url: string): Promise<T> =>
 
 /**
  * Perform a POST request.
- * @template T
+ * @template T - The type of the response data.
  * @param {string} url - The URL to send the POST request to.
  * @param {unknown} data - The data to send in the POST request.
  * @returns {Promise<T>} - A promise that resolves to the response data.
@@ -45,12 +45,28 @@ export const apiPost = <T>(url: string, data: unknown): Promise<T> =>
 
 /**
  * Perform a PUT request.
- * @template T
+ * @template T - The type of the response data.
  * @param {string} url - The URL to send the PUT request to.
  * @param {unknown} data - The data to send in the PUT request.
  * @returns {Promise<T>} - A promise that resolves to the response data.
  */
 export const apiPut = <T>(url: string, data: unknown): Promise<T> =>
 	apiClient.put<T>(url, data).then(extractData);
+
+/**
+ * Perform a PATCH request.
+ * @param url - The URL to send the PATCH request to.
+ * @param data - The data to send in the PATCH request.
+ * @returns A promise that resolves to the response data.
+ * @template T - The type of the response data.
+ */
+export const apiPatch = <T>(url: string, data: unknown): Promise<T> =>
+	apiClient.patch<T>(url, data).then(extractData);
+
+/**
+ * Perform a DELETE request.
+ * @param url - The URL to send the DELETE request to.
+ */
+export const apiDelete = (url: string): Promise<void> => apiClient.delete(url);
 
 export default apiClient;
