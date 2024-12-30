@@ -1,39 +1,52 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { axiosInstance } from '@/app/_layout';
 
-export class StateService<T> {
-	private readonly state: BehaviorSubject<T>;
+export class StateService<PostType, GetType> {
+	private readonly state: BehaviorSubject<GetType>;
 	private readonly apiEndpoint: string;
+	private readonly requiredParams: string[];
+	private readonly optionalParams: string[];
 
-	constructor(initialState: T, endpoint: string) {
-		this.state = new BehaviorSubject<T>(initialState);
+	constructor(
+		initialState: GetType,
+		endpoint: string,
+		requiredParams: string[] = [],
+		optionalParams: string[] = []
+	) {
+		this.state = new BehaviorSubject<GetType>(initialState);
 		this.apiEndpoint = endpoint;
+		this.requiredParams = requiredParams;
+		this.optionalParams = optionalParams;
 	}
 
-	getState(): T {
+	getState(): GetType {
 		return this.state.getValue();
 	}
 
-	subscribe(callback: (state: T) => void) {
+	subscribe(callback: (state: GetType) => void): Subscription {
 		return this.state.subscribe(callback);
 	}
 
-	async updateState(newState: Partial<T>): Promise<void> {
+	async updateState(newState: Partial<GetType>): Promise<void> {
 		this.state.next({
 			...this.state.getValue(),
 			...newState,
 		});
 	}
 
-	async postToAPI(data: T): Promise<void> {
+	async postToAPI(
+		data: PostType,
+		params: Record<string, string>
+	): Promise<void> {
 		try {
-			const response = await axiosInstance.post(this.apiEndpoint, data, {
+			const url = this.buildUrl(params);
+			const response = await axiosInstance.post(url, data, {
 				headers: {
-					Authorization: `5877943231555567616`,
+					Authorization: `Bearer 5877943231555567616`,
 				},
 			});
 			if (response.status === 200) {
-				this.state.next(response.data as T);
+				this.state.next(response.data as GetType);
 			}
 		} catch (error) {
 			console.error('Error posting state:', error);
@@ -41,20 +54,38 @@ export class StateService<T> {
 		}
 	}
 
-	async fetchFromAPI(): Promise<void> {
+	async fetchFromAPI(params: Record<string, string>): Promise<void> {
 		try {
-			const response = await axiosInstance.get(this.apiEndpoint, {
+			const url = this.buildUrl(params);
+			const response = await axiosInstance.get(url, {
 				headers: {
-					Authorization: `5877943231555567616`,
+					Authorization: `Bearer 5877943231555567616`,
 				},
 			});
 			if (response.status === 200) {
-				this.state.next(response.data as T);
+				this.state.next(response.data as GetType);
 			}
 		} catch (error) {
 			console.error('Error fetching state:', error);
 			throw error;
 		}
+	}
+
+	private buildUrl(params: Record<string, string>): string {
+		let url = this.apiEndpoint;
+		this.requiredParams.forEach((param) => {
+			if (params[param]) {
+				url += `/${params[param]}`;
+			} else {
+				throw new Error(`Missing required parameter: ${param}`);
+			}
+		});
+		this.optionalParams.forEach((param) => {
+			if (params[param]) {
+				url += `/${params[param]}`;
+			}
+		});
+		return url;
 	}
 }
 
