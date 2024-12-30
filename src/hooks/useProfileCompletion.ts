@@ -1,12 +1,13 @@
-import { useProfile } from '@/providers/ProfileProvider';
 import { OPTIONAL_FIELDS, OptionalField } from '@/utils/validation';
+import { useUser } from '@/providers';
 
 /**
  * Custom hook for managing profile completion.
  * @returns {object} An object containing functions to get missing fields, completion percentage, field route, and field label.
  */
 export const useProfileCompletion = () => {
-	const { user } = useProfile();
+	const { state } = useUser();
+	const { user, loading } = state;
 
 	/**
 	 * Gets the list of missing optional fields in the user's profile.
