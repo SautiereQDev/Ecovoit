@@ -1,10 +1,10 @@
-// src/providers/UserProvider.tsx
 import React, {
 	createContext,
 	Dispatch,
 	ReactNode,
 	useContext,
 	useEffect,
+	useMemo,
 	useReducer,
 } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -41,9 +41,33 @@ interface UserProviderProps {
 	children: ReactNode;
 }
 
+const useVehicles = (userId: string) => {
+	return useQuery<GetVehiclesType>(['vehicles', userId], () =>
+		fetchVehiclesByUser(userId)
+	);
+};
+
+const useRemoveVehicle = () => {};
+const useAddVehicle = () => {
+	const queryClient = useQueryClient();
+	return useMutation<
+		Vehicle,
+		unknown,
+		{ userId: string; vehicleData: PostVehiclesType }
+	>((variables) => addVehicle(variables.userId, variables.vehicleData), {
+		onSuccess: (_, variables) => {
+			queryClient
+				.invalidateQueries(['vehicles', variables.userId])
+				.catch((e) => console.error(e));
+			queryClient
+				.invalidateQueries(['users', variables.userId])
+				.catch((e) => console.error(e));
+		},
+	});
+};
+
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const [state, dispatch] = useReducer(userReducer, initialState);
-	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -53,6 +77,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 				dispatch({ type: 'SET_USER', payload: user });
 			} catch (error) {
 				console.error('Error fetching user:', error);
+			} finally {
 				dispatch({ type: 'SET_LOADING', payload: false });
 			}
 		};
@@ -60,35 +85,15 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 		fetchUser().catch((e) => console.error(e));
 	}, []);
 
-	const useVehicles = (userId: string) => {
-		return useQuery<GetVehiclesType>(['vehicles', userId], () =>
-			fetchVehiclesByUser(userId)
-		);
-	};
-
-	const useAddVehicle = () => {
-		return useMutation<
-			Vehicle,
-			unknown,
-			{ userId: string; vehicleData: PostVehiclesType }
-		>((variables) => addVehicle(variables.userId, variables.vehicleData), {
-			onSuccess: (_, variables) => {
-				queryClient
-					.invalidateQueries(['vehicles', variables.userId])
-					.catch((e) => console.error(e));
-				queryClient
-					.invalidateQueries(['users', variables.userId])
-					.catch((e) => console.error(e));
-			},
-		});
-	};
-
-	const value: UserContextProps = {
-		state,
-		dispatch,
-		useVehicles,
-		useAddVehicle,
-	};
+	const value = useMemo(
+		() => ({
+			state,
+			dispatch,
+			useVehicles,
+			useAddVehicle,
+		}),
+		[state, dispatch]
+	);
 
 	return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
