@@ -1,8 +1,18 @@
-import React, { createContext, ReactNode, useCallback, useContext, useMemo, useReducer } from 'react';
+import React, {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useMemo,
+	useReducer,
+} from 'react';
 import { usersService } from '@/services';
 import { FieldValue, PageNumber, User, ValidationErrors } from '@/types';
 import { useSharedState } from '@/hooks/useSharedState';
-import { initialRegisterState, registerReducer } from '@/reducers/registerReducer';
+import {
+	initialRegisterState,
+	registerReducer,
+} from '@/reducers/registerReducer';
 import { getPageFields, validateField } from '@/utils';
 
 interface RegisterContextType {
@@ -45,7 +55,7 @@ export function RegisterProvider({
 		[state.form]
 	);
 
-	const validatePage = useCal,lback(
+	const validatePage = useCallback(
 		(page: PageNumber): boolean => {
 			const fieldsToValidate = getPageFields(page);
 			const errors: ValidationErrors = {};
@@ -74,7 +84,7 @@ export function RegisterProvider({
 
 			// Final validation
 			const isValid = [1, 2, 3, 4].every((page) =>
-				validatePage(page as PageNumber),
+				validatePage(page as PageNumber)
 			);
 
 			if (!isValid) {
@@ -112,7 +122,7 @@ export function RegisterProvider({
 			validatePage,
 			submitForm,
 		}),
-		[state, updateField, validatePage, submitForm],
+		[state, updateField, validatePage, submitForm]
 	);
 
 	return (

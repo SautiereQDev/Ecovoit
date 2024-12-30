@@ -23,9 +23,12 @@ export function useSharedState<PostType, GetType>(
 			}
 		);
 
-		stateService.fetchFromAPI().catch((error: any) => {
-			console.error(error);
-		});
+		// Provide the required params argument
+		stateService
+			.fetchFromAPI({ user: '5877943231555567616' })
+			.catch((error: any) => {
+				console.error(error);
+			});
 
 		return () => subscription.unsubscribe();
 	}, [stateService]);
@@ -40,7 +43,7 @@ export function useSharedState<PostType, GetType>(
 
 	const postState = async (newState: PostType): Promise<void> => {
 		try {
-			await stateService.postToAPI(newState);
+			await stateService.postToAPI(newState, { user: '5877943231555567616' });
 		} catch (error) {
 			console.error(error);
 		}

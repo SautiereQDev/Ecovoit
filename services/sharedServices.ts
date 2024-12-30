@@ -14,5 +14,7 @@ export const usersService = new StateService<User, User[]>(
 
 export const vehiclesService = new StateService<Vehicle, Vehicle>(
 	{ ...(initialUserState.vehicles[0] as Vehicle) },
-	'https://api-ev-qq.pimous.dev/vehicles/'
+	'https://api-ev-qq.pimous.dev/vehicles',
+	['user'], // required parameters
+	['label'] // optional parameters
 );
