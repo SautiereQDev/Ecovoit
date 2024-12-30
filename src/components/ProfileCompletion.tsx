@@ -1,12 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ThemedText } from '@/src/components/texts';
-import { CircularProgress } from '@/src/components/UI/CircularProgress';
-import { CustomButton } from '@/src/components/buttons';
-import Colors from '@/src/constants/Colors';
-import { useProfileCompletion } from '@/src/hooks/useProfileCompletion';
-import { OptionalField } from '@/src/context/RegisterProvider';
+import { ThemedText } from '@/components/texts';
+import { CircularProgress } from '@/components/UI/CircularProgress';
+import { CustomButton } from '@/components/buttons';
+import Colors from '@/constants/Colors';
+import { useProfileCompletion } from '@/hooks/useProfileCompletion';
 
 interface ProfileCompletionProps {
 	style?: object;

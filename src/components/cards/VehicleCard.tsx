@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import { Vehicle } from '@/src/types';
-import { ThemedText } from '@/src/components';
+import { Vehicle } from '@/types';
+import { ThemedText } from '@/components';
 
 type VehicleCardProps = {
 	vehicle: Vehicle;

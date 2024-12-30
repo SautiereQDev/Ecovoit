@@ -1,8 +1,8 @@
 import { HttpStatusCode } from 'axios';
 import { db_user } from './mockDatabase';
-import { User } from '@/src/mock/mockUserModel';
-import { createJWT, parseJWT } from '@/src/mock/utils/jwtUtils';
-import { checkPassword } from '@/src/mock/utils/passwordUtils';
+import { User } from '@/mock/mockUserModel';
+import { createJWT, parseJWT } from '@/mock/utils/jwtUtils';
+import { checkPassword } from '@/mock/utils/passwordUtils';
 
 export function user_all(config) {
 	// On récupère toutes les entrée de la table user.

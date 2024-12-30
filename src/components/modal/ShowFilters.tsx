@@ -8,12 +8,12 @@ import {
 	View,
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import Colors from '@/src/constants/Colors';
-import CustomButton from '@/src/components/buttons/CustomButton';
-import { ThemedInput } from '@/src/components/inputs/ThemedInput';
-import { ThemedText } from '@/src/components/texts/ThemedText';
+import Colors from '@/constants/Colors';
+import CustomButton from '@/components/buttons/CustomButton';
+import { ThemedInput } from '@/components/inputs/ThemedInput';
+import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/src/context/SearchProvider';
+import { useTripSearch } from '@/providers/SearchProvider';
 
 type Props = {
 	visible: boolean;

@@ -1,5 +1,5 @@
-import { ProfileAction, ProfileState } from '@/src/types/profile';
-import { Vehicle } from '@/src/types';
+import { ProfileAction, ProfileState } from '@/types/profile';
+import { Vehicle } from '@/types';
 
 /**
  * The initial state for the profile.

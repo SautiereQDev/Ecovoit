@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAxiosGet } from './useAxios';
-import { OpenDataCollection } from '@/src/types/OpenData';
+import { OpenDataCollection } from '@/types/OpenData';
 
 export function useOpenDataLR<T>(dataset: string) {
 	const apiUrl = `https://opendata.agglo-larochelle.fr/d4c/api/records/1.0/search/dataset=${dataset}&facet=id`;

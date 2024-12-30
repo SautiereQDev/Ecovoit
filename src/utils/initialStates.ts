@@ -1,4 +1,4 @@
-import { User } from '@/src/types';
+import { User } from '@/types';
 
 export const initialUserState: User = {
 	id: 0,

@@ -6,8 +6,8 @@ import {
 	View,
 } from 'react-native';
 import { Region } from 'react-native-maps';
-import { Emoji, emojis } from '@/src/constants/Emojis';
-import { fontSize, FontSize } from '@/src/constants/Fonts';
+import { Emoji, emojis } from '@/constants/Emojis';
+import { fontSize, FontSize } from '@/constants/Fonts';
 
 interface FakeMarkerProps {
 	icon?: Emoji;

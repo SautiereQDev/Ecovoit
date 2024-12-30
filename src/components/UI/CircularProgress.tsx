@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import { fontType, ThemedText } from '@/src/components/texts';
-import Colors from '@/src/constants/Colors';
+import { fontType, ThemedText } from '@/components/texts';
+import Colors from '@/constants/Colors';
 
 /**
  * Propriétés du composant CircularProgress.

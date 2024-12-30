@@ -1,6 +1,6 @@
-import { useOpenDataLR } from '@/src/hooks/useOpenData';
+import { useOpenDataLR } from '@/hooks/useOpenData';
 import { StyleSheet, View } from 'react-native';
-import { CarParksRecord } from '@/src/types/OpenData';
+import { CarParksRecord } from '@/types/OpenData';
 import { Marker } from 'react-native-maps';
 
 interface CarParksProps {}

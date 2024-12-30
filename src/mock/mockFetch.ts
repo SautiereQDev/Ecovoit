@@ -1,4 +1,4 @@
-import { UserType } from '@/src/context/SessionProvider';
+import { UserType } from '@/providers/SessionProvider';
 
 type MockFetchType = 'SIGN_IN' | 'SIGN_UP';
 

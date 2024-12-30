@@ -1,8 +1,7 @@
 import { StyleSheet, View } from 'react-native';
-import { CustomButton, ThemedInput } from '@/src/components';
+import { CustomButton, ThemedInput } from '@/components';
 import React, { ReactNode, useState } from 'react';
-import { CreateVehicleProps } from '@/src/context/RegisterProvider';
-import { Vehicle } from '@/src/types';
+import { Vehicle } from '@/types';
 
 /**
  * Validation rules for vehicle fields.

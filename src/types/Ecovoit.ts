@@ -17,15 +17,30 @@ export type User = {
 export type Vehicle = {
 	owner?: Readonly<string>;
 	label: string;
-	consumption: number;
-	emission: number;
+	consumption?: number | null;
+	emission?: number | null;
+};
+
+export type Location = {
+	name: string;
+	longitude: number;
+	latitude: number;
 };
 
 export type Point = {
+	id?: Readonly<string>;
+	trip?: Readonly<string>;
 	type: 'start' | 'end' | 'checkpoint';
+	location?: Location;
+	waitingTime?: number;
+	previous?: Readonly<string | null>;
+	next?: Readonly<string | null>;
+};
+
+export type ShortPointType = {
+	type: string;
 	locationName: string;
-	previous: number | null;
-	next: number | null;
+	waitingTime?: number;
 };
 
 export type Trip = {
@@ -33,4 +48,12 @@ export type Trip = {
 	seats: number | null;
 	datetime: number | null;
 	points: Point[];
+};
+
+export type ShortUserType = {
+	id: number;
+	username: string;
+	rank: 'member' | 'moderator' | 'admin';
+	verified: boolean;
+	stars: 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5 | null;
 };

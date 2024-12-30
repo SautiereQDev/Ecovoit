@@ -1,4 +1,4 @@
-import { CustomButton } from '@/src/components';
+import { CustomButton } from '@/components';
 import React from 'react';
 import { router } from 'expo-router';
 

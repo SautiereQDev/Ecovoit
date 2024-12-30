@@ -8,8 +8,8 @@ import {
 	ViewStyle,
 } from 'react-native';
 import React, { useState } from 'react';
-import { Colors } from '@/src/constants/Colors';
-import { ThemedText } from '@/src/components/drafts/ThemedText';
+import { Colors } from '@/constants/Colors';
+import { ThemedText } from '@/components/drafts/ThemedText';
 
 interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
 	theme?: 'Primary' | 'Secondary' | 'TextArea';

@@ -1,4 +1,4 @@
-import { User, ValidationErrors, Vehicle } from '@/src/types/index';
+import { User, ValidationErrors, Vehicle } from '@/types/index';
 
 /**
  * Detailed action types for the register form.

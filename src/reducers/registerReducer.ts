@@ -1,4 +1,4 @@
-import { RegisterAction, RegisterState } from '@/src/types';
+import { RegisterAction, RegisterState } from '@/types';
 
 export const initialRegisterState: RegisterState = {
 	form: {

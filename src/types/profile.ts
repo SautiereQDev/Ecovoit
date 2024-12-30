@@ -1,4 +1,4 @@
-import { User, Vehicle } from '@/src/types/Ecovoit';
+import { User, Vehicle } from '@/types/Ecovoit';
 
 /**
  * Interface representing the state of a user profile.

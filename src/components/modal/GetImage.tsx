@@ -1,9 +1,9 @@
 import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import Colors from '@/src/constants/Colors';
-import CustomButton from '@/src/components/buttons/CustomButton';
+import Colors from '@/constants/Colors';
+import CustomButton from '@/components/buttons/CustomButton';
 import * as ImagePicker from 'expo-image-picker';
-import { ThemedText } from '@/src/components/texts/ThemedText';
+import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
 
 type Props = {

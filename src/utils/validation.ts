@@ -1,4 +1,4 @@
-import { FieldValue, PageNumber, PartialUser, User, Vehicle } from '@/src/types';
+import { FieldValue, PageNumber, PartialUser, User, Vehicle } from '@/types';
 
 /**
  * Type representing validation errors for each field in PartialUser.

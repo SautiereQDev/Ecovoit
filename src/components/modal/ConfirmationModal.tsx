@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedText } from '@/src/components';
-import Colors from '@/src/constants/Colors';
+import { CustomButton, ThemedText } from '@/components';
+import Colors from '@/constants/Colors';
 import { router } from 'expo-router';
 
 type ConfirmationMenuProps = {

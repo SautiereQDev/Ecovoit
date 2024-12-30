@@ -1,4 +1,4 @@
-import { Filter, FiltreType, SearchTripCardType, searchTripFormType } from '@/src/types';
+import { Filter, FiltreType, SearchTripCardType, searchTripFormType } from '@/types';
 
 /**
  * Type representing the state of the search functionality.

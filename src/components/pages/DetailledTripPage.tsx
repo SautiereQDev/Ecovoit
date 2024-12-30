@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Point } from '@/src/types';
-import { Colors } from '@/src/constants/Colors';
+import { Point } from '@/types';
+import { Colors } from '@/constants/Colors';
 import { TripInfoLabel, TripLabel } from '../labels';
 import { RouteMap } from '../map';
 import { ThemedText } from '../texts';
@@ -83,7 +83,7 @@ export const DetailledTrip = () => {
 				<View style={styles.description}>
 					<View style={styles.userContainer}>
 						<Image
-							source={require('@/src/assets/images/user-picture.jpg')}
+							source={require('@/assets/images/user-picture.jpg')}
 							style={styles.userImage}
 						/>
 						{data.driverName && (

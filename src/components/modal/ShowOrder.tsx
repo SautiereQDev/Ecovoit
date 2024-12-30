@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import { FiltreType } from '@/src/types';
-import Colors from '@/src/constants/Colors';
-import CustomButton from '@/src/components/buttons/CustomButton';
-import { ThemedText } from '@/src/components/texts/ThemedText';
+import { FiltreType } from '@/types';
+import Colors from '@/constants/Colors';
+import CustomButton from '@/components/buttons/CustomButton';
+import { ThemedText } from '@/components/texts/ThemedText';
 import { RadioButton } from 'react-native-paper';
 import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/src/context/SearchProvider';
+import { useTripSearch } from '@/providers/SearchProvider';
 
 type Props = {
 	visible: boolean;

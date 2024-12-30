@@ -1,8 +1,8 @@
 import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
-import { Colors } from '@/src/constants/Colors';
+import { Colors } from '@/constants/Colors';
 import { ThemedText } from '../texts/ThemedText';
-import { SearchTripCardType } from '@/src/types/Components';
+import { SearchTripCardType } from '@/types/Components';
 
 type Props = {
 	style?: ViewStyle;
@@ -13,7 +13,7 @@ export function SearchTripCard({ style, data }: Readonly<Props>) {
 	return (
 		<View style={[styles.container, style]}>
 			<Image
-				source={require('@/src/assets/images/user-picture.jpg')}
+				source={require('@/assets/images/user-picture.jpg')}
 				style={styles.userImage}
 			/>
 			<View style={styles.textContainer}>

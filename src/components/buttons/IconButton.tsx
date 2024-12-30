@@ -6,7 +6,7 @@ import {
 	ViewStyle,
 } from 'react-native';
 import React, { ComponentProps, ReactNode } from 'react';
-import { Colors } from '@/src/constants/Colors';
+import { Colors } from '@/constants/Colors';
 import {
 	FontAwesome,
 	MaterialCommunityIcons,

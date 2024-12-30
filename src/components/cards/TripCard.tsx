@@ -1,9 +1,9 @@
 import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { TripLabel } from '../labels/TripLabel';
-import { Colors } from '@/src/constants/Colors';
+import { Colors } from '@/constants/Colors';
 import { ThemedText } from '../texts/ThemedText';
-import { TripCardType } from '@/src/types';
+import { TripCardType } from '@/types';
 
 const backgroundColor = {
 	current: Colors.light.accent,
@@ -27,7 +27,7 @@ export function TripCard({ style, data }: Readonly<Props>) {
 			]}
 		>
 			<Image
-				source={require('@/src/assets/images/user-picture.jpg')}
+				source={require('@/assets/images/user-picture.jpg')}
 				style={styles.userImage}
 			/>
 			<View style={styles.textContainer}>

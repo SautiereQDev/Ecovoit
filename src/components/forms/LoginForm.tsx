@@ -6,7 +6,7 @@ import {
 	View,
 } from 'react-native';
 import { useState } from 'react';
-import { Colors } from '@/src/constants/Colors';
+import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
 export function LoginForm() {

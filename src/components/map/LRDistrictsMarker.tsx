@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native';
 import { Marker } from 'react-native-maps';
-import LocRecord from '@/src/types/LocRecord';
+import LocRecord from '@/types/LocRecord';
 
 interface LRDistrictsMarkersProps {}
 
 export default function LRDistrictsMarkers({}: LRDistrictsMarkersProps) {
-	const records: LocRecord.LRDistricts[] = require('@/src/assets/data/lr_districts.json');
+	const records: LocRecord.LRDistricts[] = require('@/assets/data/lr_districts.json');
 
 	return (
 		<View style={styles.container}>

@@ -1,5 +1,5 @@
-import { useProfile } from '@/src/context/ProfileProvider';
-import { OPTIONAL_FIELDS, OptionalField } from '@/src/utils/validation';
+import { useProfile } from '@/providers/ProfileProvider';
+import { OPTIONAL_FIELDS, OptionalField } from '@/utils/validation';
 
 /**
  * Custom hook for managing profile completion.

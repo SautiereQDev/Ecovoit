@@ -1,6 +1,6 @@
 // styles/vehicles.ts
 import { StyleSheet } from 'react-native';
-import Colors from '@/src/constants/Colors';
+import Colors from '@/constants/Colors';
 
 export const vehiclesStyles = StyleSheet.create({
 	// Styles communs

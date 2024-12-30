@@ -1,9 +1,9 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { ThemedText } from '@/src/components';
-import Colors from '@/src/constants/Colors';
+import { ThemedText } from '@/components';
+import Colors from '@/constants/Colors';
 import { Link } from 'expo-router';
-import ConfirmationMenu from '@/src/components/modal/ConfirmationModal';
+import ConfirmationMenu from '@/components/modal/ConfirmationModal';
 
 type VehicleMenuProps = {
 	visible: boolean;

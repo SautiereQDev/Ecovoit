@@ -1,6 +1,6 @@
 // styles/profile.ts
 import { StyleSheet } from 'react-native';
-import Colors from '@/src/constants/Colors';
+import Colors from '@/constants/Colors';
 
 export const profileStyles = StyleSheet.create({
 	// Styles communs

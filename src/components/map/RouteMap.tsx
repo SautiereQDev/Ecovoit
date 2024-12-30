@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import { OSRMService } from '@/src/services/routingServices';
-import { Location } from '@/src/types';
-import Colors from '@/src/constants/Colors';
-import CustomButton from '@/src/components/buttons/CustomButton';
+import { OSRMService } from '@/services/routingServices';
+import { Location } from '@/types';
+import Colors from '@/constants/Colors';
+import CustomButton from '@/components/buttons/CustomButton';
 
 interface Route {
 	points: Location[];

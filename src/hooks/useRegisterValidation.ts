@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { FieldValue, PageNumber, PartialUser } from '@/src/types';
-import { PAGE_FIELDS, VALIDATION_RULES } from '@/src/utils';
+import { FieldValue, PageNumber, PartialUser } from '@/types';
+import { PAGE_FIELDS, VALIDATION_RULES } from '@/utils';
 
 /**
  * Custom hook for validating registration form fields and pages.
