@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
-import {
-	ActivityIndicator,
-	Image,
-	Pressable,
-	ScrollView,
-	View,
-} from 'react-native';
-import { useSession } from '@/providers/SessionProvider';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { CustomButton, IconButton, ThemedText } from '@/components';
 import { useRouter } from 'expo-router';
-import { useUser } from '@/providers/UserProvider';
+import { useData, useSession } from '@/providers';
 import { profileStyles } from '@/styles';
 import { Colors } from '@/constants';
 
@@ -17,8 +10,11 @@ export function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
 	const { signOut, isLoading: sessionLoading } = useSession();
-	const { state } = useUser();
-	const { loading, user } = state;
+
+	const { useUser } = useData();
+	const { data: user, isLoading: loading } = useUser('me');
+
+	console.log('user', user);
 
 	const router = useRouter();
 
@@ -61,14 +57,14 @@ export function Profile() {
 				{/*	setImage={setProfileImage}*/}
 				{/*/>*/}
 				<Pressable onPress={() => setShowModal(true)}>
-					<Image
-						source={
-							user.profilePicture
-								? { uri: user.profilePicture }
-								: require('@/assets/images/user-picture.jpg')
-						}
-						style={profileStyles.profilePicture}
-					/>
+					{/*<Image*/}
+					{/*	source={*/}
+					{/*		user.profilePicture*/}
+					{/*			? { uri: user.profilePicture }*/}
+					{/*			: require('@/assets/images/user-picture.jpg')*/}
+					{/*	}*/}
+					{/*	style={profileStyles.profilePicture}*/}
+					{/*/>*/}
 				</Pressable>
 				<ThemedText
 					type={'header6'}
@@ -81,7 +77,7 @@ export function Profile() {
 						type={'header6'}
 						style={profileStyles.biographyText}
 					>
-						A propos de {user?.firstName}
+						A propos de {user?.username}
 					</ThemedText>
 					<ThemedText style={profileStyles.biographyText}>
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}

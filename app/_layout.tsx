@@ -2,7 +2,7 @@ import { Slot } from 'expo-router';
 import { SessionProvider } from '@/providers/SessionProvider';
 import { LocationProvider } from '@/providers/LocationProvider';
 import { configureReanimatedLogger } from 'react-native-reanimated';
-import { UserProvider } from '@/providers';
+import { DataProvider } from '@/providers';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 export default function RootLayout() {
@@ -19,9 +19,9 @@ export default function RootLayout() {
 		<QueryClientProvider client={queryClient}>
 			<SessionProvider>
 				<LocationProvider>
-					<UserProvider>
+					<DataProvider>
 						<Slot />
-					</UserProvider>
+					</DataProvider>
 				</LocationProvider>
 			</SessionProvider>
 		</QueryClientProvider>

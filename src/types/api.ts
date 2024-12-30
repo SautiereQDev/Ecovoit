@@ -1,9 +1,4 @@
-import {
-	Point,
-	ShortPointType,
-	ShortUserType,
-	Vehicle,
-} from '@/types/Ecovoit';
+import { Point, ShortPointType, ShortUserType, Vehicle } from '@/types/Ecovoit';
 import uri from 'ajv/lib/runtime/uri';
 
 /**
@@ -69,7 +64,7 @@ export type GetVehiclesType = Vehicle[];
 /**
  * Type for the payload of the POST /vehicles/{user} endpoint.
  */
-export type PostVehiclesType = {
+export type PostVehicleType = {
 	label: string;
 	consumption?: number | null;
 	emission?: number | null;
