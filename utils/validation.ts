@@ -1,4 +1,4 @@
-import { FieldValue, PageNumber, PartialUser, Vehicle } from '@/types';
+import { FieldValue, PageNumber, PartialUser, User, Vehicle } from '@/types';
 
 /**
  * Type representing validation errors for each field in PartialUser.
@@ -50,21 +50,34 @@ export const VALIDATION_RULES: {
 	profilePicture: (value?: string | null): null => null,
 };
 
+export const getPageFields = (page: PageNumber): (keyof User)[] => {
+	switch (page) {
+		case 1:
+			return ['username', 'email', 'password'];
+		case 2:
+			return ['firstName', 'lastName'];
+		case 3:
+			return ['bio'];
+		case 4:
+			return ['vehicles'];
+		default:
+			return [];
+	}
+};
+
 /**
  * Validates a field based on its validation rule.
  * @param {keyof PartialUser} field - The field to validate.
  * @param {FieldValue} value - The value of the field.
  * @returns {string | null} - Error message or null if valid.
  */
-export const validateField = (
-	field: keyof PartialUser,
-	value: FieldValue
-): string | null => {
-	const rule = VALIDATION_RULES[field as string];
-	if (field === 'bio' && (value === undefined || value === null)) {
-		return null; // No error if biographie is undefined or null
+export const validateField = (field: keyof User, value: FieldValue): string | null => {
+	const rule = VALIDATION_RULES[field];
+	if (!rule) {
+		console.warn(`No validation rule found for field: ${field}`);
+		return null;
 	}
-	return rule ? rule(value) : null;
+	return rule(value);
 };
 
 export const validatePage = (
