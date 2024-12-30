@@ -10,7 +10,7 @@ import { registerStyles as styles } from '@/styles';
 import { validateField, validatePage } from '@/utils';
 
 const RegisterPage2 = () => {
-	const { state, updateField, errors } = useRegister();
+	const { form, updateField, errors } = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(2)) {
@@ -38,7 +38,7 @@ const RegisterPage2 = () => {
 
 				<ThemedInput
 					placeholder='Prénom'
-					value={state.firstName}
+					value={form.firstName}
 					onChangeText={(value) => {
 						updateField('firstName', value);
 						validateField('firstName', value);
@@ -50,7 +50,7 @@ const RegisterPage2 = () => {
 
 				<ThemedInput
 					placeholder='Nom'
-					value={state.lastName}
+					value={form.lastName}
 					onChangeText={(value) => {
 						updateField('lastName', value);
 						validateField('lastName', value);

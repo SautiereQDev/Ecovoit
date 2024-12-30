@@ -1,14 +1,14 @@
 import { SafeAreaView, View } from 'react-native';
-import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
 import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import React from 'react';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
+import { useRegister } from '@/context';
 
-export const Index = () => {
-	const { state, updateField, errors, validatePage } = useRegister();
+export const RegisterPage = () => {
+	const { form, updateField, errors, validatePage } = useRegister();
 
 	const handleNext = () => {
 		if (validatePage(1)) {
@@ -28,24 +28,23 @@ export const Index = () => {
 			<View style={styles.content}>
 				<ReturnButton />
 				<ThemedText
-					type={'header2'}
+					type='header2'
 					style={styles.title}
 				>
 					Inscription
 				</ThemedText>
 
 				<ThemedInput
-					placeholder="Nom d'utilisateur"
-					value={state.username}
+					label="Nom d'utilisateur"
+					value={form.username}
 					onChangeText={(value) => updateField('username', value)}
 					hasError={!!errors.username}
 					errorMessage={errors.username}
-					label={"Nom d'utilisateur"}
 				/>
 
 				<ThemedInput
 					placeholder='Adresse mail'
-					value={state.email}
+					value={form.email}
 					onChangeText={(value) => updateField('email', value)}
 					hasError={!!errors.email}
 					errorMessage={errors.email}
@@ -55,7 +54,7 @@ export const Index = () => {
 
 				<ThemedInput
 					placeholder='Mot de passe'
-					value={state.password}
+					value={form.password}
 					onChangeText={(value) => updateField('password', value)}
 					hasError={!!errors.password}
 					errorMessage={errors.password}
@@ -75,4 +74,4 @@ export const Index = () => {
 	);
 };
 
-export default Index;
+export default RegisterPage;

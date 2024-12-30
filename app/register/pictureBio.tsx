@@ -8,7 +8,7 @@ import { registerStyles as styles } from '@/styles';
 import { validateField } from '@/utils';
 
 export const RegisterPage5 = () => {
-	const { state, updateField, errors, submitForm } = useRegister();
+	const { form, updateField, errors, submitForm: submit } = useRegister();
 
 	const updateImage = (image: string | null) => {
 		updateField('profilePicture', image);
@@ -29,7 +29,7 @@ export const RegisterPage5 = () => {
 						Photo de profil (optionnel)
 					</ThemedText>
 					<ImagePickerButton
-						image={state.profilePicture}
+						image={form.profilePicture}
 						setImage={updateImage}
 						style={styles.imagePicker}
 					/>
@@ -40,7 +40,7 @@ export const RegisterPage5 = () => {
 					</ThemedText>
 					<ThemedInput
 						placeholder='Biographie'
-						value={state.bio}
+						value={form.bio}
 						onChangeText={(value) => {
 							updateField('bio', value);
 							validateField('bio', value);
@@ -57,7 +57,7 @@ export const RegisterPage5 = () => {
 					text='Terminer'
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
-					onPress={submitForm}
+					onPress={submit}
 					buttonStyle={styles.buttons}
 				/>
 			</View>
