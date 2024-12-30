@@ -1,24 +1,29 @@
-import { ValidationErrors, Vehicle } from '@/types';
+import { User, ValidationErrors, Vehicle } from '@/types';
 
 /**
  * Detailed action types for the register form.
  */
 export type RegisterAction =
-	| { type: 'UPDATE_FIELD'; field: keyof PartialUser; value: any }
-	| { type: 'VALIDATE_FIELD'; field: keyof PartialUser; error: string | null }
+	| { type: 'UPDATE_FIELD'; field: keyof User; value: any }
+	| { type: 'VALIDATE_FIELD'; field: keyof User; error: string | null }
 	| { type: 'SET_PAGE'; page: number }
 	| { type: 'ADD_VEHICLE'; vehicle: Vehicle }
 	| { type: 'UPDATE_VEHICLE'; vehicle: Vehicle; index: number }
 	| { type: 'REMOVE_VEHICLE'; index: number }
 	| { type: 'SUBMIT_FORM' }
 	| { type: 'RESET_FORM' }
-	| { type: 'CLEAR_ERRORS' };
+	| { type: 'CLEAR_ERRORS' }
+	| { type: 'SET_ERRORS'; errors: ValidationErrors }
+	| { type: 'SUBMIT_SUCCESS' }
+	| { type: 'SUBMIT_FAILURE'; errors: ValidationErrors }
+	| { type: 'SET_SUBMITTING'; value: boolean }
+	| { type: 'SET_VALID'; value: boolean };
 
 /**
  * Initial state type for the register form.
  */
 export interface RegisterState {
-	form: PartialUser;
+	form: User;
 	errors: ValidationErrors;
 	currentPage: number;
 	isSubmitting: boolean;
