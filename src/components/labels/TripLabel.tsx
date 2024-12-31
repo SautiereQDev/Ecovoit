@@ -4,7 +4,9 @@ import { ThemedText } from '../texts';
 import { Colors } from '@/constants/Colors';
 
 type Props = {
-	status: 'completed' | 'current' | 'canceled';
+	status:
+		| Readonly<'upcoming' | 'completed' | 'ongoing' | 'cancelled'>
+		| undefined;
 	style?: ViewStyle;
 	theme?: 'default' | 'bigger';
 };
