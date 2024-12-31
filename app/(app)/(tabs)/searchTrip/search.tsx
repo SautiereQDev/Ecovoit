@@ -1,21 +1,58 @@
-import { FlatList, KeyboardAvoidingView, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Pressable, View } from 'react-native';
 import { IconButton, SearchTripCard, ThemedText } from '@/components';
-import ShowFilters from '@/components/modal/ShowFilters';
-import ShowOrder from '@/components/modal/ShowOrder';
 import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTripSearch } from '@/providers/SearchProvider';
 import { searchTripStyles } from '@/styles/searchTrip';
+import { useData, useSearchContext } from '@/providers';
+import { router } from 'expo-router';
 
 export const Search = () => {
-	const { state, resetSearch, reverseOrder } = useTripSearch();
-	const { results, searchData, filters } = state;
-
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 
-	const isFilterActive = filters.some((filter) => filter.active);
+	const { searchQuery: searchData, setSearchQuery: setSearchData } =
+		useSearchContext();
+
+	const { useTrips } = useData();
+	const resetSearch = () => {
+		setSearchData({
+			depart: '',
+			destination: '',
+			date: new Date().getTime(),
+			filters: [],
+			sort: { field: 'distance', direction: 'asc' },
+		});
+		router.push('/searchTrip/search');
+	};
+
+	const reverseOrder = () => {
+		setSearchData({
+			...searchData,
+			sort:
+				searchData.sort.direction === 'asc'
+					? { ...searchData.sort, direction: 'desc' }
+					: { ...searchData.sort, direction: 'asc' },
+		});
+	};
+
+	const { data, isLoading, isError } = useTrips();
+
+	if (isLoading) {
+		return (
+			<SafeAreaView>
+				<ThemedText>Loading...</ThemedText>
+			</SafeAreaView>
+		);
+	}
+
+	if (isError) {
+		return (
+			<SafeAreaView>
+				<ThemedText>Une erreur est survenue</ThemedText>
+			</SafeAreaView>
+		);
+	}
 
 	return (
 		<SafeAreaView style={searchTripStyles.container}>
@@ -36,52 +73,17 @@ export const Search = () => {
 								buttonStyle={searchTripStyles.resetButton}
 							/>
 						</View>
-						<View style={searchTripStyles.icons}>
-							<IconButton
-								name={'filter'}
-								lib={'MaterialCommunityIcons'}
-								size={26}
-								buttonStyle={searchTripStyles.button}
-								backgroundColor={isFilterActive ? 'primary' : 'background'}
-								color={
-									isFilterActive
-										? Colors.light.background
-										: Colors.light.primary
-								}
-								onPress={() => setShowFilters(!showFilters)}
-							/>
-							<View style={searchTripStyles.orderButtons}>
-								<IconButton
-									// @ts-ignore
-									name={'sort'}
-									lib={'MaterialCommunityIcons'}
-									size={26}
-									buttonStyle={searchTripStyles.button}
-									onPress={reverseOrder}
-								/>
-								<IconButton
-									// @ts-ignore
-									name={'sort'}
-									lib={'MaterialCommunityIcons'}
-									size={26}
-									buttonStyle={searchTripStyles.button}
-									onPress={() => setShowOrder(!showOrder)}
-								/>
-							</View>
-						</View>
-						<ShowFilters
-							visible={showFilters}
-							onClose={() => setShowFilters(false)}
-						/>
-						<ShowOrder
-							visible={showOrder}
-							onClose={() => setShowOrder(false)}
-						/>
 						<ThemedText type='header3'>Trajets correspondants 🔗</ThemedText>
 						<FlatList
-							data={results}
-							renderItem={({ item }) => <SearchTripCard data={item} />}
-							keyExtractor={(_, index) => index.toString()}
+							data={data}
+							renderItem={({ item }) => (
+								<Pressable
+									onPress={() => router.push(`/DetailedTrip/${item.id}`)}
+								>
+									<SearchTripCard trip={item} />
+								</Pressable>
+							)}
+							keyExtractor={(trip, index) => trip.id}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 						/>
 					</View>
