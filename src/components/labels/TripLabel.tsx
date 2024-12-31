@@ -4,23 +4,24 @@ import { ThemedText } from '../texts';
 import { Colors } from '@/constants/Colors';
 
 type Props = {
-	status:
-		| Readonly<'upcoming' | 'completed' | 'ongoing' | 'cancelled'>
-		| undefined;
+	status?: Readonly<'upcoming' | 'completed' | 'ongoing' | 'cancelled'>;
 	style?: ViewStyle;
 	theme?: 'default' | 'bigger';
 };
 
 const backgroundColor = {
-	current: Colors.light.hidden,
+	upcoming: Colors.light.primary,
+	ongoing: Colors.light.secondary,
 	completed: '#00B309',
-	canceled: '#C00600',
+	cancelled: '#C00600',
 };
 
 const statusText = {
 	current: 'En cours',
+	upcoming: 'À venir',
+	ongoing: 'En cours',
 	completed: 'Effectué',
-	canceled: 'Annulé',
+	cancelled: 'Annulé',
 };
 
 export function TripLabel({
@@ -35,17 +36,18 @@ export function TripLabel({
 			style={[
 				styles.container,
 				style,
-				{ backgroundColor: backgroundColor[status] },
+				{
+					backgroundColor: status
+						? backgroundColor[status]
+						: Colors.light.hidden,
+				},
 			]}
 		>
 			<ThemedText
-				type={theme === 'default' ? 'small' : 'header5'}
-				style={[
-					{ color: status === 'current' ? Colors.light.text : '#fff' },
-					styles.text,
-				]}
+				type={theme === 'default' ? 'small' : 'header6'}
+				style={[{ color: Colors.light.background }, styles.text]}
 			>
-				{statusText[status]}
+				{status ? statusText[status] : 'Unknown'}
 			</ThemedText>
 		</View>
 	);
