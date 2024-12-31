@@ -5,12 +5,6 @@ export enum PointType {
 	END = "end",
 }
 
-export interface Location {
-	name?: string;
-	longitude: number;
-	latitude: number;
-}
-
 export interface OSRMpoint {
 	hint: string;
 	distance: number;

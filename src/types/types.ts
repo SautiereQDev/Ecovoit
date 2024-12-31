@@ -1,3 +1,6 @@
+import { getBindingIdentifiers } from '@babel/types';
+import { GetTripsType, GetTripType } from '@/types/api';
+
 export interface destinationSearch {
 	position: string;
 	destination: string;
@@ -55,3 +58,17 @@ export type userParams = {
 export type ValidationErrors = Record<string, string | undefined>;
 
 export type FieldValue = string | number | boolean | null | undefined;
+
+export type FilterType = Record<keyof GetTripType, GetTripsType>;
+
+export type SortType = {
+	field: keyof GetTripType;
+	direction: 'asc' | 'desc';
+};
+
+export type TripParamsType = {
+	page: number;
+	limit: number;
+	filters: FilterType;
+	sort: SortType;
+};

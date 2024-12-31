@@ -2,15 +2,20 @@ import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
+	fetchTrips,
 	fetchUser,
 	fetchUsers,
 	fetchVehiclesByUser,
+	patchTrip,
+	postTrip,
 	removeVehicle,
 } from '@/api';
 import {
+	GetTripsType,
 	GetUsersType,
 	GetUserType,
 	GetVehiclesType,
+	PostTripsType,
 	PostVehicleType,
 	Vehicle,
 } from '@/types';
@@ -32,6 +37,14 @@ interface DataContextProps {
 	useUser: (userId: string) => ReturnType<typeof useQuery<GetUserType>>;
 	useRemoveVehicle: () => ReturnType<
 		typeof useMutation<void, unknown, { userId: string; label: string }>
+	>;
+	useTrips: () => ReturnType<typeof useQuery<GetTripsType>>;
+	useTrip: (tripId: string) => ReturnType<typeof useQuery<GetTripsType>>;
+	useAddTrip: () => ReturnType<
+		typeof useMutation<GetTripsType, unknown, { tripData: PostTripsType }>
+	>;
+	useCanceledTrip: () => ReturnType<
+		typeof useMutation<unknown, unknown, { tripId: string }>
 	>;
 }
 
@@ -92,6 +105,44 @@ const useAddVehicle = () => {
 	});
 };
 
+const useTrips = () => {
+	return useQuery<GetTripsType>(['trips'], () => fetchTrips());
+};
+
+const useTrip = (tripId: string) => {
+	return useQuery<GetTripsType>(['trip', tripId], () => fetchTrips());
+};
+
+const useAddTrip = () => {
+	const queryClient = useQueryClient();
+	return useMutation<GetTripsType, unknown, { tripData: PostTripsType }>(
+		(variables) => postTrip(variables.tripData),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(['trips']).catch((e) => console.error(e));
+				queryClient
+					.invalidateQueries(['user', 'me'])
+					.catch((e) => console.error(e));
+			},
+		}
+	);
+};
+
+const useCanceledTrip = () => {
+	const queryClient = useQueryClient();
+	return useMutation<unknown, unknown, { tripId: string }>(
+		(variables) => patchTrip(variables.tripId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(['trips']).catch((e) => console.error(e));
+				queryClient
+					.invalidateQueries(['user', 'me'])
+					.catch((e) => console.error(e));
+			},
+		}
+	);
+};
+
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const value: DataContextProps = useMemo(
 		() => ({
@@ -100,6 +151,10 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useUsers,
 			useUser,
 			useRemoveVehicle,
+			useTrips,
+			useTrip,
+			useAddTrip,
+			useCanceledTrip,
 		}),
 		[]
 	);
