@@ -33,6 +33,8 @@ export const RouteMap = ({
 		name: point.name,
 	});
 
+	// TODO: Afficher les points de passage sur la carte avec une couleur différente que les points de départ et d'arrivée
+
 	useEffect(() => {
 		const loadRoute = async () => {
 			try {

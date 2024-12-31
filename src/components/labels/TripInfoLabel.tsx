@@ -16,7 +16,7 @@ type Props = {
 	style?: ViewStyle;
 };
 
-export function TripInfoLabel({ data, style }: Props) {
+export function TripInfoLabel({ data, style }: Readonly<Props>) {
 	const items = [
 		`${data.distance}km`,
 		`${data.consumption}g de CO2`,
