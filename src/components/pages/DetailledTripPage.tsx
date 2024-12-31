@@ -1,12 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Point } from '@/types';
-import { Colors } from '@/constants/Colors';
-import { TripInfoLabel, TripLabel } from '../labels';
-import { RouteMap } from '../map';
+import { Location, Point } from '@/types';
 import { ThemedText } from '../texts';
-import { Stars } from '../UI/Stars';
+import { useData } from '@/providers';
 
 interface TripData {
 	date?: string;
@@ -23,36 +19,45 @@ interface TripData {
 }
 
 // TODO: Afficher un label "terminé" et le nombres d'étoiles attribuées si le trajet est terminé
-export const DetailledTrip = () => {
-	const data: TripData = {
-		date: '12 Novembre 2024',
-		start: {
-			latitude: 46.177673675037354,
-			longitude: -1.1183228504255647,
-			name: 'Super U',
-		},
-		end: {
-			latitude: 46.15565762058419,
-			longitude: -1.1501020876315642,
-			name: 'Chez Auguste',
-		},
-		waypoints: [], // optionnel
-		driverName: 'Quentin',
-		description:
-			"Trajet rapide avant d'aller faire la fête chez Auguste, on va essayer d'éviter les bouchons",
-		distance: 45,
-		consommation: 12,
-		rating: 3.5,
-	};
+export const DetailledTrip = ({ tripId }: { tripId: string }) => {
+	const { useTrip } = useData();
+	const { data: trip, isLoading, isError } = useTrip(tripId);
+
+	const start = trip?.points.find((point) => point.type === 'start');
+	const end = trip?.points.find((point) => point.type === 'end');
+
+	const checkpoints = trip?.points
+		.filter(
+			(point) => point.type === 'checkpoint' && point.location !== undefined
+		)
+		.map((point) => point.location as unknown as Location);
+
+	if (isError) {
+		return (
+			<SafeAreaView>
+				<ThemedText>Une erreur est survenue</ThemedText>
+			</SafeAreaView>
+		);
+	}
+
+	if (isLoading) {
+		return (
+			<SafeAreaView>
+				<ThemedText>Loading...</ThemedText>
+			</SafeAreaView>
+		);
+	}
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{data.date && <ThemedText type='header3'>{data?.date}</ThemedText>}
+			<ThemedText type='"eader3'"
+				{trip?.datetime?.toLocaleString('fr-FR')}
+			</ThemedText>
 			<ThemedText
 				type='header5'
 				style={styles.tripTitle}
 			>
-				{`${data.start.name} -> ${data.end.name}`}
+				{`${start?.location?.name} -> ${end?.location?.name}`}
 			</ThemedText>
 			<View style={styles.labelContainer}>
 				<TripLabel
@@ -62,45 +67,50 @@ export const DetailledTrip = () => {
 			</View>
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
-					<RouteMap
-						start={data.start}
-						end={data.end}
-						waypoints={data.waypoints}
-						style={styles.map}
-					/>
-					<TripInfoLabel
-						data={{
-							distance: data.distance,
-							consumption: data.consommation,
-							arrivalTime: '12h30',
-						}}
-					/>
+					{start?.location && end?.location && trip?.points && (
+						<RouteMap
+							start={start.location}
+							end={end.location}
+							waypoints={checkpoints}
+							style={styles.map}
+						/>
+					)}
+					{/*<TripInfoLabel*/}
+					{/*	data={{*/}
+					{/*		distance: trip?.distance,*/}
+					{/*		consumption: trip.consommation,*/}
+					{/*		arrivalTime: '12h30',*/}
+					{/*	}}*/}
+					{/*/>*/}
 				</View>
-				<Stars
-					rating={data.rating}
-					style={styles.rating}
-				/>
+				<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>
+				{trip?.driver?.stars && (
+					<Stars
+						rating={trip.driver.stars}
+						style={styles.rating}
+					/>
+				)}
 				<View style={styles.description}>
 					<View style={styles.userContainer}>
 						<Image
 							source={require('@/assets/images/user-picture.jpg')}
 							style={styles.userImage}
 						/>
-						{data.driverName && (
+						{trip?.driver?.username && (
 							<ThemedText
 								type='header5'
 								style={styles.driverName}
 							>
-								{data.driverName}
+								{trip?.driver?.username}
 							</ThemedText>
 						)}
 					</View>
-					{data.description && (
+					{trip?.description && (
 						<ThemedText
 							type='defaultBody'
 							style={styles.descriptionText}
 						>
-							{data.description}
+							{trip.description}
 						</ThemedText>
 					)}
 				</View>

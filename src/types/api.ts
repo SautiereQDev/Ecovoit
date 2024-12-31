@@ -90,7 +90,7 @@ export type PostTripsType = {
  * Type for the response of the GET /trips/{id} endpoint.
  */
 export type GetTripType = {
-	id?: Readonly<string>;
+	id: Readonly<string>;
 	driver?: Readonly<ShortUserType>;
 	vehicle: string; // vehicle label
 	seats: number;
