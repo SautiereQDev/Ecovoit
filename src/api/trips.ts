@@ -3,10 +3,11 @@ import { GetTripsType, GetTripType, PatchTripsType, PostTripsType, TripParamsTyp
 
 /**
  * Fetches the list of trips.
+ * @param {TripParamsType} params - The parameters to filter the trips.
  * @returns {Promise<GetTripsType>} A promise that resolves to the list of trips.
  */
-export const fetchTrips = (): Promise<GetTripsType> =>
-	apiGet<GetTripsType>('/trips');
+export const fetchTrips = (params?: TripParamsType): Promise<GetTripsType> =>
+	apiGet<GetTripsType>('/trips', params);
 
 /**
  * Post a trip
@@ -19,13 +20,10 @@ export const postTrip = (tripData: PostTripsType): Promise<GetTripsType> =>
 /**
  * Fetches a trip by its ID.
  * @param {string} id - The ID of the trip to fetch.
- * @param {TripParamsType} params - The parameters for fetching the trip.
  * @returns {Promise<GetTripType>} A promise that resolves to the trip data.
  */
-export const fetchTrip = (
-	id: string,
-	params: TripParamsType
-): Promise<GetTripType> => apiGet<GetTripType>(` /trips/${id}`, params);
+export const fetchTrip = (id: string): Promise<GetTripType> =>
+	apiGet<GetTripType>(` /trips/${id}`);
 
 /**
  * Deletes a trip by its ID.

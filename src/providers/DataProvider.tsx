@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
+	fetchTrip,
 	fetchTrips,
 	fetchUser,
 	fetchUsers,
@@ -12,11 +13,13 @@ import {
 } from '@/api';
 import {
 	GetTripsType,
+	GetTripType,
 	GetUsersType,
 	GetUserType,
 	GetVehiclesType,
 	PostTripsType,
 	PostVehicleType,
+	TripParamsType,
 	Vehicle,
 } from '@/types';
 
@@ -38,8 +41,8 @@ interface DataContextProps {
 	useRemoveVehicle: () => ReturnType<
 		typeof useMutation<void, unknown, { userId: string; label: string }>
 	>;
-	useTrips: () => ReturnType<typeof useQuery<GetTripsType>>;
-	useTrip: (tripId: string) => ReturnType<typeof useQuery<GetTripsType>>;
+	useTrips: (params?: any) => ReturnType<typeof useQuery<GetTripsType>>;
+	useTrip: (tripId: string) => ReturnType<typeof useQuery<GetTripType>>;
 	useAddTrip: () => ReturnType<
 		typeof useMutation<GetTripsType, unknown, { tripData: PostTripsType }>
 	>;
@@ -105,12 +108,11 @@ const useAddVehicle = () => {
 	});
 };
 
-const useTrips = () => {
-	return useQuery<GetTripsType>(['trips'], () => fetchTrips());
+const useTrips = (params?: TripParamsType) => {
+	return useQuery<GetTripsType>(['trips', params], () => fetchTrips(params));
 };
-
 const useTrip = (tripId: string) => {
-	return useQuery<GetTripsType>(['trip', tripId], () => fetchTrips());
+	return useQuery<GetTripType>(['trip', tripId], () => fetchTrip(tripId));
 };
 
 const useAddTrip = () => {

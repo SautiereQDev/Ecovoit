@@ -1,5 +1,4 @@
-import { getBindingIdentifiers } from '@babel/types';
-import { GetTripsType, GetTripType } from '@/types/api';
+import { GetTripType } from '@/types/api';
 
 export interface destinationSearch {
 	position: string;
@@ -10,6 +9,8 @@ export type searchTripFormType = {
 	depart: string;
 	destination: string;
 	date: number;
+	filters: FilterType[];
+	sort: SortType;
 };
 
 export interface TripCardType {
@@ -59,7 +60,7 @@ export type ValidationErrors = Record<string, string | undefined>;
 
 export type FieldValue = string | number | boolean | null | undefined;
 
-export type FilterType = Record<keyof GetTripType, GetTripsType>;
+export type FilterType = Record<keyof GetTripType, GetTripType>;
 
 export type SortType = {
 	field: keyof GetTripType;
@@ -67,8 +68,8 @@ export type SortType = {
 };
 
 export type TripParamsType = {
-	page: number;
-	limit: number;
-	filters: FilterType;
-	sort: SortType;
+	page?: number;
+	limit?: number;
+	filters?: FilterType[];
+	sort?: SortType;
 };
