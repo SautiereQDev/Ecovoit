@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts/ThemedText';
 import { GetTripType } from '@/types';
 
 type Props = {

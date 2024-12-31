@@ -1,11 +1,13 @@
 import { FlatList, KeyboardAvoidingView, Pressable, View } from 'react-native';
-import { IconButton, SearchTripCard, ThemedText } from '@/components';
+import { IconButton } from '@/components/buttons';
 import React, { useState } from 'react';
 import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { searchTripStyles } from '@/styles/searchTrip';
 import { useData, useSearchContext } from '@/providers';
 import { router } from 'expo-router';
+import { SearchTripCard } from '@/components/cards';
+import { ThemedText } from '@/components/texts';
 
 export const Search = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -62,7 +64,9 @@ export const Search = () => {
 						<View style={searchTripStyles.searchBar}>
 							<View style={searchTripStyles.destination}>
 								<ThemedText color='text'>
-									{searchData.depart} {' -> '} {searchData.destination}
+									{searchData.depart}
+									{' -> '}
+									{searchData.destination}
 								</ThemedText>
 							</View>
 							<IconButton

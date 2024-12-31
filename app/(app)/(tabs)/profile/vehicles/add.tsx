@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import React from 'react';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';

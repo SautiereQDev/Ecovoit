@@ -1,6 +1,8 @@
 import { View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
+import { ThemedInput } from '@/components/inputs';
 import { handleBack } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { router } from 'expo-router';

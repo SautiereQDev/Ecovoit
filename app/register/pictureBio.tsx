@@ -1,10 +1,12 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
 import { ImagePickerButton } from '@/components/buttons/ImagePickerButton';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { registerStyles as styles } from '@/styles';
 import { validateField } from '@/utils';
+import { ThemedInput } from '@/components/inputs';
+import { ThemedText } from '@/components/texts';
 
 export const RegisterPage5 = () => {
 	const { form, updateField, errors, submitForm: submit } = useRegister();

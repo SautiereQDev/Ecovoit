@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { handleBack } from './index';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import { router } from 'expo-router';
 import { vehiclesStyles } from '@/styles/vehicles';
 

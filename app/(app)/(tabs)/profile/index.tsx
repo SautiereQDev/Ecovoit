@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
-import { CustomButton, IconButton, ThemedText } from '@/components';
+import { CustomButton, IconButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
 import { useRouter } from 'expo-router';
 import { useData, useSession } from '@/providers';
 import { profileStyles } from '@/styles';

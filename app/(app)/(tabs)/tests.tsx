@@ -1,4 +1,4 @@
-import { CustomButton } from '@/components';
+import { CustomButton } from '@/components/buttons';
 import { router } from 'expo-router';
 
 export default function Tests() {

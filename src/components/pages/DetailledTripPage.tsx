@@ -4,9 +4,12 @@ import { Location, Point } from '@/types';
 import { ThemedText } from '../texts';
 import { useData } from '@/providers';
 import { Image, StyleSheet, View } from 'react-native';
-import { RouteMap, TripLabel } from '@/components';
+import { RouteMap } from '@/components/map';
 import { Stars } from '@/components/UI/Stars';
 import { Colors } from '@/constants';
+import { ReturnButton } from '@/components/buttons/ReturnButton';
+import { router } from 'expo-router';
+import { TripLabel } from '@/components/labels';
 
 interface TripData {
 	date?: string;
@@ -22,8 +25,7 @@ interface TripData {
 	rating: 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
 }
 
-// TODO: Afficher un label "terminé" et le nombres d'étoiles attribuées si le trajet est terminé
-export const DetailledTrip = ({ tripId }: { tripId: string }) => {
+export const DetailedTrip = ({ tripId }: { tripId: string }) => {
 	const { useTrip } = useData();
 	const { data: trip, isLoading, isError } = useTrip(tripId);
 
@@ -54,23 +56,32 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ThemedText type='header3'>
-				{trip?.datetime?.toLocaleString('fr-FR')}
+			<ReturnButton handleBack={() => router.push('/searchTrip/search')} />
+			<ThemedText
+				type='header3'
+				style={styles.title}
+			>
+				{trip?.datetime
+					? new Date(trip.datetime).toLocaleDateString('fr-FR', {
+							day: 'numeric',
+							month: 'long',
+							hour: 'numeric',
+							minute: 'numeric',
+						})
+					: 'Date not available'}
 			</ThemedText>
 			<ThemedText
 				type='header5'
-				style={styles.tripTitle}
+				style={styles.title}
 			>
 				{`${start?.location?.name} -> ${end?.location?.name}`}
 			</ThemedText>
-			;
 			<View style={styles.labelContainer}>
 				<TripLabel
-					status={trip?.status}
+					status={trip?.status ?? 'upcoming'}
 					theme={'bigger'}
 				/>
 			</View>
-			;
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
 					{start?.location && end?.location && trip?.points && (
@@ -82,19 +93,24 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 						/>
 					)}
 					{/*<TripInfoLabel*/}
-					{/*	data={{*/}
-					{/*		distance: trip?.distance,*/}
-					{/*		consumption: trip.consommation,*/}
-					{/*		arrivalTime: '12h30',*/}
-					{/*	}}*/}
+					{/* data={{*/}
+					{/* distance: trip?.distance,*/}
+					{/* consumption: trip.consommation,*/}
+					{/* arrivalTime: '12h30',*/}
+					{/* }}*/}
 					{/*/>*/}
 				</View>
-				<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>;
 				{trip?.driver?.stars && (
-					<Stars
-						rating={trip.driver.stars}
-						style={styles.rating}
-					/>
+					<View>
+						<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>
+						<View>
+							<ThemedText type='defaultBody'>{trip.driver.stars}</ThemedText>
+							<Stars
+								rating={trip.driver.stars}
+								style={styles.rating}
+							/>
+						</View>
+					</View>
 				)}
 				<View style={styles.description}>
 					<View style={styles.userContainer}>
@@ -120,31 +136,28 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 						</ThemedText>
 					)}
 				</View>
-				;
 			</View>
-			;
 		</SafeAreaView>
 	);
 };
 
-export default DetailledTrip;
+export default DetailedTrip;
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		marginTop: 25,
 		backgroundColor: Colors.light.background,
-		alignItems: 'center',
+		display: 'flex',
+		width: '85%',
+		marginHorizontal: 'auto',
 	},
-	tripTitle: {
+	title: {
 		textAlign: 'center',
-		marginBottom: 20,
+		marginBottom: 5,
 	},
 	body: {
-		display: 'flex',
-		flex: 1,
 		gap: 20,
-		width: '90%',
 	},
 	labelContainer: {
 		width: '90%',

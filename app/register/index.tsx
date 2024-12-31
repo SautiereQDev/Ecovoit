@@ -1,6 +1,8 @@
 import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
+import { ThemedInput } from '@/components/inputs';
+import { ThemedText } from '@/components/texts';
 import React from 'react';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { notify } from 'react-native-notificated';

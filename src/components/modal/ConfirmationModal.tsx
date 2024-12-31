@@ -1,8 +1,9 @@
 import { Modal, StyleSheet, View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
 import Colors from '@/constants/Colors';
 import { router } from 'expo-router';
+import { ThemedText } from '@/components/texts';
 
 type ConfirmationMenuProps = {
 	visible: boolean;

@@ -14,6 +14,10 @@ export const searchTripStyles = StyleSheet.create({
 		marginHorizontal: 'auto',
 	},
 
+	title: {
+		marginTop: '5%',
+	},
+
 	// Styles du formulaire
 	formContainer: {
 		marginTop: '5%',
@@ -60,10 +64,11 @@ export const searchTripStyles = StyleSheet.create({
 		justifyContent: 'center',
 		gap: 20,
 	},
-	destination: {
+	input: {
 		borderWidth: 1.5,
 		borderColor: Colors.light.inputText,
-		padding: '2%',
+		paddingVertical: '2.5%',
+		paddingHorizontal: '3%',
 		borderRadius: 10,
 	},
 	resetButton: {

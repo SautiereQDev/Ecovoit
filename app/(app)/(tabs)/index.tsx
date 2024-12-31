@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, View } from 'react-native';
-import { ThemedText, TripCard } from '@/components';
+import { ThemedText } from '@/components/texts';
+import { TripCard } from '@/components/cards';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';

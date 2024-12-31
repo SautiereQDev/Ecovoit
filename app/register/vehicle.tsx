@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Vehicle } from '@/types';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
 import { validateField, validatePage } from '@/utils';

@@ -1,6 +1,6 @@
 import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import { Vehicle } from '@/types';
 import VehicleCard from '@/components/cards/VehicleCard';
 import { FontAwesome6 } from '@expo/vector-icons';
