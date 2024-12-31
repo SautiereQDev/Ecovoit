@@ -3,6 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Location, Point } from '@/types';
 import { ThemedText } from '../texts';
 import { useData } from '@/providers';
+import { Image, StyleSheet, View } from 'react-native';
+import { RouteMap, TripLabel } from '@/components';
+import { Stars } from '@/components/UI/Stars';
+import { Colors } from '@/constants';
 
 interface TripData {
 	date?: string;
@@ -50,7 +54,7 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ThemedText type='"eader3'"
+			<ThemedText type='header3'>
 				{trip?.datetime?.toLocaleString('fr-FR')}
 			</ThemedText>
 			<ThemedText
@@ -59,12 +63,14 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 			>
 				{`${start?.location?.name} -> ${end?.location?.name}`}
 			</ThemedText>
+			;
 			<View style={styles.labelContainer}>
 				<TripLabel
-					status={'completed'}
+					status={trip?.status}
 					theme={'bigger'}
 				/>
 			</View>
+			;
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
 					{start?.location && end?.location && trip?.points && (
@@ -83,7 +89,7 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 					{/*	}}*/}
 					{/*/>*/}
 				</View>
-				<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>
+				<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>;
 				{trip?.driver?.stars && (
 					<Stars
 						rating={trip.driver.stars}
@@ -114,7 +120,9 @@ export const DetailledTrip = ({ tripId }: { tripId: string }) => {
 						</ThemedText>
 					)}
 				</View>
+				;
 			</View>
+			;
 		</SafeAreaView>
 	);
 };
