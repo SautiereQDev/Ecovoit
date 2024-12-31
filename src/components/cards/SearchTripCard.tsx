@@ -1,15 +1,18 @@
 import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { ThemedText } from '../texts/ThemedText';
-import { SearchTripCardType } from '@/types/Components';
+import { ThemedText } from '@/components';
+import { GetTripType } from '@/types';
 
 type Props = {
 	style?: ViewStyle;
-	data: SearchTripCardType;
+	trip: GetTripType;
 };
 
-export function SearchTripCard({ style, data }: Readonly<Props>) {
+export function SearchTripCard({ style, trip }: Readonly<Props>) {
+	const depart = trip.points.find((point) => point.type === 'start');
+	const destination = trip.points.find((point) => point.type === 'end');
+
 	return (
 		<View style={[styles.container, style]}>
 			<Image
@@ -19,30 +22,28 @@ export function SearchTripCard({ style, data }: Readonly<Props>) {
 			<View style={styles.textContainer}>
 				<View style={styles.header}>
 					<ThemedText
-						type='header4'
-						color={'background'}
-						style={{ marginLeft: 20 }}
-					>
-						{data.nom}
-					</ThemedText>
-					<ThemedText
 						type={'header5'}
 						color={'background'}
 					>
-						{data.distance}m
+						{trip.distance} km
 					</ThemedText>
 				</View>
 				<ThemedText color='background'>
-					{data.depart}
+					{depart?.location?.name ?? 'Unknown'}
 					{' -> '}
-					{data.destination}
+					{destination?.location?.name ?? 'Unknown'}
 				</ThemedText>
 				<ThemedText
 					color='background'
 					style={styles.date}
 					type={'smaller'}
 				>
-					{data.date}
+					{new Date(trip.datetime).toLocaleDateString('fr-FR', {
+						hour: 'numeric',
+						day: 'numeric',
+						month: 'long',
+						hourCycle: 'h24',
+					})}{' '}
 				</ThemedText>
 			</View>
 		</View>
@@ -83,5 +84,3 @@ const styles = StyleSheet.create({
 		marginRight: 3,
 	},
 });
-
-export default SearchTripCard;
