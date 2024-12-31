@@ -26,42 +26,58 @@ const extractData = <T>(response: AxiosResponse<T>): T => response.data;
 
 /**
  * Perform a GET request.
- * @template T
+ * @template GetType
  * @param {string} url - The URL to send the GET request to.
- * @returns {Promise<T>} - A promise that resolves to the response data.
+ * @param params
+ * @returns {Promise<GetType>} - A promise that resolves to the response data.
  */
-export const apiGet = <T>(url: string): Promise<T> =>
-	apiClient.get<T>(url).then(extractData);
+export const apiGet = <GetType>(
+	url: string,
+	params?: object | object[]
+): Promise<GetType> =>
+	apiClient.get<GetType>(url, { params }).then(extractData);
 
 /**
  * Perform a POST request.
- * @template T - The type of the response data.
+ * @template RequestType - The type of the request body.
+ * @template ResponseType - The type of the response data.
  * @param {string} url - The URL to send the POST request to.
- * @param {unknown} data - The data to send in the POST request.
- * @returns {Promise<T>} - A promise that resolves to the response data.
+ * @param {RequestType} data - The data to send in the POST request.
+ * @returns {Promise<ResponseType>} - A promise that resolves to the response data.
  */
-export const apiPost = <T>(url: string, data: unknown): Promise<T> =>
-	apiClient.post<T>(url, data).then(extractData);
+export const apiPost = <RequestType, ResponseType>(
+	url: string,
+	data: RequestType
+): Promise<ResponseType> =>
+	apiClient.post<ResponseType>(url, data).then(extractData);
 
 /**
  * Perform a PUT request.
- * @template T - The type of the response data.
+ * @template RequestType - The type of the request body.
+ * @template ResponseType - The type of the response data.
  * @param {string} url - The URL to send the PUT request to.
- * @param {unknown} data - The data to send in the PUT request.
- * @returns {Promise<T>} - A promise that resolves to the response data.
+ * @param {RequestType} data - The data to send in the PUT request.
+ * @returns {Promise<ResponseType>} - A promise that resolves to the response data.
  */
-export const apiPut = <T>(url: string, data: unknown): Promise<T> =>
-	apiClient.put<T>(url, data).then(extractData);
+export const apiPut = <RequestType, ResponseType>(
+	url: string,
+	data: RequestType
+): Promise<ResponseType> =>
+	apiClient.put<ResponseType>(url, data).then(extractData);
 
 /**
  * Perform a PATCH request.
- * @param url - The URL to send the PATCH request to.
- * @param data - The data to send in the PATCH request.
- * @returns A promise that resolves to the response data.
- * @template T - The type of the response data.
+ * @template RequestType - The type of the request body.
+ * @template ResponseType - The type of the response data.
+ * @param {string} url - The URL to send the PATCH request to.
+ * @param {RequestType} data - The data to send in the PATCH request.
+ * @returns {Promise<ResponseType>} - A promise that resolves to the response data.
  */
-export const apiPatch = <T>(url: string, data: unknown): Promise<T> =>
-	apiClient.patch<T>(url, data).then(extractData);
+export const apiPatch = <RequestType, ResponseType>(
+	url: string,
+	data: RequestType
+): Promise<ResponseType> =>
+	apiClient.patch<ResponseType>(url, data).then(extractData);
 
 /**
  * Perform a DELETE request.
