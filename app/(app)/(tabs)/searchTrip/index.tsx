@@ -1,130 +1,110 @@
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import React from 'react';
+import { TextInput } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchContext } from '@/providers';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IconButton, ThemedInput, ThemedText } from '@/components';
-import DateTimePicker, {
-	DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
-import validTimestamp from 'ajv/lib/runtime/timestamp';
-import { formatDate } from '@/utils/date';
-import { useTripSearch } from '@/providers/SearchProvider';
-import { searchTripStyles } from '@/styles/searchTrip';
+import { searchTripFormType } from '@/types';
+import { router } from 'expo-router';
+import { IconButton, ThemedText } from '@/components';
+import { Colors } from '@/constants';
+import { searchTripStyles } from '@/styles';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export const Index = () => {
-	const { state, handleInputChange, handleSubmit } = useTripSearch();
-	const { searchData, errors } = state;
+const searchSchema = z.object({
+	depart: z.string().min(3, 'Le départ est requis'),
+	destination: z.string().min(3, 'La destination est requise'),
+	// date: z.number().min(Date.now(), 'La date doit être dans le futur'),
+});
 
-	const { dispatch } = useTripSearch();
+export const SearchForm = () => {
+	const { searchQuery, setSearchQuery } = useSearchContext();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		defaultValues: searchQuery,
+		resolver: zodResolver(searchSchema),
+	});
 
-	const [showDatePicker, setShowDatePicker] = useState(false);
-	const [mode, setMode] = useState<'date' | 'time'>('date');
-
-	const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-		if (Platform.OS === 'android') {
-			if (event.type === 'set') {
-				if (mode === 'date') {
-					setMode('time');
-					return;
-				} else if (mode === 'time') {
-					if (!validTimestamp(selectedDate?.toISOString() || '', true)) {
-						dispatch({
-							type: 'SET_ERRORS',
-							payload: { ...errors, date: 'Date invalide' },
-						});
-						return;
-					}
-					dispatch({
-						type: 'SET_SEARCH_DATA',
-						payload: { date: selectedDate?.getTime() ?? searchData.date },
-					});
-					setShowDatePicker(false);
-					setMode('date');
-				}
-			} else if (event.type === 'dismissed') {
-				setShowDatePicker(false);
-				setMode('date');
-			}
-		} else {
-			dispatch({
-				type: 'SET_SEARCH_DATA',
-				payload: { date: selectedDate?.getTime() ?? searchData.date },
-			});
-			setShowDatePicker(false);
-		}
+	const onSubmit = (data: searchTripFormType) => {
+		setSearchQuery(data);
+		router.push('/searchTrip/search');
 	};
 
+	const [showDatePicker, setShowDatePicker] = React.useState(false);
+	const [mode, setMode] = React.useState<'date' | 'time'>('date');
+
 	return (
-		<SafeAreaView style={searchTripStyles.container}>
-			<KeyboardAvoidingView style={searchTripStyles.content}>
-				<ThemedText type='header3'>Rechercher votre trajet 🔎</ThemedText>
-				<View style={searchTripStyles.formContainer}>
-					<ThemedInput
-						label='Départ'
-						placeholder='Départ'
-						value={searchData.depart}
-						onChangeText={(val) => handleInputChange('depart', val)}
-						hasError={!!errors.depart}
-						errorMessage={errors.depart}
-						size='medium'
-						editable={true}
-						autoFocus={true}
+		<SafeAreaView>
+			<Controller
+				control={control}
+				name='depart'
+				render={({ field: { onChange, onBlur, value } }) => (
+					<TextInput
+						placeholder='Departure'
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
 					/>
-					<ThemedInput
-						label='Destination'
+				)}
+			/>
+			{errors.depart && <ThemedText>{errors.depart.message}</ThemedText>}
+
+			<Controller
+				control={control}
+				name='destination'
+				render={({ field: { onChange, onBlur, value } }) => (
+					<TextInput
 						placeholder='Destination'
-						value={searchData.destination}
-						onChangeText={(val) => handleInputChange('destination', val)}
-						hasError={!!errors.destination}
-						errorMessage={errors.destination}
-						size='medium'
-						editable={true}
-						autoFocus={true}
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
 					/>
-					<View>
-						<ThemedText
-							type='defaultBody'
-							color='text'
-						>
-							Date
-						</ThemedText>
-						<IconButton
-							name='calendar'
-							title={`${formatDate(searchData.date)}`}
-							onPress={() => setShowDatePicker(true)}
-							style={searchTripStyles.dateButton}
-							size={20}
-							iconFirst={true}
-						/>
-					</View>
-					{showDatePicker && (
+				)}
+			/>
+			{errors.destination && (
+				<ThemedText>{errors.destination.message}</ThemedText>
+			)}
+
+			{showDatePicker && (
+				<Controller
+					control={control}
+					name='date'
+					render={({ field: { onChange, value } }) => (
 						<DateTimePicker
-							value={new Date(searchData.date)}
+							value={new Date(value)}
 							mode={mode}
 							is24Hour={true}
 							display='default'
-							onChange={(event, date) => onDateChange(event, date as Date)}
+							onChange={(event, date) => {
+								onChange(date);
+								setShowDatePicker(false);
+							}}
 						/>
 					)}
-					{Boolean(errors.date) && (
-						<ThemedText style={searchTripStyles.errorText}>
-							{errors.date}
-						</ThemedText>
-					)}
-					<IconButton
-						name='search'
-						title='Rechercher'
-						size={24}
-						color={Colors.light.primary}
-						buttonStyle={searchTripStyles.submitButton}
-						textProps={{ type: 'header5', color: 'background' }}
-						onPress={handleSubmit}
-						iconStyle={{ color: Colors.light.background }}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+				/>
+			)}
+			{Boolean(errors.date) && (
+				<ThemedText style={searchTripStyles.errorText}>
+					{errors?.date?.message}
+				</ThemedText>
+			)}
+
+			<IconButton
+				name='search'
+				title='Rechercher'
+				size={24}
+				color={Colors.light.primary}
+				buttonStyle={searchTripStyles.submitButton}
+				textProps={{ type: 'header5', color: 'background' }}
+				onPress={handleSubmit(onSubmit)}
+				iconStyle={{ color: Colors.light.background }}
+			/>
 		</SafeAreaView>
 	);
 };
 
-export default Index;
+export default SearchForm;
