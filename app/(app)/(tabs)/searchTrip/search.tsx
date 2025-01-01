@@ -8,6 +8,7 @@ import { useData, useSearchContext } from '@/providers';
 import { router } from 'expo-router';
 import { SearchTripCard } from '@/components/cards';
 import { ThemedText } from '@/components/texts';
+import { ErrorPage, LoadingPage } from '@/components/pages';
 
 export const Search = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -41,19 +42,11 @@ export const Search = () => {
 	const { data, isLoading, isError } = useTrips();
 
 	if (isLoading) {
-		return (
-			<SafeAreaView>
-				<ThemedText>Loading...</ThemedText>
-			</SafeAreaView>
-		);
+		return <LoadingPage />;
 	}
 
 	if (isError) {
-		return (
-			<SafeAreaView>
-				<ThemedText>Une erreur est survenue</ThemedText>
-			</SafeAreaView>
-		);
+		return <ErrorPage />;
 	}
 
 	return (
@@ -62,7 +55,7 @@ export const Search = () => {
 				<View style={searchTripStyles.content}>
 					<View style={searchTripStyles.header}>
 						<View style={searchTripStyles.searchBar}>
-							<View style={searchTripStyles.destination}>
+							<View style={searchTripStyles.input}>
 								<ThemedText color='text'>
 									{searchData.depart}
 									{' -> '}

@@ -5,12 +5,10 @@ export interface destinationSearch {
 	destination: string;
 }
 
-export type searchTripFormType = {
+export type searchTripFormType = TripParamsType & {
 	depart: string;
 	destination: string;
 	date: number;
-	filters: FilterType[];
-	sort: SortType;
 };
 
 export interface TripCardType {
@@ -60,16 +58,19 @@ export type ValidationErrors = Record<string, string | undefined>;
 
 export type FieldValue = string | number | boolean | null | undefined;
 
-export type FilterType = Record<keyof GetTripType, GetTripType>;
-
 export type SortType = {
 	field: keyof GetTripType;
 	direction: 'asc' | 'desc';
 };
 
+export type FiltersType = {
+	field: string;
+	value: any;
+}[];
+
 export type TripParamsType = {
 	page?: number;
 	limit?: number;
-	filters?: FilterType[];
+	filters?: { [key: string]: any };
 	sort?: SortType;
 };

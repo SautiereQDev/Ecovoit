@@ -3,7 +3,7 @@ import React from 'react';
 import { ThemedText } from '@/components/texts';
 import { ActivityIndicator } from 'react-native-paper';
 
-const LoadingPage = () => {
+export const LoadingPage = () => {
 	return (
 		<View style={styles.container}>
 			<ActivityIndicator size={'large'} />

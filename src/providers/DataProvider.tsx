@@ -49,6 +49,7 @@ interface DataContextProps {
 	useCanceledTrip: () => ReturnType<
 		typeof useMutation<unknown, unknown, { tripId: string }>
 	>;
+	useCurrentUserTrips: () => ReturnType<typeof useQuery<GetTripsType>>;
 }
 
 export const DataContext = createContext<DataContextProps | undefined>(
@@ -65,6 +66,11 @@ const useUsers = () => {
 
 const useUser = (userId: string) => {
 	return useQuery<GetUserType>(['user', userId], () => fetchUser(userId));
+};
+
+const currentUser = () => {
+	throw new Error('Function not implemented.');
+	// TODO: Faire une recherche à [GET] /users/me
 };
 
 const useVehicles = (userId: string) => {
@@ -145,6 +151,15 @@ const useCanceledTrip = () => {
 	);
 };
 
+const useCurrentUserTrip = () => {
+	// TODO: Faire une recherche à [GET] /trips et filtrer par userId avec l'id du currentUser
+	// Dans un premier temps on test le système de filtre avec un requête en recuperer seats=3
+	let filters = [{ field: 'seats', value: 3 }];
+	return useQuery<GetTripsType>(['trips'], () =>
+		fetchTrips(undefined, filters)
+	);
+};
+
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const value: DataContextProps = useMemo(
 		() => ({
@@ -157,6 +172,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useTrip,
 			useAddTrip,
 			useCanceledTrip,
+			useCurrentUserTrips: useCurrentUserTrip,
 		}),
 		[]
 	);

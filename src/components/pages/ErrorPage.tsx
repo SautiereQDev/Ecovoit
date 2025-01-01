@@ -7,7 +7,7 @@ type Props = {
 	error?: any;
 };
 
-const LoadingPage = ({ error = null }) => {
+export const ErrorPage = ({ error = null }: Props) => {
 	return (
 		<View style={styles.container}>
 			<ActivityIndicator size={'large'} />
@@ -16,7 +16,7 @@ const LoadingPage = ({ error = null }) => {
 		</View>
 	);
 };
-export default LoadingPage;
+export default ErrorPage;
 
 const styles = StyleSheet.create({
 	container: {
