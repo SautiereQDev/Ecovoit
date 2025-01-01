@@ -135,7 +135,7 @@ export function TripCreationProvider({
 		},
 		setInitialSeats: (initialSeats: number) => {
 			dispatch({
-				type: 'set_initial_seats',
+				type: 'set_available_seats',
 				payload: initialSeats,
 			});
 		},

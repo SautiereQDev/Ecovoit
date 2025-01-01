@@ -8,6 +8,41 @@ import { View } from 'react-native';
 
 export default function Confirm() {
 	const { trip } = useTripCreation();
+	const endpoint = 'https://api-ev-qq.pimous.dev/trips';
+
+	const createTrip = async () => {
+		const body = {
+			vehicle: 'vehicule_id',
+			seats: trip.initialSeats,
+			// datetime en ms
+			datetime: new Date(trip.date + 'T' + trip.time).getTime(),
+			points: [
+				{
+					type: 'start',
+					locationName: trip.start,
+				},
+				{
+					type: 'end',
+					locationName: trip.destination,
+				},
+			],
+		};
+
+		console.log(body);
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+		});
+		if (response.ok) {
+			router.navigate('/(app)/(tabs)/post-trip');
+		} else {
+			alert('Une erreur est survenue');
+			console.log(response.status);
+		}
+	};
 
 	return (
 		<PostTripLayout
@@ -41,6 +76,7 @@ export default function Confirm() {
 					iconName='car'
 					onPress={() => {
 						alert('Trajet enregistré');
+						createTrip();
 					}}
 				></CircleButton>
 			</View>
