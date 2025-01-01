@@ -5,24 +5,33 @@ import { ThemedInput } from '@/components/inputs';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
-import { validateField, validatePage } from '@/utils';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { PostUserType } from '@/types';
+import { useRegisterContext } from '@/providers/RegisterProvider';
+
+const schema = z.object({
+	firstName: z.string().min(1, 'Prénom est requis'),
+	lastName: z.string().min(1, 'Nom est requis'),
+});
 
 const RegisterPage2 = () => {
-	const { form, updateField, errors } = useRegister();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<PostUserType>({
+		resolver: zodResolver(schema),
+	});
 
-	const handleNext = () => {
-		if (validatePage(2)) {
-			router.push('/register/confirmation');
-		} else {
-			notify('error', {
-				params: {
-					title: 'Erreur',
-					description: 'Veuillez remplir tous les champs correctement',
-				},
-			});
-		}
+	const { registerQuery, setRegisterQuery } = useRegisterContext();
+
+	const submit = (data: PostUserType) => {
+		setRegisterQuery({ ...registerQuery, ...data });
+		console.log(registerQuery);
+		router.push('/register/confirmation');
 	};
 
 	return (
@@ -36,35 +45,43 @@ const RegisterPage2 = () => {
 					Informations personnelles
 				</ThemedText>
 
-				<ThemedInput
-					placeholder='Prénom'
-					value={form.firstName}
-					onChangeText={(value) => {
-						updateField('firstName', value);
-						validateField('firstName', value);
-					}}
-					hasError={!!errors.firstName}
-					errorMessage={errors.firstName}
-					label={'Prénom'}
+				<Controller
+					control={control}
+					name={'firstName'}
+					render={({ field: { onChange, onBlur, value } }) => (
+						<ThemedInput
+							placeholder='Prénom'
+							value={value}
+							onChangeText={onChange}
+							hasError={!!errors.firstName}
+							errorMessage={errors.firstName?.message}
+							label={'Prénom'}
+							onBlur={onBlur}
+						/>
+					)}
 				/>
 
-				<ThemedInput
-					placeholder='Nom'
-					value={form.lastName}
-					onChangeText={(value) => {
-						updateField('lastName', value);
-						validateField('lastName', value);
-					}}
-					hasError={!!errors.lastName}
-					errorMessage={errors.lastName}
-					label={'Nom'}
+				<Controller
+					name={'lastName'}
+					control={control}
+					render={({ field: { onChange, onBlur, value } }) => (
+						<ThemedInput
+							placeholder='Nom'
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							hasError={!!errors.lastName}
+							errorMessage={errors.lastName?.message}
+							label={'Nom'}
+						/>
+					)}
 				/>
 
 				<CustomButton
 					text='Suivant'
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
-					onPress={handleNext}
+					onPress={handleSubmit(submit)}
 					buttonStyle={styles.buttonNext}
 				/>
 			</View>

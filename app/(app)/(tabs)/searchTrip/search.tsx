@@ -8,7 +8,7 @@ import { useData, useSearchContext } from '@/providers';
 import { router } from 'expo-router';
 import { SearchTripCard } from '@/components/cards';
 import { ThemedText } from '@/components/texts';
-import { ErrorPage, LoadingPage } from '@/components/pages';
+import { ErrorScreen, LoadingPage } from '@/components/pages';
 
 export const Search = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -46,7 +46,7 @@ export const Search = () => {
 	}
 
 	if (isError) {
-		return <ErrorPage />;
+		return <ErrorScreen />;
 	}
 
 	return (
