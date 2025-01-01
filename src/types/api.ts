@@ -4,7 +4,7 @@ import uri from 'ajv/lib/runtime/uri';
 /**
  * Type for the payload of the POST /users endpoint.
  */
-export type PostUsersType = {
+export type PostUserType = {
 	firstName: string;
 	lastName?: string;
 	username: string;
@@ -78,7 +78,7 @@ export type GetTripsType = GetTripType[];
 /**
  * Type for the payload of the POST /trips endpoint.
  */
-export type PostTripsType = {
+export type PostTripType = {
 	vehicle: string; // vehicle label
 	seats: number;
 	datetime: number;

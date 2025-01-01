@@ -3,7 +3,7 @@ import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useData } from '@/providers';
-import { ErrorPage, LoadingPage } from '@/components/pages';
+import { ErrorScreen, LoadingPage } from '@/components/pages';
 
 export default function Index() {
 	const { useUser, useCurrentUserTrips } = useData();
@@ -15,7 +15,7 @@ export default function Index() {
 	}
 
 	if (isError) {
-		return <ErrorPage />;
+		return <ErrorScreen />;
 	}
 
 	if (!isLoading) {

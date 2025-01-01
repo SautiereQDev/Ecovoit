@@ -5,11 +5,13 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { PostUsersType } from '@/types';
+import { PostUserType, PostVehicleType } from '@/types';
 
 interface RegisterContextType {
-	searchQuery: PostUsersType;
-	setSearchQuery: React.Dispatch<React.SetStateAction<PostUsersType>>;
+	registerQuery: PostUserType & PostVehicleType;
+	setRegisterQuery: React.Dispatch<
+		React.SetStateAction<PostUserType & PostVehicleType>
+	>;
 }
 
 const RegisterContext = createContext<RegisterContextType | undefined>(
@@ -19,30 +21,35 @@ const RegisterContext = createContext<RegisterContextType | undefined>(
 export const RegisterProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const initialState: PostUsersType = {
+	const initialState: PostUserType & PostVehicleType = {
 		firstName: '',
 		lastName: '',
 		username: '',
 		email: '',
 		password: '',
 		bio: '',
+		label: '',
+		consumption: 0,
+		emission: 0,
 	};
 
-	const [searchQuery, setSearchQuery] = useState<PostUsersType>(initialState);
+	const [registerQuery, setRegisterQuery] = useState<
+		PostUserType & PostVehicleType
+	>(initialState);
 
 	const value: RegisterContextType = useMemo(
-		() => ({ searchQuery, setSearchQuery }),
-		[searchQuery]
+		() => ({ registerQuery, setRegisterQuery }),
+		[registerQuery]
 	);
 
 	return (
 		<RegisterContext.Provider value={value}>
-			{children},
+			{children}
 		</RegisterContext.Provider>
 	);
 };
 
-export const useSearchContext = (): RegisterContextType => {
+export const useRegisterContext = (): RegisterContextType => {
 	const context = useContext(RegisterContext);
 	if (!context) {
 		throw new Error('useSearchContext must be used within a RegisterProvider');
