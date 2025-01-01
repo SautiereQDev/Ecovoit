@@ -4,7 +4,7 @@ import {
 	GetTripsType,
 	GetTripType,
 	PatchTripsType,
-	PostTripsType,
+	PostTripType,
 	SortType,
 	TripParamsType,
 } from '@/types';
@@ -40,8 +40,8 @@ export const fetchTrips = (
  * @returns {Promise<GetTripType>} A promise that resolves to the added trip.
  * @param tripData
  */
-export const postTrip = (tripData: PostTripsType): Promise<GetTripsType> =>
-	apiPost<PostTripsType, GetTripsType>('/trips', tripData);
+export const postTrip = (tripData: PostTripType): Promise<GetTripType> =>
+	apiPost<PostTripType, GetTripType>('/trips', tripData);
 
 /**
  * Fetches a trip by its ID.
