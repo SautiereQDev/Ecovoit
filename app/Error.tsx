@@ -2,6 +2,8 @@ import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import { ThemedText } from '@/components/texts';
 import { ActivityIndicator } from 'react-native-paper';
+import { CustomButton } from '@/components/buttons';
+import { router } from 'expo-router';
 
 type Props = {
 	error?: any;
@@ -13,6 +15,10 @@ export const ErrorPage = ({ error = null }: Props) => {
 			<ActivityIndicator size={'large'} />
 			<ThemedText type={'header5'}>Une erreur est survenue</ThemedText>
 			{error && <ThemedText>{error}</ThemedText>}
+			<CustomButton
+				text={"Retour à l'accueil"}
+				onPress={() => router.push('/')}
+			/>
 		</View>
 	);
 };
