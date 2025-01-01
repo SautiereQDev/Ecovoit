@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import CustomCalendar from '@/components/calendar/Calendar';
 import { DateData } from 'react-native-calendars';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
-import { useTripCreation } from '@/components/context/TripCreationProvider';
+import { useTripCreation } from '@/context/TripCreationProvider';
 
 export default function Destination() {
 	const { setDate } = useTripCreation(); // TODO

@@ -1,5 +1,4 @@
 import { mockFetchData } from '@/mock/mockFetch';
-import { mockLoadSecureStore } from '@/mock/mockLoadSecureStore';
 import {
 	createContext,
 	PropsWithChildren,
@@ -74,34 +73,33 @@ export function SessionProvider({ children }: PropsWithChildren): JSX.Element {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	useEffect(() => {
-		setIsLoading(true);
-		/**
-		 * Implémentation factice d'une connexion ne nécessitant pas les identifiants
-		 * On recherche un token dans le SecureStore
-		 */
-		const loadSession = async () => {
-			console.log("Recherche d'un token dans le SecureStore...");
-			try {
-				const userToken = await mockLoadSecureStore();
+	// useEffect(() => {
+	// 	setIsLoading(true);
+	// 	/**
+	// 	 * Implémentation factice d'une connexion ne nécessitant pas les identifiants
+	// 	 * On recherche un token dans le SecureStore
+	// 	 */
+	// 	const loadSession = async () => {
+	// 		console.log("Recherche d'un token dans le SecureStore...");
+	// 		try {
 
-				if (userToken) {
-					console.log(
-						'Token trouvé dans le SecureStore : ' + JSON.stringify(userToken)
-					);
-					// GET api/auth/signin
-					// On récupère le Token
-					// On place le token en header "par défaut" pour les prochaines requêtes
-					console.log("L'utilisateur est maintenant connecté.");
-					setIsAuthenticated(true);
-				}
-			} catch (e) {
-				console.error(e);
-			}
-			setIsLoading(false);
-		};
-		loadSession();
-	}, []);
+	// 			if (userToken) {
+	// 				console.log(
+	// 					'Token trouvé dans le SecureStore : ' + JSON.stringify(userToken)
+	// 				);
+	// 				// GET api/auth/signin
+	// 				// On récupère le Token
+	// 				// On place le token en header "par défaut" pour les prochaines requêtes
+	// 				console.log("L'utilisateur est maintenant connecté.");
+	// 				setIsAuthenticated(true);
+	// 			}
+	// 		} catch (e) {
+	// 			console.error(e);
+	// 		}
+	// 		setIsLoading(false);
+	// 	};
+	// 	loadSession();
+	// }, []);
 
 	/**
 	 * Implémentation factice d'une connexion avec les identifiants.

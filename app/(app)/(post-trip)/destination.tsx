@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import SearchBar from '@/components/drafts/SearchBar';
-import { useTripCreation } from '@/components/context/TripCreationProvider';
+import { useTripCreation } from '@/context/TripCreationProvider';
 const lr_cda = require('@/assets/data/lr_cda_division.json');
 const lr_districts = require('@/assets/data/lr_districts.json');
 

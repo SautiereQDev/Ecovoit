@@ -2,7 +2,7 @@ import React from 'react';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import { router } from 'expo-router';
 import CircleButton from '@/components/drafts/CircleButton';
-import { useTripCreation } from '@/components/context/TripCreationProvider';
+import { useTripCreation } from '@/context/TripCreationProvider';
 import { ThemedText } from '@/components/drafts/ThemedText';
 import { View } from 'react-native';
 

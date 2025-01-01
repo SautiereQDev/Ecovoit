@@ -1,4 +1,4 @@
-import { useTripCreation } from '@/components/context/TripCreationProvider';
+import { useTripCreation } from '@/context/TripCreationProvider';
 import CircleButton from '@/components/drafts/CircleButton';
 import SeatPicker from '@/components/drafts/SeatPicker';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
