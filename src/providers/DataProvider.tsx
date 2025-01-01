@@ -9,6 +9,7 @@ import {
 	fetchVehiclesByUser,
 	patchTrip,
 	postTrip,
+	postUser,
 	removeVehicle,
 } from '@/api';
 import {
@@ -17,7 +18,8 @@ import {
 	GetUsersType,
 	GetUserType,
 	GetVehiclesType,
-	PostTripsType,
+	PostTripType,
+	PostUserType,
 	PostVehicleType,
 	TripParamsType,
 	Vehicle,
@@ -36,6 +38,19 @@ interface DataContextProps {
 			unknown
 		>
 	>;
+	useAddUser: () => ReturnType<
+		typeof useMutation<
+			GetUserType,
+			unknown,
+			{
+				userData: PostUserType;
+			},
+			unknown
+		>
+	>;
+	useAddTrip: () => ReturnType<
+		typeof useMutation<GetTripType, unknown, { tripData: PostTripType }>
+	>;
 	useUsers: () => ReturnType<typeof useQuery<GetUsersType>>;
 	useUser: (userId: string) => ReturnType<typeof useQuery<GetUserType>>;
 	useRemoveVehicle: () => ReturnType<
@@ -43,9 +58,7 @@ interface DataContextProps {
 	>;
 	useTrips: (params?: any) => ReturnType<typeof useQuery<GetTripsType>>;
 	useTrip: (tripId: string) => ReturnType<typeof useQuery<GetTripType>>;
-	useAddTrip: () => ReturnType<
-		typeof useMutation<GetTripsType, unknown, { tripData: PostTripsType }>
-	>;
+
 	useCanceledTrip: () => ReturnType<
 		typeof useMutation<unknown, unknown, { tripId: string }>
 	>;
@@ -123,7 +136,7 @@ const useTrip = (tripId: string) => {
 
 const useAddTrip = () => {
 	const queryClient = useQueryClient();
-	return useMutation<GetTripsType, unknown, { tripData: PostTripsType }>(
+	return useMutation<GetTripType, unknown, { tripData: PostTripType }>(
 		(variables) => postTrip(variables.tripData),
 		{
 			onSuccess: () => {
@@ -131,6 +144,23 @@ const useAddTrip = () => {
 				queryClient
 					.invalidateQueries(['user', 'me'])
 					.catch((e) => console.error(e));
+			},
+		}
+	);
+};
+
+const useAddUser = () => {
+	const queryClient = useQueryClient();
+	return useMutation<GetUserType, unknown, { userData: PostUserType }>(
+		(variables) => postUser(variables.userData),
+		{
+			onSuccess: (data) => {
+				queryClient.invalidateQueries(['users']).catch((e) => console.error(e));
+				queryClient
+					.invalidateQueries(['user', 'me'])
+					.catch((e) => console.error(e));
+				// Fetch the user data after the mutation
+				queryClient.setQueryData(['user', data.id], data);
 			},
 		}
 	);
@@ -151,7 +181,7 @@ const useCanceledTrip = () => {
 	);
 };
 
-const useCurrentUserTrip = () => {
+const useCurrentUserTrips = () => {
 	// TODO: Faire une recherche à [GET] /trips et filtrer par userId avec l'id du currentUser
 	// Dans un premier temps on test le système de filtre avec un requête en recuperer seats=3
 	let filters = [{ field: 'seats', value: 3 }];
@@ -165,6 +195,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 		() => ({
 			useVehicles,
 			useAddVehicle,
+			useAddUser,
 			useUsers,
 			useUser,
 			useRemoveVehicle,
@@ -172,7 +203,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useTrip,
 			useAddTrip,
 			useCanceledTrip,
-			useCurrentUserTrips: useCurrentUserTrip,
+			useCurrentUserTrips,
 		}),
 		[]
 	);
