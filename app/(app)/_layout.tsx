@@ -1,8 +1,6 @@
-import { useSession } from '@/context/SessionProvider';
+import { useSession } from '@/components/context/SessionProvider';
 import { Redirect, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { createNotifications } from 'react-native-notificated';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function AppLayout() {
 	const { isAuthenticated } = useSession();
@@ -59,16 +57,15 @@ export default function AppLayout() {
 	}
 
 	return (
+		// Permet l'utilisation de FlatList "
 		<GestureHandlerRootView>
-			<NotificationsProvider>
-				<Stack
-					screenOptions={{
-						headerShown: false,
-					}}
-				>
-					<Stack.Screen name='(tabs)' />
-				</Stack>
-			</NotificationsProvider>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
+				<Stack.Screen name='(tabs)' />
+			</Stack>
 		</GestureHandlerRootView>
 	);
 }

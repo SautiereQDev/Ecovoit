@@ -7,17 +7,10 @@ import {
 } from 'react-native';
 import { useSession } from '@/context/SessionProvider';
 import { Redirect } from 'expo-router';
-import { useState } from 'react';
+import ButtonTest from '@/components/drafts/ButtonTest';
 
 export default function Signin() {
-	// console.warn("-- render Signin");
-
 	const { signIn, isAuthenticated, isLoading } = useSession();
-
-	const credentials = {
-		username: 'maxime@lr',
-		password: 'password_123',
-	};
 
 	if (isLoading) {
 		return (
@@ -37,7 +30,7 @@ export default function Signin() {
 
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Pressable onPress={() => signIn(credentials)}>
+			<Pressable onPress={() => signIn('mchasleslr', 'my_fake_password')}>
 				<Text>SignIn</Text>
 			</Pressable>
 		</View>

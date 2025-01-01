@@ -1,18 +1,18 @@
-import { TripCreationProvider } from "@/context/TripCreationProvider";
-import { Stack } from "expo-router";
+import { TripCreationProvider } from '@/context/TripCreationProvider';
+import { Stack } from 'expo-router';
 
 export default function PostTripLayout() {
-  return (
-    <TripCreationProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="start" />
-        <Stack.Screen name="end" />
-        <Stack.Screen name="datetime" />
-      </Stack>
-    </TripCreationProvider>
-  );
+	return (
+		<TripCreationProvider>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
+				<Stack.Screen name='start' />
+				<Stack.Screen name='end' />
+				<Stack.Screen name='datetime' />
+			</Stack>
+		</TripCreationProvider>
+	);
 }
