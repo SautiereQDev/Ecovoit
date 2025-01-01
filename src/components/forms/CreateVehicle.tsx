@@ -1,102 +1,92 @@
 import { StyleSheet, View } from 'react-native';
 import { CustomButton } from '@/components/buttons';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Vehicle } from '@/types';
 import { ThemedInput } from '@/components/inputs';
+import { z } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-/**
- * Validation rules for vehicle fields.
- */
-const vehicleValidation = {
-	label: (value: string): string | null =>
-		value.length >= 2
-			? null
-			: 'Le nom du véhicule doit contenir au moins 2 caractères',
-	consumption: (value: number): string | null =>
-		value > 0 && value < 50
-			? null
-			: 'La consommation doit être entre 0 et 50 L/100km',
-	emission: (value: number): string | null =>
-		value > 0 && value < 500
-			? null
-			: 'Les émissions doivent être entre 0 et 500 g/km',
+type CreateVehicleProps = {
+	handleSubmit: (vehicle: Vehicle) => void;
+	buttonStyle: any;
+	buttonText?: string;
 };
 
-/**
- * Component for creating a vehicle.
- *
- * @param {CreateVehicleProps & { handleSubmit: (vehicle: Vehicle) => void }} props - The props for the component.
- * @returns {ReactNode} The rendered component.
- */
+const schema = z.object({
+	label: z
+		.string()
+		.min(2, 'Le nom du véhicule doit contenir au moins 2 caractères'),
+	consumption: z
+		.number()
+		.min(0, 'La consommation doit être entre 0 et 50 L/100km'),
+	emission: z.number().min(0, 'Les émissions doivent être entre 0 et 500 g/km'),
+});
+
 export const CreateVehicle = ({
-	errors,
-	validateField,
-	handleSubmit,
+	handleSubmit: submit,
 	buttonStyle,
 	buttonText = 'Enregistrer',
-	initialData,
 }: CreateVehicleProps): ReactNode => {
-	const [vehicle, setVehicle] = useState<Vehicle>({
-		label: '',
-		consumption: 0,
-		emission: 0,
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Vehicle>({
+		resolver: zodResolver(schema),
 	});
-
-	/**
-	 * Handles changes to vehicle fields.
-	 *
-	 * @param {keyof Vehicle} field - The field being changed.
-	 * @param {string | number} value - The new value for the field.
-	 */
-	const handleVehicleChange = (
-		field: keyof Vehicle,
-		value: string | number
-	) => {
-		const updatedVehicle = { ...vehicle, [field]: value };
-		setVehicle(updatedVehicle);
-
-		// @ts-ignore
-		const error = vehicleValidation[field]?.(value);
-		if (error) validateField('vehicles', [updatedVehicle]);
-	};
 
 	return (
 		<View style={styles.content}>
 			<View style={styles.form}>
-				<ThemedInput
-					placeholder='Nom du véhicule'
-					value={vehicle.label ?? initialData?.label}
-					onChangeText={(value) => handleVehicleChange('label', value)}
-					hasError={!!errors.vehicles?.[0]?.carName}
-					errorMessage={errors.vehicles?.[0]?.carName}
-					label='Nom du véhicule'
+				<Controller
+					name={'label'}
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<ThemedInput
+							placeholder='Nom du véhicule'
+							value={value}
+							onChangeText={onChange}
+							label='Nom du véhicule'
+							hasError={!!errors.label}
+							errorMessage={errors.label?.message}
+						/>
+					)}
 				/>
-				<ThemedInput
-					placeholder='Consommation (L/100km)'
-					value={vehicle.consumption.toString() ?? initialData?.consumption}
-					onChangeText={(value) =>
-						handleVehicleChange('consumption', parseFloat(value) || 0)
-					}
-					keyboardType='numeric'
-					hasError={!!errors.vehicles?.[0]?.carConsommation}
-					errorMessage={errors.vehicles?.[0]?.carConsommation}
-					label='Consommation'
+				<Controller
+					name={'consumption'}
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<ThemedInput
+							placeholder='Consommation (L/100km)'
+							value={value?.toString()}
+							onChangeText={(text) => onChange(parseFloat(text))}
+							keyboardType='numeric'
+							label='Consommation'
+							hasError={!!errors.consumption}
+							errorMessage={errors.consumption?.message}
+						/>
+					)}
 				/>
-				<ThemedInput
-					placeholder='Émissions CO2 (g/km)'
-					value={vehicle.emission.toString() ?? initialData?.emission}
-					onChangeText={(value) =>
-						handleVehicleChange('emission', parseFloat(value) || 0)
-					}
-					keyboardType='numeric'
-					hasError={!!errors.vehicles?.[0]?.carEmission}
-					errorMessage={errors.vehicles?.[0]?.carEmission}
-					label='Émissions CO2'
+				<Controller
+					name={'emission'}
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<ThemedInput
+							placeholder='Émissions CO2 (g/km)'
+							value={value?.toString()}
+							onChangeText={(text) => onChange(parseFloat(text))}
+							keyboardType='numeric'
+							label='Émissions CO2'
+							hasError={!!errors.emission}
+							errorMessage={errors.emission?.message}
+						/>
+					)}
 				/>
 			</View>
 			<CustomButton
 				text={buttonText}
-				onPress={() => handleSubmit(vehicle)}
+				onPress={handleSubmit(submit)}
 				buttonStyle={buttonStyle}
 			/>
 		</View>

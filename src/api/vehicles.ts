@@ -21,7 +21,7 @@ export const addVehicle = (
 	userId: string,
 	vehicleData: PostVehicleType
 ): Promise<Vehicle> =>
-	apiPost<PostVehicleType>(`/vehicles/${userId}`, vehicleData);
+	apiPost<PostVehicleType, any>(`/vehicles/${userId}`, vehicleData);
 
 /**
  * Removes a vehicle for a specific user.
