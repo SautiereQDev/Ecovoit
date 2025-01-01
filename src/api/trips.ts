@@ -1,13 +1,39 @@
 import { apiDelete, apiGet, apiPost } from './client';
-import { GetTripsType, GetTripType, PatchTripsType, PostTripsType, TripParamsType } from '@/types';
+import {
+	FiltersType,
+	GetTripsType,
+	GetTripType,
+	PatchTripsType,
+	PostTripsType,
+	SortType,
+	TripParamsType,
+} from '@/types';
 
 /**
  * Fetches the list of trips.
  * @param {TripParamsType} params - The parameters to filter the trips.
+ * @param filters - The filters to apply to the trips.
+ * @param sort - The sorting to apply to the trips.
  * @returns {Promise<GetTripsType>} A promise that resolves to the list of trips.
  */
-export const fetchTrips = (params?: TripParamsType): Promise<GetTripsType> =>
-	apiGet<GetTripsType>('/trips', params);
+export const fetchTrips = (
+	params?: TripParamsType,
+	filters?: FiltersType,
+	sort?: SortType
+): Promise<GetTripsType> => {
+	let url = '/trips';
+	if (filters) {
+		const filterParams = filters
+			.map((filter) => `sort[${filter.field}]=${filter.value}`)
+			.join('&');
+		url += `?${filterParams}`;
+	}
+	if (sort) {
+		url += `&sort=${sort.field}:${sort.direction}`;
+	}
+	console.log(url);
+	return apiGet<GetTripsType>(url, params);
+};
 
 /**
  * Post a trip
