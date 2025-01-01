@@ -1,5 +1,5 @@
-import { apiGet } from './client';
-import { GetUsersType, GetUserType, User } from '@/types';
+import { apiGet, apiPost } from './client';
+import { GetUsersType, GetUserType, PostUserType, User } from '@/types';
 
 /**
  * Fetches the list of users.
@@ -24,6 +24,14 @@ export const fetchUser = (id: string): Promise<GetUserType> =>
  * @returns {Promise<User>} A promise that resolves to the current user data.
  */
 export const fetchCurrentUser = (): Promise<User> => apiGet<User>('/users/me');
+
+/**
+ * Creates a new user.
+ * @param {PostUserType} data - The data for the new user.
+ * @returns {Promise<GetUserType>} A promise that resolves to the created user data.
+ */
+export const postUser = (data: PostUserType): Promise<GetUserType> =>
+	apiPost<PostUserType, GetUserType>('/users', data);
 
 // /**
 //  * Updates a user by their ID.
