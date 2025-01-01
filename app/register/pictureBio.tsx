@@ -11,6 +11,7 @@ import { useRegisterContext } from '@/providers/RegisterProvider';
 import { router } from 'expo-router';
 import { z } from 'zod';
 import { useData } from '@/providers';
+import { CustomButton } from '@/components/buttons';
 
 const schema = z.object({
 	bio: z
@@ -101,7 +102,7 @@ export const RegisterPage5 = () => {
 						render={({ field: { onChange, value } }) => (
 							<ThemedInput
 								placeholder='B"ographie'
-"							value={value}
+								value={value}
 								onChangeText={onChange}
 								hasError={!!errors.bio}
 								errorMessage={errors.bio?.message}
