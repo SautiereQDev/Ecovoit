@@ -32,7 +32,7 @@ export default function Destination() {
 			{/*	onSuggestionsHeaderPress={() => {}} // TODO*/}
 			{/*	onSuggestionPress={(item) => {*/}
 			{/*		setDestination(item);*/}
-			{/*		router.navigate('/(app)/(post-trip)/date');*/}
+			{/*		router.navigate('/(app)/post-trip/date');*/}
 			{/*	}}*/}
 			{/*/>*/}
 		</PostTripLayout>

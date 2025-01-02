@@ -32,7 +32,7 @@ export default function Time() {
 			{/*<CircleButton*/}
 			{/*	iconName='arrow-forward'*/}
 			{/*	onPress={() => {*/}
-			{/*		router.navigate('/(app)/(post-trip)/seats');*/}
+			{/*		router.navigate('/(app)/post-trip/seats');*/}
 			{/*	}}*/}
 			{/*	size='medium'*/}
 			{/*	style={{*/}

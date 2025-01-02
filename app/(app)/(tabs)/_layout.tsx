@@ -57,7 +57,7 @@ export default function TabsLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='postTrip'
+				name='post-trip'
 				options={{
 					title: 'Publier',
 					tabBarHideOnKeyboard: true,

@@ -6,7 +6,7 @@ import { useTripCreation } from '@/providers/TripCreationProvider';
 import lr_cda from '@/assets/data/lr_cda_division.json';
 import lr_districts from '@/assets/data/lr_districts.json';
 
-export default function Start() {
+export default function Index() {
 	const { setStart, trip } = useTripCreation(); // CONTEXT
 
 	const data = lr_cda.map((field: any) => field.fields.nom_commune);
@@ -32,7 +32,7 @@ export default function Start() {
 			{/*	onSuggestionsHeaderPress={() => {}} // TODO*/}
 			{/*	onSuggestionPress={(item) => {*/}
 			{/*		setStart(item);*/}
-			{/*		router.navigate('/(app)/(post-trip)/destination');*/}
+			{/*		router.navigate('/(app)/post-trip/destination');*/}
 			{/*	}}*/}
 			{/*/>*/}
 		</PostTripLayout>
