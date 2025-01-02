@@ -34,7 +34,6 @@ export const RegisterPage = () => {
 
 	const onSubmit = (data: PostUserType) => {
 		setRegisterQuery({ ...registerQuery, ...data });
-		console.log(registerQuery);
 		router.push('/register/infosPerso');
 	};
 

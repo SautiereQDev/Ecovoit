@@ -13,7 +13,6 @@ export const RegisterPage4 = () => {
 
 	const submit = (data: Vehicle) => {
 		setRegisterQuery({ ...registerQuery, ...data });
-		console.log(registerQuery);
 		router.push('/register/pictureBio');
 	};
 

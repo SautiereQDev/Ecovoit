@@ -6,8 +6,7 @@ import { useData } from '@/providers';
 import { ErrorScreen, LoadingPage } from '@/components/pages';
 
 export default function Index() {
-	const { useUser, useCurrentUserTrips } = useData();
-	// const { data, isLoading, isError } = useUser('me');
+	const { useCurrentUserTrips } = useData();
 	const { data, isLoading, isError } = useCurrentUserTrips();
 
 	if (isLoading) {

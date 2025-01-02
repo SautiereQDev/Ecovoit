@@ -30,7 +30,6 @@ const RegisterPage2 = () => {
 
 	const submit = (data: PostUserType) => {
 		setRegisterQuery({ ...registerQuery, ...data });
-		console.log(registerQuery);
 		router.push('/register/confirmation');
 	};
 

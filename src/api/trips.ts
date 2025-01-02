@@ -31,7 +31,6 @@ export const fetchTrips = (
 	if (sort) {
 		url += `&sort=${sort.field}:${sort.direction}`;
 	}
-	console.log(url);
 	return apiGet<GetTripsType>(url, params);
 };
 
