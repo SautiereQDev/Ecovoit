@@ -52,7 +52,9 @@ export const RegisterProvider: React.FC<{ children: ReactNode }> = ({
 export const useRegisterContext = (): RegisterContextType => {
 	const context = useContext(RegisterContext);
 	if (!context) {
-		throw new Error('useSearchContext must be used within a RegisterProvider');
+		throw new Error(
+			'useRegisterContext must be used within a RegisterProvider'
+		);
 	}
 	return context;
 };
