@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 export default function RootLayout() {
 	configureReanimatedLogger({
 		level: 2, //only show errors
+
 		strict: false,
 	});
 

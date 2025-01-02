@@ -1,8 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import IconButton from '@/components/IconButton';
-import { ThemedText } from '@/components/ThemedText';
+import { IconButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 

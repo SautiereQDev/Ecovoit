@@ -2,11 +2,11 @@ import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { ThemedText } from '@/components/texts';
 import { Vehicle } from '@/types';
-import VehicleCard from '@/components/cards/VehicleCard';
+import { VehicleCard } from '@/components/cards';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import VehicleMenu from '@/components/modal/VehicleMenu';
-import ReturnButton from '@/components/buttons/ReturnButton';
+import { VehicleMenu } from '@/components/modals';
+import { ReturnButton } from '@/components/buttons';
 import { vehiclesStyles } from '@/styles/vehicles';
 
 const Index = () => {

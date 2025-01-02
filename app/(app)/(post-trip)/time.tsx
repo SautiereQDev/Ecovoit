@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import CircleButton from '@/components/CircleButton';
+// import CircleButton from '@/components/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import TimePicker from '@/components/TimePicker';
 import { useTripCreation } from '@/providers/TripCreationProvider';
@@ -29,19 +29,19 @@ export default function Time() {
 				}}
 			/>
 
-			<CircleButton
-				iconName='arrow-forward'
-				onPress={() => {
-					router.navigate('/(app)/(post-trip)/seats');
-				}}
-				size='medium'
-				style={{
-					position: 'absolute',
-					bottom: 25,
-					right: 25,
-					display: nextButtonVisible ? 'flex' : 'none',
-				}}
-			/>
+			{/*<CircleButton*/}
+			{/*	iconName='arrow-forward'*/}
+			{/*	onPress={() => {*/}
+			{/*		router.navigate('/(app)/(post-trip)/seats');*/}
+			{/*	}}*/}
+			{/*	size='medium'*/}
+			{/*	style={{*/}
+			{/*		position: 'absolute',*/}
+			{/*		bottom: 25,*/}
+			{/*		right: 25,*/}
+			{/*		display: nextButtonVisible ? 'flex' : 'none',*/}
+			{/*	}}*/}
+			{/*/>*/}
 		</PostTripLayout>
 	);
 }

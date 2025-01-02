@@ -1,10 +1,10 @@
 import { useTripCreation } from '@/providers/TripCreationProvider';
-import CircleButton from '@/components/CircleButton';
-import SeatPicker from '@/components/SeatPicker';
+// import SeatPicker from '@/components/SeatPicker';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { IconButton } from '@/components/buttons';
 
 export default function Seats() {
 	const { setInitialSeats } = useTripCreation(); // TODO
@@ -23,25 +23,25 @@ export default function Seats() {
 				router.navigate('/(app)/(tabs)/post-trip');
 			}}
 		>
-			<SeatPicker
-				activeColor={colors['secondary-1']}
-				inactiveColor={colors['text-muted']}
-				availableSeats={4} // Hardcode : correspond au nombre de places dispos dans le véhicule par défaut
-				style={{ marginTop: 50 }}
-				onAdd={() => {
-					setSeats(seats + 1);
-				}}
-				onRemove={() => {
-					setSeats(seats - 1);
-				}}
-			/>
-			<CircleButton
-				iconName='arrow-forward'
+			{/*<SeatPicker*/}
+			{/*	activeColor={colors['secondary-1']}*/}
+			{/*	inactiveColor={colors['text-muted']}*/}
+			{/*	availableSeats={4} // Hardcode : correspond au nombre de places dispos dans le véhicule par défaut*/}
+			{/*	style={{ marginTop: 50 }}*/}
+			{/*	onAdd={() => {*/}
+			{/*		setSeats(seats + 1);*/}
+			{/*	}}*/}
+			{/*	onRemove={() => {*/}
+			{/*		setSeats(seats - 1);*/}
+			{/*	}}*/}
+			{/*/>*/}
+			<IconButton
+				name='arrow-forward'
 				onPress={() => {
 					setInitialSeats(seats);
 					router.navigate('/(app)/(post-trip)/confirm');
 				}}
-				size='medium'
+				// size='medium'
 				style={{
 					position: 'absolute',
 					bottom: 25,

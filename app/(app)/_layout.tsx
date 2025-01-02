@@ -1,6 +1,8 @@
-import { useSession } from '@/components/context/SessionProvider';
+import { useSession } from '@/providers';
 import { Redirect, Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { createNotifications } from 'react-native-notificated';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function AppLayout() {
 	const { isAuthenticated } = useSession();

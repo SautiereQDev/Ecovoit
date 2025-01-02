@@ -1,10 +1,10 @@
 import React from 'react';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import { router } from 'expo-router';
-import CircleButton from '@/components/CircleButton';
 import { useTripCreation } from '@/providers/TripCreationProvider';
 import { ThemedText } from '@/components/ThemedText';
 import { View } from 'react-native';
+import { IconButton } from '@/components/buttons';
 
 export default function Confirm() {
 	const { trip } = useTripCreation();
@@ -72,13 +72,13 @@ export default function Confirm() {
 				<ThemedText type='subtitle'>Date : {trip.date}</ThemedText>
 				<ThemedText type='subtitle'>Heure : {trip.time}</ThemedText>
 				<ThemedText type='subtitle'>Passagers : {trip.initialSeats}</ThemedText>
-				<CircleButton
-					iconName='car'
+				<IconButton
+					name='car'
 					onPress={() => {
 						alert('Trajet enregistré');
 						createTrip();
 					}}
-				></CircleButton>
+				></IconButton>
 			</View>
 		</PostTripLayout>
 	);
