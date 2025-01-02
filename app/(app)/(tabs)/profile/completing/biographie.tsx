@@ -1,12 +1,12 @@
 import { View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
+import { ThemedInput } from '@/components/inputs';
+import { ThemedText } from '@/components/texts';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
-import { useRegister } from '@/context/RegisterProvider';
+import { handleBack } from './index';
 import { router } from 'expo-router';
 import { vehiclesStyles } from '@/styles/vehicles';
-import {profileStyles} from '@/styles/profile';
 
 export function Biographie() {
 	const { validateField, errors, data, setData } = useRegister();

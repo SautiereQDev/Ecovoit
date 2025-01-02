@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { useRegister } from '@/context/RegisterProvider';
-import { CustomButton, ThemedText } from '@/components';
+import { CustomButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
 import { profileStyles } from '@/styles/profile';
 
 export const handleBack = (): void => router.push('/profile');

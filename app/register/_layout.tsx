@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack } from 'expo-router';
-import { RegisterProvider } from '@/context/RegisterProvider';
+import { RegisterProvider } from '@/providers/RegisterProvider';
 
 export default function ProfileLayout() {
 	return (

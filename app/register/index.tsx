@@ -1,26 +1,40 @@
-import { SafeAreaView, View } from 'react-native';
-import { router } from 'expo-router';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
 import React from 'react';
+import { SafeAreaView, View } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { router } from 'expo-router';
+import { CustomButton } from '@/components/buttons';
+import { ThemedInput } from '@/components/inputs';
+import { ThemedText } from '@/components/texts';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { notify } from 'react-native-notificated';
 import { registerStyles as styles } from '@/styles';
-import { useRegister } from '@/context';
+import { PostUserType } from '@/types';
+import { useRegisterContext } from '@/providers/RegisterProvider';
+
+// Define the validation schema using zod
+const schema = z.object({
+	username: z.string().min(1, "Nom d'utilisateur est requis"),
+	email: z.string().email('Adresse mail invalide'),
+	password: z
+		.string()
+		.min(6, 'Mot de passe doit contenir au moins 6 caractères'),
+});
 
 export const RegisterPage = () => {
-	const { form, updateField, errors, validatePage } = useRegister();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<PostUserType>({
+		resolver: zodResolver(schema),
+	});
 
-	const handleNext = () => {
-		if (validatePage(1)) {
-			router.push('/register/infosPerso');
-		} else {
-			notify('error', {
-				params: {
-					title: 'Erreur',
-					description: 'Veuillez remplir tous les champs correctement',
-				},
-			});
-		}
+	const { registerQuery, setRegisterQuery } = useRegisterContext();
+
+	const onSubmit = (data: PostUserType) => {
+		setRegisterQuery({ ...registerQuery, ...data });
+		router.push('/register/infosPerso');
 	};
 
 	return (
@@ -34,39 +48,58 @@ export const RegisterPage = () => {
 					Inscription
 				</ThemedText>
 
-				<ThemedInput
-					label="Nom d'utilisateur"
-					value={form.username}
-					onChangeText={(value) => updateField('username', value)}
-					hasError={!!errors.username}
-					errorMessage={errors.username}
+				<Controller
+					control={control}
+					name='username'
+					render={({ field: { onChange, onBlur, value } }) => (
+						<ThemedInput
+							label="Nom d'utilisateur"
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							hasError={!!errors.username}
+							errorMessage={errors.username?.message}
+						/>
+					)}
 				/>
 
-				<ThemedInput
-					placeholder='Adresse mail'
-					value={form.email}
-					onChangeText={(value) => updateField('email', value)}
-					hasError={!!errors.email}
-					errorMessage={errors.email}
-					label={'Adresse mail'}
-					keyboardType={'email-address'}
+				<Controller
+					control={control}
+					name='email'
+					render={({ field: { onChange, onBlur, value } }) => (
+						<ThemedInput
+							label='Adresse mail'
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							hasError={!!errors.email}
+							errorMessage={errors.email?.message}
+							keyboardType='email-address'
+						/>
+					)}
 				/>
 
-				<ThemedInput
-					placeholder='Mot de passe'
-					value={form.password}
-					onChangeText={(value) => updateField('password', value)}
-					hasError={!!errors.password}
-					errorMessage={errors.password}
-					label={'Mot de passe'}
-					secureTextEntry
+				<Controller
+					control={control}
+					name='password'
+					render={({ field: { onChange, onBlur, value } }) => (
+						<ThemedInput
+							label='Mot de passe'
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							hasError={!!errors.password}
+							errorMessage={errors.password?.message}
+							secureTextEntry
+						/>
+					)}
 				/>
 
 				<CustomButton
 					text='Suivant'
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
-					onPress={handleNext}
+					onPress={handleSubmit(onSubmit)}
 					buttonStyle={styles.buttonNext}
 				/>
 			</View>

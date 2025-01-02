@@ -1,48 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import {
-	ActivityIndicator,
-	Image,
-	Pressable,
-	ScrollView,
-	View,
-} from 'react-native';
-import { useSession } from '@/context/SessionProvider';
-import { IconButton, ThemedText } from '@/components';
-import GetImage from '@/components/modal/GetImage';
-import Colors from '@/constants/Colors';
-import CustomButton from '@/components/buttons/CustomButton';
+import React, { useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { CustomButton, IconButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
 import { useRouter } from 'expo-router';
-import { useProfile } from '@/context/ProfileProvider';
-import { ProfileCompletion } from '@/components/ProfileCompletion';
-import { useProfileCompletion } from '@/hooks/useProfileCompletion';
-import { profileStyles } from '@/styles/profile';
-import { axiosInstance } from '@/app/_layout';
+import { useData, useSession } from '@/providers';
+import { profileStyles } from '@/styles';
+import { Colors } from '@/constants';
 
 export function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
-	const { signOut, isLoading } = useSession();
-	const { user, setProfileImage } = useProfile();
+	const { signOut, isLoading: sessionLoading } = useSession();
 
-	const { getMissingFields } = useProfileCompletion();
-	const missingFields = getMissingFields();
+	const { useUser } = useData();
+	const { data: user, isLoading: loading } = useUser('me');
+
+	console.log('user', user);
 
 	const router = useRouter();
 
-	useEffect(() => {
-		axiosInstance
-			.get('https://api-ev-qq.pimous.dev/users/me', {
-				headers: { Authorization: '5877943231555567616' },
-			})
-			.then((response) => {
-				console.log(response.data);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}, []);
-
-	if (isLoading) {
+	if (sessionLoading ?? loading) {
 		return (
 			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 				<ActivityIndicator
@@ -54,6 +31,18 @@ export function Profile() {
 		);
 	}
 
+	if (!user) {
+		return (
+			<View>
+				<ThemedText>
+					Impossible de lire les données, veuillez réssayer plutard
+				</ThemedText>
+			</View>
+		);
+	}
+
+	console.log('user', user);
+
 	return (
 		<ScrollView style={profileStyles.container}>
 			<ThemedText
@@ -63,20 +52,20 @@ export function Profile() {
 				Votre profile
 			</ThemedText>
 			<View>
-				<GetImage
-					visible={showModal}
-					onClose={() => setShowModal(false)}
-					setImage={setProfileImage}
-				/>
+				{/*<GetImage*/}
+				{/*	visible={showModal}*/}
+				{/*	onClose={() => setShowModal(false)}*/}
+				{/*	setImage={setProfileImage}*/}
+				{/*/>*/}
 				<Pressable onPress={() => setShowModal(true)}>
-					<Image
-						source={
-							user.profilePicture
-								? { uri: user.profilePicture }
-								: require('@/assets/images/user-picture.jpg')
-						}
-						style={profileStyles.profilePicture}
-					/>
+					{/*<Image*/}
+					{/*	source={*/}
+					{/*		user.profilePicture*/}
+					{/*			? { uri: user.profilePicture }*/}
+					{/*			: require('@/assets/images/user-picture.jpg')*/}
+					{/*	}*/}
+					{/*	style={profileStyles.profilePicture}*/}
+					{/*/>*/}
 				</Pressable>
 				<ThemedText
 					type={'header6'}
@@ -89,14 +78,14 @@ export function Profile() {
 						type={'header6'}
 						style={profileStyles.biographyText}
 					>
-						A propos de {user?.firstName}
+						A propos de {user?.username}
 					</ThemedText>
 					<ThemedText style={profileStyles.biographyText}>
 						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
 				{/*TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois*/}
-				{missingFields.length > 0 && <ProfileCompletion />}
+				{/*{missingFields.length > 0 && <ProfileCompletion />}*/}
 				<IconButton
 					lib='FontAwesome'
 					// @ts-ignore

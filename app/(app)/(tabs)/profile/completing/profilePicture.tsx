@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedText } from '@/components';
-import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
+import { CustomButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
+import { handleBack } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
 import ImagePickerButton from '@/components/buttons/ImagePickerButton';
 import { vehiclesStyles } from '@/styles/vehicles';

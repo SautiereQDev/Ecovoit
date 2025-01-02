@@ -1,9 +1,7 @@
 import { View } from 'react-native';
 import React from 'react';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import CreateVehicle from '@/components/forms/CreateVehicle';
-import { useProfile } from '@/context/ProfileProvider';
-import { useRegister } from '@/context/RegisterProvider';
 import { Vehicle } from '@/types';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
@@ -30,7 +28,7 @@ const Label = () => {
 	// Utilisation du paramètre [label] pour récupérer les données initiales du véhicule à modifier
 	return (
 		<View style={vehiclesStyles.container}>
-			<ReturnButton/>
+			<ReturnButton />
 			<ThemedText type={'header3'}>Modifier un vehicule</ThemedText>
 			{/* @ts-ignore*/}
 			<CreateVehicle

@@ -57,15 +57,16 @@ export default function AppLayout() {
 	}
 
 	return (
-		// Permet l'utilisation de FlatList "
 		<GestureHandlerRootView>
-			<Stack
-				screenOptions={{
-					headerShown: false,
-				}}
-			>
-				<Stack.Screen name='(tabs)' />
-			</Stack>
+			<NotificationsProvider>
+				<Stack
+					screenOptions={{
+						headerShown: false,
+					}}
+				>
+					<Stack.Screen name='(tabs)' />
+				</Stack>
+			</NotificationsProvider>
 		</GestureHandlerRootView>
 	);
 }

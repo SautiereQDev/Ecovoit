@@ -1,6 +1,6 @@
 import { Pressable, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
-import { ThemedText } from '@/components';
+import { ThemedText } from '@/components/texts';
 import { Vehicle } from '@/types';
 import VehicleCard from '@/components/cards/VehicleCard';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -8,7 +8,6 @@ import { router } from 'expo-router';
 import VehicleMenu from '@/components/modal/VehicleMenu';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { vehiclesStyles } from '@/styles/vehicles';
-
 
 const Index = () => {
 	const newVehicle = () => {
@@ -52,7 +51,7 @@ const Index = () => {
 
 	return (
 		<SafeAreaView style={vehiclesStyles.container}>
-			<ReturnButton/>
+			<ReturnButton />
 			<ThemedText
 				type={'header3'}
 				style={vehiclesStyles.title}

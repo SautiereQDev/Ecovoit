@@ -1,15 +1,14 @@
 import { View } from 'react-native';
 import React from 'react';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
-import { handleBack } from '@/app/(app)/(tabs)/profile/completing/index';
+import { CustomButton } from '@/components/buttons';
+import { ThemedText } from '@/components/texts';
+import { ThemedInput } from '@/components/inputs';
+import { handleBack } from './index';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { useRegister } from '@/context/RegisterProvider';
 import { router } from 'expo-router';
 import { vehiclesStyles } from '@/styles/vehicles';
 
 const LastName = () => {
-	const { validateField, errors, data, setData } = useRegister();
-
 	const handleSubmit = (): void => {
 		validateField('lastName', data.lastName);
 		if (!errors.lastName) {

@@ -1,17 +1,85 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { CustomButton, ThemedInput, ThemedText } from '@/components';
-import { ImagePickerButton } from '@/components/buttons/ImagePickerButton';
-import { useRegister } from '@/context/RegisterProvider';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { registerStyles as styles } from '@/styles';
-import { validateField } from '@/utils';
+import { ThemedInput } from '@/components/inputs';
+import { ThemedText } from '@/components/texts';
+import { Controller, useForm } from 'react-hook-form';
+import { GetUserType, PostUserType } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRegisterContext } from '@/providers/RegisterProvider';
+import { router } from 'expo-router';
+import { z } from 'zod';
+import { useData } from '@/providers';
+import { CustomButton } from '@/components/buttons';
+
+const schema = z.object({
+	bio: z
+		.string()
+		.max(128, 'La biographie doit contenir moins de 128 caractères'),
+});
 
 export const RegisterPage5 = () => {
-	const { form, updateField, errors, submitForm: submit } = useRegister();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<PostUserType>({
+		resolver: zodResolver(schema),
+	});
 
-	const updateImage = (image: string | null) => {
-		updateField('profilePicture', image);
+	const { registerQuery, setRegisterQuery } = useRegisterContext();
+	const { useAddUser, useAddVehicle } = useData();
+	const addUser = useAddUser();
+	const addVehicle = useAddVehicle();
+
+	const submit = (data: PostUserType) => {
+		setRegisterQuery({ ...registerQuery, ...data });
+		console.log(registerQuery);
+
+		addUser.mutate(
+			{
+				userData: {
+					firstName: registerQuery.firstName,
+					lastName: registerQuery.lastName,
+					username: registerQuery.username,
+					email: registerQuery.email,
+					password: registerQuery.password,
+					bio: registerQuery.bio,
+				},
+			},
+			{
+				onSuccess: (user: GetUserType) => {
+					console.log('User added');
+					if (registerQuery.label !== '') {
+						addVehicle.mutate(
+							{
+								userId: user.id as unknown as string,
+								vehicleData: {
+									label: registerQuery.label,
+									consumption: registerQuery.consumption,
+									emission: registerQuery.emission,
+								},
+							},
+							{
+								onSuccess: () => {
+									console.log('Vehicle added');
+									router.push('/');
+								},
+								onError: (error) => {
+									console.error(error);
+									router.push('/error');
+								},
+							}
+						);
+					}
+				},
+				onError: (error) => {
+					console.error(error);
+					router.push('/error');
+				},
+			}
+		);
 	};
 
 	return (
@@ -26,38 +94,31 @@ export const RegisterPage5 = () => {
 				</ThemedText>
 				<View>
 					<ThemedText style={styles.optionalText}>
-						Photo de profil (optionnel)
-					</ThemedText>
-					<ImagePickerButton
-						image={form.profilePicture}
-						setImage={updateImage}
-						style={styles.imagePicker}
-					/>
-				</View>
-				<View>
-					<ThemedText style={styles.optionalText}>
 						Biographie (optionnel)
 					</ThemedText>
-					<ThemedInput
-						placeholder='Biographie'
-						value={form.bio}
-						onChangeText={(value) => {
-							updateField('bio', value);
-							validateField('bio', value);
-						}}
-						hasError={!!errors.biographie}
-						errorMessage={errors.biographie}
-						label={'Biographie'}
-						multiline
-						numberOfLines={4}
-						style={styles.biographieInput}
+					<Controller
+						name={'bio'}
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<ThemedInput
+								placeholder='B"ographie'
+								value={value}
+								onChangeText={onChange}
+								hasError={!!errors.bio}
+								errorMessage={errors.bio?.message}
+								label={'Biographie'}
+								multiline
+								numberOfLines={4}
+								style={styles.biographieInput}
+							/>
+						)}
 					/>
 				</View>
 				<CustomButton
 					text='Terminer'
 					textProps={{ color: 'background' }}
 					backgroundColor={'primary'}
-					onPress={submit}
+					onPress={handleSubmit(submit)}
 					buttonStyle={styles.buttons}
 				/>
 			</View>

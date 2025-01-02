@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { CustomButton } from '@/components';
+import { CustomButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';

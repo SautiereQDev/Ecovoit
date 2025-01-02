@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { SearchProvider } from '@/context/SearchProvider';
+import { SearchProvider } from '@/providers/SearchProvider';
 
 export default function SearchTripLayout() {
 	return (
@@ -9,8 +9,8 @@ export default function SearchTripLayout() {
 					headerShown: false,
 				}}
 			>
-				<Stack.Screen name='index'/>
-				<Stack.Screen name='search'/>
+				<Stack.Screen name='index' />
+				<Stack.Screen name='search' />
 			</Stack>
 		</SearchProvider>
 	);
