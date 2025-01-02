@@ -1,8 +1,8 @@
 import React from 'react';
-import PostTripLayout from '@/components/layouts/PostTripLayout';
+import { PostTripLayout } from '@/components/layouts';
 import { router } from 'expo-router';
 import { useTripCreation } from '@/providers/TripCreationProvider';
-import { ThemedText } from '@/components/ThemedText';
+import { ThemedText } from '@/components/texts';
 import { View } from 'react-native';
 import { IconButton } from '@/components/buttons';
 

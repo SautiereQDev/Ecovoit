@@ -1,5 +1,5 @@
 import { useColorScheme } from 'react-native';
-import { colors } from '@/constants/drafts/Colors';
+import { Colors } from '@/constants';
 
 export function useThemeColor(theme?: 'light' | 'dark') {
 	let usedTheme = useColorScheme() ?? 'light';
@@ -7,5 +7,5 @@ export function useThemeColor(theme?: 'light' | 'dark') {
 	if (theme) {
 		usedTheme = theme;
 	}
-	return colors[usedTheme];
+	return Colors[usedTheme];
 }
