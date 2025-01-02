@@ -1,5 +1,5 @@
-import CustomButton from '@/components/drafts/CustomButton';
-import { StyleSheet, View, Image } from 'react-native';
+import CustomButton from '@/components/CustomButton';
+import { Image, StyleSheet, View } from 'react-native';
 import Cover from '@/assets/images/Ecovoit_logo.png'; // TODO: Fix the TS
 import { router } from 'expo-router';
 import { useThemeColor } from '@/hooks/useThemeColor';

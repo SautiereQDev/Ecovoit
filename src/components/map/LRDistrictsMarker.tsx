@@ -1,10 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import { Marker } from 'react-native-maps';
-import LocRecord from '@/types/LocRecord';
+import LocRecord from '@/types/LocRecords';
 
-interface LRDistrictsMarkersProps {}
-
-export default function LRDistrictsMarkers({}: LRDistrictsMarkersProps) {
+export const LRDistrictsMarkers = () => {
 	const records: LocRecord.LRDistricts[] = require('@/assets/data/lr_districts.json');
 
 	return (
@@ -18,12 +16,14 @@ export default function LRDistrictsMarkers({}: LRDistrictsMarkersProps) {
 							longitude: record.fields.coordinates[0],
 						}}
 						title={record.fields.cq_nom}
+						description={record.fields.cq_nom}
+						style={styles.marker}
 					/>
 				);
 			})}
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: {

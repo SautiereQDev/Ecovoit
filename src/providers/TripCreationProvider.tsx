@@ -1,4 +1,3 @@
-import { Trip } from '@/types/Ecovoit';
 import {
 	createContext,
 	PropsWithChildren,
@@ -6,12 +5,50 @@ import {
 	useReducer,
 } from 'react';
 
+// {
+//   "vehicle": "Foo Bar Car",
+//   "seats": 7, // Nombre de place initial
+//   "datetime": 1729843200,
+//   "points": [
+//     {
+//       "type": "start",
+//       "locationName": "Les Minimes"
+//     },
+//     {
+//       "type": "end",
+//       "locationName": "La Préfecture - Verdun - Saintes Claires"
+//     }
+//   ]
+// }
+
 interface TripCreationContextType {
-	trip: Trip | null;
+	trip: {
+		start: string;
+		destination: string;
+		date: string;
+		time: string;
+		initialSeats: number;
+	};
+	setStart: (start: string) => void;
+	setDestination: (destination: string) => void;
+	setDate: (date: string) => void;
+	setTime: (time: string) => void;
+	setInitialSeats: (initialSeats: number) => void;
 }
 
 const TripCreationContext = createContext<TripCreationContextType>({
-	trip: null,
+	trip: {
+		start: 'defaultStart',
+		destination: 'defaultDestination',
+		date: 'defaultDate',
+		time: 'defaultTime',
+		initialSeats: 0,
+	},
+	setStart: (start) => {},
+	setDestination: (destination) => {},
+	setDate: (date: string) => {},
+	setTime: (time: string) => {},
+	setInitialSeats: (initialSeats: number) => {},
 });
 
 export function useTripCreation() {
@@ -26,49 +63,79 @@ export function useTripCreation() {
 	return value;
 }
 
-type TripReducerActions = {
-	type: 'a' | 'b' | 'c' | null;
-};
-
-function tripReducer(state: Trip, action: TripReducerActions): Trip {
-	switch (action.type) {
-		case 'a': {
-			return {
-				...state,
-				// TO DO
-			};
+export function TripCreationProvider({ children }: PropsWithChildren): JSX.Element {
+	function reducer(state, action) {
+		switch (action.type) {
+			case 'set_start':
+				return {
+					...state,
+					start: action.payload,
+				};
+			case 'set_destination':
+				return {
+					...state,
+					destination: action.payload,
+				};
+			case 'set_date':
+				return {
+					...state,
+					date: action.payload,
+				};
+			case 'set_time':
+				return {
+					...state,
+					time: action.payload,
+				};
+			case 'set_available_seats':
+				return {
+					...state,
+					initialSeats: action.payload,
+				};
+			default:
+				throw Error('Unknown action.');
 		}
-		case 'b': {
-			return {
-				...state,
-				// TO DO
-			};
-		}
-		case 'c': {
-			return {
-				...state,
-				// TO DO
-			};
-		}
-		default:
-			throw new Error('Unknown action: ' + action.type);
 	}
-}
 
-export function TripCreationProvider({
-	children,
-}: PropsWithChildren): JSX.Element {
-	const initialTrip: Trip = {
-		vehicle: null,
-		seats: null,
-		datetime: null,
-		points: [],
-	};
-
-	const [state, dispatch] = useReducer(tripReducer, initialTrip);
+	const [state, dispatch] = useReducer(reducer, {
+		start: 'initialStart',
+		destination: 'initialDestination',
+		date: 'initialDate',
+		time: 'initialTime',
+		initialSeats: 0,
+	});
 
 	const providedContext: TripCreationContextType = {
 		trip: state,
+		setStart: (start: string) => {
+			dispatch({
+				type: 'set_start',
+				payload: start,
+			});
+		},
+		setDestination: (destination: string) => {
+			dispatch({
+				type: 'set_destination',
+				payload: destination,
+			});
+		},
+		setDate: (date: string) => {
+			dispatch({
+				type: 'set_date',
+				payload: date,
+			});
+		},
+		setTime: (time: string) => {
+			dispatch({
+				type: 'set_time',
+				payload: time,
+			});
+		},
+		setInitialSeats: (initialSeats: number) => {
+			dispatch({
+				type: 'set_available_seats',
+				payload: initialSeats,
+			});
+		},
 	};
 
 	return (

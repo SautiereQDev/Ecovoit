@@ -3,9 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { CarParksRecord } from '@/types/OpenData';
 import { Marker } from 'react-native-maps';
 
-interface CarParksProps {}
-
-export default function CarParks({}: CarParksProps) {
+export const CarParks = () => {
 	const { error, isLoading, openData } = useOpenDataLR<CarParksRecord[]>(
 		'lieux_de_stationnement_sur_la_rochelle'
 	);
@@ -24,7 +22,7 @@ export default function CarParks({}: CarParksProps) {
 			))}
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: {

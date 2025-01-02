@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import CircleButton from '@/components/drafts/CircleButton';
+import CircleButton from '@/components/CircleButton';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
-import TimePicker from '@/components/drafts/TimePicker';
-import { useTripCreation } from '@/context/TripCreationProvider';
+import TimePicker from '@/components/TimePicker';
+import { useTripCreation } from '@/providers/TripCreationProvider';
 
 export default function Time() {
 	const { setTime } = useTripCreation(); // TODO

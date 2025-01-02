@@ -1,9 +1,9 @@
 import React from 'react';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import { router } from 'expo-router';
-import CircleButton from '@/components/drafts/CircleButton';
-import { useTripCreation } from '@/context/TripCreationProvider';
-import { ThemedText } from '@/components/drafts/ThemedText';
+import CircleButton from '@/components/CircleButton';
+import { useTripCreation } from '@/providers/TripCreationProvider';
+import { ThemedText } from '@/components/ThemedText';
 import { View } from 'react-native';
 
 export default function Confirm() {

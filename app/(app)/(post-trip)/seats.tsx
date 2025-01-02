@@ -1,6 +1,6 @@
-import { useTripCreation } from '@/context/TripCreationProvider';
-import CircleButton from '@/components/drafts/CircleButton';
-import SeatPicker from '@/components/drafts/SeatPicker';
+import { useTripCreation } from '@/providers/TripCreationProvider';
+import CircleButton from '@/components/CircleButton';
+import SeatPicker from '@/components/SeatPicker';
 import PostTripLayout from '@/components/layouts/PostTripLayout';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { router } from 'expo-router';

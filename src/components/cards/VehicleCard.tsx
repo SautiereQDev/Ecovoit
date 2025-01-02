@@ -8,7 +8,7 @@ type VehicleCardProps = {
 	style?: any;
 };
 
-const VehicleCard = ({ vehicle, style }: VehicleCardProps) => {
+export const VehicleCard = ({ vehicle, style }: VehicleCardProps) => {
 	return (
 		<View style={[style, styles.container]}>
 			<ThemedText

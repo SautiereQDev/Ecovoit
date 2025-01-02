@@ -1,6 +1,6 @@
 import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 LocaleConfig.locales['fr'] = {

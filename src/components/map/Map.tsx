@@ -13,12 +13,12 @@ interface MapProps {
 	onMarkerPress?: (e: MarkerPressEvent) => void;
 }
 
-export default function Map({
+export const Map = ({
 	location,
 	children,
 	onMarkerPress,
 	...props
-}: MapProps & PropsWithChildren & ViewProps) {
+}: MapProps & PropsWithChildren & ViewProps) => {
 	const [region, setRegion] = useState({
 		latitude: location?.coords.latitude ?? DEFAULT_LATITUDE,
 		longitude: location?.coords.longitude ?? DEFAULT_LONGITUDE,
@@ -50,7 +50,7 @@ export default function Map({
 			</MapView>
 		</View>
 	);
-}
+};
 const styles = StyleSheet.create({
 	container: {},
 

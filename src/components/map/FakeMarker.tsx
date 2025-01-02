@@ -17,13 +17,13 @@ interface FakeMarkerProps {
 	onLoading: boolean;
 }
 
-export default function FakeMarker({
+export const FakeMarker = ({
 	icon = 'epingle',
 	region,
 	size = 'xlarge',
 	shadow = false,
 	onLoading = false,
-}: FakeMarkerProps) {
+}: FakeMarkerProps) => {
 	return (
 		<View style={styles.container}>
 			<Pressable>
@@ -46,7 +46,7 @@ export default function FakeMarker({
 			</Pressable>
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: {

@@ -5,7 +5,7 @@ interface MapHeaderProps {
 	inputValue?: string;
 }
 
-export default function MapHeader({ inputValue = '' }: MapHeaderProps) {
+export const MapHeader = ({ inputValue = '' }: MapHeaderProps) => {
 	const handleOnChangeText = (text: string) => {};
 
 	return (
@@ -19,7 +19,9 @@ export default function MapHeader({ inputValue = '' }: MapHeaderProps) {
 			</TextInput>
 		</View>
 	);
-}
+};
+
+export default MapHeader;
 
 const styles = StyleSheet.create({
 	header: {

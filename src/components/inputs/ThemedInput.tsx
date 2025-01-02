@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
-import { ThemedText } from '@/components/drafts/ThemedText';
+import { ThemedText } from '@/components/ThemedText';
 
 interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
 	theme?: 'Primary' | 'Secondary' | 'TextArea';

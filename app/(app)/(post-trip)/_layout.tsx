@@ -1,4 +1,4 @@
-import { TripCreationProvider } from '@/context/TripCreationProvider';
+import { TripCreationProvider } from '@/providers/TripCreationProvider';
 import { Stack } from 'expo-router';
 
 export default function Layout() {

@@ -1,12 +1,12 @@
 import { PropsWithChildren } from 'react';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import IconButton from '@/components/drafts/IconButton';
-import { ThemedText } from '@/components/drafts/ThemedText';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import IconButton from '@/components/IconButton';
+import { ThemedText } from '@/components/ThemedText';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function PostTripLayout({
+export const PostTripLayout = ({
 	title,
 	children,
 	iconTopLeft = 'arrow-back-sharp',
@@ -19,7 +19,7 @@ export default function PostTripLayout({
 	onPressTopRight?: () => void;
 	iconTopLeft?: keyof typeof Ionicons.glyphMap;
 	iconTopRight?: keyof typeof Ionicons.glyphMap;
-}>) {
+}>) => {
 	const colors = useThemeColor();
 
 	return (
@@ -50,7 +50,9 @@ export default function PostTripLayout({
 			{children}
 		</SafeAreaView>
 	);
-}
+};
+
+export default PostTripLayout;
 
 const styles = StyleSheet.create({
 	container: {

@@ -18,7 +18,7 @@ interface MyMapProps {
 	location?: LocationObject | null;
 }
 
-export default function MyMap({ location }: MyMapProps) {
+export const MyMap = ({ location }: MyMapProps) => {
 	const [region, setRegion] = useState({
 		latitude: location?.coords.latitude ?? DEFAULT_LATITUDE,
 		longitude: location?.coords.longitude ?? DEFAULT_LONGITUDE,
@@ -73,7 +73,7 @@ export default function MyMap({ location }: MyMapProps) {
 			/>
 		</View>
 	);
-}
+};
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
