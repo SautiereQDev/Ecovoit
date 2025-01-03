@@ -1,4 +1,4 @@
-import { Point, ShortPointType, ShortUserType, Vehicle } from '@/types/Ecovoit';
+import { Location, Point, ShortPointType, ShortUserType, Vehicle } from '@/types/Ecovoit';
 import uri from 'ajv/lib/runtime/uri';
 
 /**
@@ -126,18 +126,21 @@ export type GetTripsPointsType = Point[];
  * Type for the payload of the POST /trips/{id}/points endpoint.
  */
 export type PostTripsPointsType = {
-	// TODO: To be done once the documentation is fixed
+	type: 'checkpoint' | 'start' | 'end';
+	locationName: string;
+	previous?: string | null; // point id
+	next?: string | null; // point id
 };
 
 /**
  * Type for the response of the GET /points/{id} endpoint.
  */
-export type GetPointsType = Point;
+export type GetPointType = Point;
 
 /**
  * Type for the response of the GET /points/location endpoint.
  */
-export type GetPointsLocationType = Location;
+export type GetPointLocationType = Location;
 
 /**
  * Type for the payload of the POST /passengers/{trip} endpoint.
