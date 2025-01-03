@@ -13,6 +13,7 @@ export function useAxiosGet<T>(url: string): [boolean, any, T | null] {
 				const res = await axios.get(url);
 				const data = res.data;
 
+				// @ts-ignore
 				setApiData(data);
 				setTimeout(() => {
 					setIsLoading(false);

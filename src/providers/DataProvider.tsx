@@ -66,7 +66,7 @@ interface DataContextProps {
 	>;
 	useCurrentUserTrips: () => ReturnType<typeof useQuery<GetTripsType>>;
 	useCurrentUser: () => ReturnType<typeof useQuery<GetUserType>>;
-	useLocation: () => ReturnType<typeof useQuery<GetLocationsType[]>>;
+	useLocation: () => ReturnType<typeof useQuery<GetLocationsType>>;
 }
 
 export const DataContext = createContext<DataContextProps | undefined>(
@@ -194,7 +194,7 @@ const useCurrentUserTrips = () => {
 };
 
 const useLocations = () => {
-	return useQuery<GetLocationsType[]>(['locations'], () => fetchLocations());
+	return useQuery<GetLocationsType>(['locations'], () => fetchLocations());
 };
 
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {

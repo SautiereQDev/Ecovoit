@@ -17,14 +17,25 @@ const apiClient: AxiosInstance = axios.create({
 const mock = new EVAPIMockAdapter(apiClient);
 
 // Ajouter un interceptor pour journaliser l'URL de chaque requête
-apiClient.interceptors.request.use((config) => {
-	const url = new URL(config.url!, config.baseURL);
-	if (config.params) {
-		Object.keys(config.params).forEach(key => url.searchParams.append(key, config.params[key]));
+apiClient.interceptors.request.use(
+	(config: {
+		url: string | URL;
+		baseURL: string | URL | undefined;
+		params: { [x: string]: string };
+		method: string;
+	}) => {
+		const url = new URL(config.url, config.baseURL);
+		if (config.params) {
+			Object.keys(config.params).forEach((key) =>
+				url.searchParams.append(key, config.params[key])
+			);
+		}
+		console.log(
+			`Request Type: ${config.method?.toUpperCase()} | Request URL: ${url.toString()}`
+		);
+		return config;
 	}
-	console.log(`Request Type: ${config.method?.toUpperCase()} | Request URL: ${url.toString()}`);
-	return config;
-});
+);
 
 /**
  * Extract data from Axios response.

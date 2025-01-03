@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { PostTripType } from '@/types';
 import { useState } from 'react';
 import { globalStyles } from '@/styles';
+import SearchBar from '@/components/UI/SearchBar';
 
 export const PostTrip = () => {
 	const data = lr_cda.map((field: any) => field.fields.nom_commune);
@@ -40,6 +41,15 @@ export const PostTrip = () => {
 			>
 				Creation d'un trajet
 			</ThemedText>
+			<SearchBar
+				query={registerQuery.points[0]?.locationName || ''}
+				setQuery={(newValue) => {
+					setRegisterQuery((prev) => ({
+						...prev,
+						points: [{ locationName: newValue, type: '' }],
+					}));
+				}}
+			/>
 			{/* Départ	*/}
 			{/* Destination	*/}
 			{/* Checkpoint */}

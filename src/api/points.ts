@@ -42,5 +42,5 @@ export const deleteLocation = (pointId: string): Promise<unknown> =>
  * Fetches all locations.
  * @returns {Promise<Location[]>} - A promise that resolves to an array of locations.
  */
-export const fetchLocations = (): Promise<GetLocationsType[]> =>
-	apiGet<GetLocationsType[]>('/points/locations');
+export const fetchLocations = (): Promise<GetLocationsType> =>
+	apiGet<GetLocationsType>('/points/locations');
