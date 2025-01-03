@@ -2,12 +2,12 @@ import MapView, { Region } from 'react-native-maps';
 
 import { StyleSheet, View } from 'react-native';
 import { useEffect, useState } from 'react';
-import FakeMarker from './FakeMarker';
+import { FakeMarker } from './FakeMarker';
 import { useAxiosGet } from '@/hooks/useAxios';
 import { FeatureCollection } from '@/types/GeoCode';
-import MapHeader from './MapHeader';
+import { MapHeader } from './MapHeader';
 import { LocationObject } from 'expo-location';
-import LRDistrictsMarkers from './LRDistrictsMarker';
+import { LRDistrictsMarkers } from './LRDistrictsMarker';
 
 const DEFAULT_LATITUDE = 46.16928586861127;
 const DEFAULT_LONGITUDE = -1.1222541891038418;

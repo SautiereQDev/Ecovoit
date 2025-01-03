@@ -48,7 +48,7 @@ export const RouteMap = ({
 				console.error('Failed to load route:', error);
 			}
 		};
-		loadRoute();
+		loadRoute().catch(console.error);
 	}, [start, end, waypoints]);
 
 	const initialRegion = {

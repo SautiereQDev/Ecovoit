@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { Image, Modal, StyleSheet, View, ViewStyle } from 'react-native';
-import CustomButton from '@/components/buttons/CustomButton';
-import { GetImage } from '@/components/modals';
+import CustomButton from './CustomButton';
+import { GetImage } from '../modals/GetImage';
 
 /**
  * Props for the ImagePickerButton component.

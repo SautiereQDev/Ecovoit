@@ -3,7 +3,7 @@ import React from 'react';
 import { ThemedText } from '@/components/texts';
 import Colors from '@/constants/Colors';
 import { Link } from 'expo-router';
-import { ConfirmationMenu } from '@/components/modals';
+import { ConfirmationMenu } from './ConfirmationModal';
 
 type VehicleMenuProps = {
 	visible: boolean;

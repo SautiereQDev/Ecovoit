@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useData } from '@/providers';
 import { ErrorScreen, LoadingPage } from '@/components/pages';
 
-export default function Index() {
+export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { data, isLoading, isError } = useCurrentUserTrips();
 
@@ -60,7 +60,9 @@ export default function Index() {
 			</View>
 		</SafeAreaView>
 	);
-}
+};
+
+export default Index;
 
 const styles = StyleSheet.create({
 	container: {
