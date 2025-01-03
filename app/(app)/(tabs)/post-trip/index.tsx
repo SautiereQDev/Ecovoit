@@ -10,7 +10,10 @@ export const Index = () => {
 	const initialState: PostTripType = {
 		datetime: 0,
 		description: undefined,
-		points: [],
+		points: [
+			{ locationName: '', type: 'start' },
+			{ locationName: '', type: 'end' },
+		],
 		seats: 0,
 		vehicle: '',
 	};
