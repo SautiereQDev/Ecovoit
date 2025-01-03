@@ -4,6 +4,7 @@ import { GetLocationsType, Location } from '@/types';
 import { View } from 'react-native';
 import { ThemedInput } from '@/components/inputs';
 import { ThemedText } from '@/components/texts';
+import Fuse, { FuseResult } from 'fuse.js';
 
 interface SearchBarProps {
 	query: string;
@@ -17,9 +18,14 @@ const SearchBar = ({ query, setQuery }: SearchBarProps) => {
 
 	useEffect(() => {
 		if (query && data) {
-			const filteredSuggestions = data.filter((location: Location) =>
-				location.name.toLowerCase().includes(query.toLowerCase())
-			);
+			const fuse = new Fuse(data, {
+				keys: ['name'], // Indique qu'on souhaite comparer le name
+				threshold: 0.4, // Règle le precision de la recherche
+				sortFn: (a, b) => (a.score < b.score ? -1 : 1), // Trie les résultats par pertinence
+			});
+			const filteredSuggestions = fuse
+				.search(query)
+				.map((result: FuseResult<Location>) => result.item);
 			setSuggestions(filteredSuggestions);
 		} else {
 			setSuggestions([]);
