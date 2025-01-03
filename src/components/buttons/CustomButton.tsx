@@ -48,7 +48,7 @@ type Props = PressableProps & {
 export function CustomButton({
 	buttonStyle,
 	text,
-	textProps = { color: 'background' },
+	textProps = { color: 'text' },
 	backgroundColor = 'primary',
 	size = 'default',
 	...restProps
@@ -66,7 +66,7 @@ export function CustomButton({
 			<ThemedText
 				type={textProps?.type ?? 'bigger'}
 				color={textProps?.color}
-				style={styles.text}
+				style={[styles.text, { color: Colors.light[textProps?.color] }]}
 			>
 				{text}
 			</ThemedText>
