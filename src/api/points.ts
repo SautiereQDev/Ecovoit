@@ -1,14 +1,14 @@
 import { Location } from '@/types/Ecovoit';
 import { apiGet, apiPost } from '@/api/client';
-import { GetPointType, PostTripsPointsType } from '@/types';
+import { GetLocationsType, GetPointType, PostTripsPointsType } from '@/types';
 
 /**
  * Fetches the points of a specific trip.
  * @param {string} tripId - The ID of the trip.
  * @returns {Promise<Location[]>} - A promise that resolves to an array of locations.
  */
-export const fetchTripPoints = (tripId: string): Promise<Location[]> =>
-	apiGet<Location[]>(`/trips/${tripId}/points`);
+export const fetchTripPoints = (tripId: string): Promise<GetLocationsType> =>
+	apiGet<GetLocationsType>(`/trips/${tripId}/points`);
 
 /**
  * Posts a new point to a specific trip.
@@ -42,5 +42,5 @@ export const deleteLocation = (pointId: string): Promise<unknown> =>
  * Fetches all locations.
  * @returns {Promise<Location[]>} - A promise that resolves to an array of locations.
  */
-export const fetchLocations = (): Promise<Location[]> =>
-	apiGet<Location[]>('/points/locations');
+export const fetchLocations = (): Promise<GetLocationsType[]> =>
+	apiGet<GetLocationsType[]>('/points/locations');

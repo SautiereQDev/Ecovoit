@@ -140,7 +140,7 @@ export type GetPointType = Point;
 /**
  * Type for the response of the GET /points/location endpoint.
  */
-export type GetPointLocationType = Location;
+export type GetLocationsType = Location[];
 
 /**
  * Type for the payload of the POST /passengers/{trip} endpoint.

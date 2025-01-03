@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
+	fetchLocations,
 	fetchTrip,
 	fetchTrips,
 	fetchUser,
@@ -13,6 +14,7 @@ import {
 	removeVehicle,
 } from '@/api';
 import {
+	GetLocationsType,
 	GetTripsType,
 	GetTripType,
 	GetUsersType,
@@ -63,6 +65,8 @@ interface DataContextProps {
 		typeof useMutation<unknown, unknown, { tripId: string }>
 	>;
 	useCurrentUserTrips: () => ReturnType<typeof useQuery<GetTripsType>>;
+	useCurrentUser: () => ReturnType<typeof useQuery<GetUserType>>;
+	useLocation: () => ReturnType<typeof useQuery<GetLocationsType[]>>;
 }
 
 export const DataContext = createContext<DataContextProps | undefined>(
@@ -81,9 +85,8 @@ const useUser = (userId: string) => {
 	return useQuery<GetUserType>(['user', userId], () => fetchUser(userId));
 };
 
-const currentUser = () => {
-	throw new Error('Function not implemented.');
-	// TODO: Faire une recherche à [GET] /users/me
+const useCurrentUser = () => {
+	return useQuery<GetUserType>(['user', 'me'], () => fetchUser('me'));
 };
 
 const useVehicles = (userId: string) => {
@@ -190,6 +193,10 @@ const useCurrentUserTrips = () => {
 	);
 };
 
+const useLocations = () => {
+	return useQuery<GetLocationsType[]>(['locations'], () => fetchLocations());
+};
+
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const value: DataContextProps = useMemo(
 		() => ({
@@ -204,6 +211,8 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useAddTrip,
 			useCanceledTrip,
 			useCurrentUserTrips,
+			useCurrentUser,
+			useLocation: useLocations,
 		}),
 		[]
 	);
