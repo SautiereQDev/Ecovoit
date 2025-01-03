@@ -1,13 +1,5 @@
 import { apiDelete, apiGet, apiPost } from './client';
-import {
-	FiltersType,
-	GetTripsType,
-	GetTripType,
-	PatchTripsType,
-	PostTripType,
-	SortType,
-	TripParamsType,
-} from '@/types';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 /**
  * Fetches the list of trips.
@@ -17,21 +9,18 @@ import {
  * @returns {Promise<GetTripsType>} A promise that resolves to the list of trips.
  */
 export const fetchTrips = (
-	params?: TripParamsType,
-	filters?: FiltersType,
-	sort?: SortType
-): Promise<GetTripsType> => {
+	params?: EVAPI.DB.ListingOptions<EVAPI.Entry>,
+	filters?: EVAPI.DB.Filters<EVAPI.Entry>,
+	sort?: EVAPI.DB.Sort<EVAPI.Entry>
+): Promise<EVAPI.Trip | EVAPI.Error> => {
 	let url = '/trips';
+	if (params) {
+		url += `?${new URLSearchParams(params as Record<string, string>).toString()}`;
+	}
 	if (filters) {
-		const filterParams = filters
-			.map((filter) => `sort[${filter.field}]=${filter.value}`)
-			.join('&');
-		url += `?${filterParams}`;
+		url += `?${new URLSearchParams(filters as Record<string, string>).toString()}`;
 	}
-	if (sort) {
-		url += `&sort=${sort.field}:${sort.direction}`;
-	}
-	return apiGet<GetTripsType>(url, params);
+	return apiGet<EVAPI.Trip>(url, params);
 };
 
 /**
@@ -39,28 +28,30 @@ export const fetchTrips = (
  * @returns {Promise<GetTripType>} A promise that resolves to the added trip.
  * @param tripData
  */
-export const postTrip = (tripData: PostTripType): Promise<GetTripType> =>
-	apiPost<PostTripType, GetTripType>('/trips', tripData);
+export const postTrip = (
+	tripData: EVAPI.TripEntry
+): Promise<EVAPI.Error | EVAPI.Trip> =>
+	apiPost<EVAPI.TripEntry | EVAPI.Error, EVAPI.Trip>('/trips', tripData);
 
 /**
  * Fetches a trip by its ID.
  * @param {string} id - The ID of the trip to fetch.
  * @returns {Promise<GetTripType>} A promise that resolves to the trip data.
  */
-export const fetchTrip = (id: string): Promise<GetTripType> =>
-	apiGet<GetTripType>(` /trips/${id}`);
+export const fetchTrip = (id: string): Promise<EVAPI.Trip | EVAPI.Error> =>
+	apiGet<EVAPI.Trip>(` /trips/${id}`);
 
 /**
  * Deletes a trip by its ID.
  * @param {string} id - The ID of the trip to delete.
  * @returns {Promise<void>} A promise that resolves when the trip is deleted.
  */
-export const deleteTrip = (id: string): Promise<void> =>
+export const deleteTrip = (id: string): Promise<void | EVAPI.Error> =>
 	apiDelete(`/trips/${id}`);
 
 /**
  * Switch the status the trip status to canceled
  * @param id
  */
-export const patchTrip = (id: string): Promise<PatchTripsType> =>
-	apiGet<PatchTripsType>(`/trips/${id}/cancel`);
+export const patchTrip = (id: string): Promise<EVAPI.Review | EVAPI.Error> =>
+	apiGet<EVAPI.Review>(`/trips/${id}/cancel`);

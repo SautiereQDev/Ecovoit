@@ -1,6 +1,8 @@
+// @ts-ignore
 import type { AxiosResponse } from 'axios';
+// @ts-ignore
 import axios, { AxiosInstance } from 'axios';
-import EVAPIMockAdapter from '@ecovoit-api/mock-adapter';
+import EVAPIMockAdapter, { EVAPI } from '@ecovoit-api/mock-adapter';
 
 /**
  * Create an Axios instance with predefined configuration.
@@ -14,6 +16,7 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mock = new EVAPIMockAdapter(apiClient);
 
 // Ajouter un interceptor pour journaliser l'URL de chaque requête
@@ -55,8 +58,8 @@ const extractData = <T>(response: AxiosResponse<T>): T => response.data;
 export const apiGet = <GetType>(
 	url: string,
 	params?: object | object[]
-): Promise<GetType> =>
-	apiClient.get<GetType>(url, { params }).then(extractData);
+): Promise<GetType | EVAPI.Error> =>
+	apiClient.get<GetType | EVAPI.Error>(url, { params }).then(extractData);
 
 /**
  * Perform a POST request.
@@ -69,8 +72,8 @@ export const apiGet = <GetType>(
 export const apiPost = <RequestType, ResponseType>(
 	url: string,
 	data: RequestType
-): Promise<ResponseType> =>
-	apiClient.post<ResponseType>(url, data).then(extractData);
+): Promise<ResponseType | EVAPI.Error> =>
+	apiClient.post<ResponseType | EVAPI.Error>(url, data).then(extractData);
 
 /**
  * Perform a PUT request.
@@ -83,8 +86,8 @@ export const apiPost = <RequestType, ResponseType>(
 export const apiPut = <RequestType, ResponseType>(
 	url: string,
 	data: RequestType
-): Promise<ResponseType> =>
-	apiClient.put<ResponseType>(url, data).then(extractData);
+): Promise<ResponseType | EVAPI.Error> =>
+	apiClient.put<ResponseType | EVAPI.Error>(url, data).then(extractData);
 
 /**
  * Perform a PATCH request.
@@ -97,13 +100,14 @@ export const apiPut = <RequestType, ResponseType>(
 export const apiPatch = <RequestType, ResponseType>(
 	url: string,
 	data: RequestType
-): Promise<ResponseType> =>
-	apiClient.patch<ResponseType>(url, data).then(extractData);
+): Promise<ResponseType | EVAPI.Error> =>
+	apiClient.patch<ResponseType | EVAPI.Error>(url, data).then(extractData);
 
 /**
  * Perform a DELETE request.
  * @param url - The URL to send the DELETE request to.
  */
-export const apiDelete = (url: string): Promise<void> => apiClient.delete(url);
+export const apiDelete = (url: string): Promise<void | EVAPI.Error> =>
+	apiClient.delete(url);
 
 export default apiClient;
