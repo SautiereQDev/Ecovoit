@@ -9,6 +9,7 @@ export const globalStyles = StyleSheet.create({
 	},
 	title: {
 		marginTop: 20,
+		marginBottom: 20,
 		textAlign: 'center',
 	},
 });

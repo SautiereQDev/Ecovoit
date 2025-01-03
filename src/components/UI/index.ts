@@ -1,3 +1,3 @@
 export * from './CircularProgress';
 export * from './Stars';
-export * from './SearchBar';
+export * from '../inputs/LocationInput';

@@ -64,6 +64,7 @@ export const ThemedInput = ({
 				cursorColor={Colors.light.inputText}
 				style={[
 					styles.input,
+					// @ts-ignore
 					theme !== 'TextArea' && styles[size],
 					isFocused && styles.focusedInput,
 					hasError && styles.errorInput,

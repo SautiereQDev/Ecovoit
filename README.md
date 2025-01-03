@@ -45,6 +45,14 @@ expo start
 - [React Native](https://reactnative.dev/) - Framework d'applications mobiles (front-end)
 - [Expo](https://expo.dev/) - Outil permettant de développer des applications mobiles natives universelles
 
+## Dépendances externes
+
+- [react-hook-form](https://react-hook-form.com/) - Librairie de gestion de formulaires
+- [zod](https://zod.dev/) - Librairie de validation de données
+- [fuse.js](https://fusejs.io/) - Librairie de recherche
+- [axios](https://axios-http.com/) - Librairie de requêtes HTTP
+- [react-query](https://react-query.tanstack.com/) - Librairie de gestion de données
+
 ## Versions
 
 ## Auteurs
