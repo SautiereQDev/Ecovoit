@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
 	fetchCurrentUser,
+	fetchLocations,
 	fetchTrip,
 	fetchTrips,
 	fetchUser,
@@ -256,11 +257,20 @@ const useCurrentUserTrips = () => {
 	// TODO: Faire une recherche à [GET] /trips et filtrer par userId avec l'id du currentUser
 	// Dans un premier temps on test le système de filtre avec un requête en recuperer seats=3
 	const filters: EVAPI.DB.Filters<EVAPI.TripEntry> = {
-		vehicle: 'Audi R8 II LMS 5.2L',
+		// vehicle: 'Audi R8 II LMS 5.2L',
+		seats: 3,
 	};
 	return useQuery<EVAPI.Trip[], EVAPI.Error>(
 		['trips'],
-		() => fetchTrips(undefined, filters),
+		() =>
+			fetchTrips(undefined, filters).then(
+				(data: EVAPI.Trip[] | EVAPI.Error) => {
+					if ('type' in data) {
+						throw data;
+					}
+					return data;
+				}
+			),
 		{
 			retry: 1,
 			onError: (error: EVAPI.Error) => {
@@ -270,8 +280,23 @@ const useCurrentUserTrips = () => {
 	);
 };
 
-const useLocations = () => {
-	throw new Error('Not implemented');
+const useLocations = (
+	params?: EVAPI.DB.ListingOptions<EVAPI.Location>,
+	filters?: EVAPI.DB.Filters<EVAPI.Location>,
+	sort?: EVAPI.DB.Sort<EVAPI.Location>
+) => {
+	return useQuery<EVAPI.Location[], EVAPI.Error>(
+		['locations'],
+		() => {
+			return fetchLocations(params, filters, sort);
+		},
+		{
+			retry: 1,
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to fetch locations:', error);
+			},
+		}
+	);
 };
 
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {

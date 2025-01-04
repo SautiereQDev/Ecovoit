@@ -3,7 +3,6 @@ import type { AxiosResponse } from 'axios';
 // @ts-ignore
 import axios, { AxiosInstance } from 'axios';
 import EVAPIMockAdapter, { EVAPI } from '@ecovoit-api/mock-adapter';
-import { errorsToString } from '@/utils';
 
 /**
  * Create an Axios instance with predefined configuration.
@@ -17,18 +16,15 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
-// Ajouter un interceptor pour journaliser l'URL de chaque requête
+const DEBUG_MODE = false;
+
+// Ajouter un interceptor pour journaliser l'URL de chaque requête et les données
 if (process.env.NODE_ENV === 'development') {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const mock = new EVAPIMockAdapter(apiClient);
 
 	apiClient.interceptors.request.use(
-		(config: {
-			url: string | URL;
-			baseURL: string | URL | undefined;
-			params: { [x: string]: string };
-			method: string;
-		}) => {
+		(config: any) => {
 			let url = new URL(config.url, config.baseURL);
 			if (config.params) {
 				Object.keys(config.params).forEach((key) => {
@@ -40,7 +36,29 @@ if (process.env.NODE_ENV === 'development') {
 			console.log(
 				`Request Type: ${config.method?.toUpperCase()} | Request URL: ${url.toString()}`
 			);
+
+			if (DEBUG_MODE) {
+				console.log('Request Headers:', config.headers);
+				console.log('Request Data:', config.data);
+			}
 			return config;
+		},
+		(error: any) => {
+			return Promise.reject(error instanceof Error ? error : new Error(error));
+		}
+	);
+
+	apiClient.interceptors.response.use(
+		(response: any) => {
+			if (DEBUG_MODE) console.log('Response Data:', response.data);
+			return response;
+		},
+		(error: any) => {
+			console.log(
+				'Response Error:',
+				error.response ? error.response.data : error.message
+			);
+			return Promise.reject(error instanceof Error ? error : new Error(error));
 		}
 	);
 }
@@ -92,7 +110,7 @@ export const apiGet = <GetType>(
 		.get<ResponseType>(urlObj.toString(), config)
 		.then(extractData)
 		.catch((error: EVAPI.Error) => {
-			throw new Error(errorsToString(error));
+			throw error;
 		});
 };
 /**
@@ -111,7 +129,7 @@ export const apiPost = <RequestType, ResponseType>(
 		.post<ResponseType>(url, data)
 		.then(extractData)
 		.catch((error: EVAPI.Error) => {
-			throw new Error(errorsToString(error));
+			throw error;
 		});
 
 /**
@@ -130,7 +148,7 @@ export const apiPut = <RequestType, ResponseType>(
 		.put<ResponseType>(url, data)
 		.then(extractData)
 		.catch((error: EVAPI.Error) => {
-			throw new Error(errorsToString(error));
+			throw error;
 		});
 
 /**
@@ -149,7 +167,7 @@ export const apiPatch = <RequestType, ResponseType>(
 		.patch<ResponseType>(url, data)
 		.then(extractData)
 		.catch((error: EVAPI.Error) => {
-			throw new Error(errorsToString(error));
+			throw error;
 		});
 
 /**
@@ -161,7 +179,7 @@ export const apiDelete = (url: string): Promise<void> =>
 		.delete<void>(url)
 		.then(extractData)
 		.catch((error: EVAPI.Error) => {
-			throw new Error(errorsToString(error));
+			throw error;
 		});
 
 export default apiClient;
