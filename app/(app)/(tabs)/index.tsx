@@ -7,14 +7,14 @@ import { ErrorScreen, LoadingPage } from '@/components/pages';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
-	const { data, isLoading, isError } = useCurrentUserTrips();
+	const { data, isLoading, error } = useCurrentUserTrips();
 
 	if (isLoading) {
 		return <LoadingPage />;
 	}
 
-	if (isError) {
-		return <ErrorScreen />;
+	if (error) {
+		return <ErrorScreen error={error} />;
 	}
 
 	if (!isLoading) {

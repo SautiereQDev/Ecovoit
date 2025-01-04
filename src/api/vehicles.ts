@@ -5,10 +5,18 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
  * Fetches the vehicles for a specific user.
  *
  * @param {string} userId - The ID of the user whose vehicles are to be fetched.
+ * @param params
+ * @param filters
+ * @param sort
  * @returns {Promise<GetVehiclesType>} A promise that resolves to the list of vehicles.
  */
-export const fetchVehiclesByUser = (userId: string): Promise<EVAPI.Vehicle[]> =>
-	apiGet<EVAPI.Vehicle[]>(`/vehicles/${userId}`);
+export const fetchVehiclesByUser = (
+	userId: string,
+	params?: EVAPI.DB.ListingOptions<EVAPI.Vehicle>,
+	filters?: EVAPI.DB.Filters<EVAPI.Vehicle>,
+	sort?: EVAPI.DB.Sort<EVAPI.Vehicle>
+): Promise<EVAPI.Vehicle[]> =>
+	apiGet<EVAPI.Vehicle[]>(`/vehicles/${userId}`, params, filters, sort);
 
 /**
  * Adds a new vehicle for a specific user.
@@ -47,7 +55,7 @@ export const removeVehicle = (userId: string, label: string): Promise<void> =>
 export const updateVehicle = (
 	userId: string,
 	label: string,
-	data: Partial<EVAPI.VehicleCreation>
+	data: EVAPI.VehicleCreation
 ): Promise<EVAPI.Vehicle> =>
 	apiPut<Partial<EVAPI.VehicleCreation>, EVAPI.Vehicle>(
 		`/vehicles/${userId}/${label}`,

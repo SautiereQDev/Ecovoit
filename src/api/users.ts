@@ -6,13 +6,20 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
  *
  * @returns {Promise<GetUsersType>} A promise that resolves to the list of users.
  */
-export const fetchUsers = (): Promise<EVAPI.PublicUser[]> =>
-	apiGet<EVAPI.PublicUser[]>('/users');
+export const fetchUsers = (
+	params?: EVAPI.DB.ListingOptions<EVAPI.UserEntry>,
+	filters?: EVAPI.DB.Filters<EVAPI.UserEntry>,
+	sort?: EVAPI.DB.Sort<EVAPI.UserEntry>
+): Promise<EVAPI.PublicUser[]> =>
+	apiGet<EVAPI.PublicUser[]>('/users', params, filters, sort);
 
 /**
  * Fetches a user by their ID.
  *
  * @param {string} id - The ID of the user to fetch.
+ * @param params
+ * @param filters
+ * @param sort
  * @returns {Promise<GetUserType>} A promise that resolves to the user data.
  */
 export const fetchUser = (id: string): Promise<EVAPI.PublicUser> =>
@@ -43,7 +50,7 @@ export const postUser = (data: EVAPI.UserEntry): Promise<EVAPI.User> =>
  */
 export const updateUser = (
 	id: string,
-	data: Partial<EVAPI.UserEntry>
-): Promise<Partial<EVAPI.User>> => {
+	data: EVAPI.UserEntry
+): Promise<EVAPI.User> => {
 	throw new Error('Not implemented');
 };

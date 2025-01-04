@@ -11,13 +11,19 @@ type Props = {
 export const ErrorScreen = ({ error = null }: Props) => {
 	return (
 		<View style={styles.container}>
-			<ThemedText type={'header5'}>Une erreur est survenue</ThemedText>
-			{error && <ThemedText>{error}</ThemedText>}
+			<ThemedText
+				type={'header4'}
+				style={styles.title}
+			>
+				Une erreur est survenue
+			</ThemedText>
+			{error && <ThemedText>{error.toString()}</ThemedText>}
 			<CustomButton
 				text={"Retour à l'accueil"}
 				onPress={() => router.push('/')}
 				buttonStyle={styles.button}
 				size={'smaller'}
+				textProps={{ color: 'background' }}
 			/>
 		</View>
 	);
@@ -30,8 +36,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: '25%',
 	},
+	title: {
+		marginBottom: '1%',
+	},
 	button: {
-		marginTop: '5%',
+		marginTop: '10%',
 		width: '50%',
 		marginHorizontal: 'auto',
 	},

@@ -5,6 +5,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { PostTripType } from '@/types';
 import { globalStyles, postTripStyles } from '@/styles';
 import LocationInput from '@/components/inputs/LocationInput';
+import { useData } from '@/providers';
+import { ErrorScreen } from '@/components/pages';
 
 export const Index = () => {
 	const initialState: PostTripType = {
@@ -18,16 +20,35 @@ export const Index = () => {
 		vehicle: '',
 	};
 
+	const { useLocation } = useData();
+	const { data: listePoints, isLoading, error } = useLocation();
+
+	// on récupère les coordonées des points de départ et d'arrivée
+
+	if (error) {
+		return <ErrorScreen error={error} />;
+	}
+
+	const startPointIndex = 0;
+	const endPointIndex = initialState.points.length - 1;
+
 	const { control, handleSubmit, setValue } = useForm<PostTripType>({
 		defaultValues: initialState,
 	});
 
 	const onSubmit = (data: PostTripType) => {
 		console.log(data);
+		// if (listePoints) {
+		// 	const departLocationId = listePoints.find(
+		// 		(location: Location) =>
+		// 			location.name === data.points[startPointIndex].locationName
+		// 	);
+		// 	const endLocationId = listePoints.find(
+		// 		(location: Location) =>
+		// 			location.name === data.points[endPointIndex].locationName
+		// 	).
+		// }
 	};
-
-	const startPointIndex = 0;
-	const endPointIndex = initialState.points.length - 1;
 
 	return (
 		<View style={globalStyles.container}>
@@ -37,6 +58,8 @@ export const Index = () => {
 				style={globalStyles.title}
 			>
 				Creation d'un trajet
+				{/*TODO: affichage de la map avec un vue + bordure correspondant à la taille de la map pour ne pas avoir d'effect de chargement*/}
+				{/*{isLoading && <ThemedText>Loading...</ThemedText>} */}
 			</ThemedText>
 			<View style={postTripStyles.content}>
 				<Controller

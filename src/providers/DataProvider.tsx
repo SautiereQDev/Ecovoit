@@ -255,12 +255,19 @@ const useCanceledTrip = () => {
 const useCurrentUserTrips = () => {
 	// TODO: Faire une recherche à [GET] /trips et filtrer par userId avec l'id du currentUser
 	// Dans un premier temps on test le système de filtre avec un requête en recuperer seats=3
-	return useQuery<EVAPI.Trip[], EVAPI.Error>(['trips'], () => fetchTrips(), {
-		retry: 1,
-		onError: (error: EVAPI.Error) => {
-			console.error('Failed to fetch trips:', error);
-		},
-	});
+	const filters: EVAPI.DB.Filters<EVAPI.TripEntry> = {
+		vehicle: 'Audi R8 II LMS 5.2L',
+	};
+	return useQuery<EVAPI.Trip[], EVAPI.Error>(
+		['trips'],
+		() => fetchTrips(undefined, filters),
+		{
+			retry: 1,
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to fetch trips:', error);
+			},
+		}
+	);
 };
 
 const useLocations = () => {

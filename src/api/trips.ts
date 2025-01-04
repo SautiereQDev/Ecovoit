@@ -13,17 +13,7 @@ export const fetchTrips = (
 	filters?: EVAPI.DB.Filters<EVAPI.Entry>,
 	sort?: EVAPI.DB.Sort<EVAPI.Entry>
 ): Promise<EVAPI.Trip[]> => {
-	let url = '/trips';
-	if (params) {
-		url += `?${new URLSearchParams(params as Record<string, string>).toString()}`;
-	}
-	if (filters) {
-		url += `?${new URLSearchParams(filters as Record<string, string>).toString()}`;
-	}
-	if (sort) {
-		url += `?${new URLSearchParams(sort as Record<string, string>).toString()}`;
-	}
-	return apiGet<EVAPI.Trip[]>(url, params);
+	return apiGet<EVAPI.Trip[]>('/trips', params, filters, sort);
 };
 
 /**
