@@ -6,10 +6,8 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
  * @param {string} tripId - The ID of the trip.
  * @returns {Promise<Location[]>} - A promise that resolves to an array of locations.
  */
-export const fetchTripPoints = (
-	tripId: string
-): Promise<EVAPI.Location | EVAPI.Error> =>
-	apiGet<EVAPI.Location | EVAPI.Error>(`/trips/${tripId}/points`);
+export const fetchTripPoints = (tripId: string): Promise<EVAPI.Point[]> =>
+	apiGet<EVAPI.Point[]>(`/trips/${tripId}/points`);
 
 /**
  * Posts a new point to a specific trip.
@@ -20,7 +18,7 @@ export const fetchTripPoints = (
 export const postTripPoint = (
 	tripId: string,
 	point: EVAPI.PointEntry
-): Promise<EVAPI.Point | EVAPI.Error> =>
+): Promise<EVAPI.Point> =>
 	apiPost<EVAPI.PointEntry, EVAPI.Point>(`/trips/${tripId}/points`, point);
 
 /**
@@ -28,22 +26,20 @@ export const postTripPoint = (
  * @param {string} pointId - The ID of the point.
  * @returns {Promise<PostTripsPointsType>} - A promise that resolves to the point data.
  */
-export const fetchLocation = (
-	pointId: string
-): Promise<EVAPI.Location | EVAPI.Error> =>
-	apiGet<EVAPI.Location | EVAPI.Error>(`/points/${pointId}`);
+export const fetchLocation = (pointId: string): Promise<EVAPI.Location> =>
+	apiGet<EVAPI.Location>(`/points/${pointId}`);
 
 /**
  * Deletes a specific location.
  * @param {string} pointId - The ID of the point.
  * @returns {Promise<unknown>} - A promise that resolves when the location is deleted.
  */
-export const deleteLocation = (pointId: string): Promise<void | EVAPI.Error> =>
+export const deleteLocation = (pointId: string): Promise<void> =>
 	apiGet<void>(`/points/${pointId}`);
 
 /**
  * Fetches all locations.
  * @returns {Promise<Location[]>} - A promise that resolves to an array of locations.
  */
-export const fetchLocations = (): Promise<EVAPI.Location | EVAPI.Error> =>
-	apiGet<EVAPI.Location>('/points/locations');
+export const fetchLocations = (): Promise<EVAPI.Location[]> =>
+	apiGet<EVAPI.Location[]>('/points/locations');

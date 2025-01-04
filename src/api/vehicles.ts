@@ -1,5 +1,4 @@
 import { apiDelete, apiGet, apiPost, apiPut } from './client';
-import { GetVehiclesType, PostVehicleType, Vehicle } from '@/types';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 /**
@@ -8,10 +7,8 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
  * @param {string} userId - The ID of the user whose vehicles are to be fetched.
  * @returns {Promise<GetVehiclesType>} A promise that resolves to the list of vehicles.
  */
-export const fetchVehiclesByUser = (
-	userId: string
-): Promise<EVAPI.Vehicle | EVAPI.Error> =>
-	apiGet<EVAPI.Vehicle>(`/vehicles/${userId}`);
+export const fetchVehiclesByUser = (userId: string): Promise<EVAPI.Vehicle[]> =>
+	apiGet<EVAPI.Vehicle[]>(`/vehicles/${userId}`);
 
 /**
  * Adds a new vehicle for a specific user.
@@ -23,7 +20,7 @@ export const fetchVehiclesByUser = (
 export const addVehicle = (
 	userId: string,
 	vehicleData: EVAPI.VehicleCreation
-): Promise<EVAPI.Vehicle | EVAPI.Error> =>
+): Promise<EVAPI.Vehicle> =>
 	apiPost<EVAPI.VehicleCreation, EVAPI.Vehicle>(
 		`/vehicles/${userId}`,
 		vehicleData
@@ -36,10 +33,8 @@ export const addVehicle = (
  * @param {string} label - The label of the vehicle to be removed.
  * @returns {Promise<void>} A promise that resolves when the vehicle is removed.
  */
-export const removeVehicle = (
-	userId: string,
-	label: string
-): Promise<void | EVAPI.Error> => apiDelete(`/vehicles/${userId}/${label}`);
+export const removeVehicle = (userId: string, label: string): Promise<void> =>
+	apiDelete(`/vehicles/${userId}/${label}`);
 
 /**
  * Updates a vehicle for a specific user.
@@ -53,7 +48,7 @@ export const updateVehicle = (
 	userId: string,
 	label: string,
 	data: Partial<EVAPI.VehicleCreation>
-): Promise<EVAPI.Vehicle | EVAPI.Error> =>
+): Promise<EVAPI.Vehicle> =>
 	apiPut<Partial<EVAPI.VehicleCreation>, EVAPI.Vehicle>(
 		`/vehicles/${userId}/${label}`,
 		data

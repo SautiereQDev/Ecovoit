@@ -6,8 +6,8 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
  *
  * @returns {Promise<GetUsersType>} A promise that resolves to the list of users.
  */
-export const fetchUsers = (): Promise<EVAPI.User | EVAPI.Error> =>
-	apiGet<EVAPI.User>('/users');
+export const fetchUsers = (): Promise<EVAPI.PublicUser[]> =>
+	apiGet<EVAPI.PublicUser[]>('/users');
 
 /**
  * Fetches a user by their ID.
@@ -15,9 +15,7 @@ export const fetchUsers = (): Promise<EVAPI.User | EVAPI.Error> =>
  * @param {string} id - The ID of the user to fetch.
  * @returns {Promise<GetUserType>} A promise that resolves to the user data.
  */
-export const fetchUser = (
-	id: string
-): Promise<EVAPI.PublicUser | EVAPI.Error> =>
+export const fetchUser = (id: string): Promise<EVAPI.PublicUser> =>
 	apiGet<EVAPI.PublicUser>(`/users/${id}`);
 
 /**
@@ -25,7 +23,7 @@ export const fetchUser = (
  *
  * @returns {Promise<EVAPI.User>} A promise that resolves to the current user data.
  */
-export const fetchCurrentUser = (): Promise<EVAPI.User | EVAPI.Error> =>
+export const fetchCurrentUser = (): Promise<EVAPI.User> =>
 	apiGet<EVAPI.User>('/users/me');
 
 /**
@@ -33,10 +31,8 @@ export const fetchCurrentUser = (): Promise<EVAPI.User | EVAPI.Error> =>
  * @param {PostUserType} data - The data for the new user.
  * @returns {Promise<GetUserType>} A promise that resolves to the created user data.
  */
-export const postUser = (
-	data: EVAPI.UserEntry
-): Promise<EVAPI.PublicUser | EVAPI.Error> =>
-	apiPost<EVAPI.UserEntry, EVAPI.PublicUser>('/users', data);
+export const postUser = (data: EVAPI.UserEntry): Promise<EVAPI.User> =>
+	apiPost<EVAPI.UserEntry, EVAPI.User>('/users', data);
 
 /**
  * Updates a user by their ID.
@@ -48,6 +44,6 @@ export const postUser = (
 export const updateUser = (
 	id: string,
 	data: Partial<EVAPI.UserEntry>
-): Promise<Partial<EVAPI.User> | EVAPI.Error> => {
+): Promise<Partial<EVAPI.User>> => {
 	throw new Error('Not implemented');
 };

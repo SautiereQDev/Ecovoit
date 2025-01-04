@@ -12,7 +12,7 @@ export const fetchTrips = (
 	params?: EVAPI.DB.ListingOptions<EVAPI.Entry>,
 	filters?: EVAPI.DB.Filters<EVAPI.Entry>,
 	sort?: EVAPI.DB.Sort<EVAPI.Entry>
-): Promise<EVAPI.Trip | EVAPI.Error> => {
+): Promise<EVAPI.Trip[]> => {
 	let url = '/trips';
 	if (params) {
 		url += `?${new URLSearchParams(params as Record<string, string>).toString()}`;
@@ -20,7 +20,10 @@ export const fetchTrips = (
 	if (filters) {
 		url += `?${new URLSearchParams(filters as Record<string, string>).toString()}`;
 	}
-	return apiGet<EVAPI.Trip>(url, params);
+	if (sort) {
+		url += `?${new URLSearchParams(sort as Record<string, string>).toString()}`;
+	}
+	return apiGet<EVAPI.Trip[]>(url, params);
 };
 
 /**
@@ -28,17 +31,15 @@ export const fetchTrips = (
  * @returns {Promise<GetTripType>} A promise that resolves to the added trip.
  * @param tripData
  */
-export const postTrip = (
-	tripData: EVAPI.TripEntry
-): Promise<EVAPI.Error | EVAPI.Trip> =>
-	apiPost<EVAPI.TripEntry | EVAPI.Error, EVAPI.Trip>('/trips', tripData);
+export const postTrip = (tripData: EVAPI.TripEntry): Promise<EVAPI.Trip> =>
+	apiPost<EVAPI.TripEntry, EVAPI.Trip>('/trips', tripData);
 
 /**
  * Fetches a trip by its ID.
  * @param {string} id - The ID of the trip to fetch.
  * @returns {Promise<GetTripType>} A promise that resolves to the trip data.
  */
-export const fetchTrip = (id: string): Promise<EVAPI.Trip | EVAPI.Error> =>
+export const fetchTrip = (id: string): Promise<EVAPI.Trip> =>
 	apiGet<EVAPI.Trip>(` /trips/${id}`);
 
 /**
@@ -46,12 +47,12 @@ export const fetchTrip = (id: string): Promise<EVAPI.Trip | EVAPI.Error> =>
  * @param {string} id - The ID of the trip to delete.
  * @returns {Promise<void>} A promise that resolves when the trip is deleted.
  */
-export const deleteTrip = (id: string): Promise<void | EVAPI.Error> =>
+export const deleteTrip = (id: string): Promise<void> =>
 	apiDelete(`/trips/${id}`);
 
 /**
  * Switch the status the trip status to canceled
  * @param id
  */
-export const patchTrip = (id: string): Promise<EVAPI.Review | EVAPI.Error> =>
+export const patchTrip = (id: string): Promise<EVAPI.Review> =>
 	apiGet<EVAPI.Review>(`/trips/${id}/cancel`);
