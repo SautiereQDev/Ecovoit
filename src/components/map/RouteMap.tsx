@@ -33,8 +33,6 @@ export const RouteMap = ({
 		name: point.name,
 	});
 
-	// TODO: Afficher les points de passage sur la carte avec une couleur différente que les points de départ et d'arrivée
-
 	useEffect(() => {
 		const loadRoute = async () => {
 			try {
@@ -43,7 +41,18 @@ export const RouteMap = ({
 					toRoutePoint(end),
 					waypoints.map(toRoutePoint)
 				);
-				setRoute(routeData);
+				setRoute({
+					points: routeData.points.map(
+						(point: {
+							latitude: number;
+							longitude: number;
+							name?: string;
+						}) => ({
+							...point,
+							name: point.name ?? 'Unnamed',
+						})
+					),
+				});
 			} catch (error) {
 				console.error('Failed to load route:', error);
 			}
@@ -58,7 +67,7 @@ export const RouteMap = ({
 	};
 
 	const fitParams = {
-		edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+		edgePadding: { top: 80, right: 80, bottom: 80, left: 80 },
 		animated: true,
 	};
 

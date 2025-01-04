@@ -1,53 +1,91 @@
+import React, { useEffect, useState } from 'react';
 import { ThemedText } from '@/components/texts';
 import { View } from 'react-native';
 import { CustomButton, ReturnButton } from '@/components/buttons';
 import { Controller, useForm } from 'react-hook-form';
-import { PostTripType } from '@/types';
 import { globalStyles, postTripStyles } from '@/styles';
 import LocationInput from '@/components/inputs/LocationInput';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { useData } from '@/providers';
 import { ErrorScreen } from '@/components/pages';
+import RouteMap from '@/components/map/RouteMap';
 
 export const Index = () => {
-	const initialState: PostTripType = {
+	const initialState: EVAPI.TripCreation = {
 		datetime: 0,
 		description: undefined,
 		points: [
-			{ locationName: '', type: 'start' },
-			{ locationName: '', type: 'end' },
+			{ locationName: '', type: 'start', waitingTime: 0 },
+			{ locationName: '', type: 'end', waitingTime: 0 },
 		],
 		seats: 0,
 		vehicle: '',
 	};
 
+	const { control, handleSubmit, setValue, watch } =
+		useForm<EVAPI.TripCreation>({
+			defaultValues: initialState,
+		});
+
 	const { useLocation } = useData();
 	const { data: listePoints, isLoading, error } = useLocation();
 
-	// on récupère les coordonées des points de départ et d'arrivée
+	const startPointIndex = 0;
+	const endPointIndex = initialState.points.length - 1;
+
+	const [departLocation, setDepartLocation] = useState<
+		EVAPI.Location | undefined
+	>(undefined);
+	const [endLocation, setEndLocation] = useState<EVAPI.Location | undefined>(
+		undefined
+	);
+	const [waypoints, setWaypoints] = useState<EVAPI.Location[]>([]);
+
+	const startLocationName = watch(`points.${startPointIndex}.locationName`);
+	const endLocationName = watch(`points.${endPointIndex}.locationName`);
+	const points = watch(`points`);
+
+	useEffect(() => {
+		if (listePoints) {
+			const departLoc = listePoints.find(
+				(location: EVAPI.Location) =>
+					location.name === watch(`points.${startPointIndex}.locationName`)
+			);
+			const endLoc = listePoints.find(
+				(location: EVAPI.Location) =>
+					location.name === watch(`points.${endPointIndex}.locationName`)
+			);
+			const wp = watch(`points`)
+				.slice(1, -1)
+				.map((point: { locationName: string }) =>
+					listePoints.find((location) => location.name === point.locationName)
+				)
+				.filter(
+					(location): location is EVAPI.Location => location !== undefined
+				);
+
+			setDepartLocation(departLoc);
+			setEndLocation(endLoc);
+			setWaypoints(wp);
+		}
+	}, [
+		startLocationName,
+		endLocationName,
+		points,
+		listePoints,
+		watch,
+		endPointIndex,
+	]);
 
 	if (error) {
 		return <ErrorScreen error={error} />;
 	}
 
-	const startPointIndex = 0;
-	const endPointIndex = initialState.points.length - 1;
-
-	const { control, handleSubmit, setValue } = useForm<PostTripType>({
-		defaultValues: initialState,
-	});
-
-	const onSubmit = (data: PostTripType) => {
+	const onSubmit = (data: EVAPI.TripCreation) => {
 		console.log(data);
-		// if (listePoints) {
-		// 	const departLocationId = listePoints.find(
-		// 		(location: Location) =>
-		// 			location.name === data.points[startPointIndex].locationName
-		// 	);
-		// 	const endLocationId = listePoints.find(
-		// 		(location: Location) =>
-		// 			location.name === data.points[endPointIndex].locationName
-		// 	).
-		// }
+		console.log('departLocation', departLocation);
+		console.log('endLocation', endLocation);
+		console.log('waypoints', waypoints);
 	};
 
 	return (
@@ -58,10 +96,16 @@ export const Index = () => {
 				style={globalStyles.title}
 			>
 				Creation d'un trajet
-				{/*TODO: affichage de la map avec un vue + bordure correspondant à la taille de la map pour ne pas avoir d'effect de chargement*/}
-				{/*{isLoading && <ThemedText>Loading...</ThemedText>} */}
 			</ThemedText>
 			<View style={postTripStyles.content}>
+				{departLocation && endLocation && !isLoading && (
+					<RouteMap
+						start={departLocation}
+						end={endLocation}
+						waypoints={waypoints}
+						style={postTripStyles.map}
+					/>
+				)}
 				<Controller
 					control={control}
 					name={`points.${startPointIndex}.locationName`}
