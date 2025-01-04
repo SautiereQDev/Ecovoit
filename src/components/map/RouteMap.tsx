@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { OSRMService } from '@/services/routingServices';
@@ -33,6 +33,17 @@ export const RouteMap = ({
 		name: point.name,
 	});
 
+	const fitParams = useMemo(() => {
+		return {
+			edgePadding: { top: 80, right: 80, bottom: 80, left: 80 },
+			animated: true,
+		};
+	}, []);
+
+	const fitToCoordinates = useMemo(() => {
+		return [start, ...waypoints, end];
+	}, [start, end, waypoints]);
+
 	useEffect(() => {
 		const loadRoute = async () => {
 			try {
@@ -58,20 +69,16 @@ export const RouteMap = ({
 			}
 		};
 		loadRoute().catch(console.error);
-	}, [start, end, waypoints]);
+		if (start && end) {
+			mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams); // recentre la map lors de la modification des points
+		}
+	}, [start, end, waypoints, fitToCoordinates, fitParams]);
 
 	const initialRegion = {
 		...start,
 		latitudeDelta: 1.0,
 		longitudeDelta: 1.0,
 	};
-
-	const fitParams = {
-		edgePadding: { top: 80, right: 80, bottom: 80, left: 80 },
-		animated: true,
-	};
-
-	const fitToCoordinates = [start, ...waypoints, end];
 
 	const mapStyle = [
 		{
@@ -98,7 +105,9 @@ export const RouteMap = ({
 				initialRegion={initialRegion}
 				customMapStyle={mapStyle}
 				onLayout={() => {
-					mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
+					if (start && end) {
+						mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
+					}
 				}}
 			>
 				<Marker
