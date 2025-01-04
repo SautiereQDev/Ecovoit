@@ -10,6 +10,7 @@ export default function ProfileLayout() {
 		>
 			<Stack.Screen name='index' />
 			<Stack.Screen name='description' />
+			<Stack.Screen name='checkpoints' />
 			<Stack.Screen name='vehicle' />
 		</Stack>
 	);

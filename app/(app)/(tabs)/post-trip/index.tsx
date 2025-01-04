@@ -9,6 +9,7 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { useData } from '@/providers';
 import { ErrorScreen } from '@/components/pages';
 import RouteMap from '@/components/map/RouteMap';
+import { router } from 'expo-router';
 
 export const Index = () => {
 	const initialState: EVAPI.TripCreation = {
@@ -83,9 +84,7 @@ export const Index = () => {
 
 	const onSubmit = (data: EVAPI.TripCreation) => {
 		console.log(data);
-		console.log('departLocation', departLocation);
-		console.log('endLocation', endLocation);
-		console.log('waypoints', waypoints);
+		router.push('/post-trip/checkpoints');
 	};
 
 	return (
@@ -137,7 +136,7 @@ export const Index = () => {
 					)}
 				/>
 				<CustomButton
-					text='Submit'
+					text='Suivant'
 					textProps={{ color: 'background' }}
 					onPress={handleSubmit(onSubmit)}
 					buttonStyle={postTripStyles.submitButton}
