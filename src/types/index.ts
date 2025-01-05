@@ -3,3 +3,4 @@ export * from './map';
 export * from './Ecovoit';
 export * from './register';
 export * from './profile';
+export * from './forms';

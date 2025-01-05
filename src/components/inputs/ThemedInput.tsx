@@ -117,7 +117,7 @@ const primary = StyleSheet.create({
 		height: 50,
 	},
 	large: {
-		height: 60,
+		height: 50,
 	},
 });
 

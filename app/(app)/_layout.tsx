@@ -56,7 +56,8 @@ export default function AppLayout() {
 	});
 
 	if (!isAuthenticated) {
-		return <Redirect href='/(auth)/connexion' />;
+		// @ts-ignore
+		return <Redirect href={'/app/(auth)/connexion'} />;
 	}
 
 	return (
@@ -68,7 +69,6 @@ export default function AppLayout() {
 					}}
 				>
 					<Stack.Screen name='(tabs)' />
-					<Stack.Screen name='(auth)' />
 				</Stack>
 			</NotificationsProvider>
 		</GestureHandlerRootView>

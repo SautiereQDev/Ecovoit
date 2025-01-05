@@ -10,80 +10,77 @@ import { useData } from '@/providers';
 import { ErrorScreen } from '@/components/pages';
 import RouteMap from '@/components/map/RouteMap';
 import { router } from 'expo-router';
+import { usePostTripContext } from '@/providers/PostTripProvider';
 
 export const Index = () => {
-	const initialState: EVAPI.TripCreation = {
-		datetime: 0,
-		description: undefined,
-		points: [
+	const { control, handleSubmit, setValue, watch } = useForm<
+		[EVAPI.PointCreation, EVAPI.PointCreation]
+	>({
+		defaultValues: [
 			{ locationName: '', type: 'start', waitingTime: 0 },
-			{ locationName: '', type: 'end', waitingTime: 0 },
+			{
+				locationName: '',
+				type: 'end',
+				waitingTime: 0,
+			},
 		],
-		seats: 0,
-		vehicle: '',
-	};
-
-	const { control, handleSubmit, setValue, watch } =
-		useForm<EVAPI.TripCreation>({
-			defaultValues: initialState,
-		});
+	});
 
 	const { useLocation } = useData();
 	const { data: listePoints, isLoading, error } = useLocation();
 
-	const startPointIndex = 0;
-	const endPointIndex = initialState.points.length - 1;
+	const { postTripQuery, setPostTripQuery } = usePostTripContext();
 
-	const [departLocation, setDepartLocation] = useState<
-		EVAPI.Location | undefined
-	>(undefined);
-	const [endLocation, setEndLocation] = useState<EVAPI.Location | undefined>(
-		undefined
+	const [locPoints, setLocPoints] = useState<
+		[EVAPI.Location, EVAPI.Location] | null
+	>(null);
+
+	const [endLocationIndex, setEndLocationIndex] = useState<number>(() =>
+		postTripQuery.points.findIndex((point) => point.type === 'end')
 	);
-	const [waypoints, setWaypoints] = useState<EVAPI.Location[]>([]);
-
-	const startLocationName = watch(`points.${startPointIndex}.locationName`);
-	const endLocationName = watch(`points.${endPointIndex}.locationName`);
-	const points = watch(`points`);
 
 	useEffect(() => {
-		if (listePoints) {
-			const departLoc = listePoints.find(
-				(location: EVAPI.Location) =>
-					location.name === watch(`points.${startPointIndex}.locationName`)
-			);
-			const endLoc = listePoints.find(
-				(location: EVAPI.Location) =>
-					location.name === watch(`points.${endPointIndex}.locationName`)
-			);
-			const wp = watch(`points`)
-				.slice(1, -1)
-				.map((point: { locationName: string }) =>
-					listePoints.find((location) => location.name === point.locationName)
-				)
-				.filter(
-					(location): location is EVAPI.Location => location !== undefined
-				);
+		if (Array.isArray(listePoints) && listePoints.length > 0) {
+			const startLocationName = watch('0.locationName');
+			const endLocationName = watch('1.locationName');
 
-			setDepartLocation(departLoc);
-			setEndLocation(endLoc);
-			setWaypoints(wp);
+			const filteredPoints = listePoints.filter(
+				(location): location is EVAPI.Location => {
+					return (
+						location !== undefined &&
+						location !== null &&
+						typeof location === 'object' &&
+						'name' in location &&
+						typeof location.name === 'string' &&
+						(location.name === startLocationName ||
+							location.name === endLocationName)
+					);
+				}
+			);
+
+			if (filteredPoints.length === 2) {
+				setLocPoints(filteredPoints as [EVAPI.Location, EVAPI.Location]);
+			} else {
+				setLocPoints(null);
+			}
 		}
-	}, [
-		startLocationName,
-		endLocationName,
-		points,
-		listePoints,
-		watch,
-		endPointIndex,
-	]);
+	}, [listePoints, watch('0.locationName'), watch('1.locationName')]);
 
 	if (error) {
 		return <ErrorScreen error={error} />;
 	}
 
-	const onSubmit = (data: EVAPI.TripCreation) => {
-		console.log(data);
+	const onSubmit = (data: [EVAPI.PointCreation, EVAPI.PointCreation]) => {
+		setPostTripQuery({
+			...postTripQuery,
+			points: [
+				...postTripQuery.points.slice(0, endLocationIndex),
+				data[0],
+				data[1],
+				...postTripQuery.points.slice(endLocationIndex + 1),
+			],
+		});
+		console.log(postTripQuery);
 		router.push('/post-trip/checkpoints');
 	};
 
@@ -97,23 +94,22 @@ export const Index = () => {
 				Creation d'un trajet
 			</ThemedText>
 			<View style={postTripStyles.content}>
-				{departLocation && endLocation && !isLoading && (
+				{locPoints && !isLoading && (
 					<RouteMap
-						start={departLocation}
-						end={endLocation}
-						waypoints={waypoints}
+						start={locPoints[0]}
+						end={locPoints[1]}
 						style={postTripStyles.map}
 					/>
 				)}
 				<Controller
 					control={control}
-					name={`points.${startPointIndex}.locationName`}
+					name={'0.locationName'}
 					render={({ field: { onChange, value } }) => (
 						<LocationInput
-							locationName={value || ''}
+							locationName={value ?? ''}
 							setLocationName={(newValue) => {
 								onChange(newValue);
-								setValue(`points.${startPointIndex}.locationName`, newValue);
+								setValue('0.locationName', newValue);
 							}}
 							label={'Départ'}
 							placeholder={'Entrez le point de départ'}
@@ -122,13 +118,13 @@ export const Index = () => {
 				/>
 				<Controller
 					control={control}
-					name={`points.${endPointIndex}.locationName`}
+					name={'1.locationName'}
 					render={({ field: { onChange, value } }) => (
 						<LocationInput
-							locationName={value || ''}
+							locationName={value ?? ''}
 							setLocationName={(newValue) => {
 								onChange(newValue);
-								setValue(`points.${endPointIndex}.locationName`, newValue);
+								setValue('1.locationName', newValue);
 							}}
 							label={'Arrivée'}
 							placeholder={"Entrez le point d'arrivée"}

@@ -6,7 +6,7 @@ import { ActivityIndicator } from 'react-native-paper';
 export const LoadingScreen = () => {
 	return (
 		<View style={styles.container}>
-			<ActivityIndicator size={'large'} />
+			<ActivityIndicator size={'small'} />
 			<ThemedText type={'accent'}>Loading...</ThemedText>
 		</View>
 	);

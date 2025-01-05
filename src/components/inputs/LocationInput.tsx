@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useData } from '@/providers';
-import { Location } from '@/types';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { ThemedInput } from '@/components/inputs/index';
 import { ThemedText } from '@/components/texts';
 import Fuse, { FuseResult } from 'fuse.js';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 interface SearchBarProps {
 	locationName: string;
@@ -36,7 +36,7 @@ const LocationInput = ({
 			});
 			const filteredSuggestions = fuse
 				.search(locationName)
-				.map((result: FuseResult<Location>) => result.item.name);
+				.map((result: FuseResult<EVAPI.Location>) => result.item.name);
 			setSuggestions(filteredSuggestions);
 		} else {
 			setSuggestions([]);
