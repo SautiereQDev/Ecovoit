@@ -37,12 +37,14 @@ export const ConfirmationMenu = ({
 							onPress={deleteVehicle}
 							backgroundColor={'acceptButton'}
 							buttonStyle={styles.button}
+							textProps={{ color: 'background' }}
 						/>
 						<CustomButton
 							text={'Non'}
 							onPress={onClose}
 							backgroundColor={'resetButton'}
 							buttonStyle={styles.button}
+							textProps={{ color: 'background' }}
 						/>
 					</View>
 				</View>

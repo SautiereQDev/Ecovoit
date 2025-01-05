@@ -9,7 +9,7 @@ export default function ProfileLayout() {
 			}}
 		>
 			<Stack.Screen name='index' />
-			<Stack.Screen name='add' />
+			<Stack.Screen name='new_vehicle' />
 			<Stack.Screen name='edit/[label]' />
 		</Stack>
 	);

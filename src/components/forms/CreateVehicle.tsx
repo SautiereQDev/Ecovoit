@@ -88,6 +88,7 @@ export const CreateVehicle = ({
 				text={buttonText}
 				onPress={handleSubmit(submit)}
 				buttonStyle={buttonStyle}
+				textProps={{ color: 'background' }}
 			/>
 		</View>
 	);

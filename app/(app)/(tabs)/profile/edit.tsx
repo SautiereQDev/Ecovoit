@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	ActivityIndicator,
 	KeyboardAvoidingView,
 	Platform,
-	TextInput,
 	View,
 } from 'react-native';
 import { ThemedText } from '@/components/texts/ThemedText';
-import CustomButton from '@/components/buttons/CustomButton';
 import { useRouter } from 'expo-router';
 import { useNotifications } from 'react-native-notificated';
 import { profileStyles } from '@/styles/profile';
-import { ReturnButton } from '@/components/buttons/ReturnButton';
 import { useData } from '@/providers';
 import { GetUserType } from '@/types';
 
@@ -23,11 +20,11 @@ export default function EditProfile() {
 	const { useUser } = useData();
 	const { data: user, isLoading: loading } = useUser('me');
 
-	useEffect(() => {
-		if (!loading) {
-			setTempUser(user);
-		}
-	}, [loading, user]);
+	// useEffect(() => {
+	// 	if (!loading) {
+	// 		setTempUser(user);
+	// 	}
+	// }, [loading, user]);
 
 	const handleSave = () => {
 		router.back();
@@ -66,54 +63,55 @@ export default function EditProfile() {
 			style={profileStyles.container}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 		>
-			<View style={profileStyles.container}>
-				<ReturnButton />
-				<ThemedText
-					type={'header4'}
-					style={profileStyles.title}
-				>
-					Modifier votre profil
-				</ThemedText>
+			<ThemedText>Not implemented on backend...</ThemedText>
+			{/*<View style={profileStyles.container}>*/}
+			{/*	<ReturnButton />*/}
+			{/*	<ThemedText*/}
+			{/*		type={'header4'}*/}
+			{/*		style={profileStyles.title}*/}
+			{/*	>*/}
+			{/*		Modifier votre profil*/}
+			{/*	</ThemedText>*/}
 
-				<View style={profileStyles.formGroup}>
-					<ThemedText type={'defaultBody'}>Nom d'utilisateur</ThemedText>
-					<TextInput
-						style={profileStyles.input}
-						// @ts-ignore
-						value={tempUser.username}
-						onChangeText={(text) => setTempUser({ ...user, username: text })}
-						placeholder="Nom d'utilisateur"
-					/>
-				</View>
-				<View style={profileStyles.formGroup}>
-					<ThemedText type={'defaultBody'}>Biographie</ThemedText>
-					<TextInput
-						style={[profileStyles.input, profileStyles.multilineInput]}
-						// @ts-ignore
-						value={tempUser.bio}
-						onChangeText={(text) => setTempUser({ ...user, bio: text })}
-						placeholder='Parlez-nous de vous'
-						multiline
-					/>
-				</View>
+			{/*	<View style={profileStyles.formGroup}>*/}
+			{/*		<ThemedText type={'defaultBody'}>Nom d'utilisateur</ThemedText>*/}
+			{/*		<TextInput*/}
+			{/*			style={profileStyles.input}*/}
+			{/*			// @ts-ignore*/}
+			{/*			value={tempUser.username}*/}
+			{/*			onChangeText={(text) => setTempUser({ ...user, username: text })}*/}
+			{/*			placeholder="Nom d'utilisateur"*/}
+			{/*		/>*/}
+			{/*	</View>*/}
+			{/*	<View style={profileStyles.formGroup}>*/}
+			{/*		<ThemedText type={'defaultBody'}>Biographie</ThemedText>*/}
+			{/*		<TextInput*/}
+			{/*			style={[profileStyles.input, profileStyles.multilineInput]}*/}
+			{/*			// @ts-ignore*/}
+			{/*			value={tempUser.bio}*/}
+			{/*			onChangeText={(text) => setTempUser({ ...user, bio: text })}*/}
+			{/*			placeholder='Parlez-nous de vous'*/}
+			{/*			multiline*/}
+			{/*		/>*/}
+			{/*	</View>*/}
 
-				<View style={profileStyles.buttonContainer}>
-					<CustomButton
-						text={'Enregistrer'}
-						onPress={handleSave}
-						textProps={{ type: 'defaultBody' }}
-						backgroundColor={'accentBackground'}
-						buttonStyle={profileStyles.button}
-					/>
-					<CustomButton
-						text={'Annuler'}
-						onPress={() => router.back()}
-						textProps={{ type: 'defaultBody' }}
-						backgroundColor={'disabledBackground'}
-						buttonStyle={profileStyles.button}
-					/>
-				</View>
-			</View>
+			{/*	<View style={profileStyles.buttonContainer}>*/}
+			{/*		<CustomButton*/}
+			{/*			text={'Enregistrer'}*/}
+			{/*			onPress={handleSave}*/}
+			{/*			textProps={{ type: 'defaultBody' }}*/}
+			{/*			backgroundColor={'accentBackground'}*/}
+			{/*			buttonStyle={profileStyles.button}*/}
+			{/*		/>*/}
+			{/*		<CustomButton*/}
+			{/*			text={'Annuler'}*/}
+			{/*			onPress={() => router.back()}*/}
+			{/*			textProps={{ type: 'defaultBody' }}*/}
+			{/*			backgroundColor={'disabledBackground'}*/}
+			{/*			buttonStyle={profileStyles.button}*/}
+			{/*		/>*/}
+			{/*	</View>*/}
+			{/*</View>*/}
 		</KeyboardAvoidingView>
 	);
 }

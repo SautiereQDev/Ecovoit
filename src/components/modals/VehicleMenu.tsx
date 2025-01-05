@@ -39,7 +39,7 @@ export const VehicleMenu = ({
 				<View style={[styles.container, { top: position.y, left: position.x }]}>
 					<Link
 						href={{
-							pathname: '/profile/vehicles/edit/[label]',
+							pathname: '/profile/vehicles/edit_vehicle/[label]',
 							params: { label },
 						}}
 					>
