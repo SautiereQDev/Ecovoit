@@ -17,41 +17,37 @@ import {
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 interface DataContextProps {
-	useVehicles: (userId: string) => ReturnType<typeof useQuery<EVAPI.Vehicle[]>>;
+	useVehiclesByUser: (
+		userId: string
+	) => ReturnType<typeof useQuery<EVAPI.Vehicle[]>>;
+	useCurrentUserVehicles: () => ReturnType<typeof useQuery<EVAPI.Vehicle[]>>;
 	useAddVehicle: () => ReturnType<
 		typeof useMutation<
 			EVAPI.Vehicle,
-			unknown,
-			{
-				userId: string;
-				vehicleData: EVAPI.VehicleCreation;
-			},
-			unknown
+			EVAPI.Error,
+			{ vehicle: EVAPI.VehicleCreation }
 		>
 	>;
 	useAddUser: () => ReturnType<
 		typeof useMutation<
 			EVAPI.PublicUser,
-			unknown,
-			{
-				userData: EVAPI.UserEntry;
-			},
-			unknown
+			EVAPI.Error,
+			{ userData: EVAPI.UserEntry }
 		>
 	>;
 	useAddTrip: () => ReturnType<
-		typeof useMutation<EVAPI.Trip, unknown, { tripData: EVAPI.TripEntry }>
+		typeof useMutation<EVAPI.Trip, EVAPI.Error, { tripData: EVAPI.TripEntry }>
 	>;
 	useUsers: () => ReturnType<typeof useQuery<EVAPI.PublicUser[]>>;
 	useUser: (userId: string) => ReturnType<typeof useQuery<EVAPI.PublicUser>>;
 	useRemoveVehicle: () => ReturnType<
-		typeof useMutation<void, unknown, { userId: string; label: string }>
+		typeof useMutation<void, EVAPI.Error, { userId: string; label: string }>
 	>;
 	useTrips: (params?: any) => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useTrip: (tripId: string) => ReturnType<typeof useQuery<EVAPI.Trip>>;
 
 	useCanceledTrip: () => ReturnType<
-		typeof useMutation<unknown, unknown, { tripId: string }>
+		typeof useMutation<unknown, EVAPI.Error, { tripId: string }>
 	>;
 	useCurrentUserTrips: () => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useCurrentUser: () => ReturnType<typeof useQuery<EVAPI.User>>;
@@ -121,6 +117,24 @@ const useVehiclesByUser = (userId: string) => {
 	);
 };
 
+const useCurrentUserVehicles = () => {
+	return useQuery<EVAPI.Vehicle[], EVAPI.Error>(
+		['vehicles', 'me'],
+		() =>
+			fetchCurrentUser().then((data: EVAPI.User | EVAPI.Error) => {
+				if ('type' in data) {
+					throw data;
+				}
+				return data.vehicles;
+			}),
+		{
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to fetch vehicles:', error);
+			},
+		}
+	);
+};
+
 const useRemoveVehicle = () => {
 	const queryClient = useQueryClient();
 	return useMutation<void, EVAPI.Error, { userId: string; label: string }>(
@@ -144,17 +158,21 @@ const useRemoveVehicle = () => {
 
 const useAddVehicle = () => {
 	const queryClient = useQueryClient();
+	const userId = useCurrentUser().data?.id;
+	if (!userId) {
+		throw new Error('User ID not found');
+	}
 	return useMutation<
 		EVAPI.Vehicle,
 		EVAPI.Error,
-		{ userId: string; vehicleData: EVAPI.VehicleCreation }
-	>((variables) => addVehicle(variables.userId, variables.vehicleData), {
-		onSuccess: (_, variables) => {
+		{ vehicle: EVAPI.VehicleCreation }
+	>((variables) => addVehicle(userId, variables.vehicle), {
+		onSuccess: () => {
 			queryClient
-				.invalidateQueries(['vehicles', variables.userId])
+				.invalidateQueries(['vehicles', userId])
 				.catch((e) => console.error(e));
 			queryClient
-				.invalidateQueries(['users', variables.userId])
+				.invalidateQueries(['user', 'me'])
 				.catch((e) => console.error(e));
 		},
 		retry: 1,
@@ -254,23 +272,18 @@ const useCanceledTrip = () => {
 };
 
 const useCurrentUserTrips = () => {
-	// TODO: Faire une recherche à [GET] /trips et filtrer par userId avec l'id du currentUser
-	// Dans un premier temps on test le système de filtre avec un requête en recuperer seats=3
 	const filters: EVAPI.DB.Filters<EVAPI.TripEntry> = {
-		// vehicle: 'Audi R8 II LMS 5.2L',
 		seats: 3,
 	};
 	return useQuery<EVAPI.Trip[], EVAPI.Error>(
 		['trips'],
 		() =>
-			fetchTrips(undefined, filters).then(
-				(data: EVAPI.Trip[] | EVAPI.Error) => {
-					if ('type' in data) {
-						throw data;
-					}
-					return data;
+			fetchTrips(undefined, filters).then((data: EVAPI.Trip[]) => {
+				if (data.some((trip) => 'type' in trip)) {
+					throw new Error('Invalid trip data');
 				}
-			),
+				return data;
+			}),
 		{
 			retry: 1,
 			onError: (error: EVAPI.Error) => {
@@ -302,7 +315,7 @@ const useLocations = (
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const value: DataContextProps = useMemo(
 		() => ({
-			useVehicles: useVehiclesByUser,
+			useVehiclesByUser,
 			useAddVehicle,
 			useAddUser,
 			useUsers,
@@ -315,6 +328,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useCurrentUserTrips,
 			useCurrentUser,
 			useLocation: useLocations,
+			useCurrentUserVehicles,
 		}),
 		[]
 	);

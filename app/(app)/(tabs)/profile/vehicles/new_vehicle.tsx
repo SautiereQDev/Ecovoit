@@ -1,36 +1,41 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import { ThemedText } from '@/components/texts';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
-import { Vehicle } from '@/types';
 import { vehiclesStyles } from '@/styles/vehicles';
+import { useData } from '@/providers';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 const AddVehicle = () => {
-	const { addVehicle } = useProfile();
-	const { errors, validateField } = useRegister();
+	const { useAddVehicle } = useData();
+	const addVehicleMutation = useAddVehicle();
 
-	const handleAddVehicle = (vehicle: Vehicle) => {
-		// @ts-ignore
-		addVehicle(vehicle);
-		router.back();
+	const handleAddVehicle = (vehicle: EVAPI.VehicleCreation) => {
+		addVehicleMutation.mutate(
+			{ vehicle },
+			{
+				onSuccess: () => {
+					router.back();
+				},
+				onError: (error) => {
+					console.error(error);
+				},
+			}
+		);
 	};
 
 	return (
 		<View style={vehiclesStyles.container}>
 			<ReturnButton />
-			{/*/@ts-ignore */}
 			<ThemedText
 				type={'header3'}
 				style={styles.title}
 			>
 				Ajouter un vehicle
 			</ThemedText>
-			{/* @ts-ignore */}
 			<CreateVehicle
-				errors={errors}
-				validateField={validateField}
 				handleSubmit={handleAddVehicle}
 				buttonText={'Ajouter'}
 				buttonStyle={vehiclesStyles.button}
@@ -38,11 +43,12 @@ const AddVehicle = () => {
 		</View>
 	);
 };
+
 export default AddVehicle;
 
-const styles = {
+const styles = StyleSheet.create({
 	title: {
-		margiTop: '10%',
+		marginTop: '10%',
 		textAlign: 'center',
 	},
-};
+});

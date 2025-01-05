@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { CustomButton, IconButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts';
 import { useRouter } from 'expo-router';
 import { useData, useSession } from '@/providers';
 import { profileStyles } from '@/styles';
 import { Colors } from '@/constants';
+import { ErrorScreen, LoadingScreen } from '@/components/pages';
 
 export function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -13,35 +14,19 @@ export function Profile() {
 	const { signOut, isLoading: sessionLoading } = useSession();
 
 	const { useUser } = useData();
-	const { data: user, isLoading: loading } = useUser('me');
+	const { data: user, isLoading, error } = useUser('me');
 
 	console.log('user', user);
 
 	const router = useRouter();
 
-	if (sessionLoading ?? loading) {
-		return (
-			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-				<ActivityIndicator
-					size={'large'}
-					animating
-				/>
-				<ThemedText>Loading...</ThemedText>
-			</View>
-		);
+	if (sessionLoading ?? isLoading) {
+		return <LoadingScreen />;
 	}
 
-	if (!user) {
-		return (
-			<View>
-				<ThemedText>
-					Impossible de lire les données, veuillez réssayer plutard
-				</ThemedText>
-			</View>
-		);
+	if (error) {
+		return <ErrorScreen error={error} />;
 	}
-
-	console.log('user', user);
 
 	return (
 		<ScrollView style={profileStyles.container}>
@@ -81,7 +66,7 @@ export function Profile() {
 						A propos de {user?.username}
 					</ThemedText>
 					<ThemedText style={profileStyles.biographyText}>
-						{user.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
+						{user?.bio ? user?.bio : "Salut, je suis nouveau sur l'application"}
 					</ThemedText>
 				</View>
 				{/*TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois*/}

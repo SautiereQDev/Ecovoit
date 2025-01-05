@@ -3,14 +3,14 @@ import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useData } from '@/providers';
-import { ErrorScreen, LoadingPage } from '@/components/pages';
+import { ErrorScreen, LoadingScreen } from '@/components/pages';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { data, isLoading, error } = useCurrentUserTrips();
 
 	if (isLoading) {
-		return <LoadingPage />;
+		return <LoadingScreen />;
 	}
 
 	if (error) {

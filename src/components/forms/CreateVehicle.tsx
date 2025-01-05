@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { CustomButton } from '@/components/buttons';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Vehicle } from '@/types';
 import { ThemedInput } from '@/components/inputs';
 import { z } from 'zod';
@@ -27,7 +27,7 @@ export const CreateVehicle = ({
 	handleSubmit: submit,
 	buttonStyle,
 	buttonText = 'Enregistrer',
-}: CreateVehicleProps): ReactNode => {
+}: CreateVehicleProps) => {
 	const {
 		control,
 		handleSubmit,
