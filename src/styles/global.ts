@@ -12,4 +12,9 @@ export const globalStyles = StyleSheet.create({
 		marginBottom: 20,
 		textAlign: 'center',
 	},
+	form: {
+		marginTop: 20,
+		display: 'flex',
+		gap: 10,
+	},
 });

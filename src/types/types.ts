@@ -1,15 +1,7 @@
-import { GetTripType } from '@/types/api';
-
 export interface destinationSearch {
 	position: string;
 	destination: string;
 }
-
-export type searchTripFormType = TripParamsType & {
-	depart: string;
-	destination: string;
-	date: number;
-};
 
 export interface TripCardType {
 	depart: string;
@@ -57,20 +49,3 @@ export type userParams = {
 export type ValidationErrors = Record<string, string | undefined>;
 
 export type FieldValue = string | number | boolean | null | undefined;
-
-export type SortType = {
-	field: keyof GetTripType;
-	direction: 'asc' | 'desc';
-};
-
-export type FiltersType = {
-	field: string;
-	value: any;
-}[];
-
-export type TripParamsType = {
-	page?: number;
-	limit?: number;
-	filters?: { [key: string]: any };
-	sort?: SortType;
-};

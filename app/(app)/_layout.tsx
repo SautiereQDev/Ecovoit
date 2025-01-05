@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function AppLayout() {
 	const { isAuthenticated } = useSession();
+
 	const { NotificationsProvider } = createNotifications({
 		defaultStylesSettings: {
 			globalConfig: {
@@ -55,7 +56,7 @@ export default function AppLayout() {
 	});
 
 	if (!isAuthenticated) {
-		return <Redirect href='/signin' />;
+		return <Redirect href='/(auth)/connexion' />;
 	}
 
 	return (
@@ -67,6 +68,7 @@ export default function AppLayout() {
 					}}
 				>
 					<Stack.Screen name='(tabs)' />
+					<Stack.Screen name='(auth)' />
 				</Stack>
 			</NotificationsProvider>
 		</GestureHandlerRootView>
