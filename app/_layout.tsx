@@ -8,23 +8,20 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 export default function RootLayout() {
 	configureReanimatedLogger({
 		level: 2, //only show errors
-
 		strict: false,
 	});
 
 	const queryClient = new QueryClient();
 
-	// TODO:  Creer une stack pour connexion et inscription accessible uniquement si l'utilisateur n'est pas connecté
-
 	return (
 		<QueryClientProvider client={queryClient}>
-			<SessionProvider>
-				<LocationProvider>
-					<DataProvider>
+			<LocationProvider>
+				<DataProvider>
+					<SessionProvider>
 						<Slot />
-					</DataProvider>
-				</LocationProvider>
-			</SessionProvider>
+					</SessionProvider>
+				</DataProvider>
+			</LocationProvider>
 		</QueryClientProvider>
 	);
 }

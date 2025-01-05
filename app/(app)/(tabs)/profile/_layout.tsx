@@ -10,7 +10,7 @@ export default function ProfileLayout() {
 		>
 			<Stack.Screen name='index' />
 			<Stack.Screen
-				name='edit'
+				name='edit_user'
 				options={{
 					presentation: 'modal',
 					headerShown: false,
