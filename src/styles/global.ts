@@ -8,7 +8,7 @@ export const globalStyles = StyleSheet.create({
 		backgroundColor: Colors.light.background,
 	},
 	title: {
-		marginTop: 20,
+		marginTop: 25,
 		marginBottom: 20,
 		textAlign: 'center',
 	},
