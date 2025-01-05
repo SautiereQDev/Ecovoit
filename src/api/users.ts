@@ -38,8 +38,8 @@ export const fetchCurrentUser = (): Promise<EVAPI.User> =>
  * @param {PostUserType} data - The data for the new user.
  * @returns {Promise<GetUserType>} A promise that resolves to the created user data.
  */
-export const postUser = (data: EVAPI.UserEntry): Promise<EVAPI.User> =>
-	apiPost<EVAPI.UserEntry, EVAPI.User>('/users', data);
+export const postUser = (data: EVAPI.UserCreation): Promise<EVAPI.User> =>
+	apiPost<EVAPI.UserCreation, EVAPI.User>('/users', data);
 
 /**
  * Updates a user by their ID.

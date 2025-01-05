@@ -5,13 +5,11 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { PostUserType, PostVehicleType } from '@/types';
+import { RegisterForm } from '@/types/forms';
 
 interface RegisterContextType {
-	registerQuery: PostUserType & PostVehicleType;
-	setRegisterQuery: React.Dispatch<
-		React.SetStateAction<PostUserType & PostVehicleType>
-	>;
+	registerQuery: RegisterForm;
+	setRegisterQuery: React.Dispatch<React.SetStateAction<RegisterForm>>;
 }
 
 const RegisterContext = createContext<RegisterContextType | undefined>(
@@ -21,7 +19,7 @@ const RegisterContext = createContext<RegisterContextType | undefined>(
 export const RegisterProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const initialState: PostUserType & PostVehicleType = {
+	const initialState: RegisterForm = {
 		firstName: '',
 		lastName: '',
 		username: '',
@@ -33,9 +31,8 @@ export const RegisterProvider: React.FC<{ children: ReactNode }> = ({
 		emission: 0,
 	};
 
-	const [registerQuery, setRegisterQuery] = useState<
-		PostUserType & PostVehicleType
-	>(initialState);
+	const [registerQuery, setRegisterQuery] =
+		useState<RegisterForm>(initialState);
 
 	const value: RegisterContextType = useMemo(
 		() => ({ registerQuery, setRegisterQuery }),

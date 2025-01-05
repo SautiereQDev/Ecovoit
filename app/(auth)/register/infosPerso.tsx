@@ -9,7 +9,6 @@ import { registerStyles as styles } from '@/styles';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { PostUserType } from '@/types';
 import { useRegisterContext } from '@/providers/RegisterProvider';
 
 const schema = z.object({
@@ -22,13 +21,13 @@ const RegisterPage2 = () => {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<PostUserType>({
+	} = useForm<{ firstName: string; lastName: string }>({
 		resolver: zodResolver(schema),
 	});
 
 	const { registerQuery, setRegisterQuery } = useRegisterContext();
 
-	const submit = (data: PostUserType) => {
+	const submit = (data: { firstName: string; lastName: string }) => {
 		setRegisterQuery({ ...registerQuery, ...data });
 		router.push('/register/confirmation');
 	};

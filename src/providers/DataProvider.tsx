@@ -25,14 +25,14 @@ interface DataContextProps {
 		typeof useMutation<
 			EVAPI.Vehicle,
 			EVAPI.Error,
-			{ vehicle: EVAPI.VehicleCreation }
+			{ userId: string; vehicle: EVAPI.VehicleCreation }
 		>
 	>;
 	useAddUser: () => ReturnType<
 		typeof useMutation<
 			EVAPI.PublicUser,
 			EVAPI.Error,
-			{ userData: EVAPI.UserEntry }
+			{ userData: EVAPI.UserCreation }
 		>
 	>;
 	useAddTrip: () => ReturnType<
@@ -158,18 +158,16 @@ const useRemoveVehicle = () => {
 
 const useAddVehicle = () => {
 	const queryClient = useQueryClient();
-	const userId = useCurrentUser().data?.id;
-	if (!userId) {
-		throw new Error('User ID not found');
-	}
+	// const userId = useCurrentUser().data?.id;
+	// TODO: A l'avenir, si l'utilisateur est directement connecté, on peut récupérer son ID directement
 	return useMutation<
 		EVAPI.Vehicle,
 		EVAPI.Error,
-		{ vehicle: EVAPI.VehicleCreation }
-	>((variables) => addVehicle(userId, variables.vehicle), {
-		onSuccess: () => {
+		{ userId: string; vehicle: EVAPI.VehicleCreation }
+	>((variables) => addVehicle(variables.userId, variables.vehicle), {
+		onSuccess: (_, variables) => {
 			queryClient
-				.invalidateQueries(['vehicles', userId])
+				.invalidateQueries(['vehicles', variables.userId])
 				.catch((e) => console.error(e));
 			queryClient
 				.invalidateQueries(['user', 'me'])
@@ -235,7 +233,7 @@ const useAddUser = () => {
 	return useMutation<
 		EVAPI.PublicUser,
 		EVAPI.Error,
-		{ userData: EVAPI.UserEntry }
+		{ userData: EVAPI.UserCreation }
 	>((variables) => postUser(variables.userData), {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(['users']).catch((e) => console.error(e));

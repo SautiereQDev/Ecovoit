@@ -9,7 +9,6 @@ import { ThemedInput } from '@/components/inputs';
 import { ThemedText } from '@/components/texts';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { registerStyles as styles } from '@/styles';
-import { PostUserType } from '@/types';
 import { useRegisterContext } from '@/providers/RegisterProvider';
 
 // Define the validation schema using zod
@@ -26,13 +25,17 @@ export const RegisterPage = () => {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<PostUserType>({
+	} = useForm<{ username: string; email: string; password: string }>({
 		resolver: zodResolver(schema),
 	});
 
 	const { registerQuery, setRegisterQuery } = useRegisterContext();
 
-	const onSubmit = (data: PostUserType) => {
+	const onSubmit = (data: {
+		username: string;
+		email: string;
+		password: string;
+	}) => {
 		setRegisterQuery({ ...registerQuery, ...data });
 		router.push('/register/infosPerso');
 	};

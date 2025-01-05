@@ -1,14 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import { CustomButton } from '@/components/buttons';
 import React from 'react';
-import { Vehicle } from '@/types';
 import { ThemedInput } from '@/components/inputs';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 type CreateVehicleProps = {
-	handleSubmit: (vehicle: Vehicle) => void;
+	handleSubmit: (vehicle: EVAPI.VehicleCreation) => void;
 	buttonStyle: any;
 	buttonText?: string;
 };
@@ -32,7 +32,7 @@ export const CreateVehicle = ({
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<Vehicle>({
+	} = useForm<EVAPI.VehicleCreation>({
 		resolver: zodResolver(schema),
 	});
 

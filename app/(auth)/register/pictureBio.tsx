@@ -5,18 +5,19 @@ import { registerStyles as styles } from '@/styles';
 import { ThemedInput } from '@/components/inputs';
 import { ThemedText } from '@/components/texts';
 import { Controller, useForm } from 'react-hook-form';
-import { GetUserType, PostUserType } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRegisterContext } from '@/providers/RegisterProvider';
 import { router } from 'expo-router';
 import { z } from 'zod';
 import { useData } from '@/providers';
 import { CustomButton } from '@/components/buttons';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 const schema = z.object({
 	bio: z
 		.string()
-		.max(128, 'La biographie doit contenir moins de 128 caractères'),
+		.max(128, 'La biographie doit contenir moins de 128 caractères')
+		.optional(),
 });
 
 export const RegisterPage5 = () => {
@@ -24,7 +25,7 @@ export const RegisterPage5 = () => {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<PostUserType>({
+	} = useForm<{ bio?: string }>({
 		resolver: zodResolver(schema),
 	});
 
@@ -33,7 +34,7 @@ export const RegisterPage5 = () => {
 	const addUser = useAddUser();
 	const addVehicle = useAddVehicle();
 
-	const submit = (data: PostUserType) => {
+	const submit = (data: { bio?: string }) => {
 		setRegisterQuery({ ...registerQuery, ...data });
 		console.log(registerQuery);
 
@@ -49,13 +50,13 @@ export const RegisterPage5 = () => {
 				},
 			},
 			{
-				onSuccess: (user: GetUserType) => {
+				onSuccess: (user: EVAPI.PublicUser) => {
 					console.log('User added');
 					if (registerQuery.label !== '') {
 						addVehicle.mutate(
 							{
 								userId: user.id as unknown as string,
-								vehicleData: {
+								vehicle: {
 									label: registerQuery.label,
 									consumption: registerQuery.consumption,
 									emission: registerQuery.emission,

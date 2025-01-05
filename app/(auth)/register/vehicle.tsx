@@ -1,17 +1,17 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Vehicle } from '@/types';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import CreateVehicle from '@/components/forms/CreateVehicle';
 import { ThemedText } from '@/components/texts';
 import { registerStyles as styles } from '@/styles';
 import { useRegisterContext } from '@/providers/RegisterProvider';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 export const RegisterPage4 = () => {
 	const { registerQuery, setRegisterQuery } = useRegisterContext();
 
-	const submit = (data: Vehicle) => {
+	const submit = (data: EVAPI.VehicleCreation) => {
 		setRegisterQuery({ ...registerQuery, ...data });
 		router.push('/register/pictureBio');
 	};
