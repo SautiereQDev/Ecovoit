@@ -13,6 +13,7 @@ const AddVehicle = () => {
 	const addVehicleMutation = useAddVehicle();
 
 	const handleAddVehicle = (vehicle: EVAPI.VehicleCreation) => {
+		console.log(vehicle);
 		addVehicleMutation.mutate(
 			{ vehicle },
 			{
