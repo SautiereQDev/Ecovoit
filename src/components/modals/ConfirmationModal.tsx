@@ -8,9 +8,15 @@ import { ThemedText } from '@/components/texts';
 type ConfirmationMenuProps = {
 	visible: boolean;
 	onClose: () => void;
+	message: string;
+	onConfirm: () => void;
+	onDeny: () => void;
 };
 
 export const ConfirmationMenu = ({
+	message,
+	onConfirm,
+	onDeny,
 	visible,
 	onClose,
 }: ConfirmationMenuProps) => {
@@ -29,19 +35,19 @@ export const ConfirmationMenu = ({
 			<View style={styles.overlay}>
 				<View style={styles.container}>
 					<ThemedText type={'bigger'}>
-						Êtes-vous sûr de vouloir supprimer ce véhicule ?
+						{message ?? 'Êtes-vous sûr de vouloir supprimer ce véhicule ?'}
 					</ThemedText>
 					<View style={styles.buttonContainer}>
 						<CustomButton
 							text={'Oui'}
-							onPress={deleteVehicle}
+							onPress={onConfirm ?? deleteVehicle}
 							backgroundColor={'acceptButton'}
 							buttonStyle={styles.button}
 							textProps={{ color: 'background' }}
 						/>
 						<CustomButton
 							text={'Non'}
-							onPress={onClose}
+							onPress={onDeny ?? onClose}
 							backgroundColor={'resetButton'}
 							buttonStyle={styles.button}
 							textProps={{ color: 'background' }}
