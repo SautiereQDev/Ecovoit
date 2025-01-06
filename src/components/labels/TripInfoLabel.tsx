@@ -6,9 +6,9 @@ import { Colors } from '@/constants/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface TripLbelData {
-	distance: number;
-	consumption: number;
-	arrivalTime: string;
+	distance?: number;
+	consumption?: number;
+	arrivalTime?: string;
 }
 
 type Props = {
@@ -52,7 +52,6 @@ export function TripInfoLabel({ data, style }: Readonly<Props>) {
 						<ThemedText
 							color='background'
 							style={styles.text}
-							numberOfLines={1} // Empêcher le retour à la ligne
 						>
 							{item}
 						</ThemedText>

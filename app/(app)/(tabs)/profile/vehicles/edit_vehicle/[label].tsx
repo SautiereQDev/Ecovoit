@@ -1,10 +1,10 @@
 import { View } from 'react-native';
 import React from 'react';
-import { ThemedText } from '@/components/texts';
 import { router } from 'expo-router';
 import ReturnButton from '@/components/buttons/ReturnButton';
 import { vehiclesStyles } from '@/styles/vehicles';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { ErrorScreen } from '@/components/pages';
 
 const Label = () => {
 	const handleEditVehicle = (vehicle: EVAPI.VehicleCreation) => {
@@ -22,7 +22,7 @@ const Label = () => {
 	return (
 		<View style={vehiclesStyles.container}>
 			<ReturnButton />
-			<ThemedText>Not implemented on backend...</ThemedText>
+			<ErrorScreen error={'Non implémenté dans le backend'} />
 			{/*<ThemedText type={'header3'}>Modifier un vehicule</ThemedText>*/}
 			{/*/!* @ts-ignore*!/*/}
 			{/*<CreateVehicle*/}
