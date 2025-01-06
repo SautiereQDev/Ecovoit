@@ -1,24 +1,26 @@
 import React from 'react';
-import { KeyboardAvoidingView, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchContext } from '@/providers';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { searchTripFormType } from '@/types';
 import { router } from 'expo-router';
-import { IconButton } from '@/components/buttons';
+import { CustomButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts';
-import { Colors } from '@/constants';
 import { searchTripStyles } from '@/styles';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import ReturnButton from '@/components/buttons/ReturnButton';
+import LocationInput from '@/components/inputs/LocationInput';
 
-const searchSchema = z.object({
-	depart: z.string().min(3, 'Le départ est requis'),
-	destination: z.string().min(3, 'La destination est requise'),
-	// date: z.number().min(Date.now(), 'La date doit être dans le futur'),
-});
+const searchSchema = z
+	.object({
+		start: z.string().min(1, 'Le départ est requis'),
+		end: z.string().min(1, 'La destination est requise'),
+	})
+	.refine((data) => data.start !== data.end, {
+		message: 'Le départ et la destination doivent être différents',
+		path: ['end'], // Indique que l'erreur est liée au champ 'end'
+	});
 
 export const SearchForm = () => {
 	const { searchQuery, setSearchQuery } = useSearchContext();
@@ -31,13 +33,14 @@ export const SearchForm = () => {
 		resolver: zodResolver(searchSchema),
 	});
 
-	const onSubmit = (data: searchTripFormType) => {
-		setSearchQuery(data);
+	const onSubmit = (data: { start: string; end: string }) => {
+		setSearchQuery({
+			...searchQuery,
+			...data,
+		});
 		router.push('/searchTrip/search');
+		console.log('searchQuery', searchQuery);
 	};
-
-	const [showDatePicker, setShowDatePicker] = React.useState(false);
-	const [mode, setMode] = React.useState<'date' | 'time'>('date');
 
 	return (
 		<SafeAreaView style={searchTripStyles.container}>
@@ -52,68 +55,44 @@ export const SearchForm = () => {
 				<View style={searchTripStyles.formContainer}>
 					<Controller
 						control={control}
-						name='depart'
+						name='start'
 						render={({ field: { onChange, onBlur, value } }) => (
-							<TextInput
+							<LocationInput
 								placeholder='Departure'
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
-								style={searchTripStyles.input}
+								hasError={!!errors.start}
+								errorMessage={errors.start?.message?.toString()}
+								locationName={value}
+								setLocationName={onChange}
+								label={'Départ'}
 							/>
 						)}
 					/>
-					{errors.depart && <ThemedText>{errors.depart.message}</ThemedText>}
 
 					<Controller
 						control={control}
-						name='destination'
+						name='end'
 						render={({ field: { onChange, onBlur, value } }) => (
-							<TextInput
+							<LocationInput
 								placeholder='Destination'
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
-								style={searchTripStyles.input}
+								hasError={!!errors.end}
+								errorMessage={errors.end?.message?.toString()}
+								locationName={value}
+								setLocationName={onChange}
+								label={'Destination'}
 							/>
 						)}
 					/>
-					{errors.destination && (
-						<ThemedText>{errors.destination.message}</ThemedText>
-					)}
-
-					{showDatePicker && (
-						<Controller
-							control={control}
-							name='date'
-							render={({ field: { onChange, value } }) => (
-								<DateTimePicker
-									value={new Date(value)}
-									mode={mode}
-									is24Hour={true}
-									display='default'
-									onChange={(event, date) => {
-										onChange(date);
-										setShowDatePicker(false);
-									}}
-								/>
-							)}
-						/>
-					)}
-					{Boolean(errors.date) && (
-						<ThemedText style={searchTripStyles.errorText}>
-							{errors?.date?.message}
-						</ThemedText>
-					)}
-					<IconButton
-						name='search'
-						title='Rechercher'
-						size={24}
-						color={Colors.light.primary}
+					<CustomButton
 						buttonStyle={searchTripStyles.submitButton}
 						textProps={{ type: 'header5', color: 'background' }}
 						onPress={handleSubmit(onSubmit)}
-						iconStyle={{ color: Colors.light.background }}
+						text={'Rechercher'}
 					/>
 				</View>
 			</KeyboardAvoidingView>
