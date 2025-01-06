@@ -1,40 +1,25 @@
-import { StyleSheet, Text, TextStyle } from 'react-native';
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { StyleSheet, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Colors } from '@/constants/Colors';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { fonts } from '@/constants/Fonts';
 
 export type ThemedTextProps = {
-	lightColor?: string;
-	darkColor?: string;
 	type?: keyof typeof fontType;
 	color?: keyof typeof Colors.light;
 	style?: any;
 	children: any;
 };
 
-export function ThemedText({
+export const ThemedText: FC<ThemedTextProps> = ({
+	type,
+	color,
 	style,
-	lightColor,
-	darkColor,
 	children,
-	type = 'defaultBody',
-	color = 'text',
-	...rest
-}: ThemedTextProps) {
-	const textColor = useThemeColor(
-		{ light: lightColor, dark: darkColor },
-		// @ts-ignore
-		color
-	);
-
+	...props
+}) => {
 	const [loaded, error] = useFonts({
-		Inter: require('@/assets/fonts/Inter.ttf'),
-		'Inter-italic': require('@/assets/fonts/InterItalic.ttf'),
-		'Gabarito-bold': require('@/assets/fonts/Gabarito-Bold.ttf'),
-		'Gabarito-medium': require('@/assets/fonts/Gabarito-Medium.ttf'),
 		Inter: require('@/assets/fonts/Inter.ttf'),
 		'Inter-italic': require('@/assets/fonts/InterItalic.ttf'),
 		'Gabarito-bold': require('@/assets/fonts/Gabarito-Bold.ttf'),
@@ -44,7 +29,7 @@ export function ThemedText({
 	// fonts import
 	useEffect(() => {
 		if (loaded || error) {
-			SplashScreen.hideAsync();
+			SplashScreen.hideAsync().catch(console.error);
 		}
 	}, [loaded, error]);
 
@@ -54,15 +39,17 @@ export function ThemedText({
 
 	return (
 		<Text
-			style={
-				[{ color: textColor }, fontType[type], style] as unknown as TextStyle
-			}
-			{...rest}
+			style={[
+				fontType[type ?? 'defaultBody'],
+				{ color: Colors.light[color ?? 'text'] },
+				style,
+			]}
+			{...props}
 		>
 			{children}
 		</Text>
 	);
-}
+};
 
 export const fontType = StyleSheet.create({
 	defaultBody: fonts.defaultBody,
@@ -78,5 +65,5 @@ export const fontType = StyleSheet.create({
 	header3: fonts.header3,
 	header4: fonts.header4,
 	header5: fonts.header5,
-	header6: fonts.header5,
+	header6: fonts.header6,
 });
