@@ -53,6 +53,7 @@ export const Vehicle = () => {
 			seats: data.seats,
 		});
 		console.log(postTripQuery);
+		// @ts-ignore
 		router.push('post-trip/description');
 	};
 
@@ -114,7 +115,7 @@ export const Vehicle = () => {
 					/>
 				</View>
 				<CustomButton
-					text={'Valider'}
+					text={'Créer le trajet'}
 					textProps={{ color: 'background' }}
 					buttonStyle={{ width: '70%' }}
 					onPress={handleSubmit(submit)}

@@ -11,6 +11,7 @@ type ConfirmationMenuProps = {
 	message?: string;
 	onConfirm?: () => void;
 	onDeny?: () => void;
+	title?: string;
 };
 
 export const ConfirmationMenu = ({
@@ -19,6 +20,7 @@ export const ConfirmationMenu = ({
 	onDeny,
 	visible,
 	onClose,
+	title,
 }: ConfirmationMenuProps) => {
 	const deleteVehicle = () => {
 		onClose();
@@ -34,6 +36,7 @@ export const ConfirmationMenu = ({
 		>
 			<View style={styles.overlay}>
 				<View style={styles.container}>
+					{title && <ThemedText type={'header5'}>{title}</ThemedText>}
 					<ThemedText type={'bigger'}>
 						{message ?? 'Êtes-vous sûr de vouloir supprimer ce véhicule ?'}
 					</ThemedText>
