@@ -2,18 +2,19 @@ import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { TripLabel } from '../labels/TripLabel';
 import { Colors } from '@/constants/Colors';
-import { ThemedText } from '../texts/ThemedText';
-import { TripCardType } from '@/types';
+import { ThemedText } from '@/components/texts';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 const backgroundColor = {
-	current: Colors.light.accent,
-	completed: Colors.light.secondary,
-	canceled: Colors.light.inputText,
+	upcoming: Colors.light.primary,
+	ongoing: Colors.light.secondary,
+	completed: Colors.light.acceptButton,
+	cancelled: Colors.light.error,
 };
 
 type Props = {
 	style?: ViewStyle;
-	data: TripCardType;
+	data: EVAPI.Trip;
 };
 
 export function TripCard({ style, data }: Readonly<Props>) {
@@ -23,7 +24,7 @@ export function TripCard({ style, data }: Readonly<Props>) {
 				styles.container,
 				style,
 				{ backgroundColor: backgroundColor[data.status] },
-				data.status === 'canceled' && styles.cancelledCard,
+				data.status === 'cancelled' && styles.cancelledCard,
 			]}
 		>
 			<Image
@@ -37,24 +38,23 @@ export function TripCard({ style, data }: Readonly<Props>) {
 						color={'background'}
 						style={{ marginLeft: 20 }}
 					>
-						{data.nom}
+						<ThemedText color='background'>
+							{data.points[0].location.name}
+							{' -> '}
+							{data.points[data.points.length - 1].location.name}
+						</ThemedText>
 					</ThemedText>
 					<TripLabel
 						status={data.status}
 						style={{ alignSelf: 'baseline' }}
 					/>
 				</View>
-				<ThemedText color='background'>
-					{data.depart}
-					{' -> '}
-					{data.destination}
-				</ThemedText>
 				<ThemedText
 					color='background'
 					style={styles.date}
 					type={'smaller'}
 				>
-					{data.date}
+					{data.datetime.toLocaleString()}
 				</ThemedText>
 			</View>
 		</View>
