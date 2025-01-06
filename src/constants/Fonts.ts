@@ -61,7 +61,7 @@ export const fonts = {
 	},
 	header5: {
 		fontFamily: 'Gabarito-medium',
-		fontSize: 21,
+		fontSize: 24,
 		letterSpacing: 0.5,
 	},
 	header6: {

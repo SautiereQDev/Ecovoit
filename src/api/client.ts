@@ -2,7 +2,7 @@
 import type { AxiosResponse } from 'axios';
 // @ts-ignore
 import axios, { AxiosInstance } from 'axios';
-import EVAPIMockAdapter, { EVAPI } from '@ecovoit-api/mock-adapter';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 /**
  * Create an Axios instance with predefined configuration.
@@ -16,12 +16,13 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
+const EXTENDED_DEBUG_MODE = false;
 
 // Ajouter un interceptor pour journaliser l'URL de chaque requête et les données
 if (process.env.NODE_ENV === 'development') {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const mock = new EVAPIMockAdapter(apiClient);
+	// const mock = new EVAPIMockAdapter(apiClient);
 
 	apiClient.interceptors.request.use(
 		(config: any) => {
@@ -37,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 				`Request Type: ${config.method?.toUpperCase()} | Request URL: ${url.toString()}`
 			);
 
-			if (DEBUG_MODE) {
+			if (DEBUG_MODE && EXTENDED_DEBUG_MODE) {
 				console.log('Request Headers:', config.headers);
 				console.log('Request Data:', config.data);
 			}

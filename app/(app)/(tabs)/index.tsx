@@ -1,13 +1,17 @@
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useData } from '@/providers';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
+import { ThemedText } from '@/components/texts';
+import { Link, router } from 'expo-router';
+import { TripCard } from '@/components/cards';
+import { CustomButton } from '@/components/buttons';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
-	const { data, isLoading, error } = useCurrentUserTrips();
+	const { trips: userTrips, isLoading, error } = useCurrentUserTrips();
 
 	if (isLoading) {
 		return <LoadingScreen />;
@@ -17,46 +21,42 @@ export const Index = () => {
 		return <ErrorScreen error={error} />;
 	}
 
-	if (!isLoading) {
-		console.log(data);
-	}
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
-				{/*<ThemedText*/}
-				{/*	type='header1'*/}
-				{/*	color='primary'*/}
-				{/*	style={styles.title}*/}
-				{/*>*/}
-				{/*	Ecovoit*/}
-				{/*</ThemedText>*/}
-				{/*<Link*/}
-				{/*	href={'/(app)/(tabs)/searchTrip/search'}*/}
-				{/*	style={styles.searchButton}*/}
-				{/*>*/}
-				{/*	<ThemedText*/}
-				{/*		color='background'*/}
-				{/*		type='header5'*/}
-				{/*		style={{ textAlign: 'center' }}*/}
-				{/*	>*/}
-				{/*		Chercher un covoiturage*/}
-				{/*	</ThemedText>*/}
-				{/*</Link>*/}
-				{/*<ThemedText*/}
-				{/*	type='header3'*/}
-				{/*	style={styles.secondaryTitle}*/}
-				{/*>*/}
-				{/*	Mes trajets effectués ou en cours 🌿*/}
-				{/*</ThemedText>*/}
-				{/*{data?.tripsAsDriver.length === 0 && (*/}
-				{/*	<FlatList*/}
-				{/*		data={}*/}
-				{/*		renderItem={({ item }) => <TripCard data={item} />}*/}
-				{/*		keyExtractor={(item, index) => index.toString()}*/}
-				{/*		ItemSeparatorComponent={() => <View style={{ height: 20 }} />}*/}
-				{/*	/>*/}
-				{/*)}*/}
+				<ThemedText
+					type='header1'
+					style={styles.title}
+				>
+					Ecovoit
+				</ThemedText>
+				<CustomButton
+					text={'Chercher un covoiturage'}
+					buttonStyle={styles.searchButton}
+					// @ts-ignore
+					onPress={() => router.push('/(app)/(tabs)/searchTrip')}
+					textProps={{ color: 'background', type: 'header5' }}
+				/>
+				<ThemedText
+					type='header3'
+					style={styles.secondaryTitle}
+				>
+					Mes trajets effectués ou en cours 🌿
+				</ThemedText>
+				{userTrips && userTrips.length > 0 && (
+					<FlatList
+						data={userTrips}
+						renderItem={({ item }) =>
+							item ? (
+								<Link href={`/(app)/DetailedTrip/[${item.id}]`}>
+									<TripCard data={item} />
+								</Link>
+							) : null
+						}
+						keyExtractor={(item, index) => index.toString()}
+						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+					/>
+				)}
 			</View>
 		</SafeAreaView>
 	);
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light.primary,
 		paddingVertical: '3%',
 		maxWidth: '90%',
+		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
 	},

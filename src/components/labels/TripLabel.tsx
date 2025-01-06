@@ -44,7 +44,7 @@ export function TripLabel({
 			]}
 		>
 			<ThemedText
-				type={theme === 'default' ? 'small' : 'header6'}
+				type={theme === 'bigger' ? 'small' : 'header6'}
 				style={[{ color: Colors.light.background }, styles.text]}
 			>
 				{status ? statusText[status] : 'Unknown'}

@@ -41,7 +41,7 @@ export const Description = () => {
 	const handleDeny = () => {
 		// on envoie les donnes à l'api sans la description
 		addTrip.mutate(
-			{ tripData: postTripQuery },
+			{ trip: postTripQuery },
 			{
 				onSuccess: () => {
 					router.push('/');
@@ -64,7 +64,7 @@ export const Description = () => {
 			description: data.description,
 		});
 		addTrip.mutate(
-			{ tripData: postTripQuery },
+			{ trip: postTripQuery },
 			{
 				onSuccess: () => {
 					notify('success', {
