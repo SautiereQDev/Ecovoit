@@ -21,8 +21,8 @@ export const fetchTrips = (
  * @returns {Promise<GetTripType>} A promise that resolves to the added trip.
  * @param tripData
  */
-export const postTrip = (tripData: EVAPI.TripEntry): Promise<EVAPI.Trip> =>
-	apiPost<EVAPI.TripEntry, EVAPI.Trip>('/trips', tripData);
+export const postTrip = (tripData: EVAPI.TripCreation): Promise<EVAPI.Trip> =>
+	apiPost<EVAPI.TripCreation, EVAPI.Trip>('/trips', tripData);
 
 /**
  * Fetches a trip by its ID.

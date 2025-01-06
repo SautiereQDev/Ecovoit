@@ -10,7 +10,6 @@ import { useRouter } from 'expo-router';
 import { useNotifications } from 'react-native-notificated';
 import { profileStyles } from '@/styles/profile';
 import { useData } from '@/providers';
-import { GetUserType } from '@/types';
 
 export default function EditProfile() {
 	const [tempUser, setTempUser] = useState<GetUserType | undefined>(undefined);

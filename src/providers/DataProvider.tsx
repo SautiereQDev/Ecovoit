@@ -36,7 +36,11 @@ interface DataContextProps {
 		>
 	>;
 	useAddTrip: () => ReturnType<
-		typeof useMutation<EVAPI.Trip, EVAPI.Error, { tripData: EVAPI.TripEntry }>
+		typeof useMutation<
+			EVAPI.Trip,
+			EVAPI.Error,
+			{ tripData: EVAPI.TripCreation }
+		>
 	>;
 	useUsers: () => ReturnType<typeof useQuery<EVAPI.PublicUser[]>>;
 	useUser: (userId: string) => ReturnType<typeof useQuery<EVAPI.PublicUser>>;
@@ -211,7 +215,7 @@ const useTrip = (tripId: string) => {
 
 const useAddTrip = () => {
 	const queryClient = useQueryClient();
-	return useMutation<EVAPI.Trip, EVAPI.Error, { tripData: EVAPI.TripEntry }>(
+	return useMutation<EVAPI.Trip, EVAPI.Error, { tripData: EVAPI.TripCreation }>(
 		(variables) => postTrip(variables.tripData),
 		{
 			onSuccess: () => {

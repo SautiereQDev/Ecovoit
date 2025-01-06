@@ -15,6 +15,7 @@ interface RouteMapProps {
 	start: Location;
 	end: Location;
 	waypoints?: Location[];
+	onError?: (err: any) => void;
 }
 
 export const RouteMap = ({
@@ -22,6 +23,7 @@ export const RouteMap = ({
 	start,
 	end,
 	waypoints = [],
+	onError,
 }: RouteMapProps) => {
 	const [route, setRoute] = useState<Route | null>(null);
 	const mapRef = useRef<MapView>(null);
@@ -66,6 +68,9 @@ export const RouteMap = ({
 				});
 			} catch (error) {
 				console.error('Failed to load route:', error);
+				if (onError) {
+					onError(error);
+				}
 			}
 		};
 		loadRoute().catch(console.error);

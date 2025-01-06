@@ -50,11 +50,10 @@ export const Index = () => {
 				(point) => point.name === watch('1.locationName')
 			);
 
-			console.log(startLocation, endLocation);
-			console.log(postTripQuery);
-
 			if (startLocation && endLocation) {
 				setLocPoints([startLocation, endLocation]);
+			} else {
+				setLocPoints(null);
 			}
 		}
 	}, [listePoints, watch('0.locationName'), watch('1.locationName')]);
