@@ -48,7 +48,10 @@ export const Index = () => {
 						data={userTrips}
 						renderItem={({ item }) =>
 							item ? (
-								<Link href={`/(app)/DetailedTrip/[${item.id}]`}>
+								<Link
+									href={`/(app)/DetailedTrip/[id]`}
+									key={item.id}
+								>
 									<TripCard data={item} />
 								</Link>
 							) : null
