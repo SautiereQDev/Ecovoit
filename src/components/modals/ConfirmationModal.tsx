@@ -8,9 +8,9 @@ import { ThemedText } from '@/components/texts';
 type ConfirmationMenuProps = {
 	visible: boolean;
 	onClose: () => void;
-	message: string;
-	onConfirm: () => void;
-	onDeny: () => void;
+	message?: string;
+	onConfirm?: () => void;
+	onDeny?: () => void;
 };
 
 export const ConfirmationMenu = ({
