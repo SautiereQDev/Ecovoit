@@ -6,62 +6,55 @@ import { Controller, useForm } from 'react-hook-form';
 import { globalStyles, postTripStyles } from '@/styles';
 import LocationInput from '@/components/inputs/LocationInput';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
-import { useData } from '@/providers';
+import { useData, usePostTrip } from '@/providers';
 import { ErrorScreen } from '@/components/pages';
 import RouteMap from '@/components/map/RouteMap';
 import { router } from 'expo-router';
-import { usePostTripContext } from '@/providers/PostTripProvider';
 
 export const Index = () => {
-	const { control, handleSubmit, setValue, watch } = useForm<
-		[EVAPI.PointCreation, EVAPI.PointCreation]
-	>({
+	const {
+		control,
+		handleSubmit,
+		setValue,
+		watch,
+		formState: { errors },
+	} = useForm<[EVAPI.PointCreation, EVAPI.PointCreation]>({
 		defaultValues: [
 			{ locationName: '', type: 'start', waitingTime: 0 },
-			{
-				locationName: '',
-				type: 'end',
-				waitingTime: 0,
-			},
+			{ locationName: '', type: 'end', waitingTime: 0 },
 		],
 	});
 
 	const { useLocation } = useData();
 	const { data: listePoints, isLoading, error } = useLocation();
 
-	const { postTripQuery, setPostTripQuery } = usePostTripContext();
+	const { postTripQuery, setPostTripQuery } = usePostTrip();
 
 	const [locPoints, setLocPoints] = useState<
 		[EVAPI.Location, EVAPI.Location] | null
 	>(null);
 
-	const [endLocationIndex, setEndLocationIndex] = useState<number>(() =>
-		postTripQuery.points.findIndex((point) => point.type === 'end')
-	);
+	const [endLocationIndex, setEndLocationIndex] = useState<number>(() => {
+		return (
+			postTripQuery.points.findIndex((point) => point.type === 'end') ??
+			postTripQuery.points.length
+		);
+	});
 
 	useEffect(() => {
 		if (Array.isArray(listePoints) && listePoints.length > 0) {
-			const startLocationName = watch('0.locationName');
-			const endLocationName = watch('1.locationName');
-
-			const filteredPoints = listePoints.filter(
-				(location): location is EVAPI.Location => {
-					return (
-						location !== undefined &&
-						location !== null &&
-						typeof location === 'object' &&
-						'name' in location &&
-						typeof location.name === 'string' &&
-						(location.name === startLocationName ||
-							location.name === endLocationName)
-					);
-				}
+			const startLocation = listePoints.find(
+				(point) => point.name === watch('0.locationName')
+			);
+			const endLocation = listePoints.find(
+				(point) => point.name === watch('1.locationName')
 			);
 
-			if (filteredPoints.length === 2) {
-				setLocPoints(filteredPoints as [EVAPI.Location, EVAPI.Location]);
-			} else {
-				setLocPoints(null);
+			console.log(startLocation, endLocation);
+			console.log(postTripQuery);
+
+			if (startLocation && endLocation) {
+				setLocPoints([startLocation, endLocation]);
 			}
 		}
 	}, [listePoints, watch('0.locationName'), watch('1.locationName')]);
@@ -74,10 +67,16 @@ export const Index = () => {
 		setPostTripQuery({
 			...postTripQuery,
 			points: [
-				...postTripQuery.points.slice(0, endLocationIndex),
-				data[0],
-				data[1],
-				...postTripQuery.points.slice(endLocationIndex + 1),
+				{
+					locationName: data[0].locationName,
+					type: 'start',
+					waitingTime: 0,
+				},
+				{
+					locationName: data[1].locationName,
+					type: 'end',
+					waitingTime: 0,
+				},
 			],
 		});
 		console.log(postTripQuery);
@@ -113,6 +112,8 @@ export const Index = () => {
 							}}
 							label={'Départ'}
 							placeholder={'Entrez le point de départ'}
+							hasError={!!errors[0]?.locationName}
+							errorMessage={errors[0]?.locationName?.message}
 						/>
 					)}
 				/>
@@ -128,6 +129,8 @@ export const Index = () => {
 							}}
 							label={'Arrivée'}
 							placeholder={"Entrez le point d'arrivée"}
+							hasError={!!errors[1]?.locationName}
+							errorMessage={errors[1]?.locationName?.message}
 						/>
 					)}
 				/>

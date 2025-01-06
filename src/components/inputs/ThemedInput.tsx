@@ -115,6 +115,7 @@ const primary = StyleSheet.create({
 	},
 	medium: {
 		height: 50,
+		fontSize: 18, // Augmenter la taille de la police
 	},
 	large: {
 		height: 50,

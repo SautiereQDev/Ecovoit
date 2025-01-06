@@ -45,7 +45,7 @@ export const PostTripProvider: React.FC<{ children: ReactNode }> = ({
 	);
 };
 
-export const usePostTripContext = (): PostTripContextType => {
+export const usePostTrip = (): PostTripContextType => {
 	const context = useContext(PostTripContext);
 	if (!context) {
 		throw new Error(

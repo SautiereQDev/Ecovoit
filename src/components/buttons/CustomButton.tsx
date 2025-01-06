@@ -55,10 +55,12 @@ export function CustomButton({
 }: Props): ReactNode {
 	return (
 		<Pressable
+			disabled={restProps.disabled}
 			style={[
 				styles.button,
 				styles[size], // Appliquer les styles spécifiques à la taille
 				buttonStyle,
+				restProps.disabled && styles.disabled,
 				{ backgroundColor: Colors.light[backgroundColor] },
 			]}
 			{...restProps}
@@ -97,6 +99,9 @@ const styles = StyleSheet.create({
 		paddingVertical: '2%',
 		paddingHorizontal: '2%',
 		width: '70%',
+	},
+	disabled: {
+		opacity: 0.5,
 	},
 });
 

@@ -2,17 +2,27 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { ThemedText } from '@/components/texts';
 import { globalStyles } from '@/styles';
-import { IconButton, ReturnButton } from '@/components/buttons';
+import { CustomButton, ReturnButton } from '@/components/buttons';
 import { VehicleCard } from '@/components/cards';
-import { useData } from '@/providers';
-import { LoadingScreen } from '@/components/pages';
+import { useData, usePostTrip } from '@/providers';
+import { ErrorScreen, LoadingScreen } from '@/components/pages';
 import { ThemedInput } from '@/components/inputs';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { router } from 'expo-router';
+
+const schema = z.object({
+	seats: z.number().int().min(1),
+});
 
 export const Vehicle = () => {
 	// TODO: Afficher une modal pour demander si il souhaite ajouter une description
 	//  TODO: Recuperer les vehicle de l'utilisateur et les afficher sous forme de cards cliquable comme dans le profil
 
 	// Choix du vehicle + selection du nombre de siège
+
+	const { postTripQuery, setPostTripQuery } = usePostTrip();
 
 	const { useCurrentUserVehicles } = useData();
 	const { data: vehicles, error, isLoading } = useCurrentUserVehicles();
@@ -21,8 +31,37 @@ export const Vehicle = () => {
 		null
 	);
 
+	const {
+		control,
+		handleSubmit,
+		watch,
+		formState: { errors },
+	} = useForm<{
+		seats: number;
+	}>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			seats: 0,
+		},
+	});
+
+	const submit = (data: { seats: number }) => {
+		if (!selectedVehicle) throw new Error('No vehicle selected');
+		setPostTripQuery({
+			...postTripQuery,
+			vehicle: selectedVehicle,
+			seats: data.seats,
+		});
+		console.log(postTripQuery);
+		router.push('post-trip/description');
+	};
+
 	if (isLoading) {
 		return <LoadingScreen />;
+	}
+
+	if (error) {
+		return <ErrorScreen error={error} />;
 	}
 
 	return (
@@ -49,31 +88,38 @@ export const Vehicle = () => {
 						/>
 					</Pressable>
 				))}
-				<View>
+				<View style={styles.seatContainer}>
 					<ThemedText
 						type={'header4'}
 						style={globalStyles.title}
 					>
 						Nombre de sièges disponibles
 					</ThemedText>
-					<View style={styles.seatContainer}>
-						<IconButton
-							size={24}
-							name={'arrow-left'}
-							style={styles.arrowButton}
-						/>
-						<ThemedInput
-							keyboardType={'number-pad'}
-							style={styles.seats}
-							size={'large'}
-						/>
-						<IconButton
-							size={24}
-							name={'arrow-right'}
-							style={styles.arrowButton}
-						/>
-					</View>
+					<Controller
+						render={({ field: { onChange, onBlur, value } }) => (
+							<ThemedInput
+								keyboardType={'number-pad'}
+								style={styles.seats}
+								size={'large'}
+								textAlign={'center'}
+								onBlur={onBlur}
+								onChangeText={(text) => onChange(parseInt(text, 10))}
+								value={value.toString()}
+								hasError={!!errors.seats}
+								errorMessage={errors.seats?.message}
+							/>
+						)}
+						name={'seats'}
+						control={control}
+					/>
 				</View>
+				<CustomButton
+					text={'Valider'}
+					textProps={{ color: 'background' }}
+					buttonStyle={{ width: '70%' }}
+					onPress={handleSubmit(submit)}
+					disabled={!selectedVehicle || watch('seats') === 0}
+				/>
 			</View>
 		</View>
 	);
@@ -93,10 +139,10 @@ const styles = StyleSheet.create({
 		maxWidth: '45%',
 	},
 	seatContainer: {
-		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: '3%',
+		marginBottom: '20%',
 	},
 	seats: {
 		width: '30%',
