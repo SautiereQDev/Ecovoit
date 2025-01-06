@@ -49,10 +49,15 @@ export const Index = () => {
 						renderItem={({ item }) =>
 							item ? (
 								<Link
-									href={`/(app)/DetailedTrip/[id]`}
-									key={item.id}
+									href={{
+										pathname: '/(app)/DetailedTrip/[id]',
+										params: { id: item.id },
+									}}
 								>
-									<TripCard data={item} />
+									<TripCard
+										data={item}
+										style={styles.tripCard}
+									/>
 								</Link>
 							) : null
 						}
@@ -92,5 +97,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
+	},
+	tripCard: {
+		width: '100%',
 	},
 });
