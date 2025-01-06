@@ -13,7 +13,7 @@ import { router } from 'expo-router';
 import { useNotifications } from 'react-native-notificated';
 
 const schema = z.object({
-	description: z.string().min(5),
+	description: z.string().min(5).max(255),
 });
 
 export const Description = () => {
@@ -67,7 +67,14 @@ export const Description = () => {
 			{ tripData: postTripQuery },
 			{
 				onSuccess: () => {
-					router.push('/(app)/(tabs)/');
+					notify('success', {
+						params: {
+							title: 'Votre trajet a bien été ajouté',
+							description:
+								'Vous pouvez désormais le retrouver dans la liste de vos trajets',
+						},
+					});
+					router.push('/');
 				},
 				onError: (error) => {
 					notify('error', {
@@ -92,15 +99,20 @@ export const Description = () => {
 			<View style={[globalStyles.form, { gap: 20 }]}>
 				{/* TODO: Arriver à faire passer l'input sur plusieurs lignes*/}
 				<Controller
-					render={() => (
+					name='description'
+					control={control}
+					render={({ field: { onChange, onBlur, value } }) => (
 						<ThemedInput
-							placeholder={'Ajouter une description'}
+							placeholder={"Ajoute d'une description"}
 							multiline
 							numberOfLines={3}
+							onBlur={onBlur}
+							onChangeText={onChange}
+							value={value}
+							hasError={!!errors.description}
+							errorMessage={errors.description?.message}
 						/>
 					)}
-					name={'description'}
-					control={control}
 				/>
 				<CustomButton
 					text={'Ajouter'}
@@ -116,6 +128,7 @@ export const Description = () => {
 				title={'Ajouter une description'}
 				message={'Souhaitez-vous ajouter une description ?'}
 				onDeny={handleDeny}
+				onConfirm={() => setShowConfirmationModal(false)}
 			/>
 		</View>
 	);

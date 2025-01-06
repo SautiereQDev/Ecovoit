@@ -2,7 +2,7 @@
 import type { AxiosResponse } from 'axios';
 // @ts-ignore
 import axios, { AxiosInstance } from 'axios';
-import { EVAPI } from '@ecovoit-api/mock-adapter';
+import EVAPIMockAdapter, { EVAPI } from '@ecovoit-api/mock-adapter';
 
 /**
  * Create an Axios instance with predefined configuration.
@@ -21,7 +21,7 @@ const DEBUG_MODE = false;
 // Ajouter un interceptor pour journaliser l'URL de chaque requête et les données
 if (process.env.NODE_ENV === 'development') {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	// const mock = new EVAPIMockAdapter(apiClient);
+	const mock = new EVAPIMockAdapter(apiClient);
 
 	apiClient.interceptors.request.use(
 		(config: any) => {

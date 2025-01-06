@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemedText } from '@/components/texts';
 import { globalStyles } from '@/styles';
 import { CustomButton, ReturnButton } from '@/components/buttons';
@@ -40,10 +40,11 @@ export const Vehicle = () => {
 		seats: number;
 	}>({
 		resolver: zodResolver(schema),
-		defaultValues: {
-			seats: 0,
-		},
 	});
+
+	useEffect(() => {
+		setSelectedVehicle(vehicles?.[0].label ?? null);
+	}, [isLoading, vehicles]);
 
 	const submit = (data: { seats: number }) => {
 		if (!selectedVehicle) throw new Error('No vehicle selected');
@@ -105,7 +106,7 @@ export const Vehicle = () => {
 								textAlign={'center'}
 								onBlur={onBlur}
 								onChangeText={(text) => onChange(parseInt(text, 10))}
-								value={value.toString()}
+								value={value ? value.toString() : ''}
 								hasError={!!errors.seats}
 								errorMessage={errors.seats?.message}
 							/>
