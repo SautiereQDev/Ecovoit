@@ -5,8 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useData } from '@/providers';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
 import { ThemedText } from '@/components/texts';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { TripCard } from '@/components/cards';
+import { CustomButton } from '@/components/buttons';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
@@ -25,23 +26,17 @@ export const Index = () => {
 			<View style={styles.content}>
 				<ThemedText
 					type='header1'
-					color='primary'
 					style={styles.title}
 				>
 					Ecovoit
 				</ThemedText>
-				<Link
-					href={'/(app)/(tabs)/searchTrip/search'}
-					style={styles.searchButton}
-				>
-					<ThemedText
-						color='background'
-						type='header5'
-						style={{ textAlign: 'center' }}
-					>
-						Chercher un covoiturage
-					</ThemedText>
-				</Link>
+				<CustomButton
+					text={'Chercher un covoiturage'}
+					buttonStyle={styles.searchButton}
+					// @ts-ignore
+					onPress={() => router.push('/(app)/(tabs)/searchTrip')}
+					textProps={{ color: 'background', type: 'header5' }}
+				/>
 				<ThemedText
 					type='header3'
 					style={styles.secondaryTitle}
@@ -51,7 +46,13 @@ export const Index = () => {
 				{userTrips && userTrips.length > 0 && (
 					<FlatList
 						data={userTrips}
-						renderItem={({ item }) => (item ? <TripCard data={item} /> : null)}
+						renderItem={({ item }) =>
+							item ? (
+								<Link href={`/(app)/DetailedTrip/[${item.id}]`}>
+									<TripCard data={item} />
+								</Link>
+							) : null
+						}
 						keyExtractor={(item, index) => index.toString()}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 					/>
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.light.primary,
 		paddingVertical: '3%',
 		maxWidth: '90%',
+		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
 	},
