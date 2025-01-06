@@ -13,6 +13,20 @@ export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { trips: userTrips, isLoading, error } = useCurrentUserTrips();
 
+	// Tri des trajets par date de départ ave les trajets en cours en premier
+	userTrips?.sort((a, b) => {
+		if (a?.status === 'ongoing' && b?.status !== 'ongoing') {
+			return -1;
+		}
+		if (a?.status !== 'ongoing' && b?.status === 'ongoing') {
+			return 1;
+		}
+		if (a?.datetime && b?.datetime) {
+			return a.datetime < b.datetime ? 1 : -1;
+		}
+		return 0;
+	});
+
 	if (isLoading) {
 		return <LoadingScreen />;
 	}

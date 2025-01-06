@@ -13,6 +13,9 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 type ratingType = 1 | 2 | 3 | 4 | 5 | 0.5 | 1.5 | 2.5 | 3.5 | 4.5;
 
+// TODO: Afficher le nom du vehicle à côté d'une icone de voiture et le nombre de passagers actuellement inscris dans le trajet
+// TODO: Créer deux modes : un premier mode lorsque le voyage est terminé et un second mode lorsque le voyage n'est pas encore commencé et qui permet de s'inscrire
+
 const DetailedTripPage = () => {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { useTrip, useUser } = useData();
