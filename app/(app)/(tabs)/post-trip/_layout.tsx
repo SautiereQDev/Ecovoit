@@ -1,20 +1,27 @@
+import { View, Text } from 'react-native';
 import React from 'react';
 import { Stack } from 'expo-router';
-import { PostTripProvider } from '@/providers/PostTripProvider';
 
-export default function ProfileLayout() {
+export default function PostTripLayout() {
 	return (
-		<PostTripProvider>
+		<View>
+			<Text>PostTripLayout</Text>
 			<Stack
 				screenOptions={{
-					headerShown: false,
+					headerStyle: {
+						backgroundColor: '#f4511e',
+					},
+					headerTintColor: '#fff',
+					headerTitleStyle: {
+						fontWeight: 'bold',
+					},
 				}}
 			>
-				<Stack.Screen name='index' />
-				<Stack.Screen name='description' />
-				<Stack.Screen name='checkpoints' />
-				<Stack.Screen name='vehicle' />
+				<Stack.Screen
+					name='index'
+					options={{}}
+				/>
 			</Stack>
-		</PostTripProvider>
+		</View>
 	);
 }
