@@ -48,20 +48,16 @@ export default function PostTrip() {
 			return;
 		}
 
-		const startLocationName = startPoint?.locationName;
-		const endLocationName = endPoint?.locationName;
-
-		if (!startLocationName || !endLocationName) {
+		if (!startPoint?.locationName || !endPoint?.locationName) {
 			setLocPoints(null);
 			return;
 		}
 
-		// Find locations with safe navigation
 		const startLocation = listePoints.find(
-			(loc) => loc && loc.name === startLocationName
+			(loc) => loc && loc.name === startPoint?.locationName
 		);
 		const endLocation = listePoints.find(
-			(loc) => loc && loc.name === endLocationName
+			(loc) => loc && loc.name === endPoint?.locationName
 		);
 
 		// Update points only if both locations are found
