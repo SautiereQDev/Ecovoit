@@ -4,9 +4,9 @@ import { ActivityIndicator } from 'react-native-paper';
 import MapView, { LatLng, Marker, Polyline, Region } from 'react-native-maps';
 import { ThemedText } from '@/components/texts';
 import { decode } from '@mapbox/polyline';
-import { CustomButton } from '@/components/buttons';
 import { Colors } from '@/constants';
 import { Location, RouteError, useMapCoordinates, useOSRMRoute } from '@/hooks';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export type RouteMapProps = {
 	start: Location;
@@ -16,7 +16,7 @@ export type RouteMapProps = {
 	onError?: (error: RouteError) => void;
 	onRouteFound?: (distance: number, duration: number) => void;
 	isStatic?: boolean;
-	showRecenterButton?: boolean;
+	hideCenterButton?: boolean;
 };
 
 export const RouteMap: FC<RouteMapProps> = ({
@@ -26,8 +26,8 @@ export const RouteMap: FC<RouteMapProps> = ({
 	style,
 	onError,
 	onRouteFound,
-	isStatic,
-	showRecenterButton = true,
+	isStatic = false,
+	hideCenterButton = false,
 }) => {
 	const mapRef = useRef<MapView>(null);
 	const { initialRegion } = useMapCoordinates(start, end, waypoints ?? []);
@@ -43,23 +43,9 @@ export const RouteMap: FC<RouteMapProps> = ({
 	// Reset la région quand les points changent
 	useEffect(() => {
 		setRegion(initialRegion);
-
-		// Optionnel: forcer la carte à s'ajuster
 		mapRef.current?.animateToRegion(initialRegion, 1000);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
-
-	// Nettoyer les requêtes en cours lors du démontage
-	useEffect(() => {
-		const mapInstance = mapRef.current;
-
-		return () => {
-			if (mapInstance) {
-				// @ts-ignore - Nécessaire pour éviter les fuites de mémoire
-				mapInstance._root = null;
-			}
-		};
-	}, []);
 
 	if (isLoading) {
 		return (
@@ -132,12 +118,11 @@ export const RouteMap: FC<RouteMapProps> = ({
 				/>
 			</MapView>
 			{!isStatic ||
-				(!showRecenterButton && (
-					<CustomButton
-						onPress={() => setRegion(initialRegion)}
-						style={styles.button}
-						textProps={{ type: 'defaultBody', color: 'secondary' }}
-						text={'Recentrer'}
+				(!hideCenterButton && (
+					<MaterialCommunityIcons
+						name='target'
+						size={24}
+						color='black'
 					/>
 				))}
 		</View>

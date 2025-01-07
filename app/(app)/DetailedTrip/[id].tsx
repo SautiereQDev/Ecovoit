@@ -1,5 +1,5 @@
 import React from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useData } from '@/providers';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
@@ -10,6 +10,7 @@ import { RouteMap } from '@/components/map';
 import { Colors } from '@/constants';
 import { Stars } from '@/components/UI';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { globalStyles } from '@/styles';
 
 type ratingType = 1 | 2 | 3 | 4 | 5 | 0.5 | 1.5 | 2.5 | 3.5 | 4.5;
 
@@ -18,13 +19,20 @@ type ratingType = 1 | 2 | 3 | 4 | 5 | 0.5 | 1.5 | 2.5 | 3.5 | 4.5;
 
 const DetailedTripPage = () => {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { useTrip, useUser } = useData();
-	const { data: trip, isLoading, error } = useTrip(id);
+	const { useTrip, useVehicleByUserByLabel, useUser } = useData();
+	const { data: trip, isLoading, error: errorTrip } = useTrip(id);
 
-	// TODO: faire sa propre requête pour récupérer le user après avoir récupéré le trip
-	const { data: driver, isLoading: driverLoading } = useUser(
-		trip?.driver?.id ?? ''
-	);
+	const {
+		data: vehicle,
+		isLoading: vehicleLoading,
+		error: errorVehicle,
+	} = useVehicleByUserByLabel(trip?.driver?.id!, trip?.vehicle!);
+
+	const {
+		data: driver,
+		isLoading: driverLoading,
+		error: errorDriver,
+	} = useUser(trip?.driver?.id!);
 
 	const start: EVAPI.Location | undefined = trip?.points.find(
 		(point) => point.type === 'start'
@@ -38,29 +46,34 @@ const DetailedTripPage = () => {
 		)
 		.map((point) => point.location);
 
-	if (error) {
-		return <ErrorScreen error={error} />;
+	if (errorTrip) {
+		return <ErrorScreen error={errorVehicle} />;
+	}
+	if (errorDriver) {
+		return <ErrorScreen error={errorTrip} />;
+	}
+	if (errorVehicle) {
+		return <ErrorScreen error={errorTrip} />;
 	}
 
-	if (isLoading || driverLoading) {
+	if (isLoading || vehicleLoading || driverLoading) {
 		return <LoadingScreen />;
 	}
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ReturnButton handleBack={() => router.push('/searchTrip/search')} />
+		<SafeAreaView style={globalStyles.container}>
+			<ReturnButton />
 			<ThemedText
 				type='header3'
 				style={styles.title}
 			>
-				{trip?.datetime
-					? new Date(trip.datetime).toLocaleDateString('fr-FR', {
-							day: 'numeric',
-							month: 'long',
-							hour: 'numeric',
-							minute: 'numeric',
-						})
-					: 'Date not available'}
+				{trip &&
+					new Date(trip.datetime).toLocaleDateString('fr-FR', {
+						day: 'numeric',
+						month: 'long',
+						hour: 'numeric',
+						minute: 'numeric',
+					})}
 			</ThemedText>
 			<ThemedText
 				type='header5'
@@ -69,10 +82,7 @@ const DetailedTripPage = () => {
 				{start && end && `${start.name} -> ${end.name}`}
 			</ThemedText>
 			<View style={styles.labelContainer}>
-				<TripLabel
-					status={trip?.status ?? 'upcoming'}
-					theme={'bigger'}
-				/>
+				<TripLabel status={trip?.status ?? 'upcoming'} />
 			</View>
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
@@ -85,11 +95,13 @@ const DetailedTripPage = () => {
 						/>
 					)}
 					<TripInfoLabel
-						data={{
-							distance: trip?.distance ?? undefined,
-							consumption: trip?.distance ?? undefined, // TODO : distance * tripVehicle.consumption
-							arrivalTime: '12h30', // TODO : trip datetime + trip duration
-						}}
+						distance={trip?.distance ?? undefined}
+						consumption={
+							trip?.distance && vehicle?.consumption
+								? trip.distance * vehicle.consumption
+								: undefined
+						}
+						arrivalTime={trip?.datetime}
 					/>
 				</View>
 				{trip?.driver?.stars && (
@@ -97,12 +109,12 @@ const DetailedTripPage = () => {
 						<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>
 						<View>
 							<ThemedText type='defaultBody'>{trip.driver.stars}</ThemedText>
-							{driver && (
+							{
 								<Stars
-									rating={driver.stars as ratingType}
+									rating={driver?.stars as ratingType}
 									style={styles.rating}
 								/>
-							)}
+							}
 						</View>
 					</View>
 				)}
