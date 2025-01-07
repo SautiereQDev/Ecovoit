@@ -12,12 +12,12 @@ const apiClient: AxiosInstance = axios.create({
 	baseURL: 'https://api-ev-qq.pimous.dev/',
 	headers: {
 		'Content-Type': 'application/json',
-		Authorization: '5877943231555567616',
+		Autorisation: '5877943231555567616',
 	},
 });
 
 const DEBUG_MODE = true;
-const EXTENDED_DEBUG_MODE = false;
+const EXTENDED_DEBUG_MODE = true;
 
 // Ajouter un interceptor pour journaliser l'URL de chaque requête et les données
 if (process.env.NODE_ENV === 'development') {

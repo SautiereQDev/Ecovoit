@@ -23,7 +23,7 @@ export const PostTripProvider: React.FC<{ children: ReactNode }> = ({
 		vehicle: '',
 		seats: 0,
 		description: null,
-		datetime: 0,
+		datetime: new Date(new Date().setDate(new Date().getDate() + 7)).getTime(),
 		points: [],
 	};
 

@@ -1,5 +1,3 @@
-// services/OSRMService.ts
-
 interface RoutePoint {
 	location: [number, number];
 	name?: string;
@@ -23,18 +21,17 @@ interface Route {
 }
 
 export class OSRMService {
-	private static readonly BASE_URL = "https://router.project-osrm.org/route/v1";
+	private static readonly BASE_URL = 'https://router.project-osrm.org/route/v1';
 
 	static async getRoute(
 		start: RoutePoint,
 		end: RoutePoint,
-		waypoints: RoutePoint[] = [],
+		waypoints: RoutePoint[] = []
 	): Promise<Route> {
 		try {
-			// Construire les coordonnées pour l'URL
 			const coordinates = [start, ...waypoints, end]
-				.map((point) => point.location.join(","))
-				.join(";");
+				.map((point) => point.location.join(','))
+				.join(';');
 
 			const url = `${this.BASE_URL}/driving/${coordinates}?overview=full&geometries=geojson`;
 
@@ -44,9 +41,11 @@ export class OSRMService {
 			}
 
 			const data: OSRMResponse = await response.json();
+			if (!data.routes || data.routes.length === 0) {
+				throw new Error('No routes found in OSRM response');
+			}
 			const route = data.routes[0];
 
-			// Convertir la géométrie GeoJSON en points
 			const points = route.geometry.coordinates.map(([lng, lat]) => ({
 				latitude: lat,
 				longitude: lng,
@@ -58,7 +57,7 @@ export class OSRMService {
 				duration: route.duration,
 			};
 		} catch (error) {
-			console.error("OSRM service error:", error);
+			console.error('OSRM service error:', error);
 			throw error;
 		}
 	}
