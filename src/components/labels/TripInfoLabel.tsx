@@ -7,21 +7,28 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
 	distance?: number;
-	consumption?: number;
+	emission?: number;
 	arrivalTime?: number;
 	style?: ViewStyle;
 };
 
 export function TripInfoLabel({
 	distance,
-	consumption,
+	emission,
 	arrivalTime,
 	style,
 }: Readonly<Props>) {
 	const items = [
 		`${distance}km`,
-		`${consumption}g de CO2`,
-		`Arrivée à ${arrivalTime}`,
+		`${emission?.toFixed()}g de CO2`,
+		`Arrivée à ${
+			arrivalTime
+				? new Date(arrivalTime).toLocaleTimeString('fr-FR', {
+						hour: '2-digit',
+						minute: '2-digit',
+					})
+				: ''
+		}`,
 	];
 
 	function getIconName(item: string): string {
