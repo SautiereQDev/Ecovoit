@@ -13,6 +13,20 @@ export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { trips: userTrips, isLoading, error } = useCurrentUserTrips();
 
+	// Tri des trajets par date de départ ave les trajets en cours en premier
+	userTrips?.sort((a, b) => {
+		if (a?.status === 'ongoing' && b?.status !== 'ongoing') {
+			return -1;
+		}
+		if (a?.status !== 'ongoing' && b?.status === 'ongoing') {
+			return 1;
+		}
+		if (a?.datetime && b?.datetime) {
+			return a.datetime < b.datetime ? 1 : -1;
+		}
+		return 0;
+	});
+
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
@@ -48,8 +62,16 @@ export const Index = () => {
 						data={userTrips}
 						renderItem={({ item }) =>
 							item ? (
-								<Link href={`/(app)/DetailedTrip/[${item.id}]`}>
-									<TripCard data={item} />
+								<Link
+									href={{
+										pathname: '/(app)/DetailedTrip/[id]',
+										params: { id: item.id },
+									}}
+								>
+									<TripCard
+										data={item}
+										style={styles.tripCard}
+									/>
 								</Link>
 							) : null
 						}
@@ -89,5 +111,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
+	},
+	tripCard: {
+		width: '100%',
 	},
 });
