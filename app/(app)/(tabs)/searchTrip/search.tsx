@@ -8,6 +8,7 @@ import { SearchTripCard } from '@/components/cards';
 import { ThemedText } from '@/components/texts';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
 import { globalStyles } from '@/styles';
+import { ReturnButton } from '@/components/buttons';
 
 export const Search = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -27,10 +28,49 @@ export const Search = () => {
 		return <ErrorScreen />;
 	}
 
+	// filtre des cards des destinations différentes de la recherche
+	// trips?.filter((trip) => {
+	// 	const start = trip.points.find((point) => {
+	// 		return point.location.name === searchData.start;
+	// 	});
+	// 	const end = trip.points.find((point) => {
+	// 		return point.location.name === searchData.end;
+	// 	});
+	//
+	// 	return (
+	// 		start?.location.name === searchData.start &&
+	// 		end?.location.name === searchData.end
+	// 	);
+	// });
+
+	const filteredTrips = trips?.filter((trip) => {
+		const start = trip.points.find(
+			(point) => point.location.name === searchData.start
+		);
+		const end = trip.points.find(
+			(point) => point.location.name === searchData.end
+		);
+
+		return start && end;
+	});
+
+	// trips?.sort((a, b) => {
+	// 	if (a.datetime > b.datetime) {
+	// 		return 1;
+	// 	}
+	// 	if (a.datetime < b.datetime) {
+	// 		return -1;
+	// 	}
+	// 	return 0;
+	// });
+
 	return (
 		<SafeAreaView style={searchTripStyles.container}>
 			<KeyboardAvoidingView>
 				<View style={searchTripStyles.content}>
+					<ReturnButton
+						handleBack={() => router.push('/(app)/(tabs)/searchTrip')}
+					/>
 					<View style={searchTripStyles.header}>
 						<View style={searchTripStyles.searchBar}>
 							<View style={searchTripStyles.input}>
@@ -53,7 +93,7 @@ export const Search = () => {
 							</ThemedText>
 						)}
 						<FlatList
-							data={trips}
+							data={!isLoading && filteredTrips}
 							renderItem={({ item }) => (
 								<Pressable
 									onPress={() => router.push(`/DetailedTrip/${item.id}`)}

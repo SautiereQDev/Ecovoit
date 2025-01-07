@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/texts/ThemedText';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { Ionicons } from '@expo/vector-icons';
 import { Stars } from '@/components/UI';
+import { formatDuration } from '@/utils';
 
 type Props = {
 	style?: ViewStyle;
@@ -45,8 +46,14 @@ export function SearchTripCard({ style, trip }: Readonly<Props>) {
 				</View>
 				<View style={styles.body}>
 					{trip.driver.stars && (
-						// @ts-ignore
-						<Stars rating={trip.driver.stars} />
+						<>
+							<ThemedText>
+								{trip.driver.stars}
+								{''}
+							</ThemedText>{' '}
+							{/* @ts-ignore */}
+							<Stars rating={trip.driver.stars} />
+						</>
 					)}
 					<View style={styles.row}>
 						<View style={styles.element}>
@@ -67,7 +74,7 @@ export function SearchTripCard({ style, trip }: Readonly<Props>) {
 								color={'background'}
 								type={'bigger'}
 							>
-								{Math.round(trip.duration / 60)} min
+								{formatDuration(trip.duration)}
 							</ThemedText>
 						)}
 					</View>
@@ -139,5 +146,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
+		marginHorizontal: '10%',
 	},
 });

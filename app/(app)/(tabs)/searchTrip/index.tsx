@@ -45,7 +45,7 @@ export const SearchForm = () => {
 	return (
 		<SafeAreaView style={searchTripStyles.container}>
 			<KeyboardAvoidingView style={searchTripStyles.content}>
-				<ReturnButton />
+				<ReturnButton handleBack={() => router.push('/')} />
 				<ThemedText
 					type='header3'
 					style={searchTripStyles.header}

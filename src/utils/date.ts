@@ -1,23 +1,12 @@
-/**
- * Formats the date to a string in the format "DD/MM/YYYY HH:MM".
- * @param {number} timestamp - The timestamp to format.
- * @returns {string} - The formatted date string.
- */
-export const formatDate = (timestamp: number): string => {
-	const date = new Date(timestamp);
-	return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-};
+export const formatDuration = (durationInSeconds: number): string => {
+	const minutes = Math.floor(durationInSeconds / 60);
+	const seconds = durationInSeconds % 60;
 
-/**
- * Formats the date to a string in the format "DD Month YYYY - HHhMM".
- * @param {number} timestamp - The timestamp to format.
- * @returns {string} - The formatted date string.
- */
-export const formatDateReverse = (timestamp: number): string => {
-	const date = new Date(timestamp);
-	return `${date.toLocaleDateString('fr-FR', {
-		day: 'numeric',
-		month: 'long',
-		year: 'numeric',
-	})} - ${date.getHours()}h${date.getMinutes()}`;
+	if (minutes >= 60) {
+		const hours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+		return `${hours}h ${remainingMinutes}m`;
+	}
+
+	return `${minutes}m`;
 };
