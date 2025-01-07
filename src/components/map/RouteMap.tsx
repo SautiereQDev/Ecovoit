@@ -1,178 +1,179 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import { OSRMService } from '@/services/routingServices';
-import { Location } from '@/types';
-import Colors from '@/constants/Colors';
-import CustomButton from '@/components/buttons/CustomButton';
+import { ActivityIndicator } from 'react-native-paper';
+import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
+import { ThemedText } from '@/components/texts';
+import { decode } from '@mapbox/polyline';
+import { RouteError, RouteMapProps, useOSRMRoute } from '@/hooks';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
-interface Route {
-	points: Location[];
-}
+// Fonction utilitaire pour s'assurer que les coordonnées sont des nombres
+const ensureNumericCoordinates = (location: EVAPI.Location): EVAPI.Location => {
+	return {
+		name: location.name,
+		latitude: Number(location.latitude),
+		longitude: Number(location.longitude),
+	};
+};
 
-interface RouteMapProps {
-	style?: any;
-	start: Location;
-	end: Location;
-	waypoints?: Location[];
-	onError?: (err: any) => void;
-}
-
-export const RouteMap = ({
-	style,
+// Composant principal
+export const RouteMap: React.FC<RouteMapProps> = ({
 	start,
 	end,
-	waypoints = [],
+	waypoints,
+	style,
 	onError,
-}: RouteMapProps) => {
-	const [route, setRoute] = useState<Route | null>(null);
-	const mapRef = useRef<MapView>(null);
+	onRouteFound,
+}) => {
+	// Conversion des coordonnées en nombres
+	const numericDeparture = ensureNumericCoordinates(start);
+	const numericArrival = ensureNumericCoordinates(end);
+	const numericWaypoints = waypoints?.map(ensureNumericCoordinates);
 
-	const toRoutePoint = (
-		point: Location
-	): { location: [number, number]; name?: string } => ({
-		location: [point.longitude, point.latitude] as [number, number],
-		name: point.name,
+	const { data, isLoading, error } = useOSRMRoute(
+		numericDeparture,
+		numericArrival,
+		numericWaypoints ?? [],
+		onError,
+		onRouteFound
+	);
+
+	const [region, setRegion] = useState({
+		latitude: numericDeparture.latitude,
+		longitude: numericDeparture.longitude,
+		latitudeDelta: 0.0922,
+		longitudeDelta: 0.0421,
 	});
 
-	const fitParams = useMemo(() => {
-		return {
-			edgePadding: { top: 80, right: 80, bottom: 80, left: 80 },
-			animated: true,
-		};
-	}, []);
+	useEffect(() => {
+		// Valider les coordonnées
+		const validateCoordinates = (location: EVAPI.Location) => {
+			const numericLoc = ensureNumericCoordinates(location);
+			const isValid =
+				!isNaN(numericLoc.latitude) &&
+				!isNaN(numericLoc.longitude) &&
+				numericLoc.latitude >= -90 &&
+				numericLoc.latitude <= 90 &&
+				numericLoc.longitude >= -180 &&
+				numericLoc.longitude <= 180;
 
-	const fitToCoordinates = useMemo(() => {
-		return [start, ...waypoints, end];
-	}, [start, end, waypoints]);
+			if (!isValid) {
+				const error: RouteError = {
+					code: 'INVALID_COORDINATES',
+					message: `Coordonnées invalides pour le point: ${location.name}`,
+					details: location,
+				};
+				onError?.(error);
+			}
+			return isValid;
+		};
+
+		const allLocations = [
+			numericDeparture,
+			...(numericWaypoints ?? []),
+			numericArrival,
+		];
+		allLocations.forEach(validateCoordinates);
+	}, [numericDeparture, numericArrival, numericWaypoints, onError]);
 
 	useEffect(() => {
-		const loadRoute = async () => {
-			try {
-				const routeData = await OSRMService.getRoute(
-					toRoutePoint(start),
-					toRoutePoint(end),
-					waypoints.map(toRoutePoint)
-				);
-				if (!routeData.points || routeData.points.length === 0) {
-					throw new Error('No points found in route data');
-				}
-				setRoute({
-					points: routeData.points.map(
-						(point: {
-							latitude: number;
-							longitude: number;
-							name?: string;
-						}) => ({
-							...point,
-							name: point.name ?? 'Unnamed',
-						})
-					),
-				});
-			} catch (error) {
-				console.error('Failed to load route:', error);
-				if (onError) {
-					onError(error);
-				}
-			}
-		};
-		loadRoute().catch(console.error);
-		if (start && end) {
-			mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams); // recentre la map lors de la modification des points
+		if (data?.waypoints) {
+			const lats = data.waypoints.map((w: any) => Number(w.location[1]));
+			const lngs = data.waypoints.map((w: any) => Number(w.location[0]));
+
+			const minLat = Math.min(...lats);
+			const maxLat = Math.max(...lats);
+			const minLng = Math.min(...lngs);
+			const maxLng = Math.max(...lngs);
+
+			setRegion({
+				latitude: (minLat + maxLat) / 2,
+				longitude: (minLng + maxLng) / 2,
+				latitudeDelta: (maxLat - minLat) * 1.5,
+				longitudeDelta: (maxLng - minLng) * 1.5,
+			});
 		}
-	}, [start, end, waypoints, fitToCoordinates, fitParams]);
+	}, [data?.waypoints]);
 
-	const initialRegion = {
-		...start,
-		latitudeDelta: 1.0,
-		longitudeDelta: 1.0,
-	};
+	if (isLoading) {
+		return (
+			<View style={[styles.container, style]}>
+				<ActivityIndicator
+					size='large'
+					color='#0000ff'
+				/>
+			</View>
+		);
+	}
 
-	const mapStyle = [
-		{
-			featureType: 'poi',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'transit',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'road',
-			elementType: 'labels',
-			stylers: [{ visibility: 'off' }],
-		},
-	];
+	if (error) {
+		return (
+			<View style={[styles.container, style]}>
+				<ThemedText>Impossible d'afficher la carte</ThemedText>
+			</View>
+		);
+	}
 
 	return (
-		<View style={style}>
+		<View style={[styles.container, style]}>
 			<MapView
-				ref={mapRef}
-				provider={PROVIDER_GOOGLE}
 				style={styles.map}
-				initialRegion={initialRegion}
-				customMapStyle={mapStyle}
-				onLayout={() => {
-					if (start && end) {
-						mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
-					}
-				}}
+				region={region}
+				onRegionChangeComplete={setRegion}
 			>
+				{/* Point de départ */}
 				<Marker
-					coordinate={start}
-					title={start.name ?? 'Départ'}
-					description={start.name ?? 'Point de départ'}
+					coordinate={{
+						latitude: numericDeparture.latitude,
+						longitude: numericDeparture.longitude,
+					}}
+					title={numericDeparture.name}
+					pinColor='green'
 				/>
-				<Marker
-					coordinate={end}
-					title={end.name ?? 'Arrivée'}
-					description={end.name ?? "Point d'arrivée"}
-				/>
-				{waypoints?.map((point, index) => (
+
+				{/* Points intermédiaires */}
+				{numericWaypoints?.map((point, index) => (
 					<Marker
-						key={index.toString()}
-						coordinate={point}
-						title={point.name ?? `Point ${index + 1}`}
-						description={point.name ?? `Point ${index + 1}`}
+						key={`waypoint-${index}`}
+						coordinate={{
+							latitude: point.latitude,
+							longitude: point.longitude,
+						}}
+						title={point.name}
+						pinColor='yellow'
 					/>
 				))}
-				{route?.points && route.points.length > 0 && (
+
+				{/* Point d'arrivée */}
+				<Marker
+					coordinate={{
+						latitude: numericArrival.latitude,
+						longitude: numericArrival.longitude,
+					}}
+					title={numericArrival.name}
+					pinColor='red'
+				/>
+				{/* Tracé de l'itinéraire */}
+				{data?.routes[0]?.geometry && (
 					<Polyline
-						coordinates={route.points}
-						strokeColor='#2196F3'
+						coordinates={decode(data.routes[0].geometry).map(
+							([latitude, longitude]): LatLng => ({ latitude, longitude })
+						)}
 						strokeWidth={3}
-						geodesic={true}
+						strokeColor='#000'
 					/>
 				)}
 			</MapView>
-			<CustomButton
-				onPress={() => {
-					mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
-				}}
-				style={styles.button}
-				textProps={{ type: 'defaultBody', color: 'secondary' }}
-				text={'Recentrer'}
-			/>
 		</View>
 	);
 };
 
-export default RouteMap;
-
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	map: {
 		width: '100%',
 		height: '100%',
-	},
-	button: {
-		position: 'absolute',
-		bottom: 10,
-		right: 10,
-		backgroundColor: Colors.light.background,
-		paddingVertical: '2%',
-		paddingHorizontal: '4%',
-		borderRadius: 20,
-		borderColor: '#617ad2',
-		borderWidth: 1,
 	},
 });
