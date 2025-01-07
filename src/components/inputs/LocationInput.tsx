@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useData } from '@/providers';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
-import { ThemedInput } from '@/components/inputs/index';
+import { ThemedInput, ThemedInputProps } from '@/components/inputs/index';
 import { ThemedText } from '@/components/texts';
 import Fuse, { FuseResult } from 'fuse.js';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 
-interface SearchBarProps {
+interface SearchBarProps extends ThemedInputProps {
 	locationName: string;
 	setLocationName: (query: string) => void;
-	hasError?: boolean;
-	errorMessage?: string;
 	label?: string;
-	placeholder?: string;
 }
 
 const LocationInput = ({
@@ -56,29 +53,27 @@ const LocationInput = ({
 			<ThemedInput
 				value={locationName}
 				onChangeText={handleChange}
-				placeholder={placeholder}
+				placeholder={isLoading ? 'Chargement' : placeholder}
 				label={label}
 				errorMessage={errorMessage}
 				hasError={hasError}
 			/>
-			{isLoading && !!locationName && <ThemedText>Chargement...</ThemedText>}
-			{!isLoading &&
-				!suggestions.includes(locationName) && ( // on cache les suggestion si les donnés chargent ou si locationName est déjà correct
-					<FlatList
-						data={suggestions.slice(0, 5)} // on affiche seulement les 3 premières suggestions
-						keyExtractor={(item) => item}
-						renderItem={({ item }) => (
-							<Pressable
-								onPress={() => setLocationName(item)}
-								style={{ width: '100%' }}
-							>
-								<ThemedText>{item}</ThemedText>
-							</Pressable>
-						)}
-						ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-						style={styles.suggestions}
-					/>
-				)}
+			{!isLoading && !suggestions.includes(locationName) && (
+				<FlatList
+					data={suggestions.slice(0, 5)}
+					keyExtractor={(item) => item}
+					renderItem={({ item }) => (
+						<Pressable
+							onPress={() => setLocationName(item)}
+							style={{ width: '100%' }}
+						>
+							<ThemedText>{item}</ThemedText>
+						</Pressable>
+					)}
+					ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+					style={styles.suggestions}
+				/>
+			)}
 		</View>
 	);
 };
