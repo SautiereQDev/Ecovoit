@@ -34,20 +34,16 @@ export const Index = () => {
 		[EVAPI.Location, EVAPI.Location] | null
 	>(null);
 
-	const [endLocationIndex, setEndLocationIndex] = useState<number>(() => {
-		return (
-			postTripQuery.points.findIndex((point) => point.type === 'end') ??
-			postTripQuery.points.length
-		);
-	});
-
 	useEffect(() => {
+		const startLocationName = watch('0.locationName');
+		const endLocationName = watch('1.locationName');
+
 		if (Array.isArray(listePoints) && listePoints.length > 0) {
 			const startLocation = listePoints.find(
-				(point) => point.name === watch('0.locationName')
+				(point) => point.name === startLocationName
 			);
 			const endLocation = listePoints.find(
-				(point) => point.name === watch('1.locationName')
+				(point) => point.name === endLocationName
 			);
 
 			if (startLocation && endLocation) {
@@ -56,7 +52,7 @@ export const Index = () => {
 				setLocPoints(null);
 			}
 		}
-	}, [listePoints, watch('0.locationName'), watch('1.locationName')]);
+	}, [listePoints, watch]);
 
 	if (error) {
 		return <ErrorScreen error={error} />;
@@ -97,6 +93,9 @@ export const Index = () => {
 						start={locPoints[0]}
 						end={locPoints[1]}
 						style={postTripStyles.map}
+						onError={(error) => {
+							console.error('RouteMap error:', error);
+						}}
 					/>
 				)}
 				<Controller

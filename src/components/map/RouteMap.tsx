@@ -54,6 +54,9 @@ export const RouteMap = ({
 					toRoutePoint(end),
 					waypoints.map(toRoutePoint)
 				);
+				if (!routeData.points || routeData.points.length === 0) {
+					throw new Error('No points found in route data');
+				}
 				setRoute({
 					points: routeData.points.map(
 						(point: {
