@@ -9,7 +9,7 @@ interface Props {
 
 export const Stars = ({ rating, style, size = 32 }: Props) => {
 	const nbFullStars = Math.floor(rating);
-	const nbHalfStar = rating - nbFullStars === 0.5 ? 1 : 0;
+	const nbHalfStar = Math.round(rating * 2) / 2 === 0.5 ? 1 : 0; // arrondi à un multiple de 0.5
 
 	return (
 		<View style={[style, styles.container]}>
