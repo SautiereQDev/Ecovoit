@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import { useData, usePostTrip } from '@/providers';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { globalStyles, postTripStyles } from '@/styles';
+import { RouteMap } from '@/components/map';
 
 type FormValues = [EVAPI.PointCreation, EVAPI.PointCreation];
 
@@ -105,14 +106,14 @@ export default function PostTrip() {
 			</ThemedText>
 
 			<View style={postTripStyles.content}>
-				{/*{locPoints && (*/}
-				{/*	<RouteMap*/}
-				{/*		start={locPoints[0]}*/}
-				{/*		end={locPoints[1]}*/}
-				{/*		style={postTripStyles.map}*/}
-				{/*		onError={(err) => console.error('RouteMap error:', err)}*/}
-				{/*	/>*/}
-				{/*)}*/}
+				{locPoints && (
+					<RouteMap
+						start={locPoints[0]}
+						end={locPoints[1]}
+						style={postTripStyles.map}
+						onError={(err) => console.error('RouteMap error:', err)}
+					/>
+				)}
 
 				<Controller
 					control={control}
