@@ -1,4 +1,3 @@
-import { StyleProp, ViewStyle } from 'react-native';
 import { apiGet } from '@/api/client';
 import { useQuery } from 'react-query';
 
@@ -26,15 +25,6 @@ export type RouteError = {
 	code: 'FETCH_ERROR' | 'NO_ROUTE_FOUND' | 'INVALID_COORDINATES' | 'UNKNOWN';
 	message: string;
 	details?: unknown;
-};
-
-export type RouteMapProps = {
-	start: Location;
-	end: Location;
-	waypoints?: Location[];
-	style?: StyleProp<ViewStyle>;
-	onError?: (error: RouteError) => void;
-	onRouteFound?: (distance: number, duration: number) => void;
 };
 
 // Configuration OSRM

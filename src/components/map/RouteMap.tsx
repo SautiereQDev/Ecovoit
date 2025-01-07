@@ -1,11 +1,23 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { FC, useEffect, useState } from 'react';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
 import { ThemedText } from '@/components/texts';
 import { decode } from '@mapbox/polyline';
-import { RouteError, RouteMapProps, useOSRMRoute } from '@/hooks';
+import { Location, RouteError, useOSRMRoute } from '@/hooks';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { CustomButton } from '@/components/buttons';
+import { Colors } from '@/constants';
+
+export type RouteMapProps = {
+	start: Location;
+	end: Location;
+	waypoints?: Location[];
+	style?: StyleProp<ViewStyle>;
+	onError?: (error: RouteError) => void;
+	onRouteFound?: (distance: number, duration: number) => void;
+	isStatic?: boolean;
+};
 
 // Fonction utilitaire pour s'assurer que les coordonnées sont des nombres
 const ensureNumericCoordinates = (location: EVAPI.Location): EVAPI.Location => {
@@ -17,13 +29,14 @@ const ensureNumericCoordinates = (location: EVAPI.Location): EVAPI.Location => {
 };
 
 // Composant principal
-export const RouteMap: React.FC<RouteMapProps> = ({
+export const RouteMap: FC<RouteMapProps> = ({
 	start,
 	end,
 	waypoints,
 	style,
 	onError,
 	onRouteFound,
+	isStatic,
 }) => {
 	// Conversion des coordonnées en nombres
 	const numericDeparture = ensureNumericCoordinates(start);
@@ -44,6 +57,25 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
 	});
+
+	const recenterMap = () => {
+		if (data?.waypoints) {
+			const lats = data.waypoints.map((w: any) => Number(w.location[1]));
+			const lngs = data.waypoints.map((w: any) => Number(w.location[0]));
+
+			const minLat = Math.min(...lats);
+			const maxLat = Math.max(...lats);
+			const minLng = Math.min(...lngs);
+			const maxLng = Math.max(...lngs);
+
+			setRegion({
+				latitude: (minLat + maxLat) / 2,
+				longitude: (minLng + maxLng) / 2 + 0.001,
+				latitudeDelta: (maxLat - minLat) * 1.5,
+				longitudeDelta: (maxLng - minLng) * 1.5,
+			});
+		}
+	};
 
 	useEffect(() => {
 		// Valider les coordonnées
@@ -76,24 +108,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 		allLocations.forEach(validateCoordinates);
 	}, [numericDeparture, numericArrival, numericWaypoints, onError]);
 
-	useEffect(() => {
-		if (data?.waypoints) {
-			const lats = data.waypoints.map((w: any) => Number(w.location[1]));
-			const lngs = data.waypoints.map((w: any) => Number(w.location[0]));
-
-			const minLat = Math.min(...lats);
-			const maxLat = Math.max(...lats);
-			const minLng = Math.min(...lngs);
-			const maxLng = Math.max(...lngs);
-
-			setRegion({
-				latitude: (minLat + maxLat) / 2,
-				longitude: (minLng + maxLng) / 2,
-				latitudeDelta: (maxLat - minLat) * 1.5,
-				longitudeDelta: (maxLng - minLng) * 1.5,
-			});
-		}
-	}, [data?.waypoints]);
+	useEffect(recenterMap, [data?.waypoints]);
 
 	if (isLoading) {
 		return (
@@ -120,6 +135,9 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 				style={styles.map}
 				region={region}
 				onRegionChangeComplete={setRegion}
+				rotateEnabled={!isStatic}
+				scrollEnabled={!isStatic}
+				pitchEnabled={!isStatic}
 			>
 				{/* Point de départ */}
 				<Marker
@@ -164,6 +182,14 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 					/>
 				)}
 			</MapView>
+			{!isStatic && (
+				<CustomButton
+					onPress={recenterMap}
+					style={styles.button}
+					textProps={{ type: 'defaultBody', color: 'secondary' }}
+					text={'Recentrer'}
+				/>
+			)}
 		</View>
 	);
 };
@@ -175,5 +201,16 @@ const styles = StyleSheet.create({
 	map: {
 		width: '100%',
 		height: '100%',
+	},
+	button: {
+		position: 'absolute',
+		bottom: 10,
+		right: 10,
+		backgroundColor: Colors.light.background,
+		paddingVertical: '2%',
+		paddingHorizontal: '4%',
+		borderRadius: 20,
+		borderColor: '#617ad2',
+		borderWidth: 1,
 	},
 });
