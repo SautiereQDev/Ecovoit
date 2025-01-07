@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from '@/components/texts';
 
-interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
+export interface ThemedInputProps extends Omit<TextInputProps, 'style'> {
 	theme?: 'Primary' | 'Secondary' | 'TextArea';
 	style?: StyleProp<ViewStyle>;
 	label?: string;
