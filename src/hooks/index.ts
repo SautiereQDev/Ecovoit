@@ -5,3 +5,4 @@ export * from './useProfileCompletion';
 export * from './useRegisterValidation';
 export * from './useThemeColor';
 export * from './useOSRMRoute';
+export * from './useMapCoordinates';

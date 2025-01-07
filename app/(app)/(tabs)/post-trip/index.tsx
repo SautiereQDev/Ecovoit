@@ -112,6 +112,7 @@ export default function PostTrip() {
 						end={locPoints[1]}
 						style={postTripStyles.map}
 						onError={(err) => console.error('RouteMap error:', err)}
+						isStatic={true}
 					/>
 				)}
 

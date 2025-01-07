@@ -1,5 +1,5 @@
-import { apiGet } from '@/api/client';
 import { useQuery } from 'react-query';
+import { useRef } from 'react';
 
 export type OSRMResponse = {
 	code: string;
@@ -14,7 +14,6 @@ export type OSRMResponse = {
 	}[];
 };
 
-// Types
 export type Location = {
 	name: string;
 	longitude: number;
@@ -27,67 +26,67 @@ export type RouteError = {
 	details?: unknown;
 };
 
-// Configuration OSRM
 const OSRM_BASE_URL = 'https://router.project-osrm.org/route/v1';
 
 export const useOSRMRoute = (
-	start: Location,
-	end: Location,
+	departure: Location,
+	arrival: Location,
 	waypoints: Location[],
 	onError?: (error: RouteError) => void,
 	onRouteFound?: (distance: number, duration: number) => void
 ) => {
-	const formatCoordinates = (location: Location) =>
-		`${Number(location.longitude)},${Number(location.latitude)}`;
+	const abortControllerRef = useRef<AbortController>();
 
-	const coordinates = [
-		formatCoordinates(start),
-		...waypoints.map(formatCoordinates),
-		formatCoordinates(end),
-	].join(';');
-
-	return useQuery<OSRMResponse>(
-		['osrm-route', coordinates],
-		async () => {
-			try {
-				const response: OSRMResponse = await apiGet(
-					`${OSRM_BASE_URL}/driving/${coordinates}?overview=full&geometries=polyline`
-				);
-
-				if (response.code !== 'Ok') {
-					throw new Error('No route found');
-				}
-
-				if (onRouteFound && response.routes[0]) {
-					onRouteFound(
-						response.routes[0].distance,
-						response.routes[0].duration
-					);
-				}
-
-				return response;
-			} catch (error) {
-				const routeError: RouteError = {
-					code: 'FETCH_ERROR',
-					message: "Erreur lors de la récupération de l'itinéraire",
-					details: error,
-				};
-
-				if (error instanceof Error && error.message === 'No route found') {
-					routeError.code = 'NO_ROUTE_FOUND';
-					routeError.message = 'Aucun itinéraire trouvé entre les points';
-				}
-
-				onError?.(routeError);
-				throw routeError;
+	const fetchRoute = async () => {
+		try {
+			if (abortControllerRef.current) {
+				abortControllerRef.current.abort();
 			}
-		},
-		{
-			staleTime: 5 * 60 * 1000,
-			cacheTime: 30 * 60 * 1000,
-			retry: 1,
+			abortControllerRef.current = new AbortController();
+
+			const coordinates = [departure, ...waypoints, arrival]
+				.map((loc) => `${Number(loc.longitude)},${Number(loc.latitude)}`)
+				.join(';');
+
+			const response = await fetch(
+				`${OSRM_BASE_URL}/driving/${coordinates}?overview=full&geometries=polyline`,
+				{ signal: abortControllerRef.current.signal }
+			);
+
+			const data: OSRMResponse = await response.json();
+
+			if (data.code !== 'Ok') {
+				throw new Error('No route found');
+			}
+
+			if (onRouteFound && data.routes[0]) {
+				onRouteFound(data.routes[0].distance, data.routes[0].duration);
+			}
+
+			return data;
+		} catch (error) {
+			if (error instanceof Error && error.name === 'AbortError') {
+				return null;
+			}
+
+			const routeError: RouteError = {
+				code: 'FETCH_ERROR',
+				message: "Erreur lors de la récupération de l'itinéraire",
+				details: error,
+			};
+
+			onError?.(routeError);
+			throw routeError;
 		}
-	);
+	};
+
+	const queryKey = ['osrm-route'];
+
+	return useQuery<OSRMResponse | null>(queryKey, fetchRoute, {
+		staleTime: 0,
+		cacheTime: 0,
+		retry: 1,
+	});
 };
 
 export default useOSRMRoute;
