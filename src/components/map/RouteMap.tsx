@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import MapView, { LatLng, Marker, Polyline, Region } from 'react-native-maps';
 import { ThemedText } from '@/components/texts';
 import { decode } from '@mapbox/polyline';
-import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { CustomButton } from '@/components/buttons';
 import { Colors } from '@/constants';
 import { Location, RouteError, useMapCoordinates, useOSRMRoute } from '@/hooks';
@@ -17,25 +16,18 @@ export type RouteMapProps = {
 	onError?: (error: RouteError) => void;
 	onRouteFound?: (distance: number, duration: number) => void;
 	isStatic?: boolean;
+	showRecenterButton?: boolean;
 };
 
-// Fonction utilitaire pour s'assurer que les coordonnées sont des nombres
-const ensureNumericCoordinates = (location: EVAPI.Location): EVAPI.Location => {
-	return {
-		name: location.name,
-		latitude: Number(location.latitude),
-		longitude: Number(location.longitude),
-	};
-};
-
-export const RouteMap: React.FC<RouteMapProps> = ({
+export const RouteMap: FC<RouteMapProps> = ({
 	start,
 	end,
-	waypoints,
+	waypoints = [],
 	style,
 	onError,
 	onRouteFound,
 	isStatic,
+	showRecenterButton = true,
 }) => {
 	const mapRef = useRef<MapView>(null);
 	const { initialRegion } = useMapCoordinates(start, end, waypoints ?? []);
@@ -43,7 +35,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 	const { data, isLoading, error } = useOSRMRoute(
 		start,
 		end,
-		(waypoints = []),
+		waypoints,
 		onError,
 		onRouteFound
 	);
@@ -100,8 +92,6 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 				loadingEnabled={true}
 				scrollEnabled={!isStatic}
 				rotateEnabled={!isStatic}
-				minZoomLevel={2}
-				maxZoomLevel={20}
 			>
 				<Marker
 					coordinate={{
@@ -141,14 +131,15 @@ export const RouteMap: React.FC<RouteMapProps> = ({
 					strokeColor='#000'
 				/>
 			</MapView>
-			{!isStatic && (
-				<CustomButton
-					onPress={() => setRegion(initialRegion)}
-					style={styles.button}
-					textProps={{ type: 'defaultBody', color: 'secondary' }}
-					text={'Recentrer'}
-				/>
-			)}
+			{!isStatic ||
+				(!showRecenterButton && (
+					<CustomButton
+						onPress={() => setRegion(initialRegion)}
+						style={styles.button}
+						textProps={{ type: 'defaultBody', color: 'secondary' }}
+						text={'Recentrer'}
+					/>
+				))}
 		</View>
 	);
 };
