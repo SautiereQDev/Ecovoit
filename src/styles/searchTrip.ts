@@ -18,6 +18,14 @@ export const searchTripStyles = StyleSheet.create({
 		marginTop: '5%',
 	},
 
+	input: {
+		borderWidth: 1.5,
+		borderColor: Colors.light.inputText,
+		paddingVertical: '2.5%',
+		paddingHorizontal: '3%',
+		borderRadius: 10,
+	},
+
 	// Styles du formulaire
 	formContainer: {
 		marginTop: '5%',
@@ -50,12 +58,10 @@ export const searchTripStyles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: Colors.light.primary,
 	},
-
-	// Styles de la recherche
 	header: {
-		display: 'flex',
-		flexDirection: 'column',
-		gap: 25,
+		marginTop: '10%',
+		marginBottom: '3%',
+		textAlign: 'center',
 	},
 	searchBar: {
 		display: 'flex',
@@ -63,13 +69,6 @@ export const searchTripStyles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		gap: 20,
-	},
-	input: {
-		borderWidth: 1.5,
-		borderColor: Colors.light.inputText,
-		paddingVertical: '2.5%',
-		paddingHorizontal: '3%',
-		borderRadius: 10,
 	},
 	resetButton: {
 		borderWidth: 2,

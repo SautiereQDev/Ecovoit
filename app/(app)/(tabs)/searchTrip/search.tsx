@@ -1,7 +1,5 @@
 import { FlatList, KeyboardAvoidingView, Pressable, View } from 'react-native';
-import { IconButton } from '@/components/buttons';
 import React, { useState } from 'react';
-import Colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { searchTripStyles } from '@/styles/searchTrip';
 import { useData, useSearchContext } from '@/providers';
@@ -9,37 +7,17 @@ import { router } from 'expo-router';
 import { SearchTripCard } from '@/components/cards';
 import { ThemedText } from '@/components/texts';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
+import { globalStyles } from '@/styles';
 
 export const Search = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 
-	const { searchQuery: searchData, setSearchQuery: setSearchData } =
-		useSearchContext();
+	const { searchQuery: searchData } = useSearchContext();
 
 	const { useTrips } = useData();
-	const resetSearch = () => {
-		setSearchData({
-			depart: '',
-			destination: '',
-			date: new Date().getTime(),
-			filters: [],
-			sort: { field: 'distance', direction: 'asc' },
-		});
-		router.push('/searchTrip/search');
-	};
 
-	const reverseOrder = () => {
-		setSearchData({
-			...searchData,
-			sort:
-				searchData.sort.direction === 'asc'
-					? { ...searchData.sort, direction: 'desc' }
-					: { ...searchData.sort, direction: 'asc' },
-		});
-	};
-
-	const { data, isLoading, isError } = useTrips();
+	const { data: trips, isLoading, isError } = useTrips();
 
 	if (isLoading) {
 		return <LoadingScreen />;
@@ -57,22 +35,25 @@ export const Search = () => {
 						<View style={searchTripStyles.searchBar}>
 							<View style={searchTripStyles.input}>
 								<ThemedText color='text'>
-									{searchData.depart}
+									{searchData.start}
 									{' -> '}
-									{searchData.destination}
+									{searchData.end}
 								</ThemedText>
 							</View>
-							<IconButton
-								name='x'
-								color={Colors.light.resetButton}
-								onPress={resetSearch}
-								size={30}
-								buttonStyle={searchTripStyles.resetButton}
-							/>
 						</View>
-						<ThemedText type='header3'>Trajets correspondants 🔗</ThemedText>
+						<ThemedText
+							type='header4'
+							style={globalStyles.title}
+						>
+							Trajets correspondants 🔗
+						</ThemedText>
+						{trips && trips.length < 1 && (
+							<ThemedText type={'header4'}>
+								Aucun trajets disponibles entre ces deux destinations
+							</ThemedText>
+						)}
 						<FlatList
-							data={data}
+							data={trips}
 							renderItem={({ item }) => (
 								<Pressable
 									onPress={() => router.push(`/DetailedTrip/${item.id}`)}
