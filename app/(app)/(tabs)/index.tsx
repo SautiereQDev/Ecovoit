@@ -57,7 +57,7 @@ export const Index = () => {
 					type='header3'
 					style={styles.secondaryTitle}
 				>
-					Mes trajets effectués ou en cours 🌿
+					Mon historique 🌿
 				</ThemedText>
 				{userTrips && userTrips.length > 0 && (
 					<FlatList
@@ -70,13 +70,16 @@ export const Index = () => {
 										params: { id: item.id },
 									}}
 								>
-									<TripCard data={item} />
+									<TripCard
+										data={item}
+										style={{ width: '100%' }}
+									/>
 								</Link>
 							) : null
 						}
 						keyExtractor={(item, index) => index.toString()}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-						style={{ marginBottom: '165%' }}
+						style={{ marginBottom: '143%' }}
 					/>
 				)}
 			</View>

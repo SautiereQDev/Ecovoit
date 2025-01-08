@@ -59,7 +59,7 @@ export const searchTripStyles = StyleSheet.create({
 		backgroundColor: Colors.light.primary,
 	},
 	header: {
-		marginTop: '10%',
+		marginTop: '5%',
 		marginBottom: '3%',
 		textAlign: 'center',
 	},
