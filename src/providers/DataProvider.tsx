@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useMemo } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
 	fetchCurrentUser,
@@ -304,16 +304,22 @@ const useCurrentUserTrips = () => {
 		}
 	);
 
-	// @ts-ignore
-	const trips: EVAPI.Trip[] = [
+	const tripsId: string[] = [
 		...(queryResult.data?.tripsAsDriver || []),
 		...(queryResult.data?.tripsAsPassenger || []),
 	];
 
+	const trips = useQueries(
+		tripsId.map((id) => ({
+			queryKey: ['trip', id],
+			queryFn: () => fetchTrip(id),
+			retry: 1,
+		}))
+	);
+
 	return {
 		...queryResult,
-		data: trips,
-		isIdle: false,
+		data: trips.map((trip) => trip.data),
 	};
 };
 
