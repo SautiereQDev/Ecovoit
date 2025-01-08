@@ -96,7 +96,7 @@ export const Result = () => {
 			.filter((trip) => trip.availableSeats > 0) // on n'affiche que les trajets ayant des places disponibles
 			.filter(
 				(trip) =>
-					!currentUser?.tripsAsPassenger.includes(trip.id) ||
+					!currentUser?.tripsAsPassenger.includes(trip.id) &&
 					!currentUser?.tripsAsDriver.includes(trip.id)
 			); // on n'affiche pas les trajets auxquels l'utilisateur est déjà inscrit ou est conducteur
 	};
