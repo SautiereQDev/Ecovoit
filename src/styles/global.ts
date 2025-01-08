@@ -7,7 +7,6 @@ export const globalStyles = StyleSheet.create({
 		paddingTop: 25,
 		backgroundColor: Colors.light.background,
 		display: 'flex',
-		width: '100%',
 		paddingHorizontal: '7.5%',
 	},
 	title: {

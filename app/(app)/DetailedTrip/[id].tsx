@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { useData } from '@/providers';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
 import { ReturnButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts';
@@ -59,7 +59,7 @@ const DetailedTripPage = () => {
 	}
 
 	return (
-		<View style={globalStyles.container}>
+		<ScrollView style={globalStyles.container}>
 			<ReturnButton />
 			<ThemedText
 				type='header3'
@@ -165,7 +165,7 @@ const DetailedTripPage = () => {
 					{/*	 Temps de voyage */}
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
