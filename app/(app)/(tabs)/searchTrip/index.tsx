@@ -58,7 +58,7 @@ export const SearchForm = () => {
 						name='start'
 						render={({ field: { onChange, onBlur, value } }) => (
 							<LocationInput
-								placeholder='Departure'
+								placeholder='Départ'
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -76,7 +76,7 @@ export const SearchForm = () => {
 						name='end'
 						render={({ field: { onChange, onBlur, value } }) => (
 							<LocationInput
-								placeholder='Destination'
+								placeholder='Arrivée'
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}

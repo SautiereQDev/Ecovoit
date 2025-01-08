@@ -130,6 +130,7 @@ export const Search = () => {
 								size={26}
 								buttonStyle={searchTripStyles.button}
 								onPress={() => setShowOrder(!showOrder)}
+								color={Colors.light.primary}
 							/>
 							<IconButton
 								name={sortDirection === 'asc' ? 'sort-asc' : 'sort-desc'}

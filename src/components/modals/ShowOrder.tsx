@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedText } from '@/components/texts/ThemedText';
@@ -54,15 +54,17 @@ export const ShowOrder = ({ visible, onClose, order, setOrder }: Props) => {
 					>
 						Ordre de tri
 					</ThemedText>
-					{keys.map((field) => (
-						<Checkbox.Item
-							key={String(field)}
-							label={String(field)}
-							status={order[field] ? 'checked' : 'unchecked'}
-							onPress={() => handleCheckboxPress(field)}
-							style={styles.checkbox}
-						/>
-					))}
+					<ScrollView style={styles.scrollView}>
+						{keys.map((field) => (
+							<Checkbox.Item
+								key={String(field)}
+								label={String(field)}
+								status={order[field] ? 'checked' : 'unchecked'}
+								onPress={() => handleCheckboxPress(field)}
+								style={styles.checkbox}
+							/>
+						))}
+					</ScrollView>
 					<CustomButton
 						onPress={onClose}
 						text='Fermer'
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		width: '90%',
-		height: '42%',
+		height: '50%', // Réduction de la hauteur de la modal
 		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
@@ -96,6 +98,9 @@ const styles = StyleSheet.create({
 	title: {
 		textAlign: 'center',
 		marginBottom: '5%',
+	},
+	scrollView: {
+		marginBottom: '25%', // Espace pour le bouton "Fermer"
 	},
 	button: {
 		position: 'absolute',

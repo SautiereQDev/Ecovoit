@@ -3,7 +3,6 @@ import {
 	FlatList,
 	KeyboardAvoidingView,
 	Modal,
-	Pressable,
 	StyleSheet,
 	View,
 } from 'react-native';
@@ -29,25 +28,31 @@ export const ShowFilters = ({
 	filters,
 	setFilters,
 }: Props) => {
-	const handlePressablePress = (name: keyof EVAPI.TripEntry) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			[name]: prevFilters?.[name] !== undefined ? prevFilters[name] : '',
-		}));
-	};
-
 	const handleCheckboxPress = (name: keyof EVAPI.TripEntry) => {
 		setFilters((prevFilters) => ({
 			...prevFilters,
-			[name]: undefined,
+			[name]: prevFilters?.[name] !== undefined ? undefined : '',
 		}));
+	};
+
+	const deactivateEmptyFilters = () => {
+		setFilters((prevFilters) => {
+			const updatedFilters = { ...prevFilters };
+			Object.keys(updatedFilters).forEach((key) => {
+				if (updatedFilters[key as keyof EVAPI.TripEntry] === '') {
+					updatedFilters[key as keyof EVAPI.TripEntry] = undefined;
+				}
+			});
+			return updatedFilters;
+		});
+		onClose && onClose();
 	};
 
 	return (
 		<KeyboardAvoidingView>
 			<Modal
 				visible={visible}
-				onRequestClose={onClose}
+				onRequestClose={deactivateEmptyFilters}
 				transparent
 			>
 				<View style={styles.overlay}>
@@ -65,12 +70,7 @@ export const ShowFilters = ({
 								active: filters?.[name as keyof EVAPI.TripEntry] !== undefined,
 							}))}
 							renderItem={({ item }) => (
-								<Pressable
-									style={styles.filter}
-									onPress={() =>
-										handlePressablePress(item.name as keyof EVAPI.TripEntry)
-									}
-								>
+								<View style={styles.filter}>
 									<Checkbox
 										status={item.active ? 'checked' : 'unchecked'}
 										color={Colors.light.primary}
@@ -98,7 +98,7 @@ export const ShowFilters = ({
 										}
 										keyboardType='numeric'
 									/>
-								</Pressable>
+								</View>
 							)}
 							ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 							keyExtractor={(item) => item.name.toString()}
@@ -125,7 +125,7 @@ export const ShowFilters = ({
 								backgroundColor='resetButton'
 							/>
 							<CustomButton
-								onPress={onClose}
+								onPress={deactivateEmptyFilters}
 								text='Fermer'
 								textProps={{ color: 'background' }}
 								buttonStyle={styles.buttons}
