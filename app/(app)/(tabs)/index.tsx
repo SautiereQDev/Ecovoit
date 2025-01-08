@@ -13,7 +13,7 @@ export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { data: userTrips, isLoading, error } = useCurrentUserTrips();
 
-	// Tri des trajets par date de départ ave les trajets en cours en premier
+	// met les trajets en cours en premier puis tri par date décroissante
 	userTrips?.sort((a, b) => {
 		if (a?.status === 'ongoing' && b?.status !== 'ongoing') {
 			return -1;
@@ -34,6 +34,8 @@ export const Index = () => {
 	if (error) {
 		return <ErrorScreen error={error} />;
 	}
+
+	console.log('userTrips', userTrips);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -64,19 +66,17 @@ export const Index = () => {
 							item ? (
 								<Link
 									href={{
-										pathname: '/(app)/trips/[id]',
+										pathname: `/(app)/trips/[id]`,
 										params: { id: item.id },
 									}}
 								>
-									<TripCard
-										data={item}
-										style={styles.tripCard}
-									/>
+									<TripCard data={item} />
 								</Link>
 							) : null
 						}
 						keyExtractor={(item, index) => index.toString()}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+						style={{ marginBottom: '165%' }}
 					/>
 				)}
 			</View>
@@ -111,8 +111,5 @@ const styles = StyleSheet.create({
 		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
-	},
-	tripCard: {
-		width: '100%',
 	},
 });
