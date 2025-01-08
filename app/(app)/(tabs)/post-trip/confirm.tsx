@@ -1,15 +1,15 @@
-import { postTrip } from '@/api';
 import { usePostTrip } from '@/providers';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-	View,
-	Text,
-	TextInput,
-	StyleSheet,
 	Button,
 	Pressable,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
 } from 'react-native';
+import { notify } from 'react-native-notificated';
 
 export default function Confirm() {
 	const { trip, setDescription, setVehicle, postTrip, resetTrip } =
@@ -31,7 +31,13 @@ export default function Confirm() {
 		postTrip().then((data) => {
 			console.log(data);
 			resetTrip();
-			router.dismissAll();
+			router.push('/');
+			notify('success', {
+				params: {
+					title: 'Succès',
+					description: 'Votre trajet a bien été créé',
+				},
+			});
 		});
 	};
 
