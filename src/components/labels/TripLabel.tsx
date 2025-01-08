@@ -4,9 +4,9 @@ import { ThemedText } from '../texts';
 import { Colors } from '@/constants/Colors';
 
 type Props = {
-	status?: Readonly<'upcoming' | 'completed' | 'ongoing' | 'cancelled'>;
+	status: Readonly<'upcoming' | 'completed' | 'ongoing' | 'cancelled'>;
 	style?: ViewStyle;
-	theme?: 'default' | 'bigger';
+	size?: 'default' | 'bigger';
 };
 
 const backgroundColor = {
@@ -27,9 +27,9 @@ const statusText = {
 export function TripLabel({
 	status,
 	style,
-	theme = 'default',
+	size = 'default',
 }: Readonly<Props>) {
-	const styles = theme === 'default' ? tiny : bigger;
+	const styles = size === 'default' ? tiny : bigger;
 
 	return (
 		<View
@@ -44,10 +44,10 @@ export function TripLabel({
 			]}
 		>
 			<ThemedText
-				type={theme === 'bigger' ? 'small' : 'header6'}
+				type={size === 'bigger' ? 'small' : 'header6'}
 				style={[{ color: Colors.light.background }, styles.text]}
 			>
-				{status ? statusText[status] : 'Unknown'}
+				{statusText[status]}
 			</ThemedText>
 		</View>
 	);
@@ -67,8 +67,9 @@ const tiny = StyleSheet.create({
 const bigger = StyleSheet.create({
 	container: {
 		width: '40%',
-		paddingVertical: 5,
+		paddingVertical: 10,
 		borderRadius: 10, // Ensure borderRadius is applied
+		fontSize: 20,
 	},
 	text: {
 		textAlign: 'center',

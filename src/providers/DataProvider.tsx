@@ -8,6 +8,7 @@ import {
 	fetchTrips,
 	fetchUser,
 	fetchUsers,
+	fetchVehicleByUser,
 	fetchVehiclesByUser,
 	patchTrip,
 	postTrip,
@@ -20,6 +21,10 @@ interface DataContextProps {
 	useVehiclesByUser: (
 		userId: string
 	) => ReturnType<typeof useQuery<EVAPI.Vehicle[]>>;
+	useVehicleByUserByLabel: (
+		userId: string,
+		label: string
+	) => ReturnType<typeof useQuery<EVAPI.Vehicle>>;
 	useCurrentUserVehicles: () => ReturnType<typeof useQuery<EVAPI.Vehicle[]>>;
 	useAddVehicle: () => ReturnType<
 		typeof useMutation<
@@ -185,6 +190,19 @@ const useAddVehicle = () => {
 	});
 };
 
+const useVehicleByUserByLabel = (userId: string, label: string) => {
+	return useQuery<EVAPI.Vehicle, EVAPI.Error>(
+		['vehicle', userId, label],
+		() => fetchVehicleByUser(userId, label),
+		{
+			retry: 1,
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to fetch vehicle:', error);
+			},
+		}
+	);
+};
+
 const useTrips = (
 	params?: EVAPI.DB.ListingOptions<EVAPI.Entry>,
 	filters?: EVAPI.DB.Filters<EVAPI.Entry>,
@@ -334,6 +352,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useCurrentUser,
 			useLocation: useLocations,
 			useCurrentUserVehicles,
+			useVehicleByUserByLabel,
 		}),
 		[]
 	);

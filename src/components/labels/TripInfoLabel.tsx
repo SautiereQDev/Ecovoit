@@ -5,22 +5,30 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Colors } from '@/constants/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-interface TripLbelData {
-	distance?: number;
-	consumption?: number;
-	arrivalTime?: string;
-}
-
 type Props = {
-	data: TripLbelData;
+	distance?: number;
+	emission?: number;
+	arrivalTime?: number;
 	style?: ViewStyle;
 };
 
-export function TripInfoLabel({ data, style }: Readonly<Props>) {
+export function TripInfoLabel({
+	distance,
+	emission,
+	arrivalTime,
+	style,
+}: Readonly<Props>) {
 	const items = [
-		`${data.distance}km`,
-		`${data.consumption}g de CO2`,
-		`Arrivée à ${data.arrivalTime}`,
+		`${distance}km`,
+		`${emission?.toFixed()}g de CO2`,
+		`Arrivée à ${
+			arrivalTime
+				? new Date(arrivalTime).toLocaleTimeString('fr-FR', {
+						hour: '2-digit',
+						minute: '2-digit',
+					})
+				: ''
+		}`,
 	];
 
 	function getIconName(item: string): string {
@@ -90,6 +98,7 @@ const styles = StyleSheet.create({
 	},
 	contentContainer: {
 		alignItems: 'center',
+		margin: 'auto',
 	},
 	itemContainer: {
 		flexDirection: 'row',

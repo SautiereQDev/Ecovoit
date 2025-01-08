@@ -80,7 +80,7 @@ export const Search = () => {
 									<SearchTripCard trip={item} />
 								</Pressable>
 							)}
-							keyExtractor={(trip, index) => trip.id}
+							keyExtractor={(trip) => trip.id}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 						/>
 					</View>
