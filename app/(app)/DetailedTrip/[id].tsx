@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { useData } from '@/providers';
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
 import { ReturnButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts';
@@ -11,36 +11,34 @@ import { Colors } from '@/constants';
 import { Stars } from '@/components/UI';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { globalStyles } from '@/styles';
+import { getHoursAndMinutes } from '@/utils';
 
 type ratingType = 1 | 2 | 3 | 4 | 5 | 0.5 | 1.5 | 2.5 | 3.5 | 4.5;
-
-// TODO: Afficher le nom du vehicle à côté d'une icone de voiture et le nombre de passagers actuellement inscris dans le trajet
-// TODO: Créer deux modes : un premier mode lorsque le voyage est terminé et un second mode lorsque le voyage n'est pas encore commencé et qui permet de s'inscrire
 
 const DetailedTripPage = () => {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { useTrip, useVehicleByUserByLabel, useUser } = useData();
-	const { data: trip, isLoading, error: errorTrip } = useTrip(id);
+	const { data: trips, isLoading, error: errorTrip } = useTrip(id);
 
 	const {
 		data: vehicle,
 		isLoading: vehicleLoading,
 		error: errorVehicle,
-	} = useVehicleByUserByLabel(trip?.driver?.id!, trip?.vehicle!);
+	} = useVehicleByUserByLabel(trips?.driver?.id!, trips?.vehicle!);
 
 	const {
 		data: driver,
 		isLoading: driverLoading,
 		error: errorDriver,
-	} = useUser(trip?.driver?.id!);
+	} = useUser(trips?.driver?.id!);
 
-	const start: EVAPI.Location | undefined = trip?.points.find(
+	const start: EVAPI.Location | undefined = trips?.points.find(
 		(point) => point.type === 'start'
 	)?.location;
-	const end: EVAPI.Location | undefined = trip?.points.find(
+	const end: EVAPI.Location | undefined = trips?.points.find(
 		(point) => point.type === 'end'
 	)?.location;
-	const checkpoints: EVAPI.Location[] | undefined = trip?.points
+	const checkpoints: EVAPI.Location[] | undefined = trips?.points
 		.filter(
 			(point) => point.type === 'checkpoint' && point.location !== undefined
 		)
@@ -61,14 +59,14 @@ const DetailedTripPage = () => {
 	}
 
 	return (
-		<SafeAreaView style={globalStyles.container}>
+		<View style={globalStyles.container}>
 			<ReturnButton />
 			<ThemedText
 				type='header3'
 				style={styles.title}
 			>
-				{trip &&
-					new Date(trip.datetime).toLocaleDateString('fr-FR', {
+				{trips &&
+					new Date(trips.datetime).toLocaleDateString('fr-FR', {
 						day: 'numeric',
 						month: 'long',
 						hour: 'numeric',
@@ -82,11 +80,11 @@ const DetailedTripPage = () => {
 				{start && end && `${start.name} -> ${end.name}`}
 			</ThemedText>
 			<View style={styles.labelContainer}>
-				<TripLabel status={trip?.status ?? 'upcoming'} />
+				<TripLabel status={trips?.status ?? 'upcoming'} />
 			</View>
 			<View style={styles.body}>
 				<View style={styles.mapContainer}>
-					{start && end && trip?.points && trip?.points?.length > 0 && (
+					{start && end && trips?.points && trips?.points?.length > 0 && (
 						<RouteMap
 							start={start}
 							end={end}
@@ -94,56 +92,80 @@ const DetailedTripPage = () => {
 							style={styles.map}
 						/>
 					)}
-					<TripInfoLabel
-						distance={trip?.distance ?? undefined}
-						consumption={
-							trip?.distance && vehicle?.consumption
-								? trip.distance * vehicle.consumption
-								: undefined
-						}
-						arrivalTime={trip?.datetime}
-					/>
-				</View>
-				{trip?.driver?.stars && (
-					<View>
-						<ThemedText type='header5'>Note moyenne du conducteur</ThemedText>
-						<View>
-							<ThemedText type='defaultBody'>{trip.driver.stars}</ThemedText>
-							{
-								<Stars
-									rating={driver?.stars as ratingType}
-									style={styles.rating}
-								/>
+					{Boolean(
+						trips?.distance && vehicle?.consumption && trips?.datetime
+					) && (
+						<TripInfoLabel
+							distance={trips?.distance ?? undefined}
+							emission={
+								trips?.distance && vehicle?.consumption
+									? trips.distance * vehicle.consumption
+									: 0
 							}
-						</View>
-					</View>
-				)}
+							arrivalTime={
+								trips?.datetime ? new Date(trips.datetime).getTime() : 0
+							}
+						/>
+					)}
+				</View>
 				<View style={styles.description}>
 					<View style={styles.userContainer}>
 						<Image
 							source={require('@/assets/images/user-picture.jpg')}
 							style={styles.userImage}
 						/>
-						{trip?.driver?.username && (
+						{trips?.driver?.username && (
 							<ThemedText
 								type='header5'
 								style={styles.driverName}
 							>
-								{trip?.driver?.username}
+								{trips?.driver?.username}
 							</ThemedText>
 						)}
 					</View>
-					{trip?.description && (
+					<View style={styles.descriptionBody}>
+						{trips?.description && (
+							<View style={styles.descriptionText}>
+								<ThemedText type='header6'>Description du trajet</ThemedText>
+								<ThemedText>{trips.description}</ThemedText>
+							</View>
+						)}
+						<View style={styles.stars}>
+							<ThemedText type={'bigger'}>{driver?.stars}</ThemedText>
+							<Stars rating={driver?.stars as ratingType} />
+						</View>
+					</View>
+				</View>
+
+				<View style={styles.complementaryInfos}>
+					<ThemedText
+						type={'header5'}
+						style={styles.titleInfos}
+						color={'background'}
+					>
+						Infos complémentaires
+					</ThemedText>
+					<ThemedText
+						type={'header6'}
+						color={'background'}
+					>
+						{vehicle?.label}
+					</ThemedText>
+					{trips?.points.map((point) => (
 						<ThemedText
-							type='defaultBody'
-							style={styles.descriptionText}
+							key={point.id}
+							color={'background'}
 						>
-							{trip.description}
+							- {point.location.name}
+							{point.waitingTime > 0 &&
+								` (${getHoursAndMinutes(point.waitingTime)})`}
 						</ThemedText>
-					)}
+					))}
+					{/*	Liste des points du trajet + temps d'attente */}
+					{/*	 Temps de voyage */}
 				</View>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 
@@ -155,6 +177,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		width: '85%',
 		marginHorizontal: 'auto',
+		height: '100%',
 	},
 	title: {
 		textAlign: 'center',
@@ -170,12 +193,14 @@ const styles = StyleSheet.create({
 	},
 	mapContainer: {
 		display: 'flex',
-		height: '50%',
 		gap: 12,
+		height: '40%',
 	},
 	map: {
 		borderWidth: 1,
 		borderColor: Colors.light.text,
+		flex: 1,
+		// maxHeight: '50%',
 	},
 	description: {
 		backgroundColor: Colors.light.accent + '9F', // modifie l'opacité
@@ -189,8 +214,13 @@ const styles = StyleSheet.create({
 	rating: {
 		marginTop: 45,
 	},
-	descriptionText: {
-		width: '60%',
+	descriptionBody: {
+		width: '  60%',
+		display: 'flex',
+		justifyContent: 'space-between',
+		marginTop: 'auto',
+		marginBottom: '2%',
+		gap: 20,
 	},
 	userContainer: {
 		gap: 3,
@@ -203,8 +233,29 @@ const styles = StyleSheet.create({
 		borderColor: '#FFFA',
 		borderWidth: 2,
 	},
+	descriptionText: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+	},
 	driverName: {
 		textAlign: 'center',
+	},
+	stars: {
+		marginLeft: '3%',
+		marginRight: 'auto',
+		display: 'flex',
+		flexDirection: 'row',
+		gap: '5%',
+		alignItems: 'center',
+	},
+	complementaryInfos: {
+		backgroundColor: Colors.light.primary,
+		padding: '5%',
+	},
+	titleInfos: {
+		textAlign: 'center',
+		marginBottom: '1%',
 	},
 });
 

@@ -4,8 +4,11 @@ import Colors from '../constants/Colors';
 export const globalStyles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: '7.5%',
+		paddingTop: 25,
 		backgroundColor: Colors.light.background,
+		display: 'flex',
+		width: '100%',
+		paddingHorizontal: '7.5%',
 	},
 	title: {
 		marginTop: 25,

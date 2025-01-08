@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
 	},
 	contentContainer: {
 		alignItems: 'center',
+		margin: 'auto',
 	},
 	itemContainer: {
 		flexDirection: 'row',
