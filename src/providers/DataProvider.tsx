@@ -16,6 +16,7 @@ import {
 	removeVehicle,
 } from '@/api';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { postPassenger } from '@/api/passengers';
 
 interface DataContextProps {
 	useVehiclesByUser: (
@@ -56,6 +57,9 @@ interface DataContextProps {
 	useCurrentUserTrips: () => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useCurrentUser: () => ReturnType<typeof useQuery<EVAPI.User>>;
 	useLocation: () => ReturnType<typeof useQuery<EVAPI.Location[]>>;
+	useAddPassengerToTrip: () => ReturnType<
+		typeof useMutation<unknown, EVAPI.Error, { tripId: string }>
+	>;
 }
 
 export const DataContext = createContext<DataContextProps | undefined>(
@@ -124,14 +128,15 @@ const useVehiclesByUser = (userId: string) => {
 const useCurrentUserVehicles = () => {
 	return useQuery<EVAPI.Vehicle[], EVAPI.Error>(
 		['vehicles', 'me'],
-		() =>
-			fetchCurrentUser().then((data: EVAPI.User | EVAPI.Error) => {
-				if ('type' in data) {
-					throw data;
-				}
-				return data.vehicles;
-			}),
+		async () => {
+			const data = await fetchCurrentUser();
+			if ('type' in data) {
+				throw data;
+			}
+			return data.vehicles;
+		},
 		{
+			retry: 1,
 			onError: (error: EVAPI.Error) => {
 				console.error('Failed to fetch vehicles:', error);
 			},
@@ -288,7 +293,7 @@ const useCanceledTrip = () => {
 };
 
 const useCurrentUserTrips = () => {
-	const data = useQuery<EVAPI.User, EVAPI.Error>(
+	const queryResult = useQuery<EVAPI.User, EVAPI.Error>(
 		['trips', 'me'],
 		() => fetchCurrentUser(),
 		{
@@ -298,13 +303,18 @@ const useCurrentUserTrips = () => {
 			},
 		}
 	);
-	const useTrips = Array.from(
-		new Set([
-			...(data.data?.tripsAsDriver || []),
-			...(data.data?.tripsAsPassenger || []),
-		])
-	); // Crée une concaténation des deux tableaux sans doublons
-	return { ...data, data: useTrips };
+
+	// @ts-ignore
+	const trips: EVAPI.Trip[] = [
+		...(queryResult.data?.tripsAsDriver || []),
+		...(queryResult.data?.tripsAsPassenger || []),
+	];
+
+	return {
+		...queryResult,
+		data: trips,
+		isIdle: false,
+	};
 };
 
 const useLocations = (
@@ -326,7 +336,27 @@ const useLocations = (
 	);
 };
 
+const useAddPassengerToTrip = () => {
+	const queryClient = useQueryClient();
+	return useMutation<unknown, EVAPI.Error, { tripId: string }>(
+		(variables: { tripId: string }) => postPassenger(variables.tripId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(['trips']).catch((e) => console.error(e));
+				queryClient
+					.invalidateQueries(['user', 'me'])
+					.catch((e) => console.error(e));
+			},
+			retry: 1,
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to add passenger:', error);
+			},
+		}
+	);
+};
+
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
+	// @ts-ignore
 	const value: DataContextProps = useMemo(
 		() => ({
 			useVehiclesByUser,
@@ -344,6 +374,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useLocation: useLocations,
 			useCurrentUserVehicles,
 			useVehicleByUserByLabel,
+			useAddPassengerToTrip,
 		}),
 		[]
 	);
