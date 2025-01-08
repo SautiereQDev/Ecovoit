@@ -51,7 +51,7 @@ export const Search = () => {
 	};
 
 	const filterTrips = (
-		trips: EVAPI.TripEntry[],
+		trips: EVAPI.Trip[],
 		filters: EVAPI.DB.Filters<EVAPI.TripEntry> | null,
 		start: string,
 		end: string
