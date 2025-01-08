@@ -399,7 +399,7 @@ function ToastCard({
 					]}
 				/>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 }
 

@@ -9,7 +9,6 @@ import {
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { EVColor } from '@/constants/drafts/Colors';
-import { useThemeColor } from '@/hooks/useThemeColor';
 
 type CircleButtonProps = {
 	iconName: keyof typeof Ionicons.glyphMap;
@@ -28,14 +27,12 @@ export function CircleButton({
 	theme,
 	size = 'medium',
 }: CircleButtonProps) {
-	const colors = useThemeColor(theme);
 	return (
 		<View
 			style={[
 				{
 					width: sizes.container[size].width,
 					height: sizes.container[size].height,
-					backgroundColor: colors[color],
 				},
 				styles.container,
 				style,
@@ -45,7 +42,6 @@ export function CircleButton({
 				<Ionicons
 					name={iconName}
 					size={sizes.icon[size]}
-					color={colors['text-secondary']}
 				/>
 			</TouchableOpacity>
 		</View>
