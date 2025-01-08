@@ -16,8 +16,8 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
-const DEBUG_MODE = true;
-const EXTENDED_DEBUG_MODE = true;
+const DEBUG_MODE = false;
+const EXTENDED_DEBUG_MODE = false;
 
 // Ajouter un interceptor pour journaliser l'URL de chaque requête et les données
 if (process.env.NODE_ENV === 'development') {

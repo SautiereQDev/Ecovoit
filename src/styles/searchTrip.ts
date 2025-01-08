@@ -69,6 +69,7 @@ export const searchTripStyles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		gap: 20,
+		marginBottom: '2%',
 	},
 	resetButton: {
 		borderWidth: 2,

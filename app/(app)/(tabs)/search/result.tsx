@@ -1,17 +1,15 @@
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, Pressable, SafeAreaView, View } from 'react-native';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { searchTripStyles } from '@/styles/searchTrip';
 import { useData, useSearchContext } from '@/providers';
-import { router } from 'expo-router';
-import { SearchTripCard } from '@/components/cards';
-import { ThemedText } from '@/components/texts';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
-import { globalStyles } from '@/styles';
 import { IconButton, ReturnButton } from '@/components/buttons';
 import { ShowFilters, ShowOrder } from '@/components/modals';
-import { Colors } from '@/constants';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { router } from 'expo-router';
+import { ThemedText } from '@/components/texts';
+import { globalStyles, searchTripStyles } from '@/styles';
+import { Colors } from '@/constants';
+import { SearchTripCard } from '@/components/cards';
 
 export const Result = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -46,57 +44,69 @@ export const Result = () => {
 		description: false,
 	});
 
+	const { searchQuery: searchData } = useSearchContext();
+
+	const { useCurrentUser, useTrips } = useData();
+
+	const {
+		data: currentUser,
+		isLoading: userLoading,
+		error: userError,
+	} = useCurrentUser();
+	const {
+		data: trips,
+		isLoading: tripsLoading,
+		error: tripsError,
+	} = useTrips({ order, filters });
+
 	const reverseOrder = () => {
 		setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
 	};
 
+	// On filtre les trajets que l'on ne veut pas afficher
 	const filterTrips = (
 		trips: EVAPI.Trip[],
 		filters: EVAPI.DB.Filters<EVAPI.TripEntry> | null,
 		start: string,
 		end: string
 	) => {
-		return trips.filter((trip) => {
-			const hasStart = trip.points.some(
-				(point) => point.location.name === start
-			);
-			const hasEnd = trip.points.some((point) => point.location.name === end);
+		return trips
+			.filter((trip) => {
+				// on recupère les trajets qui ont les points de départ et d'arrivée correspondant à la recherche
+				const hasStart = trip.points.some(
+					(point) => point.location.name === start
+				);
+				const hasEnd = trip.points.some((point) => point.location.name === end);
 
-			if (!hasStart || !hasEnd) return false;
+				if (!hasStart || !hasEnd) return false;
 
-			if (!filters) return true;
+				if (!filters) return true;
 
-			return Object.keys(filters).every((key) => {
-				const filterValue = filters[key as keyof EVAPI.TripEntry];
-				if (filterValue === undefined) return true;
-				return trip[key as keyof EVAPI.TripEntry]
-					?.toString()
-					.includes(filterValue?.toString() ?? '');
-			});
-		});
+				// on filtre les trajets en fonction des filtres
+				return Object.keys(filters).every((key) => {
+					const filterValue = filters[key as keyof EVAPI.TripEntry];
+					if (filterValue === undefined) return true;
+					return trip[key as keyof EVAPI.TripEntry]
+						?.toString()
+						.includes(filterValue?.toString() ?? '');
+				});
+			})
+			.filter((trip) => trip.status === 'upcoming') // on n'affiche que les trajets ayant le status 'upcoming' (à venir)
+			.filter((trip) => trip.datetime < new Date().getTime()) // on n'affiche que les trajets ayant une date supérieure à la date actuelle au cas ou la BDD ce soit trompé
+			.filter((trip) => trip.availableSeats > 0) // on n'affiche que les trajets ayant des places disponibles
+			.filter(
+				(trip) =>
+					!currentUser?.tripsAsPassenger.includes(trip.id) ||
+					!currentUser?.tripsAsDriver.includes(trip.id)
+			); // on n'affiche pas les trajets auxquels l'utilisateur est déjà inscrit ou est conducteur
 	};
 
-	const { searchQuery: searchData } = useSearchContext();
-
-	const { useTrips } = useData();
-
-	const {
-		data: trips,
-		isLoading,
-		isError,
-	} = useTrips({
-		order,
-	});
-
-	console.log('filters', filters);
-	console.log('order', order);
-
-	if (isLoading) {
+	if (userLoading || tripsLoading) {
 		return <LoadingScreen />;
 	}
 
-	if (isError) {
-		return <ErrorScreen />;
+	if (userError || tripsError) {
+		return <ErrorScreen error={userError ?? tripsError} />;
 	}
 
 	const filteredTrips = filterTrips(
@@ -195,7 +205,7 @@ export const Result = () => {
 						</ThemedText>
 					)}
 					<FlatList
-						data={!isLoading && filteredTrips}
+						data={!tripsLoading && filteredTrips}
 						renderItem={({ item }) => (
 							<Pressable onPress={() => router.push(`/trips/${item.id}/join`)}>
 								<SearchTripCard trip={item} />

@@ -13,7 +13,7 @@ export const Index = () => {
 	const { useCurrentUserTrips } = useData();
 	const { data: userTrips, isLoading, error } = useCurrentUserTrips();
 
-	// met les trajets en cours en premier puis tri par date décroissante
+	// Tri des trajets par date de départ ave les trajets en cours en premier
 	userTrips?.sort((a, b) => {
 		if (a?.status === 'ongoing' && b?.status !== 'ongoing') {
 			return -1;
@@ -35,8 +35,6 @@ export const Index = () => {
 		return <ErrorScreen error={error} />;
 	}
 
-	console.log('userTrips', userTrips);
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
@@ -49,7 +47,6 @@ export const Index = () => {
 				<CustomButton
 					text={'Chercher un covoiturage'}
 					buttonStyle={styles.searchButton}
-					// @ts-ignore
 					onPress={() => router.push('/(app)/(tabs)/search')}
 					textProps={{ color: 'background', type: 'header5' }}
 				/>
@@ -57,7 +54,7 @@ export const Index = () => {
 					type='header3'
 					style={styles.secondaryTitle}
 				>
-					Mon historique 🌿
+					Mes trajets effectués ou en cours 🌿
 				</ThemedText>
 				{userTrips && userTrips.length > 0 && (
 					<FlatList
@@ -66,20 +63,21 @@ export const Index = () => {
 							item ? (
 								<Link
 									href={{
-										pathname: `/(app)/trips/[id]`,
+										pathname: '/(app)/trips/[id]',
 										params: { id: item.id },
 									}}
 								>
 									<TripCard
 										data={item}
-										style={{ width: '100%' }}
+										style={styles.tripCard}
 									/>
 								</Link>
 							) : null
 						}
-						keyExtractor={(item, index) => index.toString()}
+						keyExtractor={(item, index) =>
+							item ? item.id.toString() : index.toString()
+						}
 						ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-						style={{ marginBottom: '143%' }}
 					/>
 				)}
 			</View>
@@ -91,6 +89,7 @@ export default Index;
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: Colors.light.background,
 	},
 	title: {
@@ -114,5 +113,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: '7%',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
+	},
+	tripCard: {
+		width: '100%',
 	},
 });

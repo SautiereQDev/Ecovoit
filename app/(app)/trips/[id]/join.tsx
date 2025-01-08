@@ -76,6 +76,7 @@ const DetailedTripPage = () => {
 							description: 'Vous avez été ajouté au trajet avec succès',
 						},
 					});
+					router.push('/');
 				},
 			}
 		);
