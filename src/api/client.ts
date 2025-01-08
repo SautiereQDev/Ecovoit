@@ -124,7 +124,7 @@ export const apiGet = <GetType>(
  */
 export const apiPost = <RequestType, ResponseType>(
 	url: string,
-	data: RequestType
+	data?: RequestType
 ): Promise<ResponseType> =>
 	apiClient
 		.post<ResponseType>(url, data)
