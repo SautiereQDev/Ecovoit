@@ -11,7 +11,7 @@ import { CustomButton } from '@/components/buttons';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
-	const { trips: userTrips, isLoading, error } = useCurrentUserTrips();
+	const { data: userTrips, isLoading, error } = useCurrentUserTrips();
 
 	// Tri des trajets par date de départ ave les trajets en cours en premier
 	userTrips?.sort((a, b) => {
