@@ -1,4 +1,4 @@
-// styles/searchTrip.ts
+// styles/search.ts
 import { StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
 

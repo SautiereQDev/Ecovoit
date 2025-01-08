@@ -20,9 +20,8 @@ export const Search = () => {
 	const { useTrips } = useData();
 	const resetSearch = () => {
 		setSearchData({
-			depart: '',
-			destination: '',
-			date: new Date().getTime(),
+			start: '',
+			end: '',
 			filters: [],
 			sort: { field: 'distance', direction: 'asc' },
 		});
@@ -57,9 +56,9 @@ export const Search = () => {
 						<View style={searchTripStyles.searchBar}>
 							<View style={searchTripStyles.input}>
 								<ThemedText color='text'>
-									{searchData.depart}
+									{searchData.start}
 									{' -> '}
-									{searchData.destination}
+									{searchData.end}
 								</ThemedText>
 							</View>
 							<IconButton

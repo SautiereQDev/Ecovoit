@@ -58,6 +58,8 @@ const DetailedTripPage = () => {
 		return <LoadingScreen />;
 	}
 
+	// TODO: Avoir un mode inscription et un mode consultation
+
 	return (
 		<ScrollView style={globalStyles.container}>
 			<ReturnButton />

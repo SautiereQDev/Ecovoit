@@ -64,7 +64,7 @@ export const Index = () => {
 							item ? (
 								<Link
 									href={{
-										pathname: '/(app)/DetailedTrip/[id]',
+										pathname: '/(app)/detailed-trip/[id]',
 										params: { id: item.id },
 									}}
 								>

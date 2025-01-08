@@ -15,7 +15,7 @@ export default function TabsLayout() {
 						case 'index':
 							iconName = focused ? 'home' : 'home-outline';
 							break;
-						case 'searchTrip':
+						case 'search':
 							iconName = focused ? 'search' : 'search-outline';
 							break;
 						case 'post-trip':
@@ -50,7 +50,7 @@ export default function TabsLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='searchTrip'
+				name='search'
 				options={{
 					title: 'Rechercher',
 					tabBarHideOnKeyboard: true,
