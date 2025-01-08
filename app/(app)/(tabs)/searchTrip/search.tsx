@@ -14,14 +14,23 @@ import { Colors } from '@/constants';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 export const Search = () => {
-	type sortKeys = keyof EVAPI.DB.Sort<EVAPI.TripEntry>;
-
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 	const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 	const [filters, setFilters] =
-		useState<EVAPI.DB.Filters<EVAPI.TripEntry> | null>(null);
+		useState<EVAPI.DB.Filters<EVAPI.TripEntry> | null>({
+			vehicle: undefined,
+			id: undefined,
+			driver: undefined,
+			distance: undefined,
+			duration: undefined,
+			cancelled: undefined,
+			seats: undefined,
+			datetime: undefined,
+			description: undefined,
+		});
 	const [order, setOrder] = useState<Record<keyof EVAPI.TripEntry, boolean>>({
+		vehicle: false,
 		id: false,
 		driver: false,
 		distance: false,
@@ -29,7 +38,6 @@ export const Search = () => {
 		cancelled: false,
 		seats: false,
 		datetime: true,
-		vehicle: false,
 		description: false,
 	});
 
@@ -98,8 +106,20 @@ export const Search = () => {
 							lib={'MaterialCommunityIcons'}
 							size={26}
 							buttonStyle={searchTripStyles.button}
-							backgroundColor={filters ? 'primary' : 'background'}
-							color={filters ? Colors.light.background : Colors.light.primary}
+							backgroundColor={
+								Object.values(filters ?? {}).findIndex(
+									(filter) => filter !== undefined
+								) !== -1
+									? 'primary'
+									: 'background'
+							}
+							color={
+								Object.values(filters ?? {}).findIndex(
+									(filter) => filter !== undefined
+								) !== -1
+									? Colors.light.background
+									: Colors.light.primary
+							}
 							onPress={() => setShowFilters(!showFilters)}
 						/>
 						<View style={searchTripStyles.orderButtons}>
@@ -152,7 +172,7 @@ export const Search = () => {
 								<SearchTripCard trip={item} />
 							</Pressable>
 						)}
-						keyExtractor={(trip, index) => trip.id}
+						keyExtractor={(trip) => trip.id}
 						ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 					/>
 				</View>
