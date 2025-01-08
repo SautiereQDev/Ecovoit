@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useMemo } from 'react';
-import { useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
 	fetchCurrentUser,
@@ -16,6 +16,7 @@ import {
 	removeVehicle,
 } from '@/api';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
+import { postPassenger } from '@/api/passengers';
 
 interface DataContextProps {
 	useVehiclesByUser: (
@@ -50,17 +51,15 @@ interface DataContextProps {
 	>;
 	useTrips: (params?: any) => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useTrip: (tripId: string) => ReturnType<typeof useQuery<EVAPI.Trip>>;
-
 	useCanceledTrip: () => ReturnType<
 		typeof useMutation<unknown, EVAPI.Error, { tripId: string }>
 	>;
-	useCurrentUserTrips: () => {
-		trips: (EVAPI.Trip | undefined)[];
-		isLoading: boolean;
-		error: EVAPI.Error | null | undefined;
-	};
+	useCurrentUserTrips: () => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useCurrentUser: () => ReturnType<typeof useQuery<EVAPI.User>>;
 	useLocation: () => ReturnType<typeof useQuery<EVAPI.Location[]>>;
+	useAddPassengerToTrip: () => ReturnType<
+		typeof useMutation<unknown, EVAPI.Error, { tripId: string }>
+	>;
 }
 
 export const DataContext = createContext<DataContextProps | undefined>(
@@ -129,14 +128,15 @@ const useVehiclesByUser = (userId: string) => {
 const useCurrentUserVehicles = () => {
 	return useQuery<EVAPI.Vehicle[], EVAPI.Error>(
 		['vehicles', 'me'],
-		() =>
-			fetchCurrentUser().then((data: EVAPI.User | EVAPI.Error) => {
-				if ('type' in data) {
-					throw data;
-				}
-				return data.vehicles;
-			}),
+		async () => {
+			const data = await fetchCurrentUser();
+			if ('type' in data) {
+				throw data;
+			}
+			return data.vehicles;
+		},
 		{
+			retry: 1,
 			onError: (error: EVAPI.Error) => {
 				console.error('Failed to fetch vehicles:', error);
 			},
@@ -293,27 +293,28 @@ const useCanceledTrip = () => {
 };
 
 const useCurrentUserTrips = () => {
-	const { data: currentUser } = useCurrentUser();
-
-	const tripQueries = useQueries(
-		currentUser?.tripsAsDriver.map((tripId) => ({
-			queryKey: ['trip', tripId],
-			queryFn: () => fetchTrip(tripId),
-			enabled: !!currentUser,
+	const queryResult = useQuery<EVAPI.User, EVAPI.Error>(
+		['trips', 'me'],
+		() => fetchCurrentUser(),
+		{
 			retry: 1,
 			onError: (error: EVAPI.Error) => {
-				console.error(`Failed to fetch trip with ID ${tripId}:`, error);
+				console.error('Failed to fetch current user:', error);
 			},
-		})) || []
+		}
 	);
 
-	// on retire les trips qui pourraient être undefined
-	const trips = tripQueries.map((query) => query.data).filter(Boolean);
-	const isLoading = tripQueries.some((query) => query.isLoading);
-	// on récupère la première erreur rencontrée
-	const error = tripQueries.find((query) => query.error)?.error;
+	// @ts-ignore
+	const trips: EVAPI.Trip[] = [
+		...(queryResult.data?.tripsAsDriver || []),
+		...(queryResult.data?.tripsAsPassenger || []),
+	];
 
-	return { trips, isLoading, error };
+	return {
+		...queryResult,
+		data: trips,
+		isIdle: false,
+	};
 };
 
 const useLocations = (
@@ -335,7 +336,27 @@ const useLocations = (
 	);
 };
 
+const useAddPassengerToTrip = () => {
+	const queryClient = useQueryClient();
+	return useMutation<unknown, EVAPI.Error, { tripId: string }>(
+		(variables: { tripId: string }) => postPassenger(variables.tripId),
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(['trips']).catch((e) => console.error(e));
+				queryClient
+					.invalidateQueries(['user', 'me'])
+					.catch((e) => console.error(e));
+			},
+			retry: 1,
+			onError: (error: EVAPI.Error) => {
+				console.error('Failed to add passenger:', error);
+			},
+		}
+	);
+};
+
 export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
+	// @ts-ignore
 	const value: DataContextProps = useMemo(
 		() => ({
 			useVehiclesByUser,
@@ -353,6 +374,7 @@ export const DataProvider: React.FC<UserProviderProps> = ({ children }) => {
 			useLocation: useLocations,
 			useCurrentUserVehicles,
 			useVehicleByUserByLabel,
+			useAddPassengerToTrip,
 		}),
 		[]
 	);

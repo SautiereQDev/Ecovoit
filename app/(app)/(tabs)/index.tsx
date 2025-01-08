@@ -11,7 +11,7 @@ import { CustomButton } from '@/components/buttons';
 
 export const Index = () => {
 	const { useCurrentUserTrips } = useData();
-	const { trips: userTrips, isLoading, error } = useCurrentUserTrips();
+	const { data: userTrips, isLoading, error } = useCurrentUserTrips();
 
 	// Tri des trajets par date de départ ave les trajets en cours en premier
 	userTrips?.sort((a, b) => {
@@ -48,7 +48,7 @@ export const Index = () => {
 					text={'Chercher un covoiturage'}
 					buttonStyle={styles.searchButton}
 					// @ts-ignore
-					onPress={() => router.push('/(app)/(tabs)/searchTrip')}
+					onPress={() => router.push('/(app)/(tabs)/search')}
 					textProps={{ color: 'background', type: 'header5' }}
 				/>
 				<ThemedText
@@ -64,7 +64,7 @@ export const Index = () => {
 							item ? (
 								<Link
 									href={{
-										pathname: '/(app)/DetailedTrip/[id]',
+										pathname: '/(app)/trips/[id]',
 										params: { id: item.id },
 									}}
 								>

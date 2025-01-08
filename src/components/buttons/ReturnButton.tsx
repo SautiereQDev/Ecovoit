@@ -4,9 +4,10 @@ import { router } from 'expo-router';
 
 interface ReturnButtonProps {
 	handleBack?: () => void;
+	style?: any;
 }
 
-export const ReturnButton = ({ handleBack }: ReturnButtonProps) => {
+export const ReturnButton = ({ handleBack, style }: ReturnButtonProps) => {
 	return (
 		<CustomButton
 			text='Retour'
@@ -19,7 +20,7 @@ export const ReturnButton = ({ handleBack }: ReturnButtonProps) => {
 				})
 			}
 			// @ts-ignore
-			buttonStyle={styles.buttonPrevious}
+			buttonStyle={[style, styles.buttonPrevious]}
 			size={'smaller'}
 		/>
 	);

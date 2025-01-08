@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/texts/ThemedText';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { Stars } from '@/components/UI';
-import { formatDuration } from '@/utils';
+import { getHoursAndMinutes } from '@/utils';
 
 type Props = {
 	style?: ViewStyle;
@@ -85,7 +85,7 @@ export function SearchTripCard({ style, trip }: Readonly<Props>) {
 									color={'background'}
 									type={'bigger'}
 								>
-									{formatDuration(trip.duration)}
+									{getHoursAndMinutes(trip.duration)}
 								</ThemedText>
 							</View>
 						)}

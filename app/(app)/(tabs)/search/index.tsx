@@ -38,7 +38,7 @@ export const SearchForm = () => {
 			...searchQuery,
 			...data,
 		});
-		router.push('/searchTrip/search');
+		router.push('/search/result');
 		console.log('searchQuery', searchQuery);
 	};
 

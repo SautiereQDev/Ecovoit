@@ -28,7 +28,7 @@
 - L'utilisateur peut naviguer entre les onglets `(app)/(tabs)` :
 
   - `index.tsx` : page d'accueil.
-  - `/searchTrip/search.tsx` : recherche d'un trajets en tant que _passager_.
+  - `/search/result.tsx` : recherche d'un trajets en tant que _passager_.
   - `/profile` : profil de l'utilisateur, il peut le modifier, gérer ses véhicules, gérer ses trajets et se déconnecter.
   - `/post-trip` : publication d'un trajet en tant que _conducteur_.
 
@@ -43,7 +43,9 @@
 
 ## Recherche d'un trajet
 
-- L'utilisateur peut rechercher un trajet en tant que _passager_ en se rendant sur la page `/searchTrip/search.tsx`. Il doit renseigner les informations nécessaires à la recherche de son trajet. Cela aboutit à un `GET /trips?from=...&to=...&date=...`.
+- L'utilisateur peut rechercher un trajet en tant que _passager_ en se rendant sur la page `/searchTrip/result.tsx`. Il
+  doit renseigner les informations nécessaires à la recherche de son trajet. Cela aboutit à un
+  `GET /trips?from=...&to=...&date=...`.
   En cas de succès, les trajets correspondants à la recherche sont affichés.
 
 ## Profil
