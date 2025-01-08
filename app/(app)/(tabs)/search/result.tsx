@@ -10,7 +10,7 @@ import { SearchTripCard } from '@/components/cards';
 import { ThemedText } from '@/components/texts';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
 
-export const Search = () => {
+export const Result = () => {
 	const [showFilters, setShowFilters] = useState<boolean>(false);
 	const [showOrder, setShowOrder] = useState<boolean>(false);
 
@@ -25,7 +25,7 @@ export const Search = () => {
 			filters: [],
 			sort: { field: 'distance', direction: 'asc' },
 		});
-		router.push('/searchTrip/search');
+		router.push('/search/result');
 	};
 
 	const reverseOrder = () => {
@@ -74,7 +74,7 @@ export const Search = () => {
 							data={data}
 							renderItem={({ item }) => (
 								<Pressable
-									onPress={() => router.push(`/DetailedTrip/${item.id}`)}
+									onPress={() => router.push(`/trips/${item.id}/join`)}
 								>
 									<SearchTripCard trip={item} />
 								</Pressable>
@@ -89,4 +89,4 @@ export const Search = () => {
 	);
 };
 
-export default Search;
+export default Result;

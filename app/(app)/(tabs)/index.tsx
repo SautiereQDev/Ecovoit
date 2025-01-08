@@ -48,7 +48,7 @@ export const Index = () => {
 					text={'Chercher un covoiturage'}
 					buttonStyle={styles.searchButton}
 					// @ts-ignore
-					onPress={() => router.push('/(app)/(tabs)/searchTrip')}
+					onPress={() => router.push('/(app)/(tabs)/search')}
 					textProps={{ color: 'background', type: 'header5' }}
 				/>
 				<ThemedText
@@ -64,7 +64,7 @@ export const Index = () => {
 							item ? (
 								<Link
 									href={{
-										pathname: '/(app)/detailed-trip/[id]',
+										pathname: '/(app)/trips/[id]',
 										params: { id: item.id },
 									}}
 								>
