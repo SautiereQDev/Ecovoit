@@ -18,6 +18,12 @@ export const fetchVehiclesByUser = (
 ): Promise<EVAPI.Vehicle[]> =>
 	apiGet<EVAPI.Vehicle[]>(`/vehicles/${userId}`, params, filters, sort);
 
+export const fetchVehicleByUser = (
+	userId: string,
+	label: string
+): Promise<EVAPI.Vehicle> =>
+	apiGet<EVAPI.Vehicle>(`/vehicles/${userId}/${label}`);
+
 /**
  * Adds a new vehicle for a specific user.
  *

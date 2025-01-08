@@ -1,162 +1,138 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import { OSRMService } from '@/services/routingServices';
-import { Location } from '@/types';
-import Colors from '@/constants/Colors';
-import CustomButton from '@/components/buttons/CustomButton';
+import { FC, useEffect, useRef, useState } from 'react';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import MapView, { LatLng, Marker, Polyline, Region } from 'react-native-maps';
+import { ThemedText } from '@/components/texts';
+import { decode } from '@mapbox/polyline';
+import { Colors } from '@/constants';
+import { Location, RouteError, useMapCoordinates, useOSRMRoute } from '@/hooks';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-interface Route {
-	points: Location[];
-}
-
-interface RouteMapProps {
-	style?: any;
+export type RouteMapProps = {
 	start: Location;
 	end: Location;
 	waypoints?: Location[];
-	onError?: (err: any) => void;
-}
+	style?: StyleProp<ViewStyle>;
+	onError?: (error: RouteError) => void;
+	onRouteFound?: (distance: number, duration: number) => void;
+	isStatic?: boolean;
+	hideCenterButton?: boolean;
+};
 
-export const RouteMap = ({
-	style,
+export const RouteMap: FC<RouteMapProps> = ({
 	start,
 	end,
 	waypoints = [],
+	style,
 	onError,
-}: RouteMapProps) => {
-	const [route, setRoute] = useState<Route | null>(null);
+	onRouteFound,
+	isStatic = false,
+	hideCenterButton = false,
+}) => {
 	const mapRef = useRef<MapView>(null);
+	const { initialRegion } = useMapCoordinates(start, end, waypoints ?? []);
+	const [region, setRegion] = useState<Region>(initialRegion);
+	const { data, isLoading, error } = useOSRMRoute(
+		start,
+		end,
+		waypoints,
+		onError,
+		onRouteFound
+	);
 
-	const toRoutePoint = (
-		point: Location
-	): { location: [number, number]; name?: string } => ({
-		location: [point.longitude, point.latitude] as [number, number],
-		name: point.name,
-	});
-
-	const fitParams = useMemo(() => {
-		return {
-			edgePadding: { top: 80, right: 80, bottom: 80, left: 80 },
-			animated: true,
-		};
-	}, []);
-
-	const fitToCoordinates = useMemo(() => {
-		return [start, ...waypoints, end];
-	}, [start, end, waypoints]);
-
+	// Reset la région quand les points changent
 	useEffect(() => {
-		const loadRoute = async () => {
-			try {
-				const routeData = await OSRMService.getRoute(
-					toRoutePoint(start),
-					toRoutePoint(end),
-					waypoints.map(toRoutePoint)
-				);
-				setRoute({
-					points: routeData.points.map(
-						(point: {
-							latitude: number;
-							longitude: number;
-							name?: string;
-						}) => ({
-							...point,
-							name: point.name ?? 'Unnamed',
-						})
-					),
-				});
-			} catch (error) {
-				console.error('Failed to load route:', error);
-				if (onError) {
-					onError(error);
-				}
-			}
-		};
-		loadRoute().catch(console.error);
-		if (start && end) {
-			mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams); // recentre la map lors de la modification des points
-		}
-	}, [start, end, waypoints, fitToCoordinates, fitParams]);
+		setRegion(initialRegion);
+		mapRef.current?.animateToRegion(initialRegion, 1000);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data]);
 
-	const initialRegion = {
-		...start,
-		latitudeDelta: 1.0,
-		longitudeDelta: 1.0,
-	};
+	if (isLoading) {
+		return (
+			<View style={[styles.container, style]}>
+				<ActivityIndicator
+					size='large'
+					color='#0000ff'
+				/>
+			</View>
+		);
+	}
 
-	const mapStyle = [
-		{
-			featureType: 'poi',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'transit',
-			stylers: [{ visibility: 'off' }],
-		},
-		{
-			featureType: 'road',
-			elementType: 'labels',
-			stylers: [{ visibility: 'off' }],
-		},
-	];
+	if (error || !data) {
+		return (
+			<View style={[styles.container, style]}>
+				<ThemedText>Impossible d'afficher la carte</ThemedText>
+			</View>
+		);
+	}
 
 	return (
-		<View style={style}>
+		<View style={[styles.container, style]}>
 			<MapView
 				ref={mapRef}
-				provider={PROVIDER_GOOGLE}
 				style={styles.map}
-				initialRegion={initialRegion}
-				customMapStyle={mapStyle}
-				onLayout={() => {
-					if (start && end) {
-						mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
-					}
-				}}
+				region={region}
+				onRegionChangeComplete={setRegion}
+				moveOnMarkerPress={false}
+				showsUserLocation={false}
+				loadingEnabled={true}
+				scrollEnabled={!isStatic}
+				rotateEnabled={!isStatic}
 			>
 				<Marker
-					coordinate={start}
-					title={start.name ?? 'Départ'}
-					description={start.name ?? 'Point de départ'}
+					coordinate={{
+						latitude: Number(start.latitude),
+						longitude: Number(start.longitude),
+					}}
+					title={start.name}
+					pinColor='green'
 				/>
-				<Marker
-					coordinate={end}
-					title={end.name ?? 'Arrivée'}
-					description={end.name ?? "Point d'arrivée"}
-				/>
-				{waypoints?.map((point, index) => (
+
+				{waypoints.map((point, index) => (
 					<Marker
-						key={index.toString()}
-						coordinate={point}
-						title={point.name ?? `Point ${index + 1}`}
-						description={point.name ?? `Point ${index + 1}`}
+						key={`waypoint-${index}`}
+						coordinate={{
+							latitude: Number(point.latitude),
+							longitude: Number(point.longitude),
+						}}
+						title={point.name}
+						pinColor='yellow'
 					/>
 				))}
-				{route?.points && route.points.length > 0 && (
-					<Polyline
-						coordinates={route.points}
-						strokeColor='#2196F3'
-						strokeWidth={3}
-						geodesic={true}
-					/>
-				)}
+
+				<Marker
+					coordinate={{
+						latitude: Number(end.latitude),
+						longitude: Number(end.longitude),
+					}}
+					title={end.name}
+					pinColor='red'
+				/>
+
+				<Polyline
+					coordinates={decode(data.routes[0].geometry).map(
+						([latitude, longitude]): LatLng => ({ latitude, longitude })
+					)}
+					strokeWidth={3}
+					strokeColor='#000'
+				/>
 			</MapView>
-			<CustomButton
-				onPress={() => {
-					mapRef.current?.fitToCoordinates(fitToCoordinates, fitParams);
-				}}
-				style={styles.button}
-				textProps={{ type: 'defaultBody', color: 'secondary' }}
-				text={'Recentrer'}
-			/>
+			{!isStatic ||
+				(!hideCenterButton && (
+					<MaterialCommunityIcons
+						name='target'
+						size={24}
+						color='black'
+					/>
+				))}
 		</View>
 	);
 };
 
-export default RouteMap;
-
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	map: {
 		width: '100%',
 		height: '100%',

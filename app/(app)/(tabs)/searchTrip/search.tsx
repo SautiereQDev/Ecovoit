@@ -57,9 +57,9 @@ export const Search = () => {
 						<View style={searchTripStyles.searchBar}>
 							<View style={searchTripStyles.input}>
 								<ThemedText color='text'>
-									{searchData.depart}
+									{searchData.start}
 									{' -> '}
-									{searchData.destination}
+									{searchData.end}
 								</ThemedText>
 							</View>
 							<IconButton
@@ -80,7 +80,7 @@ export const Search = () => {
 									<SearchTripCard trip={item} />
 								</Pressable>
 							)}
-							keyExtractor={(trip, index) => trip.id}
+							keyExtractor={(trip) => trip.id}
 							ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
 						/>
 					</View>

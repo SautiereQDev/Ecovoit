@@ -21,3 +21,10 @@ export const formatDateReverse = (timestamp: number): string => {
 		year: 'numeric',
 	})} - ${date.getHours()}h${date.getMinutes()}`;
 };
+
+export const getHoursAndMinutes = (timestamp: number): string => {
+	const date = new Date(timestamp);
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+	return hours > 0 ? `${hours}h${minutes}` : `${minutes}m`;
+};

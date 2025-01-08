@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
 	FlatList,
 	KeyboardAvoidingView,
 	Modal,
-	Pressable,
 	StyleSheet,
 	View,
 } from 'react-native';
@@ -12,36 +11,48 @@ import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
 import { ThemedText } from '@/components/texts/ThemedText';
-import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/providers/SearchProvider';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 type Props = {
 	visible: boolean;
 	onClose?: () => void;
+	filters: EVAPI.DB.Filters<EVAPI.TripEntry> | null;
+	setFilters: React.Dispatch<
+		React.SetStateAction<EVAPI.DB.Filters<EVAPI.TripEntry> | null>
+	>;
 };
 
-export const ShowFilters = ({ visible, onClose }: Props) => {
-	const {
-		filters,
-		toggleFilter,
-		updateFilterValue,
-		filtersChanged,
-		resetFilters,
-	} = useTripSearch();
+export const ShowFilters = ({
+	visible,
+	onClose,
+	filters,
+	setFilters,
+}: Props) => {
+	const handleCheckboxPress = (name: keyof EVAPI.TripEntry) => {
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			[name]: prevFilters?.[name] !== undefined ? undefined : '',
+		}));
+	};
 
-	useEffect(() => {
-		if (!visible && filtersChanged()) {
-			notify('success', {
-				params: { title: 'Les filtres ont bien été mis à jour' },
+	const deactivateEmptyFilters = () => {
+		setFilters((prevFilters) => {
+			const updatedFilters = { ...prevFilters };
+			Object.keys(updatedFilters).forEach((key) => {
+				if (updatedFilters[key as keyof EVAPI.TripEntry] === '') {
+					updatedFilters[key as keyof EVAPI.TripEntry] = undefined;
+				}
 			});
-		}
-	}, [visible, filters, filtersChanged]);
+			return updatedFilters;
+		});
+		onClose && onClose();
+	};
 
 	return (
 		<KeyboardAvoidingView>
 			<Modal
 				visible={visible}
-				onRequestClose={onClose}
+				onRequestClose={deactivateEmptyFilters}
 				transparent
 			>
 				<View style={styles.overlay}>
@@ -53,15 +64,19 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 							Filtres
 						</ThemedText>
 						<FlatList
-							data={filters}
+							data={Object.keys(filters || {}).map((name) => ({
+								name,
+								value: filters?.[name as keyof EVAPI.TripEntry] || '',
+								active: filters?.[name as keyof EVAPI.TripEntry] !== undefined,
+							}))}
 							renderItem={({ item }) => (
-								<Pressable
-									style={styles.filter}
-									onPress={() => toggleFilter(item.name)}
-								>
+								<View style={styles.filter}>
 									<Checkbox
 										status={item.active ? 'checked' : 'unchecked'}
 										color={Colors.light.primary}
+										onPress={() =>
+											handleCheckboxPress(item.name as keyof EVAPI.TripEntry)
+										}
 									/>
 									<ThemedText
 										style={styles.filterName}
@@ -74,11 +89,16 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 										placeholder='valeur'
 										style={styles.input}
 										disabled={!item.active}
-										value={item.value.toString()}
-										onChangeText={(val) => updateFilterValue(item.name, val)}
+										value={item.value?.toString() ?? ''}
+										onChangeText={(val) =>
+											setFilters((prevFilters) => ({
+												...prevFilters,
+												[item.name]: val || undefined,
+											}))
+										}
 										keyboardType='numeric'
 									/>
-								</Pressable>
+								</View>
 							)}
 							ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 							keyExtractor={(item) => item.name.toString()}
@@ -86,18 +106,29 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 						/>
 						<View style={styles.bottomButtons}>
 							<CustomButton
-								onPress={resetFilters}
-								text='Supprimer les filtres'
-								textProps={{ type: 'bigger', color: 'background' }}
+								onPress={() =>
+									setFilters({
+										vehicle: undefined,
+										id: undefined,
+										driver: undefined,
+										distance: undefined,
+										duration: undefined,
+										cancelled: undefined,
+										seats: undefined,
+										datetime: undefined,
+										description: undefined,
+									})
+								}
+								text='Reset'
+								textProps={{ color: 'background' }}
 								buttonStyle={styles.buttons}
 								backgroundColor='resetButton'
 							/>
 							<CustomButton
-								onPress={onClose}
+								onPress={deactivateEmptyFilters}
 								text='Fermer'
-								textProps={{ type: 'bigger', color: 'background' }}
+								textProps={{ color: 'background' }}
 								buttonStyle={styles.buttons}
-								backgroundColor='primary'
 							/>
 						</View>
 					</View>
@@ -119,10 +150,11 @@ const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: '5%',
 		width: '90%',
-		height: '50%',
+		maxHeight: '55%',
 		paddingTop: '3%',
 		backgroundColor: Colors.light.background,
 		borderRadius: 10,
+		paddingBottom: '20%', // Ajout d'un padding en bas pour les boutons
 	},
 	title: {
 		textAlign: 'center',
@@ -131,13 +163,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		position: 'absolute',
-		gap: 15,
 		bottom: 15,
-		right: 10,
+		left: 10, // Correction de la position des boutons
+		right: 10, // Correction de la position des boutons
 	},
 	buttons: {
-		paddingVertical: '2%',
-		paddingHorizontal: '5%',
+		maxWidth: '40%',
 	},
 	filters: {
 		marginTop: '7%',

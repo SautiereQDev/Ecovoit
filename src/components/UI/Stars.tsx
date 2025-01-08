@@ -9,7 +9,7 @@ interface Props {
 
 export const Stars = ({ rating, style, size = 32 }: Props) => {
 	const nbFullStars = Math.floor(rating);
-	const nbHalfStar = rating - nbFullStars === 0.5 ? 1 : 0;
+	const nbHalfStar = rating - nbFullStars >= 0.5 ? 1 : 0; // vérifie s'il y a une demi-étoile
 
 	return (
 		<View style={[style, styles.container]}>
@@ -31,6 +31,17 @@ export const Stars = ({ rating, style, size = 32 }: Props) => {
 					<Ionicons
 						key={index}
 						name='star-half'
+						size={size}
+						color='gold'
+					/>
+				))}
+			{/* Etoiles vides */}
+			{Array(5 - nbFullStars - nbHalfStar)
+				.fill(0)
+				.map((_, index) => (
+					<Ionicons
+						key={index}
+						name='star-outline'
 						size={size}
 						color='gold'
 					/>
