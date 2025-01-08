@@ -1,27 +1,22 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+import { PostTripProvider } from '@/providers';
 import { Stack } from 'expo-router';
 
 export default function PostTripLayout() {
 	return (
-		<View>
-			<Text>PostTripLayout</Text>
-			<Stack
-				screenOptions={{
-					headerStyle: {
-						backgroundColor: '#f4511e',
-					},
-					headerTintColor: '#fff',
-					headerTitleStyle: {
-						fontWeight: 'bold',
-					},
-				}}
-			>
+		<PostTripProvider>
+			<Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+				<Stack.Screen name='index' />
 				<Stack.Screen
-					name='index'
-					options={{}}
+					name='[modal]'
+					options={{
+						presentation: 'modal',
+						animation: 'fade',
+					}}
 				/>
+
+				<Stack.Screen name='trip' />
+				<Stack.Screen name='confirm' />
 			</Stack>
-		</View>
+		</PostTripProvider>
 	);
 }

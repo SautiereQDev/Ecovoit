@@ -1,13 +1,15 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { routeToScreen } from 'expo-router/build/useScreens';
 
 export default function TabsLayout() {
 	type IoniconNames = keyof typeof Ionicons.glyphMap;
 
 	return (
 		<Tabs
-			screenOptions={({ route }) => ({
+			screenOptions={({ route, navigation, theme }) => ({
 				headerShown: false,
+				// tabBarStyle: route.name === 'post-trip' ? { display: 'none' } : {},
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName: IoniconNames;
 
@@ -61,8 +63,10 @@ export default function TabsLayout() {
 				options={{
 					title: 'Publier',
 					tabBarHideOnKeyboard: true,
+					tabBarStyle: { display: 'none' },
 				}}
 			/>
+
 			<Tabs.Screen
 				name='profile'
 				options={{
