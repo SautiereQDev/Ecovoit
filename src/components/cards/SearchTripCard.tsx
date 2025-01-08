@@ -3,7 +3,7 @@ import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { EVAPI } from '@ecovoit-api/mock-adapter';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { Stars } from '@/components/UI';
 import { formatDuration } from '@/utils';
 
@@ -11,6 +11,8 @@ type Props = {
 	style?: ViewStyle;
 	trip: EVAPI.Trip;
 };
+
+const ICON_SIZE = 20;
 
 export function SearchTripCard({ style, trip }: Readonly<Props>) {
 	return (
@@ -60,25 +62,32 @@ export function SearchTripCard({ style, trip }: Readonly<Props>) {
 					)}
 					<View style={styles.row}>
 						<View style={styles.element}>
+							<Ionicons
+								name='man-sharp'
+								size={ICON_SIZE}
+								color={Colors.light.background}
+							/>
 							<ThemedText
 								color='background'
-								type={'header6'}
+								type={'header5'}
 							>
 								{trip.seats}
 							</ThemedText>
-							<Ionicons
-								name='man-sharp'
-								size={20}
-								color={Colors.light.background}
-							/>
 						</View>
 						{trip.duration && (
-							<ThemedText
-								color={'background'}
-								type={'bigger'}
-							>
-								{formatDuration(trip.duration)}
-							</ThemedText>
+							<View style={[styles.element, { gap: 3 }]}>
+								<AntDesign
+									name='clockcircleo'
+									size={ICON_SIZE}
+									color={Colors.light.background}
+								/>
+								<ThemedText
+									color={'background'}
+									type={'bigger'}
+								>
+									{formatDuration(trip.duration)}
+								</ThemedText>
+							</View>
 						)}
 					</View>
 				</View>
@@ -150,6 +159,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
+		gap: 10,
 	},
 	stars: {
 		display: 'flex',
