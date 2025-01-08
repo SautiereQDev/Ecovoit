@@ -46,20 +46,23 @@ export function SearchTripCard({ style, trip }: Readonly<Props>) {
 				</View>
 				<View style={styles.body}>
 					{trip.driver.stars && (
-						<>
-							<ThemedText>
+						<View style={styles.stars}>
+							<ThemedText
+								type={'accent'}
+								color={'background'}
+							>
 								{trip.driver.stars}
 								{''}
 							</ThemedText>{' '}
 							{/* @ts-ignore */}
 							<Stars rating={trip.driver.stars} />
-						</>
+						</View>
 					)}
 					<View style={styles.row}>
 						<View style={styles.element}>
 							<ThemedText
 								color='background'
-								type={'bigger'}
+								type={'header6'}
 							>
 								{trip.seats}
 							</ThemedText>
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		borderRadius: 5,
 		backgroundColor: Colors.light.secondary,
+		alignItems: 'center',
 	},
 	user: {
 		display: 'flex',
@@ -146,6 +150,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-		marginHorizontal: '10%',
+	},
+	stars: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: '3%',
+		marginVertical: '5%',
 	},
 });
