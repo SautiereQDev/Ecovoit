@@ -20,24 +20,29 @@ export const Search = () => {
 	const [filters, setFilters] =
 		useState<EVAPI.DB.Filters<EVAPI.TripEntry> | null>({
 			vehicle: undefined,
-			id: undefined,
 			driver: undefined,
-			distance: undefined,
 			duration: undefined,
 			cancelled: undefined,
-			seats: undefined,
 			datetime: undefined,
-			description: undefined,
 		});
-	const [order, setOrder] = useState<Record<keyof EVAPI.TripEntry, boolean>>({
+	const [order, setOrder] = useState<
+		Record<
+			| keyof Omit<EVAPI.TripEntry, 'description' | 'id' | 'distance' | 'seats'>
+			| 'id'
+			| 'distance'
+			| 'seats'
+			| 'description',
+			boolean
+		>
+	>({
 		vehicle: false,
-		id: false,
 		driver: false,
-		distance: false,
 		duration: false,
 		cancelled: false,
-		seats: false,
 		datetime: true,
+		id: false,
+		distance: false,
+		seats: false,
 		description: false,
 	});
 
@@ -45,11 +50,43 @@ export const Search = () => {
 		setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
 	};
 
+	const filterTrips = (
+		trips: EVAPI.TripEntry[],
+		filters: EVAPI.DB.Filters<EVAPI.TripEntry> | null,
+		start: string,
+		end: string
+	) => {
+		return trips.filter((trip) => {
+			const hasStart = trip.points.some(
+				(point) => point.location.name === start
+			);
+			const hasEnd = trip.points.some((point) => point.location.name === end);
+
+			if (!hasStart || !hasEnd) return false;
+
+			if (!filters) return true;
+
+			return Object.keys(filters).every((key) => {
+				const filterValue = filters[key as keyof EVAPI.TripEntry];
+				if (filterValue === undefined) return true;
+				return trip[key as keyof EVAPI.TripEntry]
+					?.toString()
+					.includes(filterValue?.toString() ?? '');
+			});
+		});
+	};
+
 	const { searchQuery: searchData } = useSearchContext();
 
 	const { useTrips } = useData();
 
-	const { data: trips, isLoading, isError } = useTrips();
+	const {
+		data: trips,
+		isLoading,
+		isError,
+	} = useTrips({
+		order,
+	});
 
 	console.log('filters', filters);
 	console.log('order', order);
@@ -62,16 +99,12 @@ export const Search = () => {
 		return <ErrorScreen />;
 	}
 
-	const filteredTrips = trips?.filter((trip) => {
-		const start = trip.points.find(
-			(point) => point.location.name === searchData.start
-		);
-		const end = trip.points.find(
-			(point) => point.location.name === searchData.end
-		);
-
-		return start && end;
-	});
+	const filteredTrips = filterTrips(
+		trips ?? [],
+		filters,
+		searchData.start,
+		searchData.end
+	);
 
 	// tri par date de trajet
 	trips?.sort((a, b) => {
@@ -130,11 +163,10 @@ export const Search = () => {
 								size={26}
 								buttonStyle={searchTripStyles.button}
 								onPress={() => setShowOrder(!showOrder)}
-								color={Colors.light.primary}
 							/>
 							<IconButton
 								name={sortDirection === 'asc' ? 'sort-asc' : 'sort-desc'}
-								lib={'FontAwesome'}
+								lib={'Octicons'}
 								size={26}
 								buttonStyle={searchTripStyles.button}
 								onPress={reverseOrder}

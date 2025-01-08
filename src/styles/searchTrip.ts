@@ -90,12 +90,16 @@ export const searchTripStyles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: Colors.light.primary,
 		padding: '3%',
+		height: 50,
+		width: 50,
+		borderRadius: 10,
 	},
 	icons: {
 		display: 'flex',
 		flexDirection: 'row',
 		marginRight: 'auto',
 		gap: 25,
+		marginTop: '5%',
 	},
 	orderButtons: {
 		display: 'flex',

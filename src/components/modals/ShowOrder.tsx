@@ -9,9 +9,28 @@ import { EVAPI } from '@ecovoit-api/mock-adapter';
 type Props = {
 	visible: boolean;
 	onClose: () => void;
-	order: Record<keyof EVAPI.TripEntry, boolean>;
+	order: Record<
+		| keyof Omit<EVAPI.TripEntry, 'description' | 'id' | 'distance' | 'seats'>
+		| 'id'
+		| 'distance'
+		| 'seats'
+		| 'description',
+		boolean
+	>;
 	setOrder: React.Dispatch<
-		React.SetStateAction<Record<keyof EVAPI.TripEntry, boolean>>
+		React.SetStateAction<
+			Record<
+				| keyof Omit<
+						EVAPI.TripEntry,
+						'description' | 'id' | 'distance' | 'seats'
+				  >
+				| 'id'
+				| 'distance'
+				| 'seats'
+				| 'description',
+				boolean
+			>
+		>
 	>;
 };
 
@@ -30,14 +49,12 @@ export const ShowOrder = ({ visible, onClose, order, setOrder }: Props) => {
 	};
 
 	const keys = [
-		'id',
 		'driver',
-		'distance',
 		'duration',
 		'cancelled',
 		'seats',
 		'datetime',
-		'description',
+		'vehicle',
 	] as (keyof EVAPI.TripEntry)[];
 
 	return (
