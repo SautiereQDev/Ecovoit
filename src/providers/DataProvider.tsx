@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useMemo } from 'react';
-import { useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
 	addVehicle,
 	fetchCurrentUser,
@@ -50,15 +50,10 @@ interface DataContextProps {
 	>;
 	useTrips: (params?: any) => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useTrip: (tripId: string) => ReturnType<typeof useQuery<EVAPI.Trip>>;
-
 	useCanceledTrip: () => ReturnType<
 		typeof useMutation<unknown, EVAPI.Error, { tripId: string }>
 	>;
-	useCurrentUserTrips: () => {
-		trips: (EVAPI.Trip | undefined)[];
-		isLoading: boolean;
-		error: EVAPI.Error | null | undefined;
-	};
+	useCurrentUserTrips: () => ReturnType<typeof useQuery<EVAPI.Trip[]>>;
 	useCurrentUser: () => ReturnType<typeof useQuery<EVAPI.User>>;
 	useLocation: () => ReturnType<typeof useQuery<EVAPI.Location[]>>;
 }
@@ -293,27 +288,23 @@ const useCanceledTrip = () => {
 };
 
 const useCurrentUserTrips = () => {
-	const { data: currentUser } = useCurrentUser();
-
-	const tripQueries = useQueries(
-		currentUser?.tripsAsDriver.map((tripId) => ({
-			queryKey: ['trip', tripId],
-			queryFn: () => fetchTrip(tripId),
-			enabled: !!currentUser,
+	const data = useQuery<EVAPI.User, EVAPI.Error>(
+		['trips', 'me'],
+		() => fetchCurrentUser(),
+		{
 			retry: 1,
 			onError: (error: EVAPI.Error) => {
-				console.error(`Failed to fetch trip with ID ${tripId}:`, error);
+				console.error('Failed to fetch current user:', error);
 			},
-		})) || []
+		}
 	);
-
-	// on retire les trips qui pourraient être undefined
-	const trips = tripQueries.map((query) => query.data).filter(Boolean);
-	const isLoading = tripQueries.some((query) => query.isLoading);
-	// on récupère la première erreur rencontrée
-	const error = tripQueries.find((query) => query.error)?.error;
-
-	return { trips, isLoading, error };
+	const useTrips = Array.from(
+		new Set([
+			...(data.data?.tripsAsDriver || []),
+			...(data.data?.tripsAsPassenger || []),
+		])
+	); // Crée une concaténation des deux tableaux sans doublons
+	return { ...data, data: useTrips };
 };
 
 const useLocations = (
