@@ -1,29 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
-import { FiltreType } from '@/types';
 import Colors from '@/constants/Colors';
 import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedText } from '@/components/texts/ThemedText';
-import { RadioButton } from 'react-native-paper';
-import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/providers/SearchProvider';
+import { Checkbox } from 'react-native-paper';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 type Props = {
 	visible: boolean;
 	onClose: () => void;
+	order: Record<keyof EVAPI.TripEntry, boolean>;
+	setOrder: React.Dispatch<
+		React.SetStateAction<Record<keyof EVAPI.TripEntry, boolean>>
+	>;
 };
 
-export const ShowOrder = ({ visible, onClose }: Props) => {
-	const { order, updateOrder } = useTripSearch();
-	const initialOrderValue = useRef(order);
+export const ShowOrder = ({ visible, onClose, order, setOrder }: Props) => {
+	const handleCheckboxPress = (field: keyof EVAPI.TripEntry) => {
+		setOrder((prevOrder) => ({
+			...Object.keys(prevOrder).reduce(
+				(acc, key) => {
+					acc[key as keyof EVAPI.TripEntry] = false;
+					return acc;
+				},
+				{} as Record<keyof EVAPI.TripEntry, boolean>
+			),
+			[field]: true,
+		}));
+	};
 
-	useEffect(() => {
-		if (!visible && initialOrderValue.current !== order) {
-			notify('success', {
-				params: { title: 'Les filtres ont bien été mis à jour' },
-			});
-		}
-	}, [visible, order]);
+	const keys = [
+		'id',
+		'driver',
+		'distance',
+		'duration',
+		'cancelled',
+		'seats',
+		'datetime',
+		'description',
+	] as (keyof EVAPI.TripEntry)[];
 
 	return (
 		<Modal
@@ -39,15 +54,13 @@ export const ShowOrder = ({ visible, onClose }: Props) => {
 					>
 						Ordre de tri
 					</ThemedText>
-					{Object.values(FiltreType).map((type) => (
-						<RadioButton.Item
-							key={type.toString()}
-							label={type.toString()}
-							value={type.toString()}
-							status={order === type ? 'checked' : 'unchecked'}
-							onPress={() => updateOrder(type as FiltreType)}
-							style={styles.radio}
-							position='leading'
+					{keys.map((field) => (
+						<Checkbox.Item
+							key={String(field)}
+							label={String(field)}
+							status={order[field] ? 'checked' : 'unchecked'}
+							onPress={() => handleCheckboxPress(field)}
+							style={styles.checkbox}
 						/>
 					))}
 					<CustomButton
@@ -90,7 +103,7 @@ const styles = StyleSheet.create({
 		right: 10,
 		width: '30%',
 	},
-	radio: {
+	checkbox: {
 		marginHorizontal: '5%',
 	},
 });

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	FlatList,
 	KeyboardAvoidingView,
 	Modal,
-	Pressable,
 	StyleSheet,
 	View,
 } from 'react-native';
@@ -13,29 +12,32 @@ import CustomButton from '@/components/buttons/CustomButton';
 import { ThemedInput } from '@/components/inputs/ThemedInput';
 import { ThemedText } from '@/components/texts/ThemedText';
 import { notify } from 'react-native-notificated';
-import { useTripSearch } from '@/providers/SearchProvider';
+import { EVAPI } from '@ecovoit-api/mock-adapter';
 
 type Props = {
 	visible: boolean;
 	onClose?: () => void;
+	filters: EVAPI.DB.Filters<EVAPI.TripEntry> | null;
+	setFilters: React.Dispatch<
+		React.SetStateAction<EVAPI.DB.Filters<EVAPI.TripEntry> | null>
+	>;
 };
 
-export const ShowFilters = ({ visible, onClose }: Props) => {
-	const {
-		filters,
-		toggleFilter,
-		updateFilterValue,
-		filtersChanged,
-		resetFilters,
-	} = useTripSearch();
+export const ShowFilters = ({
+	visible,
+	onClose,
+	filters,
+	setFilters,
+}: Props) => {
+	const prevFilters = useRef<EVAPI.DB.Filters<EVAPI.TripEntry>>(filters);
 
 	useEffect(() => {
-		if (!visible && filtersChanged()) {
+		if (!visible && prevFilters.current !== filters) {
 			notify('success', {
 				params: { title: 'Les filtres ont bien été mis à jour' },
 			});
 		}
-	}, [visible, filters, filtersChanged]);
+	}, [visible]);
 
 	return (
 		<KeyboardAvoidingView>
@@ -53,12 +55,17 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 							Filtres
 						</ThemedText>
 						<FlatList
-							data={filters}
+							data={
+								filters
+									? Object.entries(filters).map(([name, value]) => ({
+											name,
+											value,
+											active: value !== null,
+										}))
+									: []
+							}
 							renderItem={({ item }) => (
-								<Pressable
-									style={styles.filter}
-									onPress={() => toggleFilter(item.name)}
-								>
+								<View style={styles.filter}>
 									<Checkbox
 										status={item.active ? 'checked' : 'unchecked'}
 										color={Colors.light.primary}
@@ -74,11 +81,13 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 										placeholder='valeur'
 										style={styles.input}
 										disabled={!item.active}
-										value={item.value.toString()}
-										onChangeText={(val) => updateFilterValue(item.name, val)}
+										value={item.value?.toString() ?? ''}
+										onChangeText={(val) =>
+											setFilters({ ...filters, [item.name]: val })
+										}
 										keyboardType='numeric'
 									/>
-								</Pressable>
+								</View>
 							)}
 							ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
 							keyExtractor={(item) => item.name.toString()}
@@ -86,7 +95,7 @@ export const ShowFilters = ({ visible, onClose }: Props) => {
 						/>
 						<View style={styles.bottomButtons}>
 							<CustomButton
-								onPress={resetFilters}
+								onPress={() => setFilters(null)}
 								text='Supprimer les filtres'
 								textProps={{ type: 'bigger', color: 'background' }}
 								buttonStyle={styles.buttons}
