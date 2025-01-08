@@ -89,6 +89,19 @@ export const detailTripStyles = StyleSheet.create({
 		textAlign: 'center',
 		marginBottom: '1%',
 	},
+	header: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	joinButton: {
+		maxWidth: '60%',
+		marginBottom: '5%',
+	},
+	backButton: {
+		paddingVertical: '2%',
+	},
 });
 
 export default detailTripStyles;
