@@ -21,13 +21,3 @@ export const formatDateReverse = (timestamp: number): string => {
 		year: 'numeric',
 	})} - ${date.getHours()}h${date.getMinutes()}`;
 };
-
-export function getHoursAndMinutes(seconds: number): string {
-	if (seconds < 3600) {
-		const minutes = Math.floor(seconds / 60);
-		return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
-	} else {
-		const hours = (seconds / 3600).toFixed(1);
-		return `${hours} heure${parseFloat(hours) !== 1 ? 's' : ''}`;
-	}
-}

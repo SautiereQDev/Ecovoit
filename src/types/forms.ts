@@ -5,4 +5,11 @@ export interface SignInFrom {
 	password: string;
 }
 
+export type searchTripFormType = {
+	start: string;
+	end: string;
+	sort: { field: string; direction: string };
+	filters: { field: string; value: string }[];
+};
+
 export type RegisterForm = EVAPI.UserCreation & EVAPI.VehicleCreation;

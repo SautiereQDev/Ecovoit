@@ -10,41 +10,29 @@ import { searchTripFormType } from '@/types';
 interface SearchContextType {
 	searchQuery: searchTripFormType;
 	setSearchQuery: React.Dispatch<React.SetStateAction<searchTripFormType>>;
+	reverseOrder: () => void;
 }
+
+const initialSearchQuery: searchTripFormType = {
+	start: '',
+	end: '',
+	filters: [],
+	sort: { field: 'distance', direction: 'asc' },
+};
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const [searchQuery, setSearchQuery] = useState<searchTripFormType>({
-		depart: '',
-		destination: '',
-		date: new Date().getTime(),
-		filters: [],
-		sort: { field: 'distance', direction: 'asc' },
-	});
+	const [searchQuery, setSearchQuery] =
+		useState<searchTripFormType>(initialSearchQuery);
 
 	const value: SearchContextType = useMemo(
-		() => ({ searchQuery, setSearchQuery }),
+		() => ({ searchQuery, setSearchQuery, reverseOrder }),
 		[searchQuery]
 	);
 
-	return (
-		<SearchContext.Provider value={value}>{children},</SearchContext.Provider>
-	);
-};
-
-export const useSearchContext = (): SearchContextType => {
-	const context = useContext(SearchContext);
-	if (!context) {
-		throw new Error('useSearchContext must be used within a SearchProvider');
-	}
-	return context;
-};
-
-export const useTripSearch = () => {
-	const { searchQuery, setSearchQuery } = useSearchContext();
 	const filtersChanged = () => {
 		// Implement logic to check if filters have changed
 		throw new Error('Not implemented');
@@ -61,11 +49,25 @@ export const useTripSearch = () => {
 		// Implement logic to reset filters
 		throw new Error('Not implemented');
 	};
-	return {
-		filters: searchQuery.filters,
-		filtersChanged,
-		toggleFilter,
-		updateFilterValue,
-		resetFilters,
+	const reverseOrder = () => {
+		setSearchQuery({
+			...searchQuery,
+			sort:
+				searchQuery.sort.direction === 'asc'
+					? { ...searchQuery.sort, direction: 'desc' }
+					: { ...searchQuery.sort, direction: 'asc' },
+		});
 	};
+
+	return (
+		<SearchContext.Provider value={value}>{children},</SearchContext.Provider>
+	);
+};
+
+export const useSearchContext = (): SearchContextType => {
+	const context = useContext(SearchContext);
+	if (!context) {
+		throw new Error('useSearchContext must be used within a SearchProvider');
+	}
+	return context;
 };

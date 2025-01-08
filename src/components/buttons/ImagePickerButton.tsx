@@ -56,7 +56,7 @@ export const ImagePickerButton = ({
 		<View style={[styles.container, style]}>
 			<Image
 				source={
-					image ? { uri: image } : require('@/assets/images/default-user.png')
+					image ? { uri: image } : require('@/assets/images/user-picture.jpg')
 				}
 				style={styles.image}
 			/>
