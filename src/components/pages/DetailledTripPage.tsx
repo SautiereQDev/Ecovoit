@@ -124,7 +124,9 @@ export const DetailedTripPage = ({
 							<Image
 								source={
 									driver?.id
-										? { uri: `user/pp/${driver.id}.avif` }
+										? {
+												uri: `https://cdn-ev-qq.pimous.dev/user/pp/${driver.id}.png`,
+											}
 										: require('@/assets/images/user-picture.jpg')
 								}
 								style={detailTripStyles.userImage}

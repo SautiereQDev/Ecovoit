@@ -60,7 +60,7 @@ export const searchTripStyles = StyleSheet.create({
 	},
 	header: {
 		marginTop: '5%',
-		marginBottom: '3%',
+		marginBottom: '10%',
 		textAlign: 'center',
 	},
 	searchBar: {

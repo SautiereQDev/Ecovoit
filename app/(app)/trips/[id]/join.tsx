@@ -83,6 +83,7 @@ const JoinTripPage = () => {
 			vehicle={vehicle}
 			driver={driver}
 			handleSubscribe={handleSubscribe}
+			visiting={true}
 		/>
 	);
 };
