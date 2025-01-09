@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { CustomButton, IconButton } from '@/components/buttons';
+import { ReturnButton } from '@/components/buttons';
 import { ThemedText } from '@/components/texts';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useData } from '@/providers';
 import { profileStyles } from '@/styles';
-import { Colors } from '@/constants';
 import { ErrorScreen, LoadingScreen } from '@/components/pages';
-import { notify } from 'react-native-notificated';
 
 export function Profile() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 
-	const { useCurrentUser } = useData();
-	const { data: user, isLoading, error } = useCurrentUser();
+	const { id } = useLocalSearchParams<{ id: string }>();
+
+	const { useUser } = useData();
+	const { data: user, isLoading, error } = useUser(id);
 
 	console.log('user', user);
 
@@ -29,35 +29,15 @@ export function Profile() {
 
 	return (
 		<ScrollView style={profileStyles.container}>
+			<ReturnButton />
 			<ThemedText
 				type={'header3'}
 				style={profileStyles.title}
 			>
-				Votre profile
+				Profile de {user?.username}
 			</ThemedText>
 			<View>
-				{/*<GetImage*/}
-				{/*	visible={showModal}*/}
-				{/*	onClose={() => setShowModal(false)}*/}
-				{/*	setImage={setProfileImage}*/}
-				{/*/>*/}
-				{/*<Pressable onPress={() => setShowModal(true)}>*/}
-				{/*<Image*/}
-				{/*	source={*/}
-				{/*		user.profilePicture*/}
-				{/*			? { uri: user.profilePicture }*/}
-				{/*			: require('@/assets/images/user-picture.jpg')*/}
-				{/*	}*/}
-				{/*	style={profileStyles.profilePicture}*/}
-				{/*/>*/}
-				{/*</Pressable>*/}
-				<ThemedText
-					type={'header6'}
-					style={profileStyles.username}
-				>
-					{user?.username}
-				</ThemedText>
-				<View style={profileStyles.biography}>
+				<View style={[{ marginBottom: 50 }, profileStyles.biography]}>
 					<ThemedText
 						type={'header6'}
 						style={profileStyles.biographyText}
@@ -69,16 +49,6 @@ export function Profile() {
 					</ThemedText>
 				</View>
 				{/*TODO: Afficher un message si tous les champs ne sont pas remplis pour la premièrte fois*/}
-				{/*{missingFields.length > 0 && <ProfileCompletion />}*/}
-				<IconButton
-					lib='FontAwesome'
-					// @ts-ignore
-					name='car'
-					size={24}
-					color={Colors.light.text}
-					buttonStyle={profileStyles.carButton}
-					onPress={() => router.push('/profile/vehicles')}
-				/>
 				<View style={profileStyles.stats}>
 					<View style={profileStyles.statCell}>
 						<ThemedText
@@ -121,41 +91,9 @@ export function Profile() {
 							type={'defaultBody'}
 							style={{ textAlign: 'center' }}
 						>
-							4.56
+							{user?.stars}
 						</ThemedText>
 					</View>
-				</View>
-				<View style={profileStyles.buttonContainer}>
-					<CustomButton
-						text={'Modifier'}
-						onPress={() => {
-							router.push('/');
-							notify('error', {
-								params: {
-									title: 'Erreur',
-									description: `Fonctionalité non implémentée`,
-								},
-							});
-						}}
-						textProps={{ type: 'defaultBody' }}
-						backgroundColor={'accentBackground'}
-						buttonStyle={profileStyles.button}
-					/>
-					<CustomButton
-						text={'Déconnexion'}
-						onPress={() => {
-							router.push('/');
-							notify('error', {
-								params: {
-									title: 'Erreur',
-									description: `Fonctionalité non implémentée`,
-								},
-							});
-						}}
-						textProps={{ type: 'defaultBody' }}
-						backgroundColor={'accentBackground'}
-						buttonStyle={profileStyles.button}
-					/>
 				</View>
 			</View>
 		</ScrollView>
