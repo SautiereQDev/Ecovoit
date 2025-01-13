@@ -57,7 +57,7 @@ npm run android
 - [react-query](https://react-query.tanstack.com/) - Librairie de gestion de données
 
 ## Versions
-**1.0.0** - Definitive
+[**1.0.0**](https://github.com/SautiereQDev/Ecovoit/releases/tag/1.0.0) - Definitive
 
 ## Auteurs
 - **Quentin Sautière** _alias_ [@qsautier](https://gitlab.univ-lr.fr/qsautier): Designer, Programmer, Maintainer
