@@ -1,7 +1,8 @@
 # ECOVOIT
+Application web de covoiturage dédiée aux habitants de La Rochelle. L'application facilitera la mise en relation pour le partage de trajets, la réservation de places, et le calcul des émissions de CO2, favorisant ainsi une mobilité durable dans la ville.    
 
-Application web de covoiturage dédiée aux habitants de La Rochelle. L'application facilitera la mise en relation pour le partage de trajets, la réservation de places, et le calcul des émissions de CO2, favorisant ainsi une mobilité durable dans la ville.
-Ce dépot contient le front-end et necessite la partie backend dont le code est disponible [ici](https://gitlab.univ-lr.fr/projets-l2-2024/quantum-quartet/covoiturage-la-rochelle/EcovoitAPI)
+### Avant propos
+Ce dépot est la copie d'un dépôt GitLab interne à l'université de La Rochelle. Celui-ci contient uniquement le front-end et nécessite la partie backend dont le code est disponible [ici](https://gitlab.univ-lr.fr/projets-l2-2024/quantum-quartet/covoiturage-la-rochelle/EcovoitAPI)   
 ## Licence
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-orange.svg)](LICENSE.MD)
 
@@ -13,7 +14,7 @@ Assurez-vous d'avoir installé les outils suivants sur votre machine :
 
 - [Node.js](https://nodejs.org/fr) (version 22.13 ou supérieure)
 - npm
-- [Android Studio](https://developer.android.com/studio?hl=fr) with SDK 35 android device setuped
+- [Android Studio](https://developer.android.com/studio?hl=fr) avec une d'android sdk >= 35.0
 
 ### Cloner le projet
 
@@ -60,7 +61,7 @@ npm run android
 [**1.0.0**](https://github.com/SautiereQDev/Ecovoit/releases/tag/1.0.0) - Definitive
 
 ## Auteurs
-- **Quentin Sautière** _alias_ [@qsautier](https://gitlab.univ-lr.fr/qsautier): Designer, Programmer, Maintainer
-- **Axel Pelleray-Guilhem** _alias_ [@xibitol](https://gitlab.univ-lr.fr/xibitol): Maintener, Programmer
-- **Maxime Chasles** _alias_ [@mchasles](https://gitlab.univ-lr.fr/mchasles): Programmer
-- **Cody Six** _alias_ [@csix](https://gitlab.univ-lr.fr/csix): Programmer
+- **Quentin Sautière** _alias_ [@qsautier](https://gitlab.univ-lr.fr/qsautier): Designer, Programmeur, Maintainer
+- **Axel Pelleray-Guilhem** _alias_ [@xibitol](https://gitlab.univ-lr.fr/xibitol): Maintener, Programmeur
+- **Maxime Chasles** _alias_ [@mchasles](https://gitlab.univ-lr.fr/mchasles): Programmeur
+- **Cody Six** _alias_ [@csix](https://gitlab.univ-lr.fr/csix): Programmeur
