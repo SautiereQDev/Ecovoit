@@ -61,7 +61,7 @@ npm run android
 [**1.0.0**](https://github.com/SautiereQDev/Ecovoit/releases/tag/1.0.0) - Definitive
 
 ## Auteurs
-- **Quentin Sautière** _alias_ [@qsautier](https://gitlab.univ-lr.fr/qsautier): Designer, Programmeur, Maintainer
-- **Axel Pelleray-Guilhem** _alias_ [@xibitol](https://gitlab.univ-lr.fr/xibitol): Maintener, Programmeur
-- **Maxime Chasles** _alias_ [@mchasles](https://gitlab.univ-lr.fr/mchasles): Programmeur
-- **Cody Six** _alias_ [@csix](https://gitlab.univ-lr.fr/csix): Programmeur
+- [**Quentin Sautière**](https://gitlab.univ-lr.fr/qsautier): Designer, Programmeur, Maintainer
+- [**Xibitol**](https://www.github.com/Xibitol): Maintener, Programmeur
+- [**Maxime Chasles**](https://gitlab.univ-lr.fr/mchasles): Programmeur
+- [**Cody Six**](https://gitlab.univ-lr.fr/csix): Programmeur
